@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="aecfd1c2-f04e-4aa4-be83-17819728022f" name="Default Changelist" comment="" />
+    <list default="true" id="aecfd1c2-f04e-4aa4-be83-17819728022f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/app/adms/Views/gerenciar/verDemanda.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/adms/Views/gerenciar/verDemanda.php" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,11 +15,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/adms/Models/AdmsListarAtendArquiGerente.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="595">
               <caret line="50" column="67" selection-start-line="50" selection-start-column="67" selection-end-line="50" selection-end-column="67" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/adms/Views/gerenciar/verDemanda.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="300">
+              <caret line="90" column="32" selection-start-line="90" selection-start-column="32" selection-end-line="90" selection-end-column="32" />
+              <folding>
+                <element signature="e#4165#6649#0#PHP" />
+                <element signature="e#5296#6649#0#PHP" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -59,7 +74,6 @@
         <option value="$PROJECT_DIR$/app/adms/Models/AdmsArquivarAtendGerente.php" />
         <option value="$PROJECT_DIR$/app/adms/Controllers/VerDemanda.php" />
         <option value="$PROJECT_DIR$/app/adms/Models/AdmsVerAtividades.php" />
-        <option value="$PROJECT_DIR$/app/adms/Views/gerenciar/verDemanda.php" />
         <option value="$PROJECT_DIR$/app/adms/Controllers/GerenciarAtendimento.php" />
         <option value="$PROJECT_DIR$/core/ConfigView.php" />
         <option value="$PROJECT_DIR$/core/ConfigController.php" />
@@ -81,6 +95,7 @@
         <option value="$PROJECT_DIR$/app/adms/Views/atendimento/atendimentoArquivado.php" />
         <option value="$PROJECT_DIR$/app/adms/Views/atendimento/atendimento.php" />
         <option value="$PROJECT_DIR$/app/adms/Views/usuario/listarUsuario.php" />
+        <option value="$PROJECT_DIR$/app/adms/Views/gerenciar/verDemanda.php" />
       </list>
     </option>
   </component>
@@ -263,12 +278,12 @@
       <workItem from="1549374502939" duration="21503000" />
       <workItem from="1549460994974" duration="17437000" />
       <workItem from="1549547269925" duration="8961000" />
-      <workItem from="1549634158394" duration="599000" />
+      <workItem from="1549634158394" duration="1443000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="144670000" />
+    <option name="totallyTimeSpent" value="145514000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -375,16 +390,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="440">
           <caret line="48" column="46" selection-start-line="48" selection-start-column="26" selection-end-line="48" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/adms/Views/gerenciar/verDemanda.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="88" column="24" lean-forward="true" selection-start-line="88" selection-start-column="24" selection-end-line="155" selection-end-column="26" />
-          <folding>
-            <element signature="e#3746#3751#0#PHP" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -637,6 +642,17 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="595">
           <caret line="50" column="67" selection-start-line="50" selection-start-column="67" selection-end-line="50" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/adms/Views/gerenciar/verDemanda.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="90" column="32" selection-start-line="90" selection-start-column="32" selection-end-line="90" selection-end-column="32" />
+          <folding>
+            <element signature="e#4165#6649#0#PHP" />
+            <element signature="e#5296#6649#0#PHP" />
+          </folding>
         </state>
       </provider>
     </entry>

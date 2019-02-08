@@ -87,72 +87,77 @@ extract($this->Dados['dados_demanda'][0]);
                     <dt class="col-sm-3">Tempo de execução:</dt>
                     <dd class="col-sm-9">
                         <?php
-                            //var_dump($this->Dados['totalHorasAtividades']);
-                            extract($this->Dados['totalHorasAtividades'][0]);
+                            if ($this->Dados['totalHorasAtividades'][0]) {
+                                //var_dump($this->Dados['totalHorasAtividades'][0]);
+                                extract($this->Dados['totalHorasAtividades'][0]);
 
-                            $dadosHoras = (string) $total_horas;
-                            $dados = explode(":", $dadosHoras);
+                                if (isset($total_horas)) {
 
-                            $hora = $dados[0];
-                            $minuto = $dados[1];
+                                    $dadosHoras = (string)$total_horas;
+                                    $dados = explode(":", $dadosHoras);
+
+                                    $hora = $dados[0];
+                                    $minuto = $dados[1];
 
 
-                            if ($hora >= 24){
-                                $dia = (int)($hora / 24);
-                                if ($dia > 1){
-                                    echo $dia ." dias";
-                                } else {
-                                    echo $dia ." dia";
-                                }
+                                    if ($hora >= 24) {
+                                        $dia = (int)($hora / 24);
+                                        if ($dia > 1) {
+                                            echo $dia . " dias";
+                                        } else {
+                                            echo $dia . " dia";
+                                        }
 
-                                if ($hora != 24) {
-                                    if ($minuto > 0) {echo ", ";} else {echo " e ";}
-                                    $novaHora = $hora - ($dia * 24);
-                                    if ($novaHora > 1) {
-                                        echo $novaHora . " horas";
+                                        if ($hora != 24) {
+                                            if ($minuto > 0) {
+                                                echo ", ";
+                                            } else {
+                                                echo " e ";
+                                            }
+                                            $novaHora = $hora - ($dia * 24);
+                                            if ($novaHora > 1) {
+                                                echo $novaHora . " horas";
+                                            } else {
+                                                echo $novaHora . " hora";
+                                            }
+
+                                        }
+
+                                        if ($minuto != 0) {
+                                            echo " e ";
+                                            if ($minuto == 1) {
+                                                echo $minuto . " minuto.";
+                                            } else {
+                                                echo $minuto . " minutos.";
+                                            }
+                                        }
+
                                     } else {
-                                        echo $novaHora . " hora";
-                                    }
 
+                                        if ($hora == 1) {
+                                            echo $hora . " hora";
+                                        } elseif ($hora > 1) {
+                                            echo $hora . " horas";
+                                        }
+
+
+                                        if ($minuto != 0) {
+                                            if (($minuto == 1) AND $hora == 00) {
+                                                echo $minuto . " minuto";
+                                            } elseif (($minuto != 1) AND ($hora == 00)) {
+                                                echo $minuto . " minutos";
+                                            }
+                                            if (($minuto == 1) AND ($hora != 00)) {
+                                                echo " e " . $minuto . " minuto";
+                                            } elseif (($minuto != 1) AND ($hora != 00)) {
+                                                echo " e " . $minuto . " minutos";
+                                            }
+                                        }
+                                        echo ".";
+
+                                    }
                                 }
-
-                                if ($minuto != 0){
-                                    echo " e ";
-                                    if ($minuto == 1){echo $minuto ." minuto.";} else {echo $minuto ." minutos.";}
-                                }
-
                             }
-                            else {
-
-                                    if ($hora == 1)
-                                    {
-                                        echo $hora . " hora";
-                                    }
-                                    elseif ($hora > 1) {
-                                        echo $hora . " horas";
-                                    }
-
-
-                                    if ($minuto != 0){
-                                        if (($minuto == 1) AND $hora == 00)
-                                        {
-                                            echo $minuto ." minuto";
-                                        } elseif (($minuto != 1) AND ($hora == 00)) {
-                                            echo $minuto ." minutos";
-                                        }
-                                        if (($minuto == 1) AND ($hora != 00))
-                                        {
-                                            echo " e ". $minuto ." minuto";
-                                        }
-                                        elseif (($minuto != 1) AND ($hora != 00)) {
-                                            echo " e ". $minuto ." minutos";
-                                        }
-                                    }
-                                    echo ".";
-
-                            }
-
-
                         ?>
                     </dd>
         </dl>
