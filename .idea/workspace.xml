@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="aecfd1c2-f04e-4aa4-be83-17819728022f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/app/adms/Views/gerenciar/verDemanda.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/adms/Views/gerenciar/verDemanda.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,7 +28,7 @@
         <entry file="file://$PROJECT_DIR$/app/adms/Views/gerenciar/verDemanda.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="300">
-              <caret line="90" column="32" selection-start-line="90" selection-start-column="32" selection-end-line="90" selection-end-column="32" />
+              <caret line="90" column="34" selection-start-line="90" selection-start-column="34" selection-end-line="90" selection-end-column="34" />
               <folding>
                 <element signature="e#4165#6649#0#PHP" />
                 <element signature="e#5296#6649#0#PHP" />
@@ -278,12 +278,12 @@
       <workItem from="1549374502939" duration="21503000" />
       <workItem from="1549460994974" duration="17437000" />
       <workItem from="1549547269925" duration="8961000" />
-      <workItem from="1549634158394" duration="1443000" />
+      <workItem from="1549634158394" duration="2699000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="145514000" />
+    <option name="totallyTimeSpent" value="146770000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -648,7 +648,7 @@
     <entry file="file://$PROJECT_DIR$/app/adms/Views/gerenciar/verDemanda.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
-          <caret line="90" column="32" selection-start-line="90" selection-start-column="32" selection-end-line="90" selection-end-column="32" />
+          <caret line="90" column="34" selection-start-line="90" selection-start-column="34" selection-end-line="90" selection-end-column="34" />
           <folding>
             <element signature="e#4165#6649#0#PHP" />
             <element signature="e#5296#6649#0#PHP" />
