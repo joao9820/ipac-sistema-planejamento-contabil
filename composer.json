@@ -1,0 +1,20 @@
+{
+    "name": "Dhemes",
+    "description": "Projeto PHP OO",
+    "authors": [
+        {
+            "name": "Dhemes Mota",
+            "email": "dhemes.mota@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Core\\" : "core",
+            "Sts\\": "app/sts",
+            "App\\": "app"
+        }
+    },
+    "require": {
+        "phpmailer/phpmailer": "^6.0"
+    }
+}
