@@ -62,8 +62,6 @@ extract($this->Dados['dados_demanda'][0]);
 
         <hr>
 
-
-
         <dl class="row">
                     <dt class="col-sm-3">Nome:</dt>
                     <dd class="col-sm-9"><?php echo $nome ?></dd>
@@ -161,8 +159,6 @@ extract($this->Dados['dados_demanda'][0]);
                         ?>
                     </dd>
         </dl>
-
-
         <div class="p-2">
                 <span class="my-3">
 
