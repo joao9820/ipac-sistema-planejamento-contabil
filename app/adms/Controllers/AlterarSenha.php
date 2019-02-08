@@ -13,7 +13,6 @@ if (!defined('URL')) {
     exit();
 }
 
-
 class AlterarSenha
 {
 
@@ -33,7 +32,8 @@ class AlterarSenha
                 $UrlDestino = URLADM . 'ver-perfil/perfil';
                 header("Location: $UrlDestino");
 
-            } else {
+            }
+            else {
 
                 $listarMenu = new \App\adms\Models\AdmsMenu();
                 $this->Dados['menu'] = $listarMenu->itemMenu();
