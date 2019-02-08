@@ -16,6 +16,7 @@ if (!defined('URL')) {
 class AlterarSenha
 {
 
+    
     private $Dados;
 
     public function altSenha()
