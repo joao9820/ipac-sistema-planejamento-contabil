@@ -17,11 +17,13 @@ class PesqUsuarios
 {
 
     private $Dados;
+    private $DadosForm;
     private $PageId;
 
     public function listar($PageId = null)
     {
-        /*$this->PageId = (int) $PageId ? $PageId : 1;
+
+        $this->PageId = (int) $PageId ? $PageId : 1;
 
         $botao = ['cad_usuario' => ['menu_controller' => 'cadastrar-usuario', 'menu_metodo' => 'cad-usuario'],
             'vis_usuario' => ['menu_controller' => 'ver-usuario', 'menu_metodo' => 'ver-usuario'],
@@ -33,12 +35,20 @@ class PesqUsuarios
         $listarMenu = new \App\adms\Models\AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
 
-        $listarUsario = new \App\adms\Models\AdmsListarUsuario();
-        $this->Dados['listUser'] = $listarUsario->listarUsuario($this->PageId);
-        $this->Dados['paginacao'] = $listarUsario->getResultadoPg();
+        $this->DadosForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+        if (!empty($this->DadosForm['PesqUsuario'])) {
+            unset($this->DadosForm['PesqUsuario']);
 
-        $carregarView = new \Core\ConfigView("adms/Views/usuario/listarUsuario", $this->Dados);
-        $carregarView->renderizar();*/
+            $listarUsario = new \App\adms\Models\CpAdmsListarUsuario();
+            $this->Dados['listUser'] = $listarUsario->pesquisarUsuarios($this->PageId, $this->DadosForm);
+            $this->Dados['paginacao'] = $listarUsario->getResultadoPg();
+        }
+        /* $listarUsario = new \App\adms\Models\AdmsListarUsuario();
+          $this->Dados['listUser'] = $listarUsario->listarUsuario($this->PageId);
+          $this->Dados['paginacao'] = $listarUsario->getResultadoPg(); */
+
+        $carregarView = new \Core\ConfigView("adms/Views/usuario/pesqUsuario", $this->Dados);
+        $carregarView->renderizar();
     }
 
 }
