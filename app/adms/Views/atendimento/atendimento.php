@@ -3,8 +3,6 @@ if (!defined('URL')) {
     header("Location: /");
     exit();
 }
-
-//echo $num_result ."<br>";
 //echo $_SESSION['adms_empresa_id'];
 //var_dump($this->Dados['arquivado']);
 if ($this->Dados['arquivado'][0]) {
