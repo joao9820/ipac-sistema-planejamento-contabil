@@ -46,6 +46,8 @@ class CpAdmsListarUsuario
         return $this->Resultado;
     }
 
+    
+
     private function pesquisarUsuariosName()
     {
         $paginacao = new \App\adms\Models\helper\AdmsPaginacao(URLADM . 'usuarios/listar');
