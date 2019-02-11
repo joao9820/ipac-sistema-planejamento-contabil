@@ -35,6 +35,18 @@ if (!defined('URL')) {
 
         </div>
 
+        <form class="form-inline" method="POST" action="<?php echo URLADM . 'pesq-usuarios/listar'; ?>">
+            <div class="form-group">
+                <label>Nome</label>
+                <input name="nome" type="text" id="nome" class="form-control mx-sm-3" placeholder="Nome do usuário">
+            </div>
+            <div class="form-group">
+                <label>E-mail</label>
+                <input name="email" type="text" id="email" class="form-control mx-sm-3" placeholder="E-mail do usuário">
+            </div>
+            <input name="PesqUsuario" type="submit" class="btn btn-outline-primary my-2" value="Pesquisar">
+        </form><hr>
+
         <?php
             if (empty($this->Dados['listUser'])) {
                 ?>
