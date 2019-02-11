@@ -11,8 +11,10 @@ if (!defined('URL')) {
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
         -->
 
-        <script src="<?php echo URLADM.'assets/js/jquery-3.3.1.slim.min.js'; ?>"></script>
-        <!-- popper.js/1.14.3 -->
+        <!-- jquery/3.3.1 -->
+        <!--<script src="<?php echo URLADM.'assets/js/jquery-3.3.1.slim.min.js'; ?>"></script>-->
+        <script src="<?php echo URLADM.'assets/js/jquery.min.js'; ?>"></script>
+        <!-- popper/1.14.3 -->
         <script src="<?php echo URLADM.'assets/js/popper.min.js'; ?>"></script>
         <!-- bootstrap/4.1.3 -->
         <script src="<?php echo URLADM.'assets/js/bootstrap.min.js'; ?>"></script>
