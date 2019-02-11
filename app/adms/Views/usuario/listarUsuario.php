@@ -44,7 +44,7 @@ if (empty($this->Dados['listUser'])) {
                         <span class="d-none d-md-block">
                             <?php
                             if ($this->Dados['botao']['vis_usuario']) {
-                                echo "<a href='" . URLADM . "ver-usuario/ver-usuario/$id' class='btn btn-outline-primary btn-sm'>Visualizar</a> ";
+                                echo "<button type='button' class='btn btn-outline-primary btn-sm view_data' id='".$id."'>Visualizar</button> ";
                             }
                             if ($this->Dados['botao']['edit_usuario']) {
                                 echo "<a href='" . URLADM . "editar-usuario/edit-usuario/$id' class='btn btn-outline-warning btn-sm'>Editar</a> ";

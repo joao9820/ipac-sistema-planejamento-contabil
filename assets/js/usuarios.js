@@ -34,3 +34,20 @@ $(function () {
         }
     });
 });
+
+$(document).ready(function () {
+    $(document).on('click', '.view_data', function(){
+        var user_id = $(this).attr('id');
+        //alert(user_id);
+        if(user_id !== ''){
+            var dados = {
+                user_id: user_id
+            };
+            $.post('../../adm/ver-usuario-modal/ver-usuario/' + user_id, dados, function(retorna){
+                //Carregar o conteúdo para o usuário
+                $("#visul_usuario").html(retorna);
+                $('#visulUsuarioModal').modal('show');
+            });
+        }
+    });
+});
