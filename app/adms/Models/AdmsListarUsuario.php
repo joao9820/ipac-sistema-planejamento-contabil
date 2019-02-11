@@ -17,7 +17,7 @@ class AdmsListarUsuario
 {
     private $Resultado;
     private $PageId;
-    private $LimiteResultado = 10; // Define a quantidade de usuarios por páginas
+    private $LimiteResultado = 5; // Define a quantidade de usuarios por páginas
     private $ResultadoPg;
 
 
@@ -31,7 +31,7 @@ class AdmsListarUsuario
     public function listarUsuario($PageId = null)
     {
         $this->PageId = (int) $PageId;
-        $paginacao = new \App\adms\Models\helper\AdmsPaginacao(URLADM . 'usuarios/listar');
+        $paginacao = new \App\adms\Models\helper\AdmsPaginacaoJS(URLADM . 'usuarios/listar');
         $paginacao->condicao($this->PageId, $this->LimiteResultado);
         $paginacao->paginacao("SELECT COUNT(user.id) AS num_result
                      FROM adms_usuarios user 

@@ -20,6 +20,8 @@ if (!defined('URL')) {
         <script src="<?php echo URLADM.'assets/js/bootstrap.min.js'; ?>"></script>
 
         <script src="<?php echo URLADM.'assets/js/dashboard.js'; ?>"></script>
+        <!-- CARREGAR USUARIOS USANDO JS -->
+        <script src="<?php echo URLADM.'assets/js/usuarios.js'; ?>"></script>
 
     </body>
 </html>
