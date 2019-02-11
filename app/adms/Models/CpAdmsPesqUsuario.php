@@ -37,6 +37,9 @@ class CpAdmsPesqUsuario
         $this->Dados['nome'] = trim($this->Dados['nome']);
         $this->Dados['email'] = trim($this->Dados['email']);
 
+        $_SESSION['pesqUsuarioNome'] = $this->Dados['nome'];
+        $_SESSION['pesqUsuarioEmail'] = $this->Dados['email'];
+
         if(!empty($this->Dados['nome']) AND !empty($this->Dados['email'])){
             $this->pesquisarUsuariosComp();
         }elseif(!empty($this->Dados['nome'])){

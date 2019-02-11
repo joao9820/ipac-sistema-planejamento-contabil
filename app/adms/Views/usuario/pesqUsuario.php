@@ -47,11 +47,19 @@ if (!defined('URL')) {
         <form class="form-inline" method="POST" action="">
             <div class="form-group">
                 <label>Nome</label>
-                <input name="nome" type="text" id="nome" class="form-control mx-sm-3" placeholder="Nome do usuário">
+                <input name="nome" type="text" id="nome" class="form-control mx-sm-3" placeholder="Nome do usuário" value="<?php
+                    if (isset($_SESSION['pesqUsuarioNome'])) {
+                        echo $_SESSION['pesqUsuarioNome'];
+                    }
+                ?>">
             </div>
             <div class="form-group">
                 <label>E-mail</label>
-                <input name="email" type="text" id="email" class="form-control mx-sm-3" placeholder="E-mail do usuário">
+                <input name="email" type="text" id="email" class="form-control mx-sm-3" placeholder="E-mail do usuário" value="<?php
+                if (isset($_SESSION['pesqUsuarioEmail'])) {
+                    echo $_SESSION['pesqUsuarioEmail'];
+                }
+                ?>">
             </div>
             <input name="PesqUsuario" type="submit" class="btn btn-outline-primary my-2" value="Pesquisar">
         </form><hr>
