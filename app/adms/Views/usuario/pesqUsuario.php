@@ -16,19 +16,33 @@ if (!defined('URL')) {
             <div class="mr-auto p-2">
                 <h2 class="display-4 titulo">Pesquisar Usuários</h2>
             </div>
-            <?php
-            if ($this->Dados['botao']['cad_usuario']) {
-                ?>
-                <a href="<?php echo URLADM . 'cadastrar-usuario/cad-usuario'; ?>">
-                    <div class="p-2">
-                        <button class="btn btn-outline-success btn-sm">
-                            Cadastrar
-                        </button>
+            <div class="p-2">
+                <span class="d-none d-md-block">
+                    <?php
+                    if ($this->Dados['botao']['list_usuario']) {
+                        echo "<a href='" . URLADM . "usuarios/listar' class='btn btn-outline-info btn-sm'>Listar</a> ";
+                    }
+                    if ($this->Dados['botao']['cad_usuario']) {
+                        echo "<a href='" . URLADM . "cadastrar-usuario/cad-usuario' class='btn btn-outline-success btn-sm'>Cadastrar</a> ";
+                    }
+                    ?>
+                </span>
+                <div class="dropdown d-block d-md-none">
+                    <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="acoesListar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Ações
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="acoesListar">
+                        <?php
+                        if ($this->Dados['botao']['list_usuario']) {
+                            echo "<a class='dropdown-item' href='" . URLADM . "usuarios/listar'>Listar</a>";
+                        }
+                        if ($this->Dados['botao']['cad_usuario']) {
+                            echo "<a class='dropdown-item' href='" . URLADM . "cadastrar-usuario/cad-usuario'>Cadastrar</a>";
+                        }
+                        ?>
                     </div>
-                </a>
-                <?php
-            }
-            ?>
+                </div>
+            </div>
         </div>
         <form class="form-inline" method="POST" action="">
             <div class="form-group">
@@ -130,5 +144,4 @@ if (!defined('URL')) {
         </div>
     </div>
 </div>
-
 

@@ -23,9 +23,8 @@ class PesqUsuarios
     public function listar($PageId = null)
     {
 
-        $this->PageId = (int) $PageId ? $PageId : 1;
-
-        $botao = ['cad_usuario' => ['menu_controller' => 'cadastrar-usuario', 'menu_metodo' => 'cad-usuario'],
+        $botao = ['list_usuario' => ['menu_controller' => 'usuarios', 'menu_metodo' => 'listar'],
+            'cad_usuario' => ['menu_controller' => 'cadastrar-usuario', 'menu_metodo' => 'cad-usuario'],
             'vis_usuario' => ['menu_controller' => 'ver-usuario', 'menu_metodo' => 'ver-usuario'],
             'edit_usuario' => ['menu_controller' => 'editar-usuario', 'menu_metodo' => 'edit-usuario'],
             'del_usuario' => ['menu_controller' => 'apagar-usuario', 'menu_metodo' => 'apagar-usuario']];
@@ -38,14 +37,15 @@ class PesqUsuarios
         $this->DadosForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         if (!empty($this->DadosForm['PesqUsuario'])) {
             unset($this->DadosForm['PesqUsuario']);
-
-            $listarUsario = new \App\adms\Models\CpAdmsListarUsuario();
-            $this->Dados['listUser'] = $listarUsario->pesquisarUsuarios($this->PageId, $this->DadosForm);
-            $this->Dados['paginacao'] = $listarUsario->getResultadoPg();
+        } else {
+            $this->PageId = (int) $PageId ? $PageId : 1;
+            $this->DadosForm['nome'] = filter_input(INPUT_GET, 'nome', FILTER_DEFAULT);
+            $this->DadosForm['email'] = filter_input(INPUT_GET, 'email', FILTER_DEFAULT);
         }
-        /* $listarUsario = new \App\adms\Models\AdmsListarUsuario();
-          $this->Dados['listUser'] = $listarUsario->listarUsuario($this->PageId);
-          $this->Dados['paginacao'] = $listarUsario->getResultadoPg(); */
+
+        $listarUsario = new \App\adms\Models\CpAdmsPesqUsuario();
+        $this->Dados['listUser'] = $listarUsario->pesquisarUsuarios($this->PageId, $this->DadosForm);
+        $this->Dados['paginacao'] = $listarUsario->getResultadoPg();
 
         $carregarView = new \Core\ConfigView("adms/Views/usuario/pesqUsuario", $this->Dados);
         $carregarView->renderizar();
