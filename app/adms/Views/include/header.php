@@ -38,7 +38,6 @@ if (!defined('URL')) {
                 extract($menu);
                 if ($dropdown == 1)
                 {
-
                     // MENU DROPDOWN
                     if($cont_drop != $id_men)
                     {
@@ -49,6 +48,7 @@ if (!defined('URL')) {
                         }
                         // Menu Paginas
                         echo "<span class='dropdown-item mr-5 text-secondary'  href='#'>";
+                            // Itens de menu
                             echo "<i class='".$icone_men." '></i> ".$nome_men;
                         echo "</span>";
                         $cont_drop = $id_men;
