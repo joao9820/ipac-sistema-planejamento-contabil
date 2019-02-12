@@ -46,6 +46,8 @@ class ConfigController
         }
         //echo "URL: {$this->Url} <br>";
         //echo "Controlle: {$this->UrlController} <br>";
+        //$_SESSION['titulo'] = $this->UrlController;
+        //echo $_SESSION['titulo'];
         //echo "Metodo: {$this->UrlMetodo} <br>";
         //echo "Paramento: {$this->UrlParametro} <br>";
     }
@@ -68,6 +70,8 @@ class ConfigController
     public function slugController($SlugController)
     {
         $UrlController = str_replace(" ", "", ucwords(implode(" ", explode("-", strtolower($SlugController)))));
+        $_SESSION['titulo'] = ucwords(implode(" ", explode("-", strtolower($SlugController))));
+        //echo $SlugController;
         return $UrlController;
     }
 

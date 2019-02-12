@@ -9,8 +9,8 @@ if (!defined('URL')) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>
         <?php
-            if (isset($titulo)) {
-                echo $titulo;
+            if (isset($_SESSION['titulo'])) {
+                echo $_SESSION['titulo'] . " · IPAC";
             }
             else {
                 echo "IPAC";
