@@ -18,7 +18,7 @@
     ?>
     <div class="form-group">
         <label>Usuário</label>
-        <input type="text" name="usuario" class="form-control text-left" placeholder="Digite o usuário" value="<?php if(isset($valorForm['usuario'])) {echo $valorForm['usuario']; } ?>" autofocus>
+        <input type="text"name="usuario" class="form-control text-left" placeholder="Digite o usuário" value="<?php if(isset($valorForm['usuario'])) {echo $valorForm['usuario']; } ?>" autofocus>
     </div>
     <div class="form-group">
         <label>Senha</label>
@@ -29,5 +29,15 @@
     <p class="text-center"><a href="<?php echo URLADM . 'novo-usuario/novo-usuario' ?>" >Cadastrar</a> -
         <a href="<?php echo URLADM . 'esqueceu-senha/esqueceu-senha' ?>" >Esqueceu a senha?</a></p>
 </form>
+
+<script>
+
+    var inputs = $('input').on('keyup', verificarInputs);
+    function verificarInputs() {
+        const preenchidos = inputs.get().every(({value}) => value)
+        $('.btn').prop('disabled', !preenchidos);
+    }
+
+</script>
 </body>
 
