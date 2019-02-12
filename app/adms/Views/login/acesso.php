@@ -18,7 +18,7 @@
     ?>
     <div class="form-group">
         <label>Usuário</label>
-        <input type="text" name="usuario" class="form-control text-left" placeholder="Digite o usuário" value="<?php if(isset($valorForm['usuario'])) {echo $valorForm['usuario']; } ?>">
+        <input type="text" name="usuario" class="form-control text-left" placeholder="Digite o usuário" value="<?php if(isset($valorForm['usuario'])) {echo $valorForm['usuario']; } ?>" autofocus>
     </div>
     <div class="form-group">
         <label>Senha</label>
