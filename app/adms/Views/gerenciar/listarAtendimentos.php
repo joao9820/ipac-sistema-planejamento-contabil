@@ -33,7 +33,7 @@ if (!defined('URL')) {
                 <tr>
                     <th class="d-none d-lg-table-cell">Cod.</th>
                     <th class="">Funcionário</th>
-                    <th class="">Tipo</th>
+                    <th class="">Demanda</th>
                     <th class="">Status</th>
                     <th class="">Cliente</th>
                     <th class="d-none d-lg-table-cell">Empresa</th>

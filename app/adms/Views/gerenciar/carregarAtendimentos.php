@@ -32,7 +32,7 @@ if (!defined('URL')) {
             <div class="form-group">
                 <label>Pesquisar</label>
                 <span tabindex="0" data-placement="right" data-toggle="tooltip"
-                      title="Busque por: Funcionário | Cliente | Empresa ou Tipo de atendimento">
+                      title="Busque por: Funcionário | Cliente | Empresa ou Demanda">
                 <input name="pesqAtendimento" type="text" id="pesqAtendimento" class="form-control mx-sm-3" placeholder="">
                 </span>
             </div>
