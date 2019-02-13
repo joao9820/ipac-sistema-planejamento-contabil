@@ -29,11 +29,10 @@ class AdmsListarAtendGerente
     public function listarAtendimentos($PageId = null)
     {
         $this->PageId = (int) $PageId;
-        $paginacao = new \App\adms\Models\helper\AdmsPaginacao(URLADM . 'gerenciar-atendimento/listar');
+        $paginacao = new \App\adms\Models\helper\AdmsPaginacaoAtendimentoJS(URLADM . 'gerenciar-atendimento/listar');
         $paginacao->condicao($this->PageId, $this->LimiteResultado);
         $paginacao->paginacao("SELECT COUNT(id) AS num_result FROM adms_atendimentos WHERE arquivado_gerente <>:arquivado_gerente","arquivado_gerente=1");
         $this->ResultadoPg = $paginacao->getResultado();
-        //var_dump($this->ResultadoPg);
         $offset = $paginacao->getOffset();
 
 

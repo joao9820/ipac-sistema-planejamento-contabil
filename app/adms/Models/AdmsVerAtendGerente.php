@@ -37,7 +37,7 @@ class AdmsVerAtendGerente
                         FROM adms_atendimentos aten 
                         LEFT JOIN adms_usuarios func ON func.id=aten.adms_funcionario_id 
                         INNER JOIN adms_usuarios user ON user.id=aten.adms_usuario_id 
-                        INNER JOIN adms_empresas emp ON emp.id=user.adms_empresa_id 
+                        INNER JOIN adms_empresas emp ON emp.id=aten.adms_empresa_id 
                         INNER JOIN adms_demandas demanda ON demanda.id=aten.adms_demanda_id 
                         INNER JOIN adms_sits_atendimentos situacao ON situacao.id=aten.adms_sits_atendimento_id 
                         INNER JOIN adms_cors cr ON cr.id=situacao.adms_cor_id 

@@ -15,11 +15,11 @@ if (empty($this->Dados['listUser'])) {
         </button>
     </div>
     <?php
-}
-?>
-<div class="table-responsive">
-    <table class="table table-striped table-hover table-bordered">
-        <thead>
+} else {
+    ?>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered">
+            <thead>
             <tr>
                 <th>ID</th>
                 <th>Nome</th>
@@ -27,8 +27,8 @@ if (empty($this->Dados['listUser'])) {
                 <th class="d-none d-lg-table-cell">Situação</th>
                 <th class="text-center">Ações</th>
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             <?php
             foreach ($this->Dados['listUser'] as $usuario) {
                 extract($usuario);
@@ -44,7 +44,7 @@ if (empty($this->Dados['listUser'])) {
                         <span class="d-none d-md-block">
                             <?php
                             if ($this->Dados['botao']['vis_usuario']) {
-                                echo "<button type='button' class='btn btn-outline-primary btn-sm view_data' id='".$id."'>Visualizar</button> ";
+                                echo "<button type='button' class='btn btn-outline-primary btn-sm view_data' id='" . $id . "'>Visualizar</button> ";
                             }
                             if ($this->Dados['botao']['edit_usuario']) {
                                 echo "<a href='" . URLADM . "editar-usuario/edit-usuario/$id' class='btn btn-outline-warning btn-sm'>Editar</a> ";
@@ -55,7 +55,8 @@ if (empty($this->Dados['listUser'])) {
                             ?>
                         </span>
                         <div class="dropdown d-block d-md-none">
-                            <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="acoesListar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="acoesListar"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Ações
                             </button>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="acoesListar">
@@ -80,9 +81,11 @@ if (empty($this->Dados['listUser'])) {
             }
             ?>
 
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+        <?php
+        echo $this->Dados['paginacao'];
+        ?>
+    </div>
     <?php
-    echo $this->Dados['paginacao'];
-    ?>
-</div>
+} ?>
