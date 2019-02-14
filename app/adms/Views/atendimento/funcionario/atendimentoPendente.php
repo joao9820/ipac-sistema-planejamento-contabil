@@ -41,7 +41,8 @@ if (!defined('URL')) {
             ?>
 
             <?php
-                if (isset($this->Dados['listAtendimentoPendenteUrgente'])) {
+                if (isset($this->Dados['listAtendimentoPendenteUrgente']) AND !empty($this->Dados['listAtendimentoPendenteUrgente'])) {
+
                 ?>
                 <h4 class="text-dark mt-5 mb-3">
                     <span tabindex="0" data-placement="top" data-toggle="tooltip" title="Atenção, esse atendimento tem prioridade sobre os atendimentos normais. Deve ser realizado imediatamente">
@@ -171,7 +172,7 @@ if (!defined('URL')) {
             ?>
 
             <?php
-                if (isset($this->Dados['listAtendimentoPendente'])) {
+                if (isset($this->Dados['listAtendimentoPendente']) AND !empty($this->Dados['listAtendimentoPendente'])) {
                     ?>
                     <h4 class="text-dark mt-5">Normal</h4>
                     <div class="table-responsive">

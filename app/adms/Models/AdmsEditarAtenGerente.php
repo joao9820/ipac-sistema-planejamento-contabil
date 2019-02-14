@@ -62,7 +62,7 @@ class AdmsEditarAtenGerente
     {
         $this->Dados = $Dados;
         if ($this->Dados['prioridade'] != 1) {
-            unset($this->Dados['prioridade']);
+            $this->Dados['prioridade'] = 2;
         }
         if (($this->Dados['adms_sits_atendimento_id'] == 1) AND  ($this->Dados['adms_funcionario_id'] == '')) {
             unset($this->Dados['adms_funcionario_id']);
