@@ -22,8 +22,6 @@ if (!defined('URL')) {
         <script src="<?php echo URLADM.'assets/js/dashboard.js'; ?>"></script>
         <!-- CARREGAR USUARIOS USANDO JS -->
         <script src="<?php echo URLADM.'assets/js/usuarios.js'; ?>"></script>
-        <!-- CARREGAR ATENDIMENTOS USANDO JS -->
-        <script src="<?php echo URLADM.'assets/js/atendimentos.js'; ?>"></script>
 
     </body>
 </html>

@@ -1,5 +1,5 @@
 /*JS CARREGAR USUARIOS*/
-
+/*
 $(document).ready(function () {
     var pagina = 1; //página inicial
     listar_atendimento(pagina);
@@ -35,8 +35,8 @@ $(function () {
         }
     });
 });
-
-
+*/
+/*
 $(document).ready(function () {
     $(document).on('click', '.view_atendimento', function(){
         var aten_id = $(this).attr('id');
@@ -53,4 +53,4 @@ $(document).ready(function () {
         }
     });
 });
-
+*/

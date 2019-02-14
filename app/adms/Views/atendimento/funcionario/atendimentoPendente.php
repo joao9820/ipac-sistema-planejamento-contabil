@@ -16,24 +16,11 @@ if (!defined('URL')) {
         </div>
 
         <div class="d-flex">
-            <?php
-            if ($this->Dados['botao']['abrir']) {
-                ?>
-                <a href="<?php echo URLADM . 'novo-atendimento/novo'; ?>">
-                    <div class="p-2 mr-auto">
-                        <button class="btn btn-success btn-sm">
-                            Novo
-                        </button>
-                    </div>
-                </a>
-                <?php
-            }
-            ?>
             <div class="ml-auto">
                 <?php
-                if ($this->Dados['botao']['vis']) {
+                if ($this->Dados['botao']['arquivados']) {
                     ?>
-                    <a href="<?php echo URLADM . 'atendimento/arquivado'; ?>">
+                    <a href="<?php echo URLADM . 'funcionario-atendimento/arquivado'; ?>">
                         <div class="p-2">
                             <span tabindex="0" data-placement="left" data-toggle="tooltip" title="<?php echo $teste['num_result_arquivado'] . ' - atendimentos arquivados.'; ?>">
                                 <button class="btn btn-secondary btn-sm">
@@ -61,8 +48,8 @@ if (!defined('URL')) {
         if (empty($this->Dados['listAtendimentoPendente'])) {
             ?>
 
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                Nenhum atendimento registrado!
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                No momento não existe nenhum atendimento pendente!
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -136,14 +123,14 @@ if (!defined('URL')) {
                                         <span class="d-none d-md-block">
                                             <?php
                                             if ($this->Dados['botao']['vis']) { ?>
-                                                <a href="<?php echo URLADM . 'ver-demanda/ver-demanda/' . $id; ?>"
+                                                <a href="<?php echo URLADM . 'funcionario-ver-atendimento/ver/' . $id; ?>"
                                                    class="btn btn-info btn-sm my-md-1">Visualizar</a>
                                                 <?php
                                             }
                                             ?>
                                             <?php
                                             if ($this->Dados['botao']['edit']) { ?>
-                                                <a href="<?php echo URLADM . 'editar-demanda/edit-demanda/' . $id; ?>"
+                                                <a href="<?php echo URLADM . 'funcionario-editar-atendimento/edit/' . $id; ?>"
                                                    class="btn btn-warning btn-sm my-md-1">Editar</a>
                                                 <?php
                                             }

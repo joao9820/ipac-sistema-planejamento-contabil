@@ -17,15 +17,10 @@ class GerenciarAtendimento
 {
     private $Dados;
     private $PageId;
-    private $TipoResultado;
-    private $PesqAtendimento;
 
     public function listar($PageId = null)
     {
-        $this->TipoResultado = filter_input(INPUT_GET, 'tiporesult');
         $this->PageId = (int) $PageId ? $PageId : 1;
-
-        $this->Dados['pg'] = $this->PageId;
 
         //Array botoes
         $botao = ['vis_atendimento' => ['menu_controller' => 'atendimento-gerente', 'menu_metodo' => 'ver'],
@@ -36,40 +31,18 @@ class GerenciarAtendimento
         $listarBotao = new \App\adms\Models\AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-        if (!empty($this->TipoResultado) AND ( $this->TipoResultado == 1)) {
-            $this->listarAtendimentosPriv();
-        } elseif (!empty($this->TipoResultado) AND ( $this->TipoResultado == 2)) {
-            $this->PesqAtendimento = filter_input(INPUT_POST, 'palavraPesq');
-            //echo $this->PesqAtendimento . "<br>";
-            $this->pesqAtendimentosPriv();
-        } else {
-            $listarMenu = new \App\adms\Models\AdmsMenu();
-            $this->Dados['menu'] = $listarMenu->itemMenu();
+        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $this->Dados['menu'] = $listarMenu->itemMenu();
 
-            $carregarView = new \Core\ConfigView("adms/Views/gerenciar/carregarAtendimentos", $this->Dados);
-            $carregarView->renderizar();
-        }
 
-    }
-
-    private function listarAtendimentosPriv()
-    {
         $listarAtendimentos = new \App\adms\Models\AdmsListarAtendGerente();
         $this->Dados['listAtendimentos']= $listarAtendimentos->listarAtendimentos($this->PageId);
         $this->Dados['paginacao'] = $listarAtendimentos->getResultadoPg();
 
-        $carregarView = new \Core\ConfigView("adms/Views/gerenciar/listarAtendimentos", $this->Dados);
-        $carregarView->renderizarListar();
-    }
-
-    private function pesqAtendimentosPriv()
-    {
-        $listarAtendimento = new \App\adms\Models\AdmsPesqAtendimento();
-        $this->Dados['listAtendimentos'] = $listarAtendimento->pesqAtendimento($this->PesqAtendimento);
-        $this->Dados['paginacao'] = $listarAtendimento->getResultadoPg();
+        $this->Dados['pg'] = $this->PageId;
 
         $carregarView = new \Core\ConfigView("adms/Views/gerenciar/listarAtendimentos", $this->Dados);
-        $carregarView->renderizarListar();
+        $carregarView->renderizar();
     }
 
 

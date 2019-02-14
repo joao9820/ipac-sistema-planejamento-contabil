@@ -24,9 +24,9 @@ class AtendimentoPendente
         $this->PageId = (int) $PageId ? $PageId : 1;
 
         //Array botoes
-        $botao = ['abrir' => ['menu_controller' => 'novo-atendimento', 'menu_metodo' => 'novo'],
-            'vis' => ['menu_controller' => 'ver-atendimento', 'menu_metodo' => 'ver-atendimento'],
-            'edit' => ['menu_controller' => 'editar-atendimento', 'menu_metodo' => 'edit-atendimento']];
+        $botao = ['arquivados' => ['menu_controller' => 'novo-atendimento', 'menu_metodo' => 'novo'],
+            'vis' => ['menu_controller' => 'funcionario-ver-atendimento', 'menu_metodo' => 'ver'],
+            'edit' => ['menu_controller' => 'funcionario-editar-atendimento', 'menu_metodo' => 'edit']];
         //var_dump($botao);
         $listarBotao = new \App\adms\Models\AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
