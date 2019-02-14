@@ -13,7 +13,7 @@ if (!defined('URL')) {
     exit();
 }
 
-class AtendimentoPendente
+class AtendimentoEmAndamento
 {
     private $Dados;
     private $PageId;
@@ -24,9 +24,10 @@ class AtendimentoPendente
         $this->PageId = (int) $PageId ? $PageId : 1;
 
         //Array botoes
-        $botao = ['em_andamento' => ['menu_controller' => 'atendimento-em-andamento', 'menu_metodo' => 'listar'],
-            'vis' => ['menu_controller' => 'funcionario-ver-atendimento', 'menu_metodo' => 'ver'],
-            'edit' => ['menu_controller' => 'funcionario-editar-atendimento', 'menu_metodo' => 'edit']];
+        $botao = ['pendente' => ['menu_controller' => 'atendimento-pendente', 'menu_metodo' => 'listar'],
+                'concluido' => ['menu_controller' => 'atendimento-concluido', 'menu_metodo' => 'listar'],
+                'vis' => ['menu_controller' => 'funcionario-ver-atendimento', 'menu_metodo' => 'ver-iniciado'],
+                'edit' => ['menu_controller' => 'funcionario-editar-atendimento', 'menu_metodo' => 'edit-iniciado']];
         //var_dump($botao);
         $listarBotao = new \App\adms\Models\AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
@@ -36,13 +37,12 @@ class AtendimentoPendente
 
 
         $listarAtendimento = new \App\adms\Models\AdmsListarAtendimentoPendente();
-        $this->Dados['listAtendimentoPendente']= $listarAtendimento->listarAtendimento($this->PageId);
+        $this->Dados['listAtendimentoEmAndamento']= $listarAtendimento->listarAtendimento($this->PageId);
         $this->Dados['paginacao'] = $listarAtendimento->getResultadoPg();
-        $this->Dados['listAtendimentoPendenteUrgente'] = $listarAtendimento->listarAtendimentoUrgente();
 
         $this->Dados['pg'] = $this->PageId;
 
-        $carregarView = new \Core\ConfigView("adms/Views/atendimento/funcionario/atendimentoPendente", $this->Dados);
+        $carregarView = new \Core\ConfigView("adms/Views/atendimento/funcionario/atendimentoEmAndamento", $this->Dados);
         $carregarView->renderizar();
     }
 

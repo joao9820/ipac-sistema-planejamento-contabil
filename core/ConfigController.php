@@ -97,7 +97,7 @@ class ConfigController
                 $this->carregar();
             }
         } else {
-            $_SESSION['msg'] = '<div class="alert alert-danger" role="alert">Erro: Acesso não autorizado!</div>';
+            $_SESSION['msg'] = '<div class="alert alert-danger" role="alert">Desculpe, a página que você procura não existe ou você não tem permissão de acessa-la!</div>';
             $this->UrlController = $this->slugController('Login');
             $this->UrlMetodo = $this->slugMetodo('acesso');
             $this->carregar();
