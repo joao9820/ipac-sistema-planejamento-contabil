@@ -104,6 +104,27 @@ $(document).ready(function () {
         $('#confirm-des').modal({show: true});
         return false;
     });
+
+    //----------------------------------------------
+    $('a[data-sitAtenIniciar]').click(function (ev) {
+        var href = $(this).attr('href');
+        if (!$('#confirm').length) {
+            $('body').append('<div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-primary text-white">Iniciar Atendimento<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">Tem certeza que deseja iniciar o atendimento?</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button><a class="btn btn-primary text-white" id="dataComfirmOK">Iniciar</a></div></div></div></div>');
+        }
+        $('#dataComfirmOK').attr('href', href);
+        $('#confirm').modal({show: true});
+        return false;
+    });
+
+    $('a[data-sitAtenPausar]').click(function (ev) {
+        var href = $(this).attr('href');
+        if (!$('#confirm').length) {
+            $('body').append('<div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-warning text-white">Pausar Atendimento<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">Tem certeza que deseja pausar o atendimento?</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button><a class="btn btn-warning text-white" id="dataComfirmOK">Pausar</a></div></div></div></div>');
+        }
+        $('#dataComfirmOK').attr('href', href);
+        $('#confirm').modal({show: true});
+        return false;
+    });
 });
 
 //Apresentar tooltip
