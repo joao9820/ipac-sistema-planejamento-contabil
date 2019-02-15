@@ -7,7 +7,7 @@ if ($this->Dados['atendimento']) {
     extract($this->Dados['atendimento'][0]);
 
 $pg = $this->Dados['pg'];
-//var_dump($this->Dados);
+//var_dump($this->Dados['atendimento']);
 ?>
     <div class="content p-1">
         <div class="list-group-item">
@@ -23,7 +23,14 @@ $pg = $this->Dados['pg'];
                             echo "<a href='" . URLADM . "gerenciar-atendimento/listar/$pg' class='btn btn-outline-info btn-sm'>Listar Atendimentos</a> ";
                         }
                         if ($this->Dados['botao']['edit_atendimento'] AND $cancelado_p_user !=1) {
-                            echo "<a href='" . URLADM . "atendimento-gerente/editar/$id?pg=$pg' class='btn btn-outline-warning btn-sm'>Editar</a> ";
+                            if ($id_situacao != 2) {
+                                echo "<a href='" . URLADM . "atendimento-gerente/editar/$id?pg=$pg' class='btn btn-outline-warning btn-sm'>Editar</a> ";
+                            } else {
+                                echo '<span tabindex="0" data-placement="left" data-toggle="tooltip" title="Atendimento sendo realizado pelo funcionário responsável. Nenhuma alteração pode ser feita no momento.">';
+                                echo "<a href='#' class='btn btn-secondary btn-sm disabled'>Editar</a> ";
+                                echo '</span>';
+                            }
+
                         }
                         if (($this->Dados['botao']['arqui_atendimento']) AND ($arquivado_gerente != 1)) {
                             echo "<a href='" . URLADM . "atendimento-gerente/arquivar/$id' class='btn btn-outline-secondary btn-sm' 
@@ -40,11 +47,19 @@ $pg = $this->Dados['pg'];
                             if ($this->Dados['botao']['list_atendimento']) {
                                 echo "<a class='dropdown-item' href='" . URLADM . "gerenciar-atendimento/listar/$pg'>Listar Atendimentos</a>";
                             }
-                            if ($this->Dados['botao']['edit_atendimento']) {
-                                echo "<a class='dropdown-item' href='" . URLADM . "atendimento-gerente/editar/$id$id?pg=$pg'>Editar</a>";
+                            if ($this->Dados['botao']['edit_atendimento'] AND $cancelado_p_user !=1) {
+                                if ($id_situacao != 2) {
+                                    echo "<a class='dropdown-item' href='" . URLADM . "atendimento-gerente/editar/$id$id?pg=$pg'>Editar</a>";
+                                } else {
+
+                                    echo "<a href='#' class='dropdown-item disabled'>
+                                            <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Atendimento sendo realizado pelo funcionário responsável. Nenhuma alteração pode ser feita no momento.'>
+                                                <i class='fas fa-question-circle'></i>
+                                            </span>Editar</a> ";
+                                }
                             }
                             if ($this->Dados['botao']['arqui_atendimento']) {
-                                echo "<a class='dropdown-item' href='" . URLADM . "atendimento-gerente/arquivar/$id' data-confirm='Tem certeza de que deseja excluir o item selecionado?'>Arquivar</a>";
+                                echo "<a class='dropdown-item' href='" . URLADM . "atendimento-gerente/arquivar/$id' data-arquivo='Tem certeza que deseja arquivar o atendimento selecionado?'>Arquivar</a>";
                             }
                             ?>
                         </div>

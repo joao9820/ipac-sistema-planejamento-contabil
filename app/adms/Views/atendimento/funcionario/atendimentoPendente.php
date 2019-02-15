@@ -77,7 +77,59 @@ if (!defined('URL')) {
                             ?>
 
                             <tr>
-                                <td><span class="badge badge-secondary">Não iniciado</span></td>
+                                <td>
+                                    <?php
+                                    if ($id_sits_aten_func == 1) {
+                                        // Não iniciado
+                                        ?>
+                                        <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Clique para iniciar atendimento.'>
+                                                    <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']; ?>" class="btn btn-<?php echo $cor_sit_aten_func; ?> btn-sm my-md-1"
+                                                       data-sitAtenIniciar='Tem certeza que deseja iniciar o atendimento?'>
+                                                        <span class='badge badge-pill badge-<?php echo $cor_sit_aten_func; ?>'>
+                                                            <?php echo $nome_sits_aten_func; ?>
+                                                        </span>
+                                                    </a>
+                                                </span>
+                                        <?php
+                                    } elseif ($id_sits_aten_func == 2){
+                                        // Iniciado
+                                        ?>
+                                        <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Clique para pausar o atendimento.'>
+                                                    <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']; ?>" class="btn btn-<?php echo $cor_sit_aten_func; ?> btn-sm my-md-1"
+                                                       data-sitAtenPausar='Tem certeza que deseja pausar o atendimento?'>
+                                                        <span class='badge badge-pill badge-<?php echo $cor_sit_aten_func; ?>'>
+                                                            <?php echo $nome_sits_aten_func; ?>
+                                                        </span>
+                                                    </a>
+                                                </span>
+                                        <?php
+                                    } elseif ($id_sits_aten_func == 3) {
+                                        // Pausado
+                                        ?>
+                                        <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Clique para iniciar atendimento.'>
+                                                    <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']; ?>" class="btn btn-<?php echo $cor_sit_aten_func; ?> btn-sm my-md-1"
+                                                       data-sitAtenIniciar='Tem certeza que deseja da continuidade ao atendimento agora?'>
+                                                        <span class='badge badge-pill badge-<?php echo $cor_sit_aten_func; ?>'>
+                                                            <?php echo $nome_sits_aten_func; ?>
+                                                        </span>
+                                                    </a>
+                                                </span>
+                                        <?php
+                                    } else {
+                                        // Finalizado
+                                        ?>
+                                        <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Atendimento finalizado.'>
+                                                    <a href="#" class="btn btn-secondary btn-sm my-md-1">
+                                                        <span class='badge badge-pill badge-<?php echo $cor_sit_aten_func; ?>'>
+                                                            <?php echo $nome_sits_aten_func; ?>
+                                                        </span>
+                                                    </a>
+                                                </span>
+                                        <?php
+                                    }
+                                    ?>
+
+                                </td>
                                 <td><?php echo $demanda; ?></td>
                                 <td>
                                     <span tabindex="0" data-toggle="tooltip" data-placement="right" data-html="true"
@@ -202,7 +254,59 @@ if (!defined('URL')) {
                                 ?>
 
                                 <tr>
-                                    <td><span class="badge badge-secondary">Não iniciado</span></td>
+                                    <td>
+                                        <?php
+                                            if ($id_sits_aten_func == 1) {
+                                                // Não iniciado
+                                                ?>
+                                                <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Clique para iniciar atendimento.'>
+                                                    <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']; ?>" class="btn btn-<?php echo $cor_sit_aten_func; ?> btn-sm my-md-1"
+                                                   data-sitAtenIniciar='Tem certeza que deseja iniciar o atendimento?'>
+                                                        <span class='badge badge-pill badge-<?php echo $cor_sit_aten_func; ?>'>
+                                                            <?php echo $nome_sits_aten_func; ?>
+                                                        </span>
+                                                    </a>
+                                                </span>
+                                                <?php
+                                            } elseif ($id_sits_aten_func == 2){
+                                                // Iniciado
+                                                ?>
+                                                <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Clique para pausar o atendimento.'>
+                                                    <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']; ?>" class="btn btn-<?php echo $cor_sit_aten_func; ?> btn-sm my-md-1"
+                                                       data-sitAtenPausar='Tem certeza que deseja pausar o atendimento?'>
+                                                        <span class='badge badge-pill badge-<?php echo $cor_sit_aten_func; ?>'>
+                                                            <?php echo $nome_sits_aten_func; ?>
+                                                        </span>
+                                                    </a>
+                                                </span>
+                                                <?php
+                                            } elseif ($id_sits_aten_func == 3) {
+                                                // Pausado
+                                                ?>
+                                                <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Clique para iniciar atendimento.'>
+                                                    <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']; ?>" class="btn btn-<?php echo $cor_sit_aten_func; ?> btn-sm my-md-1"
+                                                       data-sitAtenIniciar='Tem certeza que deseja da continuidade ao atendimento agora?'>
+                                                        <span class='badge badge-pill badge-<?php echo $cor_sit_aten_func; ?>'>
+                                                            <?php echo $nome_sits_aten_func; ?>
+                                                        </span>
+                                                    </a>
+                                                </span>
+                                                <?php
+                                            } else {
+                                                // Finalizado
+                                                ?>
+                                                <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Atendimento finalizado.'>
+                                                    <a href="#" class="btn btn-secondary btn-sm my-md-1">
+                                                        <span class='badge badge-pill badge-<?php echo $cor_sit_aten_func; ?>'>
+                                                            <?php echo $nome_sits_aten_func; ?>
+                                                        </span>
+                                                    </a>
+                                                </span>
+                                                <?php
+                                            }
+                                        ?>
+
+                                    </td>
                                     <td><?php echo $demanda; ?></td>
                                     <td>
                                 <span tabindex="0" data-toggle="tooltip" data-placement="right" data-html="true"
