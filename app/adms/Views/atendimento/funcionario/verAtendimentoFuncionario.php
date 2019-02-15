@@ -14,7 +14,7 @@ $pg = $this->Dados['pg'];
             <div class="d-flex">
                 <div class="mr-auto p-2">
 
-                    <h2 class="display-4 titulo">Atendimento <span class="badge badge-info  p-2"><?php echo $id ?></span></h2>
+                    <h2 class="display-4 titulo">Atendimento <span class="badge badge-secondary  px-3"><?php echo $id ?></span></h2>
                 </div>
                 <div class="p-2">
                     <span class="d-none d-md-block">
@@ -156,11 +156,18 @@ $pg = $this->Dados['pg'];
                     ?>
                 </dd>
 
-                <dt class="col-sm-3">Prioridade de atendimento? </dt>
-                <dd class="col-sm-9"><?php if ($prioridade == 1){ echo "Sim";} else {echo "Não";} ?></dd>
+                <dt class="col-sm-3">Prioridade do atendimento: </dt>
+                <dd class="col-sm-9"><?php if ($prioridade == 1){ echo "<span class='badge badge-danger'>Imediato</span>";} else {echo "<span class='badge badge-secondary'>Normal";} ?></dd>
 
                 <dt class="col-sm-3">Atendimento iniciado em</dt>
                 <dd class="col-sm-9"><?php if (!empty($inicio_atendimento)) {echo date('d/m/Y H:i:s', strtotime($inicio_atendimento));} else {echo "Não iniciado.";} ?></dd>
+
+                <dt class="col-sm-3">Tempo Restante</dt>
+                <dd class="col-sm-9">
+                    <span tabindex="0" data-placement="top" data-toggle="tooltip" title="Hora/minutos">
+                        00:00
+                    </span>
+                </dd>
 
                 <?php
                     if (!empty($inicio_atendimento) AND empty($fim_atendimento)) {
