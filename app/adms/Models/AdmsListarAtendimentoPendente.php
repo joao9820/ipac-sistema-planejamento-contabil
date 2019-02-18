@@ -39,7 +39,7 @@ class AdmsListarAtendimentoPendente
 
 
         $listarAtendimento = new \App\adms\Models\helper\AdmsRead();
-        $listarAtendimento->fullRead("SELECT aten.id, aten.descricao, aten.created, 
+        $listarAtendimento->fullRead("SELECT aten.id, aten.descricao, aten.created, aten.inicio_atendimento, aten.at_tempo_restante, aten.at_iniciado,
                         demanda.nome demanda, 
                         emp.nome nome_empresa, emp.fantasia fantasia_empresa, 
                         situacao.nome nome_situacao, situacao.id id_situacao, 
@@ -66,7 +66,7 @@ class AdmsListarAtendimentoPendente
     {
 
         $listarAtendimentoUrgente = new \App\adms\Models\helper\AdmsRead();
-        $listarAtendimentoUrgente->fullRead("SELECT aten.id, aten.descricao, aten.created, 
+        $listarAtendimentoUrgente->fullRead("SELECT aten.id, aten.descricao, aten.created, aten.inicio_atendimento, aten.at_tempo_restante, aten.at_iniciado,
                         demanda.nome demanda, 
                         emp.nome nome_empresa, emp.fantasia fantasia_empresa, 
                         situacao.nome nome_situacao, situacao.id id_situacao, 

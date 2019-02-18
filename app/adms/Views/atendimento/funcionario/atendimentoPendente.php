@@ -70,7 +70,6 @@ if (!defined('URL')) {
 
                         <tbody>
                         <?php
-
                         foreach ($this->Dados['listAtendimentoPendenteUrgente'] as $atendimento) {
                             extract($atendimento);
 
@@ -155,13 +154,56 @@ if (!defined('URL')) {
                                 <td class="d-none d-sm-table-cell"><?php echo $descricao; ?></td>
                                 <td class="d-none d-sm-table-cell"><?php echo date('d/m/Y H:i', strtotime($created)); ?></td>
                                 <td class="text-center">
-                                    <span tabindex="0" data-placement="top" data-toggle="tooltip" title="Dia 00/00/0000">
-                                        00:00
-                                    </span>
+                                    <?php
+                                    if (!empty($inicio_atendimento)) {
+                                        ?>
+                                        <span tabindex="0" data-placement="top" data-toggle="tooltip"
+                                              title="Dia <?php echo date('d/m/Y', strtotime($inicio_atendimento)); ?>">
+                                                    <?php echo date('H:i', strtotime($inicio_atendimento)); ?>
+                                                </span>
+                                        <?php
+                                    } else {
+                                        echo "--:--";
+                                    }
+                                    ?>
                                 </td>
                                 <td class="text-center">
-                                    <span tabindex="0" data-placement="top" data-toggle="tooltip" title="Hora/minutos">
-                                        00:00
+                                    <span tabindex="0" data-placement="top" data-toggle="tooltip" title="Hora/minutos/segundos">
+                                        <?php
+                                        if ($id_sits_aten_func == 1) {
+                                            echo "--:--";
+                                        } elseif ($id_sits_aten_func == 3){
+                                            if (!empty($at_tempo_restante)) {
+                                                echo date('H:i:s', strtotime($at_tempo_restante));
+                                            } else {
+                                                echo "--:--";
+                                            }
+                                        }
+                                        elseif ($id_sits_aten_func == 2) {
+                                            if (!empty($at_tempo_restante)) {
+
+                                                // Pegando a hora restante do atendimento no banco e transformando em segundos
+                                                $at_iniciado = date('Y-m-d H:i:s', strtotime($at_iniciado));
+                                                $partes = explode(':', $at_tempo_restante);
+                                                $segundosTotal = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
+                                                // Pegando a hora do banco em que foi iniciado o atendimento
+                                                $at_pausado = date('Y-m-d H:i:s');
+                                                $dteStart = new DateTime($at_iniciado);
+                                                $dteEnd = new DateTime($at_pausado);
+                                                $dteDiff = $dteStart->diff($dteEnd);
+                                                $horas_diferenca = $dteDiff->format('%H');
+                                                $minutos_diferenca = $dteDiff->format('%i');
+                                                $segundos_diferenca = $dteDiff->format('%s');
+                                                $segundosAndamento = $horas_diferenca * 3600 + $minutos_diferenca * 60 + $segundos_diferenca;
+
+                                                $tempo_restante = $segundosTotal - $segundosAndamento;
+
+                                                echo "<span id='sessao' class='text-primary'></span>";
+                                            } else {
+                                                echo "--:--";
+                                            }
+                                        }
+                                        ?>
                                     </span>
                                 </td>
                                 <td class="text-center">
@@ -190,18 +232,13 @@ if (!defined('URL')) {
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right"
                                              aria-labelledby="acoesListar">
-                                            <?php if ($this->Dados['botao']['vis_atendimento']) { ?>
+                                            <?php if ($this->Dados['botao']['vis']) { ?>
                                                 <a class="dropdown-item"
-                                                   href="<?php echo URLADM . 'ver-demanda/ver-demanda/' . $id. '?pg='.$this->Dados['pg']; ?>">Visualizar</a>
+                                                   href="<?php echo URLADM . 'funcionario-ver-atendimento/ver/' . $id. '?pg='.$this->Dados['pg']; ?>">Visualizar</a>
                                             <?php } ?>
-                                            <?php if ($this->Dados['botao']['edit_atendimento']) { ?>
+                                            <?php if ($this->Dados['botao']['edit']) { ?>
                                                 <a class="dropdown-item"
-                                                   href="<?php echo URLADM . 'editar-demanda/edit-demanda/' . $id. '?pg='.$this->Dados['pg']; ?>">Editar</a>
-                                            <?php } ?>
-                                            <?php if (($this->Dados['botao']['can_atendimento']) AND ($id_situacao == 1)) { ?>
-                                                <a class="dropdown-item"
-                                                   href="<?php echo URLADM . 'cancelar-atendimento/cancelar/' . $id . '?pg=' . $this->Dados['pg']; ?>"
-                                                   data-cancelar='Tem certeza que deseja excluir o atendimento selecionado?'>Cancelar</a>
+                                                   href="<?php echo URLADM . 'funcionario-editar-atendimento/edit/' . $id. '?pg='.$this->Dados['pg']; ?>">Editar</a>
                                             <?php } ?>
                                         </div>
                                     </div>
@@ -247,7 +284,6 @@ if (!defined('URL')) {
 
                             <tbody>
                             <?php
-
                             foreach ($this->Dados['listAtendimentoPendente'] as $atendimento) {
                                 extract($atendimento);
 
@@ -332,13 +368,57 @@ if (!defined('URL')) {
                                     <td class="d-none d-sm-table-cell"><?php echo $descricao; ?></td>
                                     <td class="d-none d-sm-table-cell"><?php echo date('d/m/Y H:i', strtotime($created)); ?></td>
                                     <td class="text-center">
-                                    <span tabindex="0" data-placement="top" data-toggle="tooltip" title="Dia 00/00/0000">
-                                        00:00
-                                    </span>
+                                        <?php
+                                            if (!empty($inicio_atendimento)) {
+                                                ?>
+                                                <span tabindex="0" data-placement="top" data-toggle="tooltip"
+                                                      title="Dia <?php echo date('d/m/Y', strtotime($inicio_atendimento)); ?>">
+                                                    <?php echo date('H:i', strtotime($inicio_atendimento)); ?>
+                                                </span>
+                                                <?php
+                                            } else {
+                                                echo "--:--";
+                                            }
+                                        ?>
                                     </td>
                                     <td class="text-center">
-                                    <span tabindex="0" data-placement="top" data-toggle="tooltip" title="Hora/minutos">
-                                        00:00
+                                    <span tabindex="0" data-placement="top" data-toggle="tooltip" title="Hora/minutos/segundos">
+                                        <?php
+                                            if ($id_sits_aten_func == 1) {
+                                                echo "--:--";
+                                            } elseif ($id_sits_aten_func == 3){
+                                                if (!empty($at_tempo_restante)) {
+                                                    echo date('H:i:s', strtotime($at_tempo_restante));
+                                                } else {
+                                                    echo "--:--";
+                                                }
+                                            }
+                                            elseif ($id_sits_aten_func == 2) {
+
+                                                if (!empty($at_tempo_restante)) {
+
+                                                    // Pegando a hora restante do atendimento no banco e transformando em segundos
+                                                    $at_iniciado = date('Y-m-d H:i:s', strtotime($at_iniciado));
+                                                    $partes = explode(':', $at_tempo_restante);
+                                                    $segundosTotal = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
+                                                    // Pegando a hora do banco em que foi iniciado o atendimento
+                                                    $at_pausado = date('Y-m-d H:i:s');
+                                                    $dteStart = new DateTime($at_iniciado);
+                                                    $dteEnd = new DateTime($at_pausado);
+                                                    $dteDiff = $dteStart->diff($dteEnd);
+                                                    $horas_diferenca = $dteDiff->format('%H');
+                                                    $minutos_diferenca = $dteDiff->format('%i');
+                                                    $segundos_diferenca = $dteDiff->format('%s');
+                                                    $segundosAndamento = $horas_diferenca * 3600 + $minutos_diferenca * 60 + $segundos_diferenca;
+
+                                                    $tempo_restante = $segundosTotal - $segundosAndamento;
+
+                                                    echo "<span id='sessao' class='text-primary'></span>";
+                                                } else {
+                                                    echo "--:--";
+                                                }
+                                            }
+                                        ?>
                                     </span>
                                     </td>
                                     <td class="text-center">
@@ -367,18 +447,13 @@ if (!defined('URL')) {
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right"
                                                  aria-labelledby="acoesListar">
-                                                <?php if ($this->Dados['botao']['vis_atendimento']) { ?>
+                                                <?php if ($this->Dados['botao']['vis']) { ?>
                                                     <a class="dropdown-item"
-                                                       href="<?php echo URLADM . 'ver-demanda/ver-demanda/' . $id. '?pg='.$this->Dados['pg']; ?>">Visualizar</a>
+                                                       href="<?php echo URLADM . 'funcionario-ver-atendimento/ver/' . $id. '?pg='.$this->Dados['pg']; ?>">Visualizar</a>
                                                 <?php } ?>
-                                                <?php if ($this->Dados['botao']['edit_atendimento']) { ?>
+                                                <?php if ($this->Dados['botao']['edit']) { ?>
                                                     <a class="dropdown-item"
-                                                       href="<?php echo URLADM . 'editar-demanda/edit-demanda/' . $id. '?pg='.$this->Dados['pg']; ?>">Editar</a>
-                                                <?php } ?>
-                                                <?php if (($this->Dados['botao']['can_atendimento']) AND ($id_situacao == 1)) { ?>
-                                                    <a class="dropdown-item"
-                                                       href="<?php echo URLADM . 'cancelar-atendimento/cancelar/' . $id . '?pg=' . $this->Dados['pg']; ?>"
-                                                       data-cancelar='Tem certeza que deseja excluir o atendimento selecionado?'>Cancelar</a>
+                                                       href="<?php echo URLADM . 'funcionario-editar-atendimento/edit/' . $id. '?pg='.$this->Dados['pg']; ?>">Editar</a>
                                                 <?php } ?>
                                             </div>
                                         </div>
@@ -411,3 +486,120 @@ if (!defined('URL')) {
     </div>
 
 </div>
+
+<?php
+if (!empty($tempo_restante)) {
+    $scriptInicio = "<script>";
+    $scriptFinal = "</script>";
+    // O tempo tem que ser obrigatoriamente em segundos
+    $valorControler = 0;
+
+    $script = $scriptInicio . "var tempo = '" . $tempo_restante . "'; var controler = '" . $valorControler . "';" . $scriptFinal;
+    echo $script;
+?>
+<script src="<?php echo URLADM.'assets/js/temporizador/jquery-1.9.1.min.js'; ?>"></script>
+<script type="text/javascript">
+
+    //var tempo = new Number();
+    //var controler = 0;
+    // Tempo em segundos
+    //tempo = 7;
+
+    function startCountdown(){
+
+        // Se o tempo não for zerado
+        if(((tempo - 1) >= 0) && (controler == 0)){
+
+            // Pega a parte inteira dos minutos
+            var min = parseInt(tempo/60);
+
+            // horas, pega a parte inteira dos minutos
+            var hor = parseInt(min/60);
+
+            //atualiza a variável minutos obtendo o tempo restante dos minutos
+            min = min % 60;
+
+
+            // Calcula os segundos restantes
+            var seg = tempo%60;
+
+            // Formata o número menor que dez, ex: 08, 07, ...
+            if(min < 10)
+            {
+                min = "0"+min;
+                min = min.substr(0, 2);
+            }
+
+            if(seg <=9)
+            {
+                seg = "0"+seg;
+            }
+
+            if(hor <=9)
+            {
+                hor = "0"+hor;
+            }
+
+            // Cria a variável para formatar no estilo hora/cronômetro
+            horaImprimivel = hor+':' + min + ':' + seg;
+
+            //JQuery pra setar o valor
+            $("#sessao").html(horaImprimivel);
+
+            // Define que a função será executada novamente em 1000ms = 1 segundo
+            setTimeout('startCountdown()',1000);
+
+            // diminui o tempo
+            tempo--;
+
+        } else {
+            controler = 1;
+
+            // Pega a parte inteira dos minutos
+            var min = parseInt(tempo/60);
+
+            // horas, pega a parte inteira dos minutos
+            var hor = parseInt(min/60);
+
+            //atualiza a variável minutos obtendo o tempo excedido dos minutos
+            min = min % 60;
+
+            // Calcula os segundos excedido
+            var seg = tempo%60;
+
+            // Formata o número menor que dez, ex: 08, 07, ...
+            if(min < 10){
+                min = "0"+min;
+                min = min.substr(0, 2);
+            }
+            if(seg <=9){
+                seg = "0"+seg;
+            }
+            if(hor <=9){
+                hor = "0"+hor;
+            }
+
+            // Cria a variável para formatar no estilo hora/cronômetro
+            horaImprimivel = '-' + hor + ':' + min + ':' + seg;
+
+            //JQuery pra setar o valor
+            $('#sessao').attr('class', 'text-danger');
+            $("#sessao").html(horaImprimivel);
+
+            // Define que a função será executada novamente em 1000ms = 1 segundo
+            setTimeout('startCountdown()',1000);
+
+            // somar o tempo
+            tempo++;
+        }
+
+    }
+
+    // Chama a função ao carregar a tela
+    startCountdown();
+
+</script>
+
+    <?php
+}
+?>

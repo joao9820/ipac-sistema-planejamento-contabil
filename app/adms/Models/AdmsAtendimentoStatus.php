@@ -7,6 +7,7 @@
  */
 
 namespace App\adms\Models;
+use \DateTime;
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -17,10 +18,15 @@ class AdmsAtendimentoStatus
     private $DadosId;
     private $Status;
     private $StatusLog;
+    private $Resultado;
+    private $DadosDemandaId;
+    private $DemandaId;
     private $Dados;
     private $Log;
     private $DadosLog;
     private $ResultadoStsIniciado;
+    private $ResultadoDemanda;
+    private $ResultadoTempo;
 
     public function alterarStatus($DadosId = null, $Status = null)
     {
@@ -71,12 +77,44 @@ class AdmsAtendimentoStatus
     {
         if ($this->Status == 1) {
             $this->Dados['adms_sits_atendimentos_funcionario_id'] = 2;
+            $this->Dados['adms_sits_atendimento_id'] = 2;
             $this->Dados['inicio_atendimento'] = date("Y-m-d H:i:s");
             $this->Dados['at_iniciado'] = date("Y-m-d H:i:s");
+
+            $this->buscarIdDemanda();
+            $this->DemandaId = $this->ResultadoDemanda[0]['adms_demanda_id'];
+            $this->verTotalHoras($this->DemandaId);
+            $this->Dados['duracao_atendimento'] = $this->Resultado[0]['total_horas'];
+            $this->Dados['at_tempo_restante'] = $this->Resultado[0]['total_horas'];
         }
         elseif ($this->Status == 2) {
+
             $this->Dados['adms_sits_atendimentos_funcionario_id'] = 3;
             $this->Dados['at_pausado'] = date("Y-m-d H:i:s");
+
+            $this->buscarTempoRestante();
+            // Pegando a hora restante do atendimento no banco e transformando em segundos
+            $tempoRestante = $this->ResultadoTempo[0]['at_tempo_restante'];
+            $partes = explode(':', $tempoRestante);
+            $segundosTotal = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
+
+            // Pegando a hora do banco em que foi iniciado o atendimento
+            $at_iniciado = $this->ResultadoTempo[0]['at_iniciado'];
+            $at_pausado = $this->Dados['at_pausado'];
+            $dteStart = new DateTime($at_iniciado);
+            $dteEnd   = new DateTime($at_pausado);
+            $dteDiff  = $dteStart->diff($dteEnd);
+            $horas_diferenca = $dteDiff->format('%H');
+            $minutos_diferenca = $dteDiff->format('%i');
+            $segundos_diferenca = $dteDiff->format('%s');
+            $segundosAndamento = $horas_diferenca * 3600 + $minutos_diferenca * 60 + $segundos_diferenca;
+
+            $segundosDiff = $segundosTotal - $segundosAndamento;
+
+            // Transforma segundos para o formato H:i:s 00:00:00
+            $novoTempoRestante = gmdate("H:i:s", $segundosDiff);
+            $this->Dados['at_tempo_restante'] = $novoTempoRestante;
+
         }
         elseif ( $this->Status == 3) {
             $this->Dados['adms_sits_atendimentos_funcionario_id'] = 2;
@@ -96,6 +134,33 @@ class AdmsAtendimentoStatus
         }
     }
 
+    public function verTotalHoras($DadosDemandaId)
+    {
+        $this->DadosDemandaId = (int) $DadosDemandaId;
+
+        $qtdHoras = new \App\adms\Models\helper\AdmsRead();
+        $qtdHoras->fullRead("SELECT time_format( SEC_TO_TIME( SUM( TIME_TO_SEC( duracao ) ) ),'%H:%i:%s') 
+                                    AS total_horas FROM adms_atividades where adms_demanda_id=:adms_demanda_id", "adms_demanda_id={$this->DadosDemandaId}");
+        $this->Resultado = $qtdHoras->getResultado();
+        return $this->Resultado;
+    }
+
+    private function buscarIdDemanda()
+    {
+        $verificarAten = new \App\adms\Models\helper\AdmsRead();
+        $verificarAten->fullRead("SELECT id, adms_demanda_id FROM adms_atendimentos 
+                WHERE id=:id AND adms_funcionario_id =:adms_funcionario_id AND adms_sits_atendimentos_funcionario_id =:adms_sits_aten_funcionario_id", "id={$this->DadosId}&adms_funcionario_id={$_SESSION['usuario_id']}&adms_sits_aten_funcionario_id=1");
+        $this->ResultadoDemanda = $verificarAten->getResultado();
+    }
+
+    private function buscarTempoRestante()
+    {
+        $tempoRestante = new \App\adms\Models\helper\AdmsRead();
+        $tempoRestante->fullRead("SELECT at_tempo_restante, at_iniciado FROM adms_atendimentos 
+                WHERE id=:id AND adms_funcionario_id =:adms_funcionario_id", "id={$this->DadosId}&adms_funcionario_id={$_SESSION['usuario_id']}");
+        $this->ResultadoTempo = $tempoRestante->getResultado();
+    }
+
     private function registLogs($StatusLog)
     {
         $this->StatusLog = (string) $StatusLog;
@@ -112,7 +177,7 @@ class AdmsAtendimentoStatus
     private function verificarAtenIniciado()
     {
         $verificarAtenIni = new \App\adms\Models\helper\AdmsRead();
-        $verificarAtenIni->fullRead("SELECT id FROM adms_atendimentos 
+        $verificarAtenIni->fullRead("SELECT id, adms_demanda_id FROM adms_atendimentos 
                 WHERE id<>:id AND adms_funcionario_id =:adms_funcionario_id AND adms_sits_atendimentos_funcionario_id =:adms_sits_aten_funcionario_id", "id={$this->DadosId}&adms_funcionario_id={$_SESSION['usuario_id']}&adms_sits_aten_funcionario_id=2");
         $this->ResultadoStsIniciado = $verificarAtenIni->getResultado();
     }
