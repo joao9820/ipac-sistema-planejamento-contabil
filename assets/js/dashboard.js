@@ -108,21 +108,31 @@ $(document).ready(function () {
     //----------------------------------------------
     $('a[data-sitAtenIniciar]').click(function (ev) {
         var href = $(this).attr('href');
-        if (!$('#confirm').length) {
-            $('body').append('<div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-primary text-white">Iniciar Atendimento<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">Tem certeza que deseja iniciar o atendimento?</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button><a class="btn btn-primary text-white" id="dataComfirmOK">Iniciar</a></div></div></div></div>');
+        if (!$('#confirmIniciar').length) {
+            $('body').append('<div class="modal fade" id="confirmIniciar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-primary text-white">Iniciar Atendimento<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">Tem certeza que deseja iniciar o atendimento?</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button><a class="btn btn-primary text-white" id="dataComfirmOKiniciar">Iniciar</a></div></div></div></div>');
         }
-        $('#dataComfirmOK').attr('href', href);
-        $('#confirm').modal({show: true});
+        $('#dataComfirmOKiniciar').attr('href', href);
+        $('#confirmIniciar').modal({show: true});
         return false;
     });
 
     $('a[data-sitAtenPausar]').click(function (ev) {
         var href = $(this).attr('href');
-        if (!$('#confirm').length) {
-            $('body').append('<div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-warning text-white">Pausar Atendimento<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">Tem certeza que deseja pausar o atendimento?</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button><a class="btn btn-warning text-white" id="dataComfirmOK">Pausar</a></div></div></div></div>');
+        if (!$('#confirmPausar').length) {
+            $('body').append('<div class="modal fade" id="confirmPausar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-warning text-white">Pausar Atendimento<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">Tem certeza que deseja pausar o atendimento?</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button><a class="btn btn-warning text-white" id="dataComfirmOKpausar">Pausar</a></div></div></div></div>');
         }
-        $('#dataComfirmOK').attr('href', href);
-        $('#confirm').modal({show: true});
+        $('#dataComfirmOKpausar').attr('href', href);
+        $('#confirmPausar').modal({show: true});
+        return false;
+    });
+
+    $('a[data-confirmFinalizar]').click(function (ev) {
+        var href = $(this).attr('href');
+        if (!$('#confirmFinalizar').length) {
+            $('body').append('<div class="modal fade" id="confirmFinalizar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-success text-white">Finalizar Atendimento<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body text-center">Tem certeza que deseja finalizar o atendimento? <br> Atenção, uma vez finalizado o atendimento não pode ser retomado. E o cliente será informado que seu atendimento foi finalizado.</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button><a class="btn btn-success text-white" id="dataComfirmOKfina">Finalizar</a></div></div></div></div>');
+        }
+        $('#dataComfirmOKfina').attr('href', href);
+        $('#confirmFinalizar').modal({show: true});
         return false;
     });
 });

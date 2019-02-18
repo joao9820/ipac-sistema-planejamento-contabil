@@ -437,7 +437,14 @@ if (!defined('URL')) {
                                                 <?php
                                             }
                                             ?>
-
+                                            <?php
+                                            if (($this->Dados['botao']['conclu']) AND $id_sits_aten_func == 2 ) { ?>
+                                                <a href="<?php echo URLADM . 'func-concluir-atendimento/concluir/' . $id. '?pg='.$this->Dados['pg']; ?>"
+                                                   class="btn btn-success btn-sm my-md-1" data-confirmFinalizar='Para finalizar o atendimento selecionado clique em finalizar. Atenção, uma vez finalizado o atendimento não pode ser retomado.'
+                                                >Finalizar</a>
+                                                <?php
+                                            }
+                                            ?>
                                         </span>
                                         <div class="dropdown d-block d-md-none">
                                             <button class="btn btn-primary dropdown-toggle btn-sm" type="button"
