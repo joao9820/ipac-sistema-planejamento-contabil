@@ -16,8 +16,61 @@ $pg = $this->Dados['pg'];
 
                     <h2 class="display-4 titulo">Atendimento <span class="badge badge-secondary  px-3"><?php echo $id ?></span></h2>
                 </div>
-                <div class="p-2">
+                <div class="p-2 d-flex flex-md-row flex-column  align-items-center">
+                    <span class="d-block mr-2 mb-2 mb-md-0">
+                    <?php
+                        if ($id_sits_aten_func == 1) {
+                            // Não iniciado
+                            ?>
+                            <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Clique para iniciar atendimento.'>
+                                                        <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg'].'&ver=1'; ?>" class="btn btn-<?php echo $cor_sit_aten_func; ?> btn-sm my-md-1"
+                                                           data-sitAtenIniciar='Tem certeza que deseja iniciar o atendimento?'>
+                                                            <span class='badge badge-pill badge-<?php echo $cor_sit_aten_func; ?>'>
+                                                                <?php echo $nome_sits_aten_func; ?>
+                                                            </span>
+                                                        </a>
+                                                    </span>
+                            <?php
+                        } elseif ($id_sits_aten_func == 2){
+                            // Iniciado
+                            ?>
+                            <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Clique para pausar o atendimento.'>
+                                                        <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg'].'&ver=1'; ?>" class="btn btn-<?php echo $cor_sit_aten_func; ?> btn-sm my-md-1"
+                                                           data-sitAtenPausar='Tem certeza que deseja pausar o atendimento?'>
+                                                            <span class='badge badge-pill badge-<?php echo $cor_sit_aten_func; ?>'>
+                                                                <?php echo $nome_sits_aten_func; ?>
+                                                            </span>
+                                                        </a>
+                                                    </span>
+                            <?php
+                        } elseif ($id_sits_aten_func == 3) {
+                            // Pausado
+                            ?>
+                            <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Clique para iniciar atendimento.'>
+                                                        <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg'].'&ver=1'; ?>" class="btn btn-<?php echo $cor_sit_aten_func; ?> btn-sm my-md-1"
+                                                           data-sitAtenIniciar='Tem certeza que deseja da continuidade o atendimento agora?'>
+                                                            <span class='badge badge-pill badge-<?php echo $cor_sit_aten_func; ?>'>
+                                                                <?php echo $nome_sits_aten_func; ?>
+                                                            </span>
+                                                        </a>
+                                                    </span>
+                            <?php
+                        } else {
+                            // Finalizado
+                            ?>
+                            <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Atendimento finalizado.'>
+                                <a href="#" class="btn btn-secondary btn-sm my-md-1">
+                                    <span class='badge badge-pill badge-<?php echo $cor_sit_aten_func; ?>'>
+                                        <?php echo $nome_sits_aten_func; ?>
+                                    </span>
+                                </a>
+                            </span>
+                            <?php
+                        }
+                    ?>
+                    </span>
                     <span class="d-none d-md-block">
+
                         <?php
                         if ($this->Dados['botao']['list_atendimento']) {
                             echo "<a href='" . URLADM . "atendimento-pendente/listar/$pg' class='btn btn-outline-info btn-sm'>Listar Atendimentos</a> ";
@@ -81,76 +134,81 @@ $pg = $this->Dados['pg'];
                 <dt class="col-sm-3">Solicitado em: </dt>
                 <dd class="col-sm-9"><?php echo date('d/m/Y H:i:s', strtotime($created));?></dd>
 
-                <dt class="col-sm-3">Duração Prevista Para o Atendimento: </dt>
+                <dt class="col-sm-3">Tempo definido para o Atendimento: </dt>
                 <dd class="col-sm-9">
-                    <span tabindex="0" data-placement="top" data-toggle="tooltip" title="Essa previsão é feita com base no tempo de execução da demanda selecionada.">
+                    <span tabindex="0" data-placement="top" data-toggle="tooltip" title="Esse tempo é gerado com base no tempo de execução da demanda selecionada para o atendimento.">
                     <i class="fas fa-question-circle"></i>
                     </span>
                     <?php
-                    //var_dump($this->Dados['total_horas_atendimento']);
-                    extract($this->Dados['total_horas_atendimento'][0]);
+                        //var_dump($this->Dados['total_horas_atendimento']);
+                        extract($this->Dados['total_horas_atendimento'][0]);
 
-                    $dadosHoras = (string) $total_horas;
-                    $dados = explode(":", $dadosHoras);
-
-                    $hora = $dados[0];
-                    $minuto = $dados[1];
-
-
-                    if ($hora >= 24){
-                        $dia = (int)($hora / 24);
-                        if ($dia > 1){
-                            echo $dia ." dias";
+                        if (!empty($duracao_atendimento)){
+                            $dadosHoras = (string) $duracao_atendimento;
                         } else {
-                            echo $dia ." dia";
+                            $dadosHoras = (string) $total_horas;
                         }
 
-                        if ($hora != 24) {
-                            if ($minuto > 0) {echo ", ";} else {echo " e ";}
-                            $novaHora = $hora - ($dia * 24);
-                            if ($novaHora > 1) {
-                                echo $novaHora . " horas";
+                        $dados = explode(":", $dadosHoras);
+
+                        $hora = $dados[0];
+                        $minuto = $dados[1];
+
+
+                        if ($hora >= 24){
+                            $dia = (int)($hora / 24);
+                            if ($dia > 1){
+                                echo $dia ." dias";
                             } else {
-                                echo $novaHora . " hora";
+                                echo $dia ." dia";
+                            }
+
+                            if ($hora != 24) {
+                                if ($minuto > 0) {echo ", ";} else {echo " e ";}
+                                $novaHora = $hora - ($dia * 24);
+                                if ($novaHora > 1) {
+                                    echo $novaHora . " horas";
+                                } else {
+                                    echo $novaHora . " hora";
+                                }
+
+                            }
+
+                            if ($minuto != 0){
+                                echo " e ";
+                                if ($minuto == 1){echo $minuto ." minuto.";} else {echo $minuto ." minutos.";}
                             }
 
                         }
+                        else {
 
-                        if ($minuto != 0){
-                            echo " e ";
-                            if ($minuto == 1){echo $minuto ." minuto.";} else {echo $minuto ." minutos.";}
-                        }
-
-                    }
-                    else {
-
-                        if ($hora == 1)
-                        {
-                            echo $hora . " hora";
-                        }
-                        elseif ($hora > 1) {
-                            echo $hora . " horas";
-                        }
-
-
-                        if ($minuto != 0){
-                            if (($minuto == 1) AND $hora == 00)
+                            if ($hora == 1)
                             {
-                                echo $minuto ." minuto";
-                            } elseif (($minuto != 1) AND ($hora == 00)) {
-                                echo $minuto ." minutos";
+                                echo $hora . " hora";
                             }
-                            if (($minuto == 1) AND ($hora != 00))
-                            {
-                                echo " e ". $minuto ." minuto";
+                            elseif ($hora > 1) {
+                                echo $hora . " horas";
                             }
-                            elseif (($minuto != 1) AND ($hora != 00)) {
-                                echo " e ". $minuto ." minutos";
-                            }
-                        }
-                        echo ".";
 
-                    }
+
+                            if ($minuto != 0){
+                                if (($minuto == 1) AND $hora == 00)
+                                {
+                                    echo $minuto ." minuto";
+                                } elseif (($minuto != 1) AND ($hora == 00)) {
+                                    echo $minuto ." minutos";
+                                }
+                                if (($minuto == 1) AND ($hora != 00))
+                                {
+                                    echo " e ". $minuto ." minuto";
+                                }
+                                elseif (($minuto != 1) AND ($hora != 00)) {
+                                    echo " e ". $minuto ." minutos";
+                                }
+                            }
+                            echo ".";
+
+                        }
 
 
                     ?>
@@ -164,39 +222,84 @@ $pg = $this->Dados['pg'];
 
                 <dt class="col-sm-3">Tempo Restante</dt>
                 <dd class="col-sm-9">
-                    <span tabindex="0" data-placement="top" data-toggle="tooltip" title="Hora/minutos">
-                        00:00
+                    <span tabindex="0" data-placement="top" data-toggle="tooltip" title="Hora/minutos/segundos">
+                        <?php
+                        if ($id_sits_aten_func == 1) {
+                            echo "--:--";
+                        } elseif ($id_sits_aten_func == 3){
+
+
+                            if (!empty($at_tempo_restante) AND empty($at_tempo_excedido)) {
+                                echo date('H:i:s', strtotime($at_tempo_restante));
+                            }
+                            elseif (!empty($at_tempo_excedido)) {
+
+                                echo "<span id='sessao' class='text-danger'>";
+                                echo "-".date('H:i:s', strtotime($at_tempo_excedido));
+                                echo "</span>";
+
+                            }
+                            else {
+                                echo "--:--";
+                            }
+
+
+                        }
+                        elseif ($id_sits_aten_func == 2) {
+
+                            if (!empty($at_tempo_restante) AND empty($at_tempo_excedido)) {
+
+                                // Pegando a hora restante do atendimento no banco e transformando em segundos
+                                $at_iniciado = date('Y-m-d H:i:s', strtotime($at_iniciado));
+                                $partes = explode(':', $at_tempo_restante);
+                                $segundosTotal = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
+                                // Pegando a hora do banco em que foi iniciado o atendimento
+                                $at_pausado = date('Y-m-d H:i:s');
+                                $dteStart = new DateTime($at_iniciado);
+                                $dteEnd = new DateTime($at_pausado);
+                                $dteDiff = $dteStart->diff($dteEnd);
+                                $horas_diferenca = $dteDiff->format('%H');
+                                $minutos_diferenca = $dteDiff->format('%i');
+                                $segundos_diferenca = $dteDiff->format('%s');
+                                $segundosAndamento = $horas_diferenca * 3600 + $minutos_diferenca * 60 + $segundos_diferenca;
+
+                                $tempo_restante = $segundosTotal - $segundosAndamento;
+
+                                echo "<span id='sessao' class='text-primary'></span>";
+
+                                $valorControler = 0;
+
+                            }
+                            elseif (!empty($at_tempo_excedido)){
+
+                                // Pegando a hora restante do atendimento no banco e transformando em segundos
+                                $at_iniciado = date('Y-m-d H:i:s', strtotime($at_iniciado));
+                                $partes = explode(':', $at_tempo_excedido);
+                                $segundosTotal = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
+                                // Pegando a hora do banco em que foi iniciado o atendimento
+                                $at_pausado = date('Y-m-d H:i:s');
+                                $dteStart = new DateTime($at_iniciado);
+                                $dteEnd = new DateTime($at_pausado);
+                                $dteDiff = $dteStart->diff($dteEnd);
+                                $horas_diferenca = $dteDiff->format('%H');
+                                $minutos_diferenca = $dteDiff->format('%i');
+                                $segundos_diferenca = $dteDiff->format('%s');
+                                $segundosAndamento = $horas_diferenca * 3600 + $minutos_diferenca * 60 + $segundos_diferenca;
+
+                                $tempo_restante = $segundosTotal + $segundosAndamento;
+
+                                echo "<span id='sessao' class='text-primary'></span>";
+
+                                $valorControler = 1;
+
+                            }
+                            else {
+                                echo "--:--";
+                            }
+                        }
+                        ?>
                     </span>
                 </dd>
-
-                <?php
-                    if (!empty($inicio_atendimento) AND empty($fim_atendimento)) {
-                        ?>
-                        <dt class="col-sm-3">Fim previsto para</dt>
-                        <dd class="col-sm-9">
-                            <span class="bg-success rounded text-white p-1">
-                            <?php
-                                function addData($data,$minuto=0,$hora=0,$dia=0,$mes=0,$ano=0)
-                                {
-                                    $cd = strtotime($data);
-                                    $novaData = date('Y-m-d H:i:s', mktime(
-                                        date('H',$cd)+$hora,
-                                        date('i',$cd)+$minuto,
-                                        date('s',$cd),
-                                        date('m',$cd)+$mes,
-                                        date('d',$cd)+$dia,
-                                        date('Y',$cd)+$ano
-                                    ));
-                                    return $novaData;
-                                }
-                                $nvData = addData($inicio_atendimento, $minuto, $hora);
-                            echo date('d-m-Y H:i:s', strtotime($nvData));
-                            ?>
-                            </span>
-                        </dd>
-                        <?php
-                    }
-                ?>
 
                 <?php
                     if (!empty($fim_atendimento)) {
@@ -208,22 +311,237 @@ $pg = $this->Dados['pg'];
 
 
                         <dt class="col-sm-3">Duração total do atendimento:</dt>
-                        <dd class="col-sm-9">Ainda statico</dd>
+                        <dd class="col-sm-9">
+                            <?php
+
+                                if (!empty($at_tempo_excedido)) {
+                                    $partes = explode(':', $at_tempo_excedido);
+                                    $segundosExcedido = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
+
+                                    $partesDa = explode(':', $duracao_atendimento);
+                                    $segundosRestanteDa = $partesDa[0] * 3600 + $partesDa[1] * 60 + $partesDa[2];
+
+                                    $segundosDuracao = $segundosRestanteDa + $segundosExcedido;
+                                    $duracaoAtendimentoT = gmdate("H:i:s", $segundosDuracao);
+
+                                    //echo $duracaoAtendimentoT;
+
+                                } else {
+
+                                    $partes = explode(':', $at_tempo_restante);
+                                    $segundosRestante = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
+
+                                    $partesDa = explode(':', $duracao_atendimento);
+                                    $segundosRestanteDa = $partesDa[0] * 3600 + $partesDa[1] * 60 + $partesDa[2];
+
+                                    $segundosDuracao = $segundosRestanteDa - $segundosRestante;
+                                    $duracaoAtendimentoT = gmdate("H:i:s", $segundosDuracao);
+
+                                    //echo $duracaoAtendimentoT;
+                                }
+
+                            $dados = explode(":", $duracaoAtendimentoT);
+
+                            $hora = $dados[0];
+                            $minuto = $dados[1];
+                            $segundo = $dados[2];
+
+
+                            if ($hora >= 24){
+                                $dia = (int)($hora / 24);
+                                if ($dia > 1){
+                                    echo $dia ." dias";
+                                } else {
+                                    echo $dia ." dia";
+                                }
+
+                                if ($hora != 24) {
+                                    if ($minuto > 0) {echo ", ";} else {echo " e ";}
+                                    $novaHora = $hora - ($dia * 24);
+                                    if ($novaHora > 1) {
+                                        echo $novaHora . " horas";
+                                    } else {
+                                        echo $novaHora . " hora";
+                                    }
+
+                                }
+
+                                if ($minuto != 0){
+                                    echo " e ";
+                                    if ($minuto == 1){echo $minuto ." minuto.";} else {echo $minuto ." minutos.";}
+                                }
+
+                            }
+                            else {
+
+                                if ($hora == 1)
+                                {
+                                    echo $hora[1] . " hora";
+                                }
+                                elseif ($hora < 10) {
+                                    echo $hora[1] . " horas";
+                                }
+                                else{
+                                    echo $hora . " horas";
+                                }
+
+
+                                if ($minuto != 0){
+                                    if (($minuto == 1) AND $hora == 00)
+                                    {
+                                        echo $minuto[1] ." minuto";
+                                    } elseif (($minuto != 1) AND ($hora == 00)) {
+                                        if ($minuto < 10){
+                                            echo $minuto[1] ." minutos";
+                                        } else {
+                                            echo $minuto . " minutos";
+                                        }
+                                    }
+                                    if (($minuto == 1) AND ($hora != 00))
+                                    {
+                                        echo " e ". $minuto[1] ." minuto";
+                                    }
+                                    elseif (($minuto != 1) AND ($hora != 00)) {
+                                        if ($minuto < 10){
+                                            echo " e ". $minuto[1] ." minutos";
+                                        } else {
+                                            echo " e " . $minuto . " minutos";
+                                        }
+                                    }
+                                }
+                                echo ".";
+
+                            }
+
+                            ?>
+                        </dd>
                         <?php
                     }
                 ?>
 
-
-                <dt class="col-sm-3">Alterado por último em</dt>
-                <dd class="col-sm-9"><?php if (!empty($modified)) {
-                    echo date('d/m/Y H:i:s', strtotime($modified));
-                } ?></dd>
 
             </dl>
 
 
         </div>
     </div>
+
+    <?php
+    if (!empty($tempo_restante)) {
+        $scriptInicio = "<script>";
+        $scriptFinal = "</script>";
+        // O tempo tem que ser obrigatoriamente em segundos
+
+
+        $script = $scriptInicio . "var tempo = '" . $tempo_restante . "'; var controler = '" . $valorControler . "';" . $scriptFinal;
+        echo $script;
+        ?>
+        <script src="<?php echo URLADM.'assets/js/temporizador/jquery-1.9.1.min.js'; ?>"></script>
+        <script type="text/javascript">
+
+            //var tempo = new Number();
+            //var controler = 0;
+            // Tempo em segundos
+            //tempo = 7;
+
+            function startCountdown(){
+
+                // Se o tempo não for zerado
+                if(((tempo - 1) >= 0) && (controler == 0)){
+
+                    // Pega a parte inteira dos minutos
+                    var min = parseInt(tempo/60);
+
+                    // horas, pega a parte inteira dos minutos
+                    var hor = parseInt(min/60);
+
+                    //atualiza a variável minutos obtendo o tempo restante dos minutos
+                    min = min % 60;
+
+
+                    // Calcula os segundos restantes
+                    var seg = tempo%60;
+
+                    // Formata o número menor que dez, ex: 08, 07, ...
+                    if(min < 10)
+                    {
+                        min = "0"+min;
+                        min = min.substr(0, 2);
+                    }
+
+                    if(seg <=9)
+                    {
+                        seg = "0"+seg;
+                    }
+
+                    if(hor <=9)
+                    {
+                        hor = "0"+hor;
+                    }
+
+                    // Cria a variável para formatar no estilo hora/cronômetro
+                    horaImprimivel = hor+':' + min + ':' + seg;
+
+                    //JQuery pra setar o valor
+                    $("#sessao").html(horaImprimivel);
+
+                    // Define que a função será executada novamente em 1000ms = 1 segundo
+                    setTimeout('startCountdown()',1000);
+
+                    // diminui o tempo
+                    tempo--;
+
+                } else {
+                    controler = 1;
+
+                    // Pega a parte inteira dos minutos
+                    var min = parseInt(tempo/60);
+
+                    // horas, pega a parte inteira dos minutos
+                    var hor = parseInt(min/60);
+
+                    //atualiza a variável minutos obtendo o tempo excedido dos minutos
+                    min = min % 60;
+
+                    // Calcula os segundos excedido
+                    var seg = tempo%60;
+
+                    // Formata o número menor que dez, ex: 08, 07, ...
+                    if(min < 10){
+                        min = "0"+min;
+                        min = min.substr(0, 2);
+                    }
+                    if(seg <=9){
+                        seg = "0"+seg;
+                    }
+                    if(hor <=9){
+                        hor = "0"+hor;
+                    }
+
+                    // Cria a variável para formatar no estilo hora/cronômetro
+                    horaImprimivel = '-' + hor + ':' + min + ':' + seg;
+
+                    //JQuery pra setar o valor
+                    $('#sessao').attr('class', 'text-danger');
+                    $("#sessao").html(horaImprimivel);
+
+                    // Define que a função será executada novamente em 1000ms = 1 segundo
+                    setTimeout('startCountdown()',1000);
+
+                    // somar o tempo
+                    tempo++;
+                }
+
+            }
+
+            // Chama a função ao carregar a tela
+            startCountdown();
+
+        </script>
+
+        <?php
+    }
+    ?>
 <?php
 } else {
     $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Atendimento não encontrado!</div>";
