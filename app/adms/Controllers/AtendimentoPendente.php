@@ -17,9 +17,16 @@ class AtendimentoPendente
 {
     private $Dados;
     private $PageId;
+    private $DadosModal;
 
     public function listar($PageId = null)
     {
+
+        $this->DadosModal = filter_input_array(INPUT_GET, 'modal', FILTER_DEFAULT);
+        $this->Dados['teste'] = $this->DadosModal;
+        if ($this->DadosModal){
+            $this->Dados['teste'] = $this->DadosModal;
+        }
 
         $this->PageId = (int) $PageId ? $PageId : 1;
 
