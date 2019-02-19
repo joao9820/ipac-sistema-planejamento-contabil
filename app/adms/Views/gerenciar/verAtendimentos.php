@@ -20,7 +20,7 @@ $pg = $this->Dados['pg'];
                     <span class="d-none d-md-block">
                         <?php
                         if ($this->Dados['botao']['list_atendimento']) {
-                            echo "<a href='" . URLADM . "gerenciar-atendimento/listar/$pg' class='btn btn-outline-info btn-sm'>Listar Atendimentos</a> ";
+                            echo "<a href='" . URLADM . "gerenciar-atendimento/listar/$pg' class='btn btn-info btn-sm'>Listar Atendimentos</a> ";
                         }
                         if ($this->Dados['botao']['edit_atendimento'] AND $cancelado_p_user !=1) {
                             if ($id_situacao != 2) {
@@ -33,7 +33,7 @@ $pg = $this->Dados['pg'];
 
                         }
                         if (($this->Dados['botao']['arqui_atendimento']) AND ($arquivado_gerente != 1)) {
-                            echo "<a href='" . URLADM . "atendimento-gerente/arquivar/$id' class='btn btn-outline-secondary btn-sm' 
+                            echo "<a href='" . URLADM . "atendimento-gerente/arquivar/$id' class='btn btn-secondary btn-sm' 
                                     data-arquivo='Tem certeza que deseja arquivar o atendimento selecionado?'>Arquivar</a> ";
                         }
                         ?>
