@@ -37,20 +37,20 @@ if (!defined('URL')) {
             ?>
 
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                Desculpe, nenhum atendimento registrado!
+                Oops! atendimento sem histórico registrado!
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
 
             <?php
-        }
+        } else {
+
         if (isset($_SESSION['msg'])) {
             echo $_SESSION['msg'];
             unset($_SESSION['msg']);
         }
         ?>
-
 
 
         <div class="table-responsive col-12 col-md-6">
@@ -82,13 +82,12 @@ if (!defined('URL')) {
                 ?>
 
 
-
                 </tbody>
 
             </table>
 
             <?php
-
+            } // fim do else para exibir tabela
             //echo $this->Dados['paginacao'];
 
             ?>
