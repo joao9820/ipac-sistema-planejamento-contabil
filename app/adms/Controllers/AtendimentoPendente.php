@@ -47,6 +47,7 @@ class AtendimentoPendente
         $this->Dados['listAtendimentoPendente']= $listarAtendimento->listarAtendimento($this->PageId);
         $this->Dados['paginacao'] = $listarAtendimento->getResultadoPg();
         $this->Dados['listAtendimentoPendenteUrgente'] = $listarAtendimento->listarAtendimentoUrgente();
+        $this->Dados['listAtendimentoFinalizado'] = $listarAtendimento->listarAtendimentoFinalizado();
 
         $this->Dados['pg'] = $this->PageId;
 

@@ -4,7 +4,7 @@ if (!defined('URL')) {
     exit();
 }
 //echo $_SESSION['adms_empresa_id'];
-//var_dump($this->Dados);
+//var_dump($this->Dados['listAtendimentoFinalizado']);
 
 ?>
 <div class="content p-1">
@@ -26,7 +26,7 @@ if (!defined('URL')) {
             unset($_SESSION['msg']);
         }
 
-        if (empty($this->Dados['listAtendimentoPendente'])) {
+        if (empty($this->Dados['listAtendimentoPendente']) AND empty($this->Dados['listAtendimentoPendenteUrgente']) AND empty($this->Dados['listAtendimentoFinalizado'])) {
             ?>
 
             <div class="alert alert-info alert-dismissible fade show" role="alert">
@@ -38,6 +38,142 @@ if (!defined('URL')) {
 
             <?php
         } else {
+            ?>
+
+            <?php
+            if (isset($this->Dados['listAtendimentoFinalizado']) AND !empty($this->Dados['listAtendimentoFinalizado'])) {
+
+                ?>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-bordered">
+                        <thead>
+                        <tr class="bg-success text-light">
+                            <th>Anexar Documento</th>
+                            <th>Tipo</th>
+                            <th class="d-none d-lg-table-cell">Descrição</th>
+                            <th class="">Empresa</th>
+                            <th class="">Situação</th>
+                            <th class="d-none d-lg-table-cell">Data solititação</th>
+                            <th class="text-center">Ações</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <?php
+                        foreach ($this->Dados['listAtendimentoFinalizado'] as $atenFinalizado) {
+                            extract($atenFinalizado);
+
+                            ?>
+
+                            <tr>
+                                <td>
+                                    <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Clique para anexar documento(s) ao atendimento.'>
+                                        <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id . '?&pg='.$this->Dados['pg']; ?>" class="btn btn-<?php echo $cor_sit_aten_func; ?> btn-sm my-md-1"
+                                           data-sitAtenIniciar='Tem certeza que deseja iniciar o atendimento?'>
+                                            <span class='badge badge-pill badge-success'>
+                                                Sim
+                                            </span>
+                                        </a>
+                                    </span>
+                                    <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Se não hover docomento a anexar ao atendimento.'>
+                                        <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id . '?&pg='.$this->Dados['pg']; ?>" class="btn btn-danger btn-sm my-md-1"
+                                           data-sitAtenIniciar='Tem certeza que deseja iniciar o atendimento?'>
+                                            <span class='badge badge-pill badge-danger'>
+                                                Não
+                                            </span>
+                                        </a>
+                                    </span>
+                                </td>
+                                <td><?php echo $demanda; ?></td>
+                                <td><?php echo $descricao; ?></td>
+                                <td class="d-none d-sm-table-cell">
+                                    <span tabindex="0" data-placement="top" data-toggle="tooltip"
+                                          title="<?php echo ucwords(strtolower($nome_empresa)); ?>">
+                                        <?php echo ucwords(strtolower($fantasia_empresa)); ?>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span tabindex="0" data-toggle="tooltip" data-placement="right" data-html="true"
+                                          title="<?php
+                                          //if ($id_situacao == 1) {
+                                          echo "Esse é o status que o cliente visualiza nesse momento. Quando houver alterações ele será informado.";
+                                          //} elseif ($id_situacao == 2) {
+                                          //echo "Seu atendimento está agora em andamento assim que for finalizado você será informado.";
+                                          //}
+                                          ?>">
+                                        <span class="badge badge-<?php echo $cor ?>">
+                                            <?php echo $nome_situacao; ?>
+                                        </span>
+                                    </span>
+
+                                </td>
+                                <td class="d-none d-sm-table-cell"><?php echo date('d/m/Y H:i', strtotime($created)); ?></td>
+
+
+                                <td class="text-center">
+                                            <span class="d-none d-md-block">
+                                                <?php
+                                                if ($this->Dados['botao']['vis']) { ?>
+                                                    <a href="<?php echo URLADM . 'funcionario-ver-atendimento/ver/' . $id. '?pg='.$this->Dados['pg']; ?>"
+                                                       class="btn btn-info btn-sm my-md-1">Enviar para o cliente</a>
+                                                    <?php
+                                                }
+                                                ?>
+                                                <?php
+                                                if ($this->Dados['botao']['edit']) { ?>
+                                                    <a href="<?php echo URLADM . 'funcionario-editar-atendimento/edit/' . $id. '?pg='.$this->Dados['pg']; ?>"
+                                                       class="btn btn-warning btn-sm my-md-1">Editar</a>
+                                                    <?php
+                                                }
+                                                ?>
+                                                <?php
+                                                if (($this->Dados['botao']['conclu']) AND ($id_sits_aten_func == 2 OR $id_sits_aten_func == 3)) { ?>
+                                                    <a href="<?php echo URLADM . 'func-concluir-atendimento/concluir/' . $id. '?pg='.$this->Dados['pg']; ?>"
+                                                       class="btn btn-success btn-sm my-md-1" data-confirmFinalizar='Para finalizar o atendimento selecionado clique em finalizar. Atenção, uma vez finalizado o atendimento não pode ser retomado.'
+                                                    >Finalizar</a>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </span>
+                                    <div class="dropdown d-block d-md-none">
+                                        <button class="btn btn-primary dropdown-toggle btn-sm" type="button"
+                                                id="acoesListar" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
+                                            Ações
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right"
+                                             aria-labelledby="acoesListar">
+                                            <?php if ($this->Dados['botao']['vis']) { ?>
+                                                <a class="dropdown-item"
+                                                   href="<?php echo URLADM . 'funcionario-ver-atendimento/ver/' . $id. '?pg='.$this->Dados['pg']; ?>">Visualizar</a>
+                                            <?php } ?>
+                                            <?php if ($this->Dados['botao']['edit']) { ?>
+                                                <a class="dropdown-item"
+                                                   href="<?php echo URLADM . 'funcionario-editar-atendimento/edit/' . $id. '?pg='.$this->Dados['pg']; ?>">Editar</a>
+                                            <?php } ?>
+                                            <?php if (($this->Dados['botao']['conclu']) AND $id_sits_aten_func == 2 ) { ?>
+                                                <a class="dropdown-item"
+                                                   href="<?php echo URLADM . 'func-concluir-atendimento/concluir/' . $id. '?pg='.$this->Dados['pg']; ?>">Finalizar</a>
+                                            <?php } ?>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <?php
+                        }
+                        ?>
+
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <?php
+            }
             ?>
 
             <?php
@@ -272,8 +408,8 @@ if (!defined('URL')) {
                                                 }
                                                 ?>
                                                 <?php
-                                                if (($this->Dados['botao']['conclu']) AND $id_sits_aten_func == 2 ) { ?>
-                                                    <a href="<?php echo URLADM . 'func-concluir-atendimento/concluir/' . $id. '?pg='.$this->Dados['pg']; ?>"
+                                                if (($this->Dados['botao']['conclu']) AND ($id_sits_aten_func == 2 OR $id_sits_aten_func == 3)) { ?>
+                                                    <a href="<?php echo URLADM . 'func-concluir-atendimento/concluir/' . $id. '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']; ?>"
                                                        class="btn btn-success btn-sm my-md-1" data-confirmFinalizar='Para finalizar o atendimento selecionado clique em finalizar. Atenção, uma vez finalizado o atendimento não pode ser retomado.'
                                                     >Finalizar</a>
                                                     <?php
@@ -298,7 +434,8 @@ if (!defined('URL')) {
                                             <?php } ?>
                                             <?php if (($this->Dados['botao']['conclu']) AND $id_sits_aten_func == 2 ) { ?>
                                                 <a class="dropdown-item"
-                                                   href="<?php echo URLADM . 'func-concluir-atendimento/concluir/' . $id. '?pg='.$this->Dados['pg']; ?>">Finalizar</a>
+                                                   href="<?php echo URLADM . 'func-concluir-atendimento/concluir/' . $id. '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']; ?>" data-confirmFinalizar='Para finalizar o atendimento selecionado clique em finalizar. Atenção, uma vez finalizado o atendimento não pode ser retomado.'
+                                                >Finalizar</a>
                                             <?php } ?>
                                         </div>
                                     </div>
@@ -544,8 +681,8 @@ if (!defined('URL')) {
                                             }
                                             ?>
                                             <?php
-                                            if (($this->Dados['botao']['conclu']) AND $id_sits_aten_func == 2 ) { ?>
-                                                <a href="<?php echo URLADM . 'func-concluir-atendimento/concluir/' . $id. '?pg='.$this->Dados['pg']; ?>"
+                                            if (($this->Dados['botao']['conclu']) AND ($id_sits_aten_func == 2 OR $id_sits_aten_func == 3)) { ?>
+                                                <a href="<?php echo URLADM . 'func-concluir-atendimento/concluir/' . $id. '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']; ?>"
                                                    class="btn btn-success btn-sm my-md-1" data-confirmFinalizar='Para finalizar o atendimento selecionado clique em finalizar. Atenção, uma vez finalizado o atendimento não pode ser retomado.'
                                                 >Finalizar</a>
                                                 <?php
@@ -568,9 +705,10 @@ if (!defined('URL')) {
                                                     <a class="dropdown-item"
                                                        href="<?php echo URLADM . 'funcionario-editar-atendimento/edit/' . $id. '?pg='.$this->Dados['pg']; ?>">Editar</a>
                                                 <?php } ?>
-                                                <?php if (($this->Dados['botao']['conclu']) AND $id_sits_aten_func == 2 ) { ?>
+                                                <?php if (($this->Dados['botao']['conclu']) AND ($id_sits_aten_func == 2 OR $id_sits_aten_func == 3)) { ?>
                                                     <a class="dropdown-item"
-                                                       href="<?php echo URLADM . 'func-concluir-atendimento/concluir/' . $id. '?pg='.$this->Dados['pg']; ?>">Finalizar</a>
+                                                       href="<?php echo URLADM . 'func-concluir-atendimento/concluir/' . $id. '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']; ?>" data-confirmFinalizar='Para finalizar o atendimento selecionado clique em finalizar. Atenção, uma vez finalizado o atendimento não pode ser retomado.'
+                                                    >Finalizar</a>
                                                 <?php } ?>
                                             </div>
                                         </div>

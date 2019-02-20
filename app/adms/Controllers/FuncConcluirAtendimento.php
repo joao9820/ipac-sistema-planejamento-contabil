@@ -22,10 +22,10 @@ class FuncConcluirAtendimento
     public function concluir($DadosId = null)
     {
         $this->DadosId = (int) $DadosId;
-        $this->Status = filter_input(INPUT_GET, "status", FILTER_SANITIZE_NUMBER_INT);
         $this->PageId = filter_input(INPUT_GET, "pg", FILTER_SANITIZE_NUMBER_INT);
+        $this->Status = filter_input(INPUT_GET, "status", FILTER_SANITIZE_NUMBER_INT);
 
-        if (!empty($this->DadosId) AND ! empty($this->Status) AND ! empty($this->PageId)) {
+        if (!empty($this->DadosId) AND ! empty($this->PageId)) {
 
             $alterarStatus = new \App\adms\Models\AdmsFuncConcluirAtendimento();
             $alterarStatus->alterar($this->DadosId, $this->Status);
