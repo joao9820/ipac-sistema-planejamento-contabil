@@ -48,8 +48,11 @@ class AdmsNovoUsuario
                 // se retorna true email válido e único
                 $this->inserir();
 
-            } else {
+            }
+            else {
+
                 $this->Resultado = false;
+
             }
 
         }
@@ -60,9 +63,13 @@ class AdmsNovoUsuario
         $this->Dados = array_map('strip_tags', $this->Dados);
         $this->Dados = array_map('trim', $this->Dados);
         if(in_array('', $this->Dados)){
-            $_SESSION['msg'] = '<div class="alert alert-danger" role="alert">Erro: Necessário preencher todos os campos!</div>';
+
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Necessário preencher todos os campos", "danger");
             $this->Resultado = false;
-        } else {
+
+        }
+        else {
 
             $this->Resultado = true;
 
@@ -85,16 +92,26 @@ class AdmsNovoUsuario
         if($cadUser->getResultado()){
 
             if($this->IfoCadUser[0]['env_email_conf'] == 1) {
+
                 $this->dadosEmail();
-            } else {
-                $_SESSION['msg'] = "<div class='alert alert-success'>Usuário cadastrado com sucesso!</div>";
+
+            }
+            else {
+
+                $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+                $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Usuário cadastrado com sucesso", "success");
                 $this->Resultado = true;
+
             }
 
 
-        }else{
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Usuário não foi cadastrado com sucesso!</div>";
+        }
+        else{
+
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","O usuário não foi cadastrado", "danger");
             $this->Resultado = false;
+
         }
     }
 
@@ -132,12 +149,15 @@ class AdmsNovoUsuario
         $emailPHPMailer->emailPhpMailer($this->DadosEmail);
         if($emailPHPMailer->getResultado()){
 
-            $_SESSION['msg'] = "<div class='alert alert-success'>Usuário cadastrado com sucesso. Enviado no seu e-mail o link para confirmar o e-mail!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Usuário cadastrado com sucesso. Enviado no seu e-mail o link para confirmar o e-mail", "success");
             $this->Resultado = true;
 
-        } else {
+        }
+        else {
 
-            $_SESSION['msg'] = "<div class='alert alert-primary'>Usuário cadastrado com sucesso. Erro não foi possível enviar o link no seu e-mail para confirmar o e-mail!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Usuário cadastrado com sucesso. Erro não foi possível enviar o link no seu e-mail para confirmar o e-mail", "primary");
             $this->Resultado = false;
 
         }

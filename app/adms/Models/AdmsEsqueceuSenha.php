@@ -40,11 +40,16 @@ class AdmsEsqueceuSenha
             $esqSenha->fullRead("SELECT id, nome, usuario, recuperar_senha FROM adms_usuarios WHERE email =:email LIMIT :limit", "email={$this->Dados['email']}&limit=1");
             $this->DadosUsuario = $esqSenha->getResultado();
             if (!empty($this->DadosUsuario)) {
+
                 $this->valChaveRecSenha();
 
-            } else {
-                $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: E-mail não cadastrado!</div>";
+            }
+            else {
+
+                $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+                $_SESSION['msg'] = $alertMensagem->alertMensagem("Oops!","E-mail não cadastrado", "danger");
                 $this->Resultado = false;
+
             }
 
         }
@@ -58,7 +63,8 @@ class AdmsEsqueceuSenha
         if(in_array('', $this->Dados))
         {
 
-            $_SESSION['msg'] = '<div class="alert alert-danger" role="alert">Erro: Necessário preencher todos os campos!</div>';
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Oops!","Necessário preencher todos os campos", "danger");
             $this->Resultado = false;
 
         }
@@ -66,12 +72,15 @@ class AdmsEsqueceuSenha
 
             $valEmail = new \App\adms\Models\helper\AdmsEmail();
             $valEmail->valEmail($this->Dados['email']);
-            if($valEmail->getResultado())
-            {
+            if($valEmail->getResultado()){
+
                 $this->Resultado = true;
+
             }
             else {
+
                 $this->Resultado = false;
+
             }
 
         }
@@ -81,9 +90,10 @@ class AdmsEsqueceuSenha
 
     private function valChaveRecSenha()
     {
-        if (!empty($this->DadosUsuario[0]['recuperar_senha']))
-        {
+        if (!empty($this->DadosUsuario[0]['recuperar_senha'])){
+
             $this->dadosEmail();
+
         }
         else
         {
@@ -94,12 +104,15 @@ class AdmsEsqueceuSenha
             $updateRecSenha->exeUpdate("adms_usuarios", $this->DadosUdate, "WHERE id =:id", "id={$this->DadosUsuario[0]['id']}");
             if ($updateRecSenha->getResultado())
             {
+
                 $this->DadosUsuario[0]['recuperar_senha'] = $this->DadosUdate['recuperar_senha'];
                 $this->dadosEmail();
+
             }
             else {
 
-                $_SESSION['msg'] = "<div class='alert alert-danger'>Erro ao recuperar a senha!</div>";
+                $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+                $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe!","Ocorreu um erro ao recuperar a senha", "danger");
                 $this->Resultado = false;
 
             }
@@ -109,6 +122,7 @@ class AdmsEsqueceuSenha
 
     private function dadosEmail()
     {
+
         $nome = explode(" ", $this->DadosUsuario[0]['nome']);
         $pri_nome = $nome[0];
         $this->DadosEmail['dest_nome'] = $pri_nome;
@@ -134,12 +148,18 @@ class AdmsEsqueceuSenha
 
         if($emailPHPMailer->getResultado())
         {
-            $_SESSION['msg'] = "<div class='alert alert-success'>E-mail enviado com sucesso, verifique sua caixa de entrada!</div>";
+
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("E-mail enviado com sucesso, verifique sua caixa de entrada", "success");
             $this->Resultado = true;
+
         }
         else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro ao recuperar a senha!</div>";
+
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe!","Erro ao recuperar a senha", "danger");
             $this->Resultado = false;
+
         }
     }
 

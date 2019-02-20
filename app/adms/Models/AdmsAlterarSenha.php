@@ -52,12 +52,14 @@ class AdmsAlterarSenha
         $upAltSenha->exeUpdate("adms_usuarios", $this->Dados, "WHERE id =:id", "id={$_SESSION['usuario_id']}");
         if ($upAltSenha->getResultado()) {
 
-            $_SESSION['msg'] = "<div class='alert alert-success'>Senha atualizada com sucesso!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Senha atualizada com sucesso", "success");
             $this->Resultado = true;
 
         } else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A senha não foi atualizada!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro. ","A senha não foi atualizada", "danger");
             $this->Resultado = false;
 
         }

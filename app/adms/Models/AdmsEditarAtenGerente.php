@@ -72,11 +72,12 @@ class AdmsEditarAtenGerente
         }
         if ($this->Dados['adms_sits_atendimento_id'] == 2 OR $this->Dados['adms_sits_atendimento_id'] == 3) {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Você não pode alterar esse atendimento para 'Iniciado' ou 'Concluído'.<br>
-                                Apenas o funcionário responsável pelo atendimento pode fazer essas alterações.</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Você não pode alterar esse atendimento para 'Iniciado' ou 'Concluído'. Apenas o funcionário responsável pelo atendimento pode fazer essas alterações.", "danger");
             $this->Resultado = false;
 
-        } else {
+        }
+        else {
 
             $valCampos = new \App\adms\Models\helper\AdmsCampoVazio();
             $valCampos->validarDados($this->Dados);
@@ -104,18 +105,18 @@ class AdmsEditarAtenGerente
         $this->Dados['modified'] = date('Y-m-d H:i:s');
 
         $upEditDemanda = new \App\adms\Models\helper\AdmsUpdate();
-        //var_dump($this->Dados);
         $upEditDemanda->exeUpdate("adms_atendimentos", $this->Dados, "WHERE id =:id", "id={$this->Dados['id']}");
         if ($upEditDemanda->getResultado())
         {
-            //echo "ok";
-            $_SESSION['msg'] = "<div class='alert alert-success'>Atendimento editado com sucesso!</div>";
+
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Atendimento editado com sucesso", "success");
             $this->Resultado = true;
 
         } else {
 
-            //echo "erro";
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: O atendimento não foi atualizado!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","O atendimento não foi atualizado", "danger");
             $this->Resultado = false;
 
         }

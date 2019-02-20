@@ -27,10 +27,16 @@ class AdmsConfirmarEmail
         $validaChave->fullRead("SELECT id FROM adms_usuarios WHERE conf_email =:conf_email LIMIT :limit", "conf_email={$this->DadosChave}&limit=1");
         $this->DadosUsuario = $validaChave->getResultado();
         if(!empty($this->DadosUsuario)){
+
             $this->updateConfEmail();
-        }else{
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Link de confirmação inválido!</div>";
+
+        }
+        else{
+
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe!","Link de confirmação inválido", "danger");
             $this->Resultado = false;
+
         }
 
     }
@@ -43,10 +49,16 @@ class AdmsConfirmarEmail
         $updateConfEmail = new \App\adms\Models\helper\AdmsUpdate();
         $updateConfEmail->exeUpdate("adms_usuarios", $this->Dados, "WHERE id =:id", "id={$this->DadosUsuario[0]['id']}");
         if($updateConfEmail->getResultado()){
-            $_SESSION['msg'] = "<div class='alert alert-success'>E-mail confirmado com sucesso!</div>";
+
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("E-mail confirmado com sucesso", "success");
             $this->Resultado = true;
-        }else{
+
+        }
+        else{
+
             $this->Resultado = false;
+
         }
     }
 }

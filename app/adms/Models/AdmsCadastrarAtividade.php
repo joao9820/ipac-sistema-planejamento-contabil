@@ -37,7 +37,8 @@ class AdmsCadastrarAtividade
 
             $this->valNomeAtividadeUnica();
 
-        } else {
+        }
+        else {
             $this->Resultado = false;
         }
     }
@@ -49,40 +50,45 @@ class AdmsCadastrarAtividade
         //var_dump($valCampoUnico->getResultado());
         if ($valCampoUnico->getResultado()){
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Atividade já cadastrada para a demanda selecionada!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Oops!","Atividade já cadastrada para a demanda selecionada", "danger");
             $this->Resultado = false;
 
-        } else {
+        }
+        else {
 
             $this->inserirAtividade();
 
         }
     }
 
-    /**
-     * <b>Cadastrar Página no banco de dados:</b> Inserir no banco de dados as informações página
-     */
+
     private function inserirAtividade()
     {
+
         $this->Dados['created'] = date("Y-m-d H:i:s");
         $this->verUltimaAtiv();
         $this->Dados['ordem'] = $this->UltimaAtiv[0]['ordem'] + 1;
-
-        //var_dump($this->Dados);
-        //die;
 
         $cadAtividade = new \App\adms\Models\helper\AdmsCreate();
         $cadAtividade->exeCreate("adms_atividades", $this->Dados);
 
         if ($cadAtividade->getResultado())
         {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Atividade cadastrada com sucesso!</div>";
+
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Atividade cadastrada com sucesso", "success");
             $this->Resultado = true;
+
         }
         else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A atividade não foi cadastrada!</div>";
+
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","A atividade não foi cadastrada", "danger");
             $this->Resultado = false;
+
         }
+
     }
 
     private function verUltimaAtiv()

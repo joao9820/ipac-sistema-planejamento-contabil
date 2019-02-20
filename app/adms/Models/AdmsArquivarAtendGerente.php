@@ -28,11 +28,18 @@ class AdmsArquivarAtendGerente
         $upAtendi = new \App\adms\Models\helper\AdmsUpdate();
         $upAtendi->exeUpdate("adms_atendimentos", $this->Dados, "WHERE id =:id", "id={$this->DadosId}");
         if ($upAtendi->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-info'>Atendimento arquivado com sucesso!</div>";
+
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Atendimento arquivado com sucesso", "info");
             $this->Resultado = true;
-        } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Não foi possível arquivar o atendimento selecionado!</div>";
+
+        }
+        else {
+
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","Não foi possível arquivar o atendimento selecionado", "danger");
             $this->Resultado = false;
+
         }
     }
 
@@ -45,11 +52,18 @@ class AdmsArquivarAtendGerente
         $upAtendi = new \App\adms\Models\helper\AdmsUpdate();
         $upAtendi->exeUpdate("adms_atendimentos", $this->Dados, "WHERE id =:id", "id={$this->DadosId}");
         if ($upAtendi->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-info'>Atendimento desarquivado com sucesso!</div>";
+
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Atendimento desarquivado com sucesso", "info");
             $this->Resultado = true;
-        } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Não foi possível desarquivar o atendimento selecionado!</div>";
+
+        }
+        else {
+
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","Não foi possível desarquivar o atendimento selecionado", "danger");
             $this->Resultado = false;
+
         }
     }
 

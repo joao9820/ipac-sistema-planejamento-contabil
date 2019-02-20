@@ -38,12 +38,14 @@ class AdmsApagarAtividade
             $apagarDemanda->exeDelete("adms_atividades", "WHERE id=:id", "id={$this->DadosId}");
             if ($apagarDemanda->getResultado())
             {
-                $_SESSION['msg'] = "<div class='alert alert-success'>Atividade apagada com sucesso!</div>";
+                $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+                $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Atividade apagada com sucesso", "success");
                 $this->Resultado = true;
 
             } else {
 
-                $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Atividade não foi apagada!</div>";
+                $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+                $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro no sistema.","Atividade não foi apagada", "danger");
                 $this->Resultado = false;
 
             }
@@ -51,7 +53,8 @@ class AdmsApagarAtividade
         }
         else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Você não tem permissão para apagar a atividade selecionada!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe!","Você não tem permissão para apagar a atividade selecionada", "danger");
             $this->Resultado = false;
 
         }

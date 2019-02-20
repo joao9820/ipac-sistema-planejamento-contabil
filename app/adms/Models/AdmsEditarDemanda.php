@@ -49,7 +49,8 @@ class AdmsEditarDemanda
             // se retornar true
             $this->valCampos();
 
-        } else {
+        }
+        else {
 
             $this->Resultado = false;
         }
@@ -66,13 +67,14 @@ class AdmsEditarDemanda
 
         if ($valCampoUnico->getResultado()){
 
-            //var_dump($this->Dados);
             $this->updateEditDemanda();
 
-        } else {
+        }
+        else {
+
             $this->Resultado = false;
         }
-        //$this->updateAltSenha();
+
 
     }
 
@@ -88,12 +90,15 @@ class AdmsEditarDemanda
         if ($upEditDemanda->getResultado())
         {
 
-            $_SESSION['msg'] = "<div class='alert alert-success'>Demanda atualizada com sucesso!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Demanda atualizada com sucesso", "success");
             $this->Resultado = true;
 
-        } else {
+        }
+        else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A demanda não foi atualizada!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","A demanda não foi atualizada", "danger");
             $this->Resultado = false;
 
         }

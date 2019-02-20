@@ -19,6 +19,7 @@ class AdmsEditarSenha
     private $DadosId;
     private $Resultado;
     private $Dados;
+    private $DadosUsuario;
 
     function getResultado()
     {
@@ -38,11 +39,14 @@ class AdmsEditarSenha
         $this->DadosUsuario = $validaUsuario->getResultado();
         if (!empty($this->DadosUsuario))
         {
+
             $this->Resultado = true;
+
         }
         else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Usuário não encontrado!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","Usuário não encontrado", "danger");
             $this->Resultado = false;
 
         }
@@ -54,23 +58,26 @@ class AdmsEditarSenha
         $this->Dados = $Dados;
         $valCampoVazio = new \App\adms\Models\helper\AdmsCampoVazio();
         $valCampoVazio->validarDados($this->Dados);
-        if ($valCampoVazio->getResultado())
-        {
+        if ($valCampoVazio->getResultado()){
+
             $valSenha = new \App\adms\Models\helper\AdmsValSenha();
             $valSenha->valSenha($this->Dados['senha']);
-            if ($valSenha->getResultado())
-            {
+
+            if ($valSenha->getResultado()) {
 
                 $this->updateEditSenha();
 
             }
-            else
-            {
+            else {
+
                 $this->Resultado = false;
+
             }
 
         } else {
+
             $this->Resultado = false;
+
         }
 
     }
@@ -78,8 +85,7 @@ class AdmsEditarSenha
     private function updateEditSenha()
     {
         $this->valUsuario($this->Dados['id']);
-        if($this->Resultado)
-        {
+        if($this->Resultado) {
 
             $this->Dados['senha'] = password_hash($this->Dados['senha'], PASSWORD_DEFAULT);
             $this->Dados['modified'] = date('Y-m-d H:i:s');
@@ -87,18 +93,24 @@ class AdmsEditarSenha
             $upAtualSenha->exeUpdate("adms_usuarios", $this->Dados, "WHERE id =:id", "id={$this->Dados['id']}");
             if ($upAtualSenha->getResultado()) {
 
-                $_SESSION['msg'] = "<div class='alert alert-success'>Senha atualizada com sucesso!</div>";
+                $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+                $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Senha atualizada com sucesso", "success");
                 $this->Resultado = true;
 
-            } else {
-                $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A senha não foi atualizada!</div>";
+            }
+            else {
+
+                $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+                $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","A senha não foi atualizada", "danger");
                 $this->Resultado = false;
+
             }
 
         }
         else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A senha não foi atualizada!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","A senha não foi atualizada", "danger");
             $this->Resultado = false;
 
         }

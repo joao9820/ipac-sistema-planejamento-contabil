@@ -39,7 +39,8 @@ class AdmsApagarDemanda
         }
         else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Você não tem permissão para apagar a demanda selecionada!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe!","Você não tem permissão para apagar a demanda selecionada", "danger");
             $this->Resultado = false;
 
         }
@@ -66,7 +67,8 @@ class AdmsApagarDemanda
         if ($verAtendDemanda->getResultado())
         {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A demanda selecionada não pode ser apagada. Já tem atendimento registrado com essa demanda!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! A demanda selecionada não pode ser apagada.","Já tem atendimento registrado com essa demanda", "danger");
             $this->Resultado = false;
 
         }
@@ -86,12 +88,14 @@ class AdmsApagarDemanda
             $apagarAtividades = new \App\adms\Models\helper\AdmsDelete();
             $apagarAtividades->exeDelete("adms_atividades", "WHERE adms_demanda_id=:id", "id={$this->DadosId}");
 
-            $_SESSION['msg'] = "<div class='alert alert-success'>Demanda apagada com sucesso!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Demanda apagada com sucesso", "success");
             $this->Resultado = true;
 
         } else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Demanda não foi apagada!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","A demanda não foi apagada", "success");
             $this->Resultado = false;
 
         }

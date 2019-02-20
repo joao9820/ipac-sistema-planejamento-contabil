@@ -120,7 +120,6 @@ class AdmsEditarUsuario
     }
 
 
-
     private function updateEditUsuario()
     {
         $this->Dados['modified'] = date('Y-m-d H:i:s');
@@ -132,12 +131,14 @@ class AdmsEditarUsuario
         if ($upEditPerfil->getResultado())
         {
 
-            $_SESSION['msg'] = "<div class='alert alert-success'>Usuário atualizado com sucesso!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Usuário atualizado com sucesso", "success");
             $this->Resultado = true;
 
         } else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: O Usuário não foi atualizado!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","O Usuário não foi atualizado", "danger");
             $this->Resultado = false;
 
         }

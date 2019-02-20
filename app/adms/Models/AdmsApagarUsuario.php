@@ -41,12 +41,15 @@ class AdmsApagarUsuario
                 $apagar = new \App\adms\Models\helper\AdmsApagarImg();
                 $apagar->apagarImg('assets/imagens/usuario/' . $this->DadosId . '/' . $this->DadosUsuario[0]['imagem'], 'assets/imagens/usuario/' . $this->DadosId);
 
-                $_SESSION['msg'] = "<div class='alert alert-success'>Usuário apagado com sucesso!</div>";
+                $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+                $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Usuário apagado com sucesso", "success");
                 $this->Resultado = true;
 
-            } else {
+            }
+            else {
 
-                $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Usuário não foi apagado!</div>";
+                $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+                $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","O usuário não foi apagado", "danger");
                 $this->Resultado = false;
 
             }
@@ -54,7 +57,8 @@ class AdmsApagarUsuario
         }
         else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Você não tem permissão para apagar o usuário selecionado!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","Você não tem permissão para apagar o usuário selecionado", "danger");
             $this->Resultado = false;
 
         }

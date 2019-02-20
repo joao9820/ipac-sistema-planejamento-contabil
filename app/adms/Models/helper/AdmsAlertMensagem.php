@@ -36,4 +36,21 @@ class AdmsAlertMensagem
 
     }
 
+    public function alertMensagemSimples($Texto = null, $Cor = null)
+    {
+
+        $this->Texto = (string) $Texto;
+        $this->Cor = (string) $Cor ? $Cor : "primary";
+
+        $this->DadosCor = "<div class='alert alert-{$this->Cor} alert-dismissible fade show' role='alert'>
+          {$this->Texto}!
+          <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+            <span aria-hidden='true'>&times;</span>
+          </button>
+        </div>";
+
+        return $this->DadosCor;
+
+    }
+
 }

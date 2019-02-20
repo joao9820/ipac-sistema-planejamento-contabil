@@ -17,9 +17,11 @@ class AdmsCancelarAtendimento
 {
     private $DadosId;
     private $Dados;
+    private $Resultado;
 
     public function cancelar($DadosId = null)
     {
+
         $this->DadosId = (int) $DadosId;
         $this->Dados['cancelado_p_user'] = 1;
         $this->Dados['adms_sits_atendimento_id'] = 4;
@@ -27,12 +29,20 @@ class AdmsCancelarAtendimento
         $upAtendi = new \App\adms\Models\helper\AdmsUpdate();
         $upAtendi->exeUpdate("adms_atendimentos", $this->Dados, "WHERE id =:id", "id={$this->DadosId}");
         if ($upAtendi->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Atendimento cancelado com sucesso!</div>";
+
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Atendimento cancelado com sucesso", "success");
             $this->Resultado = true;
-        } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Não foi possível cancelar o atendimento selecionado!</div>";
-            $this->Resultado = false;
+
         }
+        else {
+
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","Não foi possível cancelar o atendimento selecionado", "danger");
+            $this->Resultado = false;
+
+        }
+
     }
 
 }

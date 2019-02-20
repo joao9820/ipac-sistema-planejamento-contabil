@@ -48,7 +48,8 @@ class AdmsEditarAtividade
 
             $this->valCampos();
 
-        } else {
+        }
+        else {
 
             $this->Resultado = false;
         }
@@ -69,11 +70,13 @@ class AdmsEditarAtividade
 
         if ($valCampoUnico->getResultado()){
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Atividade já cadastrada para a demanda selecionada!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","Atividade já cadastrada para a demanda selecionada", "danger");
             $this->Resultado = false;
 
 
-        } else {
+        }
+        else {
 
             $this->updateEditAtividade();
 
@@ -93,12 +96,15 @@ class AdmsEditarAtividade
         if ($upEditAtividade->getResultado())
         {
 
-            $_SESSION['msg'] = "<div class='alert alert-success'>Atividade atualizada com sucesso!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Atividade atualizada com sucesso", "success");
             $this->Resultado = true;
 
-        } else {
+        }
+        else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A atividade não foi atualizada!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","A atividade não foi atualizada", "danger");
             $this->Resultado = false;
 
         }

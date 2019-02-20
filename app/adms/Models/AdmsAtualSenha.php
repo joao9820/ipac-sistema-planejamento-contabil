@@ -38,7 +38,8 @@ class AdmsAtualSenha
         }
         else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Link inválido!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe!","Link inválido", "danger");
             $this->Resultado = false;
 
         }
@@ -69,9 +70,13 @@ class AdmsAtualSenha
         $this->Dados = array_map('strip_tags', $this->Dados);
         $this->Dados = array_map('trim', $this->Dados);
         if(in_array('', $this->Dados)){
-            $_SESSION['msg'] = '<div class="alert alert-danger" role="alert">Erro: Necessário preencher todos os campos!</div>';
+
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Oops!","Necessário preencher todos os campos", "danger");
             $this->Resultado = false;
-        } else {
+
+        }
+        else {
 
             $this->Resultado = true;
 
@@ -92,18 +97,22 @@ class AdmsAtualSenha
             $upAtualSenha->exeUpdate("adms_usuarios", $this->Dados, "WHERE id =:id", "id={$this->DadosUsuario[0]['id']}");
             if ($upAtualSenha->getResultado()) {
 
-                $_SESSION['msg'] = "<div class='alert alert-success'>Senha atualizada com sucesso!</div>";
+                $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+                $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Senha atualizada com sucesso", "success");
                 $this->Resultado = true;
 
             } else {
-                $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A senha não foi atualizada!</div>";
+
+                $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+                $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","A senha não foi atualizada", "danger");
                 $this->Resultado = false;
             }
 
         }
         else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A senha não foi atualizada!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","A senha não foi atualizada", "danger");
             $this->Resultado = false;
 
         }

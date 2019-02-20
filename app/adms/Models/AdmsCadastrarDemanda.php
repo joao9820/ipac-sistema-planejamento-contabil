@@ -33,8 +33,11 @@ class AdmsCadastrarDemanda
 
             $this->valNomeDemandaUnico();
 
-        } else {
+        }
+        else {
+
             $this->Resultado = false;
+
         }
     }
 
@@ -48,9 +51,13 @@ class AdmsCadastrarDemanda
 
             $this->inserirDemanda();
 
-        } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Está demanda já foi cadastrada!</div>";
+        }
+        else {
+
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Oops!","Está demanda já foi cadastrada", "danger");
             $this->Resultado = false;
+
         }
     }
 
@@ -66,35 +73,21 @@ class AdmsCadastrarDemanda
 
         if ($cadDemanda->getResultado())
         {
+
             $this->UltimoIdInserido = $cadDemanda->getResultado();
-            $_SESSION['msg'] = "<div class='alert alert-success'>Demanda cadastrada com sucesso!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Demanda cadastrada com sucesso", "success");
             $this->Resultado = true;
+
         }
         else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A demanda não foi cadastrada!</div>";
+
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","A demanda não foi cadastrada", "danger");
             $this->Resultado = false;
+
         }
     }
-
-
-    public function listarCadastrar()
-    {
-        $listar = new \App\adms\Models\helper\AdmsRead();
-        $listar->fullRead("SELECT id id_grpg, nome nome_grpg FROM adms_grps_pgs ORDER BY nome ASC");
-
-        $registro['grpg'] = $listar->getResultado();
-
-        $listar->fullRead("SELECT id id_tpg, tipo tipo_tpg, nome nome_tpg FROM adms_tps_pgs ORDER BY nome ASC");
-        $registro['tpg'] = $listar->getResultado();
-
-        $listar->fullRead("SELECT id id_sitpg, nome nome_sitpg FROM adms_sits_pgs ORDER BY nome ASC");
-        $registro['sitpg'] = $listar->getResultado();
-
-        $this->Resultado = ['grpg' => $registro['grpg'], 'tpg' => $registro['tpg'], 'sitpg' => $registro['sitpg']];
-
-        return $this->Resultado;
-    }
-
 
 
 }

@@ -43,7 +43,8 @@ class AdmsEditarPerfil
             // se retornar true
             $this->valCampos();
 
-        } else {
+        }
+        else {
 
             $this->Resultado = false;
         }
@@ -69,10 +70,12 @@ class AdmsEditarPerfil
             //Validar a foto
             $this->valFoto();
 
-        } else {
-            $this->Resultado = false;
         }
-        //$this->updateAltSenha();
+        else {
+
+            $this->Resultado = false;
+
+        }
 
     }
 
@@ -84,7 +87,8 @@ class AdmsEditarPerfil
 
             $this->updateEditPerfil();
 
-        } else {
+        }
+        else {
 
             $slugImg = new \App\adms\Models\helper\AdmsSlug();
             $this->Dados['imagem'] = $slugImg->nomeSlug($this->Foto['name']);
@@ -100,8 +104,11 @@ class AdmsEditarPerfil
                 $_SESSION['usuario_imagem'] = $this->Dados['imagem'];
                 $this->updateEditPerfil();
 
-            } else {
+            }
+            else {
+
                 $this->Resultado = false;
+
             }
 
         }
@@ -122,13 +129,15 @@ class AdmsEditarPerfil
             $_SESSION['usuario_nome'] = $this->Dados['nome'];
             $_SESSION['usuario_email'] = $this->Dados['email'];
 
-
-            $_SESSION['msg'] = "<div class='alert alert-success'>Perfil atualizada com sucesso!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Perfil atualizada com sucesso", "success");
             $this->Resultado = true;
 
-        } else {
+        }
+        else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: O perfil não foi atualizada!</div>";
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","O perfil não foi atualizada", "danger");
             $this->Resultado = false;
 
         }

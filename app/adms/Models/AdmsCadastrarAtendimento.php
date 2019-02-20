@@ -72,7 +72,9 @@ class AdmsCadastrarAtendimento
 
         $this->Dados['adms_sits_atendimento_id'] = 1;
         if ($_SESSION['adms_niveis_acesso_id'] > 3) {
+
             $this->Dados['adms_empresa_id'] = $_SESSION['adms_empresa_id'];
+
         }
         $this->Dados['adms_usuario_id'] = $_SESSION['usuario_id'];
         $this->Dados['created'] = date("Y-m-d H:i:s");
@@ -84,14 +86,19 @@ class AdmsCadastrarAtendimento
 
         if ($cadDemanda->getResultado())
         {
-            $this->UltimoIdInserido = $cadDemanda->getResultado();
 
-            $_SESSION['msg'] = "<div class='alert alert-success'>Atendimento solicitado com sucesso!</div>";
+            $this->UltimoIdInserido = $cadDemanda->getResultado();
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Atendimento solicitado com sucesso", "success");
             $this->Resultado = true;
+
         }
         else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: O atendiemento não foi registrado!</div>";
+
+            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","O atendiemento não foi registrado", "danger");
             $this->Resultado = false;
+
         }
     }
 
