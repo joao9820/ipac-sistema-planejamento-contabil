@@ -464,7 +464,7 @@ if (!defined('URL')) {
                     <div class="table-responsive">
                         <table class="table table-striped table-hover table-bordered">
                             <thead>
-                            <tr class="bg-secondary text-light">
+                            <tr class="">
                                 <th>Status</th>
                                 <th>Tipo</th>
                                 <th class="d-none d-lg-table-cell">Situação</th>

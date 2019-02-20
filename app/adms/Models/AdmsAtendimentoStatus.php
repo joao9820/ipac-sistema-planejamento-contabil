@@ -100,6 +100,7 @@ class AdmsAtendimentoStatus
 
             $this->Dados['adms_sits_atendimentos_funcionario_id'] = 3;
             $this->Dados['at_pausado'] = date("Y-m-d H:i:s");
+            $this->Dados['adms_sits_atendimento_id'] = 2;
 
             $this->buscarTempoRestante();
             if (empty($this->ResultadoTempo[0]['at_tempo_excedido'])) {
@@ -165,6 +166,7 @@ class AdmsAtendimentoStatus
         elseif ( $this->Status == 3) {
             $this->Dados['adms_sits_atendimentos_funcionario_id'] = 2;
             $this->Dados['at_iniciado'] = date("Y-m-d H:i:s");
+            $this->Dados['adms_sits_atendimento_id'] = 2;
 
             $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
             $_SESSION['msg'] = $alertMensagem->alertMensagem("Atendimento", "retomado");
