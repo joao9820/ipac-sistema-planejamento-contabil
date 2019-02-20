@@ -1,4 +1,6 @@
-
+span[data-toggle=tooltip]{
+    cursor: help !important;
+}
 body {
     background-color: #eaeef3;
 }
