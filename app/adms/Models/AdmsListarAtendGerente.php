@@ -37,7 +37,7 @@ class AdmsListarAtendGerente
 
 
         $listarAtendimento = new \App\adms\Models\helper\AdmsRead();
-        $listarAtendimento->fullRead("SELECT aten.id, aten.adms_funcionario_id funcionario, aten.created, 
+        $listarAtendimento->fullRead("SELECT aten.id, aten.adms_funcionario_id funcionario, aten.created, aten.adms_sits_atendimentos_funcionario_id situacao_atendimento, 
                         demanda.nome nome_demanda, 
                         situacao.nome nome_situacao, situacao.id id_situacao, 
                         cr.cor, 

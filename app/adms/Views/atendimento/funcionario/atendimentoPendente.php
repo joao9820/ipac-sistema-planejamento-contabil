@@ -4,7 +4,7 @@ if (!defined('URL')) {
     exit();
 }
 //echo $_SESSION['adms_empresa_id'];
-//var_dump($this->Dados['listAtendimentoFinalizado']);
+//var_dump($this->Dados);
 
 ?>
 <div class="content p-1">
@@ -49,6 +49,7 @@ if (!defined('URL')) {
                     <table class="table table-striped table-hover table-bordered">
                         <thead>
                         <tr class="bg-success text-light">
+                            <th>Codº</th>
                             <th>Anexar Documento</th>
                             <th>Tipo</th>
                             <th class="d-none d-lg-table-cell">Descrição</th>
@@ -67,21 +68,24 @@ if (!defined('URL')) {
                             ?>
 
                             <tr>
-                                <td>
+                                <td class="text-center">
+                                    <?php
+                                        if ($id < 10){
+                                            echo "000".$id;
+                                        } elseif ($id < 100){
+                                            echo "00".$id;
+                                        } elseif ($id < 100){
+                                            echo "0".$id;
+                                        } else {
+                                            echo $id;
+                                        }
+                                    ?>
+                                </td>
+                                <td class="text-center">
                                     <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Clique para anexar documento(s) ao atendimento.'>
-                                        <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id . '?&pg='.$this->Dados['pg']; ?>" class="btn btn-<?php echo $cor_sit_aten_func; ?> btn-sm my-md-1"
-                                           data-sitAtenIniciar='Tem certeza que deseja iniciar o atendimento?'>
-                                            <span class='badge badge-pill badge-success'>
-                                                Sim
-                                            </span>
-                                        </a>
-                                    </span>
-                                    <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Se não hover docomento a anexar ao atendimento.'>
-                                        <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id . '?&pg='.$this->Dados['pg']; ?>" class="btn btn-danger btn-sm my-md-1"
-                                           data-sitAtenIniciar='Tem certeza que deseja iniciar o atendimento?'>
-                                            <span class='badge badge-pill badge-danger'>
-                                                Não
-                                            </span>
+                                        <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id . '?&pg='.$this->Dados['pg']; ?>"
+                                           class="btn btn-outline-secondary btn-sm my-md-1">
+                                            <i class="fas fa-paperclip"></i> Anexar
                                         </a>
                                     </span>
                                 </td>
@@ -116,22 +120,9 @@ if (!defined('URL')) {
                                                 <?php
                                                 if ($this->Dados['botao']['vis']) { ?>
                                                     <a href="<?php echo URLADM . 'funcionario-ver-atendimento/ver/' . $id. '?pg='.$this->Dados['pg']; ?>"
-                                                       class="btn btn-info btn-sm my-md-1">Enviar para o cliente</a>
-                                                    <?php
-                                                }
-                                                ?>
-                                                <?php
-                                                if ($this->Dados['botao']['edit']) { ?>
-                                                    <a href="<?php echo URLADM . 'funcionario-editar-atendimento/edit/' . $id. '?pg='.$this->Dados['pg']; ?>"
-                                                       class="btn btn-warning btn-sm my-md-1">Editar</a>
-                                                    <?php
-                                                }
-                                                ?>
-                                                <?php
-                                                if (($this->Dados['botao']['conclu']) AND ($id_sits_aten_func == 2 OR $id_sits_aten_func == 3)) { ?>
-                                                    <a href="<?php echo URLADM . 'func-concluir-atendimento/concluir/' . $id. '?pg='.$this->Dados['pg']; ?>"
-                                                       class="btn btn-success btn-sm my-md-1" data-confirmFinalizar='Para finalizar o atendimento selecionado clique em finalizar. Atenção, uma vez finalizado o atendimento não pode ser retomado.'
-                                                    >Finalizar</a>
+                                                       class="btn btn-info btn-sm my-md-1" data-confirmEnviarCliente='Concluir atendimento'>
+                                                        Concluir atendimento
+                                                    </a>
                                                     <?php
                                                 }
                                                 ?>
@@ -146,15 +137,10 @@ if (!defined('URL')) {
                                              aria-labelledby="acoesListar">
                                             <?php if ($this->Dados['botao']['vis']) { ?>
                                                 <a class="dropdown-item"
-                                                   href="<?php echo URLADM . 'funcionario-ver-atendimento/ver/' . $id. '?pg='.$this->Dados['pg']; ?>">Visualizar</a>
-                                            <?php } ?>
-                                            <?php if ($this->Dados['botao']['edit']) { ?>
-                                                <a class="dropdown-item"
-                                                   href="<?php echo URLADM . 'funcionario-editar-atendimento/edit/' . $id. '?pg='.$this->Dados['pg']; ?>">Editar</a>
-                                            <?php } ?>
-                                            <?php if (($this->Dados['botao']['conclu']) AND $id_sits_aten_func == 2 ) { ?>
-                                                <a class="dropdown-item"
-                                                   href="<?php echo URLADM . 'func-concluir-atendimento/concluir/' . $id. '?pg='.$this->Dados['pg']; ?>">Finalizar</a>
+                                                   href="<?php echo URLADM . 'funcionario-ver-atendimento/ver/' . $id. '?pg='.$this->Dados['pg']; ?>"
+                                                data-confirmFinalizar='Concluir atendimento'>
+                                                    Enviar para o cliente
+                                                </a>
                                             <?php } ?>
                                         </div>
                                     </div>
@@ -193,6 +179,7 @@ if (!defined('URL')) {
                     <table class="table table-striped table-hover table-bordered">
                         <thead>
                         <tr class="bg-danger text-light">
+                            <th>Codº</th>
                             <th>Status</th>
                             <th>Tipo</th>
                             <th class="d-none d-lg-table-cell">Situação</th>
@@ -215,54 +202,68 @@ if (!defined('URL')) {
                             ?>
 
                             <tr>
+                                <td class="text-center">
+                                    <?php
+                                    if ($id < 10){
+                                        echo "000".$id;
+                                    } elseif ($id < 100){
+                                        echo "00".$id;
+                                    } elseif ($id < 100){
+                                        echo "0".$id;
+                                    } else {
+                                        echo $id;
+                                    }
+                                    ?>
+                                </td>
                                 <td>
                                     <?php
-                                    if ($id_sits_aten_func == 1) {
+                                    if ($sits_aten_func_id == 1) {
                                         // Não iniciado
                                         ?>
                                         <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Clique para iniciar atendimento.'>
-                                                    <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']; ?>" class="btn btn-<?php echo $cor_sit_aten_func; ?> btn-sm my-md-1"
-                                                       data-sitAtenIniciar='Tem certeza que deseja iniciar o atendimento?'>
-                                                        <span class='badge badge-pill badge-<?php echo $cor_sit_aten_func; ?>'>
-                                                            <?php echo $nome_sits_aten_func; ?>
-                                                        </span>
-                                                    </a>
+                                            <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id . '?status='.$sits_aten_func_id.'&pg='.$this->Dados['pg']; ?>" class="btn btn-<?php echo $cor_sit_aten_func; ?> btn-sm my-md-1"
+                                               data-sitAtenIniciar='Tem certeza que deseja iniciar o atendimento?'>
+                                                <span class='badge badge-pill badge-<?php echo $cor_sit_aten_func; ?>'>
+                                                    <?php echo $nome_sits_aten_func; ?>
                                                 </span>
+                                            </a>
+                                        </span>
                                         <?php
-                                    } elseif ($id_sits_aten_func == 2){
+                                    } elseif ($sits_aten_func_id == 2){
                                         // Iniciado
                                         ?>
                                         <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Clique para pausar o atendimento.'>
-                                                    <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']; ?>" class="btn btn-<?php echo $cor_sit_aten_func; ?> btn-sm my-md-1"
-                                                       data-sitAtenPausar='Tem certeza que deseja pausar o atendimento?'>
-                                                        <span class='badge badge-pill badge-<?php echo $cor_sit_aten_func; ?>'>
-                                                            <?php echo $nome_sits_aten_func; ?>
-                                                        </span>
-                                                    </a>
+                                            <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id . '?status='.$sits_aten_func_id.'&pg='.$this->Dados['pg']; ?>" class="btn btn-<?php echo $cor_sit_aten_func; ?> btn-sm my-md-1"
+                                               data-sitAtenPausar='Tem certeza que deseja pausar o atendimento?'>
+
+                                                <span class='badge badge-pill badge-<?php echo $cor_sit_aten_func; ?>'>
+                                                    <?php echo $nome_sits_aten_func; ?>
                                                 </span>
+                                            </a>
+                                        </span>
                                         <?php
-                                    } elseif ($id_sits_aten_func == 3) {
+                                    } elseif ($sits_aten_func_id == 3) {
                                         // Pausado
                                         ?>
                                         <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Clique para continuar o atendimento.'>
-                                                    <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']; ?>" class="btn btn-<?php echo $cor_sit_aten_func; ?> btn-sm my-md-1"
-                                                       data-sitAtenIniciar='Tem certeza que deseja da continuidade ao atendimento agora?'>
-                                                        <span class='badge badge-pill badge-<?php echo $cor_sit_aten_func; ?>'>
-                                                            <?php echo $nome_sits_aten_func; ?>
-                                                        </span>
-                                                    </a>
+                                            <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id . '?status='.$sits_aten_func_id.'&pg='.$this->Dados['pg']; ?>" class="btn btn-<?php echo $cor_sit_aten_func; ?> btn-sm my-md-1"
+                                               data-sitAtenContinuar='Tem certeza que deseja da continuidade ao atendimento agora?'>
+                                                <span class='badge badge-pill badge-<?php echo $cor_sit_aten_func; ?>'>
+                                                    <?php echo $nome_sits_aten_func; ?>
                                                 </span>
+                                            </a>
+                                        </span>
                                         <?php
                                     } else {
                                         // Finalizado
                                         ?>
                                         <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Atendimento finalizado.'>
-                                                    <a href="#" class="btn btn-secondary btn-sm my-md-1">
-                                                        <span class='badge badge-pill badge-<?php echo $cor_sit_aten_func; ?>'>
-                                                            <?php echo $nome_sits_aten_func; ?>
-                                                        </span>
-                                                    </a>
+                                            <a href="#" class="btn btn-secondary btn-sm my-md-1">
+                                                <span class='badge badge-pill badge-<?php echo $cor_sit_aten_func; ?>'>
+                                                    <?php echo $nome_sits_aten_func; ?>
                                                 </span>
+                                            </a>
+                                        </span>
                                         <?php
                                     }
                                     ?>
@@ -308,114 +309,115 @@ if (!defined('URL')) {
                                 </td>
                                 <td class="text-center">
 
-                                        <?php
-                                        if ($id_sits_aten_func == 1) {
+                                    <?php
+                                    if ($sits_aten_func_id == 1) {
+                                        echo "--:--";
+                                    } elseif ($sits_aten_func_id== 3){
+
+                                        echo '<span tabindex="0" data-placement="top" data-toggle="tooltip" title="Hora/minutos/segundos">';
+
+                                        if (!empty($at_tempo_restante) AND empty($at_tempo_excedido)) {
+                                            echo date('H:i:s', strtotime($at_tempo_restante));
+                                        }
+                                        elseif (!empty($at_tempo_excedido)) {
+
+                                            echo "<span id='sessao' class='text-danger'>";
+                                            echo "-".date('H:i:s', strtotime($at_tempo_excedido));
+                                            echo "</span>";
+
+                                        }
+                                        else {
                                             echo "--:--";
-                                        } elseif ($id_sits_aten_func == 3){
+                                        }
 
-                                            echo '<span tabindex="0" data-placement="top" data-toggle="tooltip" title="Hora/minutos/segundos">';
+                                        echo '</span>';
 
-                                                if (!empty($at_tempo_restante) AND empty($at_tempo_excedido)) {
-                                                    echo date('H:i:s', strtotime($at_tempo_restante));
-                                                }
-                                                elseif (!empty($at_tempo_excedido)) {
+                                    }
+                                    elseif ($sits_aten_func_id == 2) {
 
-                                                    echo "<span id='sessao' class='text-danger'>";
-                                                    echo "-".date('H:i:s', strtotime($at_tempo_excedido));
-                                                    echo "</span>";
+                                        if (!empty($at_tempo_restante) AND empty($at_tempo_excedido)) {
 
-                                                }
-                                                else {
-                                                    echo "--:--";
-                                                }
+                                            // Pegando a hora restante do atendimento no banco e transformando em segundos
+                                            $at_iniciado = date('Y-m-d H:i:s', strtotime($at_iniciado));
+                                            $partes = explode(':', $at_tempo_restante);
+                                            $segundosTotal = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
+                                            // Pegando a hora do banco em que foi iniciado o atendimento
+                                            $at_pausado = date('Y-m-d H:i:s');
+                                            $dteStart = new DateTime($at_iniciado);
+                                            $dteEnd = new DateTime($at_pausado);
+                                            $dteDiff = $dteStart->diff($dteEnd);
+                                            $horas_diferenca = $dteDiff->format('%H');
+                                            $minutos_diferenca = $dteDiff->format('%i');
+                                            $segundos_diferenca = $dteDiff->format('%s');
+                                            $segundosAndamento = $horas_diferenca * 3600 + $minutos_diferenca * 60 + $segundos_diferenca;
+
+                                            $tempo_restanteUrgente = $segundosTotal - $segundosAndamento;
+
+                                            echo "<span id='sessaoUrgente' class='text-primary'></span>";
+
+                                            $valorControler = 0;
+
+                                        }
+                                        elseif (!empty($at_tempo_excedido)){
+
+                                            echo '<span tabindex="0" data-placement="top" data-toggle="tooltip" title="Atendimento atrasado!">';
+
+                                            // Pegando a hora restante do atendimento no banco e transformando em segundos
+                                            $at_iniciado = date('Y-m-d H:i:s', strtotime($at_iniciado));
+                                            $partes = explode(':', $at_tempo_excedido);
+                                            $segundosTotal = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
+                                            // Pegando a hora do banco em que foi iniciado o atendimento
+                                            $at_pausado = date('Y-m-d H:i:s');
+                                            $dteStart = new DateTime($at_iniciado);
+                                            $dteEnd = new DateTime($at_pausado);
+                                            $dteDiff = $dteStart->diff($dteEnd);
+                                            $horas_diferenca = $dteDiff->format('%H');
+                                            $minutos_diferenca = $dteDiff->format('%i');
+                                            $segundos_diferenca = $dteDiff->format('%s');
+                                            $segundosAndamento = $horas_diferenca * 3600 + $minutos_diferenca * 60 + $segundos_diferenca;
+
+                                            $tempo_restanteUrgente = $segundosTotal + $segundosAndamento;
+
+                                            echo "<span id='sessaoUrgente' class='text-primary'></span>";
+
+                                            $valorControler = 1;
 
                                             echo '</span>';
 
                                         }
-                                        elseif ($id_sits_aten_func == 2) {
-
-                                            if (!empty($at_tempo_restante) AND empty($at_tempo_excedido)) {
-
-                                                // Pegando a hora restante do atendimento no banco e transformando em segundos
-                                                $at_iniciado = date('Y-m-d H:i:s', strtotime($at_iniciado));
-                                                $partes = explode(':', $at_tempo_restante);
-                                                $segundosTotal = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
-                                                // Pegando a hora do banco em que foi iniciado o atendimento
-                                                $at_pausado = date('Y-m-d H:i:s');
-                                                $dteStart = new DateTime($at_iniciado);
-                                                $dteEnd = new DateTime($at_pausado);
-                                                $dteDiff = $dteStart->diff($dteEnd);
-                                                $horas_diferenca = $dteDiff->format('%H');
-                                                $minutos_diferenca = $dteDiff->format('%i');
-                                                $segundos_diferenca = $dteDiff->format('%s');
-                                                $segundosAndamento = $horas_diferenca * 3600 + $minutos_diferenca * 60 + $segundos_diferenca;
-
-                                                $tempo_restante = $segundosTotal - $segundosAndamento;
-
-                                                echo "<span id='sessao' class='text-primary'></span>";
-
-                                                $valorControler = 0;
-
-                                            }
-                                            elseif (!empty($at_tempo_excedido)){
-
-                                                echo '<span tabindex="0" data-placement="top" data-toggle="tooltip" title="Atendimento atrasado!">';
-
-                                                    // Pegando a hora restante do atendimento no banco e transformando em segundos
-                                                    $at_iniciado = date('Y-m-d H:i:s', strtotime($at_iniciado));
-                                                    $partes = explode(':', $at_tempo_excedido);
-                                                    $segundosTotal = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
-                                                    // Pegando a hora do banco em que foi iniciado o atendimento
-                                                    $at_pausado = date('Y-m-d H:i:s');
-                                                    $dteStart = new DateTime($at_iniciado);
-                                                    $dteEnd = new DateTime($at_pausado);
-                                                    $dteDiff = $dteStart->diff($dteEnd);
-                                                    $horas_diferenca = $dteDiff->format('%H');
-                                                    $minutos_diferenca = $dteDiff->format('%i');
-                                                    $segundos_diferenca = $dteDiff->format('%s');
-                                                    $segundosAndamento = $horas_diferenca * 3600 + $minutos_diferenca * 60 + $segundos_diferenca;
-
-                                                    $tempo_restante = $segundosTotal + $segundosAndamento;
-
-                                                    echo "<span id='sessao' class='text-primary'></span>";
-
-                                                    $valorControler = 1;
-
-                                                echo '</span>';
-
-                                            }
-                                            else {
-                                                echo "--:--";
-                                            }
+                                        else {
+                                            echo "--:--";
                                         }
-                                        ?>
+                                    }
+
+                                    ?>
 
                                 </td>
                                 <td class="text-center">
-                                            <span class="d-none d-md-block">
-                                                <?php
-                                                if ($this->Dados['botao']['vis']) { ?>
-                                                    <a href="<?php echo URLADM . 'funcionario-ver-atendimento/ver/' . $id. '?pg='.$this->Dados['pg']; ?>"
-                                                       class="btn btn-info btn-sm my-md-1">Visualizar</a>
-                                                    <?php
-                                                }
-                                                ?>
-                                                <?php
-                                                if ($this->Dados['botao']['edit']) { ?>
-                                                    <a href="<?php echo URLADM . 'funcionario-editar-atendimento/edit/' . $id. '?pg='.$this->Dados['pg']; ?>"
-                                                       class="btn btn-warning btn-sm my-md-1">Editar</a>
-                                                    <?php
-                                                }
-                                                ?>
-                                                <?php
-                                                if (($this->Dados['botao']['conclu']) AND ($id_sits_aten_func == 2 OR $id_sits_aten_func == 3)) { ?>
-                                                    <a href="<?php echo URLADM . 'func-concluir-atendimento/concluir/' . $id. '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']; ?>"
-                                                       class="btn btn-success btn-sm my-md-1" data-confirmFinalizar='Para finalizar o atendimento selecionado clique em finalizar. Atenção, uma vez finalizado o atendimento não pode ser retomado.'
-                                                    >Finalizar</a>
-                                                    <?php
-                                                }
-                                                ?>
-                                            </span>
+                                    <span class="d-none d-md-block">
+                                        <?php
+                                        if ($this->Dados['botao']['vis']) { ?>
+                                            <a href="<?php echo URLADM . 'funcionario-ver-atendimento/ver/' . $id. '?pg='.$this->Dados['pg']; ?>"
+                                               class="btn btn-info btn-sm my-md-1">Visualizar</a>
+                                            <?php
+                                        }
+                                        ?>
+                                        <?php
+                                        if ($this->Dados['botao']['edit']) { ?>
+                                            <a href="<?php echo URLADM . 'funcionario-editar-atendimento/edit/' . $id. '?pg='.$this->Dados['pg']; ?>"
+                                               class="btn btn-warning btn-sm my-md-1">Editar</a>
+                                            <?php
+                                        }
+                                        ?>
+                                        <?php
+                                        if (($this->Dados['botao']['conclu']) AND ($sits_aten_func_id == 2 OR $sits_aten_func_id == 3)) { ?>
+                                            <a href="<?php echo URLADM . 'func-concluir-atendimento/concluir/' . $id. '?status='.$sits_aten_func_id.'&pg='.$this->Dados['pg']; ?>"
+                                               class="btn btn-success btn-sm my-md-1" data-confirmFinalizar='Para finalizar o atendimento selecionado clique em finalizar. Atenção, uma vez finalizado o atendimento não pode ser retomado.'
+                                            >Finalizar</a>
+                                            <?php
+                                        }
+                                        ?>
+                                    </span>
                                     <div class="dropdown d-block d-md-none">
                                         <button class="btn btn-primary dropdown-toggle btn-sm" type="button"
                                                 id="acoesListar" data-toggle="dropdown" aria-haspopup="true"
@@ -432,9 +434,9 @@ if (!defined('URL')) {
                                                 <a class="dropdown-item"
                                                    href="<?php echo URLADM . 'funcionario-editar-atendimento/edit/' . $id. '?pg='.$this->Dados['pg']; ?>">Editar</a>
                                             <?php } ?>
-                                            <?php if (($this->Dados['botao']['conclu']) AND $id_sits_aten_func == 2 ) { ?>
+                                            <?php if (($this->Dados['botao']['conclu']) AND ($id_sits_aten_func == 2 OR $sits_aten_func_id == 3)) { ?>
                                                 <a class="dropdown-item"
-                                                   href="<?php echo URLADM . 'func-concluir-atendimento/concluir/' . $id. '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']; ?>" data-confirmFinalizar='Para finalizar o atendimento selecionado clique em finalizar. Atenção, uma vez finalizado o atendimento não pode ser retomado.'
+                                                   href="<?php echo URLADM . 'func-concluir-atendimento/concluir/' . $id. '?status='.$sits_aten_func_id.'&pg='.$this->Dados['pg']; ?>" data-confirmFinalizar='Para finalizar o atendimento selecionado clique em finalizar. Atenção, uma vez finalizado o atendimento não pode ser retomado.'
                                                 >Finalizar</a>
                                             <?php } ?>
                                         </div>
@@ -465,6 +467,7 @@ if (!defined('URL')) {
                         <table class="table table-striped table-hover table-bordered">
                             <thead>
                             <tr class="">
+                                <th>Codº</th>
                                 <th>Status</th>
                                 <th>Tipo</th>
                                 <th class="d-none d-lg-table-cell">Situação</th>
@@ -487,6 +490,19 @@ if (!defined('URL')) {
                                 ?>
 
                                 <tr>
+                                    <td class="text-center">
+                                        <?php
+                                            if ($id < 10){
+                                                echo "000".$id;
+                                            } elseif ($id < 100){
+                                                echo "00".$id;
+                                            } elseif ($id < 100){
+                                                echo "0".$id;
+                                            } else {
+                                                echo $id;
+                                            }
+                                        ?>
+                                    </td>
                                     <td>
                                         <?php
                                             if ($id_sits_aten_func == 1) {
@@ -518,7 +534,7 @@ if (!defined('URL')) {
                                                 ?>
                                                 <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Clique para continuar o atendimento.'>
                                                     <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']; ?>" class="btn btn-<?php echo $cor_sit_aten_func; ?> btn-sm my-md-1"
-                                                       data-sitAtenIniciar='Tem certeza que deseja da continuidade ao atendimento agora?'>
+                                                       data-sitAtenContinuar='Tem certeza que deseja da continuidade ao atendimento agora?'>
                                                         <span class='badge badge-pill badge-<?php echo $cor_sit_aten_func; ?>'>
                                                             <?php echo $nome_sits_aten_func; ?>
                                                         </span>
@@ -580,87 +596,88 @@ if (!defined('URL')) {
                                     </td>
                                     <td class="text-center">
 
+
                                         <?php
-                                            if ($id_sits_aten_func == 1) {
+                                        if ($id_sits_aten_func == 1) {
+                                            echo "--:--";
+                                        } elseif ($id_sits_aten_func == 3){
+
+                                            echo '<span tabindex="0" data-placement="top" data-toggle="tooltip" title="Hora/minutos/segundos">';
+
+                                            if (!empty($at_tempo_restante) AND empty($at_tempo_excedido)) {
+                                                echo date('H:i:s', strtotime($at_tempo_restante));
+                                            }
+                                            elseif (!empty($at_tempo_excedido)) {
+
+                                                echo "<span id='sessao' class='text-danger'>";
+                                                echo "-".date('H:i:s', strtotime($at_tempo_excedido));
+                                                echo "</span>";
+
+                                            }
+                                            else {
                                                 echo "--:--";
-                                            } elseif ($id_sits_aten_func == 3){
+                                            }
 
-                                                echo '<span tabindex="0" data-placement="top" data-toggle="tooltip" title="Hora/minutos/segundos">';
+                                            echo '</span>';
 
-                                                    if (!empty($at_tempo_restante) AND empty($at_tempo_excedido)) {
-                                                        echo date('H:i:s', strtotime($at_tempo_restante));
-                                                    }
-                                                    elseif (!empty($at_tempo_excedido)) {
 
-                                                        echo "<span id='sessao' class='text-danger'>";
-                                                            echo "-".date('H:i:s', strtotime($at_tempo_excedido));
-                                                        echo "</span>";
+                                        }
+                                        elseif ($id_sits_aten_func == 2) {
 
-                                                    }
-                                                    else {
-                                                        echo "--:--";
-                                                    }
+                                            if (!empty($at_tempo_restante) AND empty($at_tempo_excedido)) {
+
+                                                // Pegando a hora restante do atendimento no banco e transformando em segundos
+                                                $at_iniciado = date('Y-m-d H:i:s', strtotime($at_iniciado));
+                                                $partes = explode(':', $at_tempo_restante);
+                                                $segundosTotal = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
+                                                // Pegando a hora do banco em que foi iniciado o atendimento
+                                                $at_pausado = date('Y-m-d H:i:s');
+                                                $dteStart = new DateTime($at_iniciado);
+                                                $dteEnd = new DateTime($at_pausado);
+                                                $dteDiff = $dteStart->diff($dteEnd);
+                                                $horas_diferenca = $dteDiff->format('%H');
+                                                $minutos_diferenca = $dteDiff->format('%i');
+                                                $segundos_diferenca = $dteDiff->format('%s');
+                                                $segundosAndamento = $horas_diferenca * 3600 + $minutos_diferenca * 60 + $segundos_diferenca;
+
+                                                $tempo_restanteUrgente = $segundosTotal - $segundosAndamento;
+
+                                                echo "<span id='sessaoUrgente' class='text-primary'></span>";
+
+                                                $valorControler = 0;
+
+                                            }
+                                            elseif (!empty($at_tempo_excedido)){
+
+                                                echo '<span tabindex="0" data-placement="top" data-toggle="tooltip" title="Atendimento atrasado!">';
+
+                                                // Pegando a hora restante do atendimento no banco e transformando em segundos
+                                                $at_iniciado = date('Y-m-d H:i:s', strtotime($at_iniciado));
+                                                $partes = explode(':', $at_tempo_excedido);
+                                                $segundosTotal = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
+                                                // Pegando a hora do banco em que foi iniciado o atendimento
+                                                $at_pausado = date('Y-m-d H:i:s');
+                                                $dteStart = new DateTime($at_iniciado);
+                                                $dteEnd = new DateTime($at_pausado);
+                                                $dteDiff = $dteStart->diff($dteEnd);
+                                                $horas_diferenca = $dteDiff->format('%H');
+                                                $minutos_diferenca = $dteDiff->format('%i');
+                                                $segundos_diferenca = $dteDiff->format('%s');
+                                                $segundosAndamento = $horas_diferenca * 3600 + $minutos_diferenca * 60 + $segundos_diferenca;
+
+                                                $tempo_restanteUrgente = $segundosTotal + $segundosAndamento;
+
+                                                echo "<span id='sessaoUrgente' class='text-primary'></span>";
+
+                                                $valorControler = 1;
 
                                                 echo '</span>';
 
-
                                             }
-                                            elseif ($id_sits_aten_func == 2) {
-
-                                                if (!empty($at_tempo_restante) AND empty($at_tempo_excedido)) {
-
-                                                    // Pegando a hora restante do atendimento no banco e transformando em segundos
-                                                    $at_iniciado = date('Y-m-d H:i:s', strtotime($at_iniciado));
-                                                    $partes = explode(':', $at_tempo_restante);
-                                                    $segundosTotal = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
-                                                    // Pegando a hora do banco em que foi iniciado o atendimento
-                                                    $at_pausado = date('Y-m-d H:i:s');
-                                                    $dteStart = new DateTime($at_iniciado);
-                                                    $dteEnd = new DateTime($at_pausado);
-                                                    $dteDiff = $dteStart->diff($dteEnd);
-                                                    $horas_diferenca = $dteDiff->format('%H');
-                                                    $minutos_diferenca = $dteDiff->format('%i');
-                                                    $segundos_diferenca = $dteDiff->format('%s');
-                                                    $segundosAndamento = $horas_diferenca * 3600 + $minutos_diferenca * 60 + $segundos_diferenca;
-
-                                                    $tempo_restante = $segundosTotal - $segundosAndamento;
-
-                                                    echo "<span id='sessao' class='text-primary'></span>";
-
-                                                    $valorControler = 0;
-
-                                                }
-                                                elseif (!empty($at_tempo_excedido)){
-
-                                                    echo '<span tabindex="0" data-placement="top" data-toggle="tooltip" title="Atendimento atrasado!">';
-
-                                                        // Pegando a hora restante do atendimento no banco e transformando em segundos
-                                                        $at_iniciado = date('Y-m-d H:i:s', strtotime($at_iniciado));
-                                                        $partes = explode(':', $at_tempo_excedido);
-                                                        $segundosTotal = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
-                                                        // Pegando a hora do banco em que foi iniciado o atendimento
-                                                        $at_pausado = date('Y-m-d H:i:s');
-                                                        $dteStart = new DateTime($at_iniciado);
-                                                        $dteEnd = new DateTime($at_pausado);
-                                                        $dteDiff = $dteStart->diff($dteEnd);
-                                                        $horas_diferenca = $dteDiff->format('%H');
-                                                        $minutos_diferenca = $dteDiff->format('%i');
-                                                        $segundos_diferenca = $dteDiff->format('%s');
-                                                        $segundosAndamento = $horas_diferenca * 3600 + $minutos_diferenca * 60 + $segundos_diferenca;
-
-                                                        $tempo_restante = $segundosTotal + $segundosAndamento;
-
-                                                        echo "<span id='sessao' class='text-primary'></span>";
-
-                                                        $valorControler = 1;
-
-                                                    echo '</span>';
-
-                                                }
-                                                else {
-                                                    echo "--:--";
-                                                }
+                                            else {
+                                                echo "--:--";
                                             }
+                                        }
                                         ?>
 
                                     </td>
@@ -741,119 +758,119 @@ if (!defined('URL')) {
     </div>
 
 </div>
-
+    <script src="<?php echo URLADM.'assets/js/temporizador/jquery-1.9.1.min.js'; ?>"></script>
 <?php
-if (!empty($tempo_restante)) {
+if (!empty($tempo_restanteUrgente)) {
     $scriptInicio = "<script>";
     $scriptFinal = "</script>";
     // O tempo tem que ser obrigatoriamente em segundos
 
 
-    $script = $scriptInicio . "var tempo = '" . $tempo_restante . "'; var controler = '" . $valorControler . "';" . $scriptFinal;
+    $script = $scriptInicio . "var tempoUrgente = '" . $tempo_restanteUrgente . "'; var controlerU = '" . $valorControler . "';" . $scriptFinal;
     echo $script;
-?>
-<script src="<?php echo URLADM.'assets/js/temporizador/jquery-1.9.1.min.js'; ?>"></script>
-<script type="text/javascript">
+    ?>
 
-    //var tempo = new Number();
-    //var controler = 0;
-    // Tempo em segundos
-    //tempo = 7;
+    <script type="text/javascript">
 
-    function startCountdown(){
+        //var tempo = new Number();
+        //var controler = 0;
+        // Tempo em segundos
+        //tempo = 7;
 
-        // Se o tempo não for zerado
-        if(((tempo - 1) >= 0) && (controler == 0)){
+        function startCountdownU(){
 
-            // Pega a parte inteira dos minutos
-            var min = parseInt(tempo/60);
+            // Se o tempo não for zerado
+            if(((tempoUrgente - 1) >= 0) && (controlerU == 0)){
 
-            // horas, pega a parte inteira dos minutos
-            var hor = parseInt(min/60);
+                // Pega a parte inteira dos minutos
+                var minU = parseInt(tempoUrgente/60);
 
-            //atualiza a variável minutos obtendo o tempo restante dos minutos
-            min = min % 60;
+                // horas, pega a parte inteira dos minutos
+                var horU = parseInt(minU/60);
+
+                //atualiza a variável minutos obtendo o tempo restante dos minutos
+                minU = minU % 60;
 
 
-            // Calcula os segundos restantes
-            var seg = tempo%60;
+                // Calcula os segundos restantes
+                var segU = tempoUrgente%60;
 
-            // Formata o número menor que dez, ex: 08, 07, ...
-            if(min < 10)
-            {
-                min = "0"+min;
-                min = min.substr(0, 2);
+                // Formata o número menor que dez, ex: 08, 07, ...
+                if(minU < 10)
+                {
+                    minU = "0"+minU;
+                    minU = minU.substr(0, 2);
+                }
+
+                if(segU <=9)
+                {
+                    segU = "0"+segU;
+                }
+
+                if(horU <=9)
+                {
+                    horU = "0"+horU;
+                }
+
+                // Cria a variável para formatar no estilo hora/cronômetro
+                horaImprimivelU = horU+':' + minU + ':' + segU;
+
+                //JQuery pra setar o valor
+                $("#sessaoUrgente").html(horaImprimivelU);
+
+                // Define que a função será executada novamente em 1000ms = 1 segundo
+                setTimeout('startCountdownU()',1000);
+
+                // diminui o tempo
+                tempoUrgente--;
+
+            } else {
+                controlerU = 1;
+
+                // Pega a parte inteira dos minutos
+                var minU = parseInt(tempoUrgente/60);
+
+                // horas, pega a parte inteira dos minutos
+                var horU = parseInt(minU/60);
+
+                //atualiza a variável minutos obtendo o tempo excedido dos minutos
+                minU = minU % 60;
+
+                // Calcula os segundos excedido
+                var segU = tempoUrgente%60;
+
+                // Formata o número menor que dez, ex: 08, 07, ...
+                if(minU < 10){
+                    minU = "0"+minU;
+                    minU = minU.substr(0, 2);
+                }
+                if(segU <=9){
+                    segU = "0"+segU;
+                }
+                if(horU <=9){
+                    horU = "0"+horU;
+                }
+
+                // Cria a variável para formatar no estilo hora/cronômetro
+                horaImprimivelU = '-' + horU + ':' + minU + ':' + segU;
+
+                //JQuery pra setar o valor
+                $('#sessaoUrgente').attr('class', 'text-danger');
+                $("#sessaoUrgente").html(horaImprimivelU);
+
+                // Define que a função será executada novamente em 1000ms = 1 segundo
+                setTimeout('startCountdownU()',1000);
+
+                // somar o tempo
+                tempoUrgente++;
             }
 
-            if(seg <=9)
-            {
-                seg = "0"+seg;
-            }
-
-            if(hor <=9)
-            {
-                hor = "0"+hor;
-            }
-
-            // Cria a variável para formatar no estilo hora/cronômetro
-            horaImprimivel = hor+':' + min + ':' + seg;
-
-            //JQuery pra setar o valor
-            $("#sessao").html(horaImprimivel);
-
-            // Define que a função será executada novamente em 1000ms = 1 segundo
-            setTimeout('startCountdown()',1000);
-
-            // diminui o tempo
-            tempo--;
-
-        } else {
-            controler = 1;
-
-            // Pega a parte inteira dos minutos
-            var min = parseInt(tempo/60);
-
-            // horas, pega a parte inteira dos minutos
-            var hor = parseInt(min/60);
-
-            //atualiza a variável minutos obtendo o tempo excedido dos minutos
-            min = min % 60;
-
-            // Calcula os segundos excedido
-            var seg = tempo%60;
-
-            // Formata o número menor que dez, ex: 08, 07, ...
-            if(min < 10){
-                min = "0"+min;
-                min = min.substr(0, 2);
-            }
-            if(seg <=9){
-                seg = "0"+seg;
-            }
-            if(hor <=9){
-                hor = "0"+hor;
-            }
-
-            // Cria a variável para formatar no estilo hora/cronômetro
-            horaImprimivel = '-' + hor + ':' + min + ':' + seg;
-
-            //JQuery pra setar o valor
-            $('#sessao').attr('class', 'text-danger');
-            $("#sessao").html(horaImprimivel);
-
-            // Define que a função será executada novamente em 1000ms = 1 segundo
-            setTimeout('startCountdown()',1000);
-
-            // somar o tempo
-            tempo++;
         }
 
-    }
+        // Chama a função ao carregar a tela
+        startCountdownU();
 
-    // Chama a função ao carregar a tela
-    startCountdown();
-
-</script>
+    </script>
 
     <?php
 }

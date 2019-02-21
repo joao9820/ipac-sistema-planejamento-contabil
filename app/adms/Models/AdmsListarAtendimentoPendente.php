@@ -72,7 +72,7 @@ class AdmsListarAtendimentoPendente
                         emp.nome nome_empresa, emp.fantasia fantasia_empresa, 
                         situacao.nome nome_situacao, situacao.id id_situacao, 
                         cr.cor,
-                        sitAtenFun.id id_sits_aten_func, sitAtenFun.nome nome_sits_aten_func, 
+                        sitAtenFun.id sits_aten_func_id, sitAtenFun.nome nome_sits_aten_func, 
                         cor_sitAtenFun.cor cor_sit_aten_func 
                         FROM adms_atendimentos aten 
                         INNER JOIN adms_demandas demanda ON demanda.id=aten.adms_demanda_id 
