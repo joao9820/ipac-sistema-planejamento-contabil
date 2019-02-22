@@ -121,7 +121,7 @@ class ConfigController
                     if(!isset($_SESSION['adms_niveis_acesso_id'])) {
                         $_SESSION['msg'] = '<div class="alert alert-info" role="alert">Faça login para acessar o sistema</div>';
                     } else {
-                        $_SESSION['msg'] = '<div class="alert alert-danger" role="alert">Oops! Você não tem acesso a página. <a class="nav-link" href="javascript:history.back()">Voltar a página anterior</a></div>';
+                        $_SESSION['msg'] = '<div class="alert alert-danger" role="alert">Oops! Você não tem acesso a página. <a class="nav-link text-dark" href="javascript:history.back()">Voltar a página anterior</a></div>';
                     }
                     $this->UrlController = $this->slugController('Login');
                     $this->UrlMetodo = $this->slugMetodo('acesso');
