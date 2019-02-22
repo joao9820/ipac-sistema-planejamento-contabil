@@ -13,6 +13,8 @@ class ConfigController
     private $UrlMetodo;
     private $Classe;
     private $Paginas;
+    private $PaginasExiste;
+    private $PaginasPublica;
     private static $Format;
 
     public function __construct()
@@ -85,21 +87,54 @@ class ConfigController
     public function carregar()
     {
         $listarPg = new \App\adms\Models\AdmsPaginas();
-        $this->Paginas = $listarPg->listarPaginas($this->UrlController, $this->UrlMetodo);
-        if ($this->Paginas) {
-            extract($this->Paginas[0]);
-            $this->Classe = "\\App\\{$tipo_tpg}\\Controllers\\" . $this->UrlController;
-            if (class_exists($this->Classe)) {
-                $this->carregarMetodo();
-            } else {
-                $this->UrlController = $this->slugController(CONTROLER);
-                $this->UrlMetodo = $this->slugMetodo(METODO);
-                $this->carregar();
+        $this->PaginasExiste = $listarPg->verificarPaginaExiste($this->UrlController, $this->UrlMetodo);
+        if ($this->PaginasExiste) {
+
+            $this->PaginasPublica = $listarPg->paginaPublica($this->UrlController, $this->UrlMetodo);
+            if ($this->PaginasPublica){
+
+                extract($this->PaginasPublica[0]);
+                $this->Classe = "\\App\\{$tipo_tpg}\\Controllers\\" . $this->UrlController;
+                if (class_exists($this->Classe)) {
+                    $this->carregarMetodo();
+                } else {
+                    $this->UrlController = $this->slugController(CONTROLER);
+                    $this->UrlMetodo = $this->slugMetodo(METODO);
+                    $this->carregar();
+                }
+
             }
-        } else {
-            $_SESSION['msg'] = '<div class="alert alert-danger" role="alert">Desculpe, a página que você procura não existe ou você não tem permissão de acessa-la!</div>';
-            $this->UrlController = $this->slugController('Login');
-            $this->UrlMetodo = $this->slugMetodo('acesso');
+            else {
+
+                $this->Paginas = $listarPg->listarPaginas($this->UrlController, $this->UrlMetodo);
+                if ($this->Paginas) {
+                    extract($this->Paginas[0]);
+                    $this->Classe = "\\App\\{$tipo_tpg}\\Controllers\\" . $this->UrlController;
+                    if (class_exists($this->Classe)) {
+                        $this->carregarMetodo();
+                    } else {
+                        $this->UrlController = $this->slugController(CONTROLER);
+                        $this->UrlMetodo = $this->slugMetodo(METODO);
+                        $this->carregar();
+                    }
+                } else {
+                    if(!isset($_SESSION['adms_niveis_acesso_id'])) {
+                        $_SESSION['msg'] = '<div class="alert alert-info" role="alert">Faça login para acessar o sistema</div>';
+                    } else {
+                        $_SESSION['msg'] = '<div class="alert alert-danger" role="alert">Oops! Você não tem acesso a página. <a class="nav-link" href="javascript:history.back()">Voltar a página anterior</a></div>';
+                    }
+                    $this->UrlController = $this->slugController('Login');
+                    $this->UrlMetodo = $this->slugMetodo('acesso');
+                    $this->carregar();
+                }
+
+            }
+
+        }
+        else {
+            //Página de erro 404;
+            $this->UrlController = $this->slugController('Error');
+            $this->UrlMetodo = $this->slugMetodo('erro-404');
             $this->carregar();
         }
     }
