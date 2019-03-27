@@ -16,13 +16,13 @@ if (!empty($this->Dados['dados_nivac'][0])) {
                     <span class="d-none d-md-block">
                         <?php
                         if ($this->Dados['botao']['list_nivac']) {
-                            echo "<a href='" . URLADM . "nivel-acesso/listar' class='btn btn-outline-info btn-sm'>Listar</a> ";
+                            echo "<a href='" . URLADM . "nivel-acesso/listar' class='btn btn-outline-info btn-sm'><i class='fas fa-list'></i> Listar Níveis de Acesso</a> " ;
                         }
                         if ($this->Dados['botao']['edit_nivac']) {
-                            echo "<a href='" . URLADM . "editar-niv-ac/edit-niv-ac/$id' class='btn btn-outline-warning btn-sm'>Editar</a> ";
+                            echo "<a href='" . URLADM . "editar-niv-ac/edit-niv-ac/$id' class='btn btn-outline-warning btn-sm'><i class='fas fa-edit'></i> Editar</a> ";
                         }
                         if ($this->Dados['botao']['del_nivac']) {
-                            echo "<a href='" . URLADM . "apagar-niv-ac/apagar-niv-ac/$id' class='btn btn-outline-danger btn-sm' data-confirm='Tem certeza de que deseja excluir o item selecionado?'>Apagar</a> ";
+                            echo "<a href='" . URLADM . "apagar-niv-ac/apagar-niv-ac/$id' class='btn btn-outline-danger btn-sm' data-confirm='Tem certeza de que deseja excluir o item selecionado?'><i class='fas fa-trash'></i> Apagar</a> ";
                         }
                         ?>
                     </span>

@@ -51,13 +51,7 @@ if (isset($this->Dados['form'][0])) {
                     </span>
                 </span>
             </div>
-            <div class="p-2">
-                <span class="d-block">
-                    <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Cadastrar cargo">
-                        <a href="#" class="btn btn-outline-warning btn-sm"><i class="fas fa-id-card-alt"></i> Cargo</a>
-                    </span>
-                </span>
-            </div>
+
         </div>
 
 
@@ -97,24 +91,6 @@ if (isset($this->Dados['form'][0])) {
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label for="Cargo"><span class="text-danger">* </span>Cargo</label>
-                        <select name="adms_cargo_id" id="Cargo" class="form-control">
-                            <option>Selecione o cargo do funcionário</option>
-                            <?php
-                            foreach ($this->Dados['select']['cargos'] as $cargoLinha) {
-                                extract($cargoLinha);
-                                if ($valorForm['adms_cargo_id'] == $id_cargo)
-                                {
-                                    echo "<option value='$id_cargo' selected>$cargo</option>";
-                                } else {
-                                    echo "<option value='$id_cargo'>$cargo</option>";
-                                }
-
-                            }
-                            ?>
-                        </select>
-                    </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-12">

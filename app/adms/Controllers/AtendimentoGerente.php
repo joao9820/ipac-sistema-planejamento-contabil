@@ -141,7 +141,6 @@ class AtendimentoGerente
             unset($this->Dados['EditAtendimento']);
 
 
-
             $editAtividade = new \App\adms\Models\AdmsEditarAtenGerente();
             $editAtividade->altAtendimento($this->Dados);
             if ($editAtividade->getResultado())
@@ -179,6 +178,7 @@ class AtendimentoGerente
 
             $listarSelect = new \App\adms\Models\AdmsEditarAtenGerente();
             $this->Dados['select'] = $listarSelect->listarCadastrar();
+            $this->Dados['dadosAtendimento'] = $listarSelect->verAtendimento($this->DadosId);
 
             $botao = ['vis_atendimento' => ['menu_controller' => 'atendimento-gerente', 'menu_metodo' => 'ver'],
                 'list_atendimento' => ['menu_controller' => 'gerenciar-atendimento', 'menu_metodo' => 'listar']];

@@ -10,8 +10,12 @@ if (!defined('URL')) {
     exit();
 }
 
-//var_dump($this->Dados['select']);
+//var_dump($this->Dados);
 //var_dump($this->Dados['form'][0]);
+
+if (isset($this->Dados['dadosAtendimento'][0])) {
+    $dadosAtendimento = $this->Dados['dadosAtendimento'][0];
+}
 
 if (isset($this->Dados['form'])) {
     $valorForm = $this->Dados['form'];
@@ -33,12 +37,12 @@ if (isset($this->Dados['form'][0])) {
                    <?php
                    if ($this->Dados['botao']['vis_atendimento']) {
                        ?>
-                       <a href="<?php echo URLADM . 'atendimento-gerente/ver/'.$valorForm['id']; ?>" class="btn btn-primary btn-sm">Visualizar</a>
+                       <a href="<?php echo URLADM . 'atendimento-gerente/ver/'.$valorForm['id']; ?>" class="btn btn-outline-primary btn-sm"><i class="far fa-eye"></i> Visualizar</a>
                    <?php
                    }
                    if ($this->Dados['botao']['list_atendimento']) {
                    ?>
-                       <a href="<?php echo URLADM . 'gerenciar-atendimento/listar/'.$this->Dados['pg']; ?>" class="btn btn-info btn-sm">Listar Atendimentos</a>
+                       <a href="<?php echo URLADM . 'gerenciar-atendimento/listar/'.$this->Dados['pg']; ?>" class="btn btn-outline-info btn-sm"><i class='fas fa-list'></i> Listar Atendimentos</a>
                    <?php
                    }
                    ?>
@@ -51,12 +55,12 @@ if (isset($this->Dados['form'][0])) {
                         <?php
                         if ($this->Dados['botao']['vis_atendimento']) {
                             ?>
-                            <a class="dropdown-item" href="<?php echo URLADM . 'atendimento-gerente/ver/'.$valorForm['id']; ?>" class="btn btn-primary btn-sm">Visualizar</a>
+                            <a class="dropdown-item" href="<?php echo URLADM . 'atendimento-gerente/ver/'.$valorForm['id']; ?>" class="btn btn-primary btn-sm"><i class="far fa-eye"></i> Visualizar</a>
                         <?php
                         }
                         if ($this->Dados['botao']['list_atendimento']) {
                             ?>
-                            <a class="dropdown-item" href="<?php echo URLADM . 'gerenciar-atendimento/listar/'.$this->Dados['pg']; ?>" class="btn btn-primary btn-sm">Voltar</a>
+                            <a class="dropdown-item" href="<?php echo URLADM . 'gerenciar-atendimento/listar/'.$this->Dados['pg']; ?>" class="btn btn-primary btn-sm"><i class='fas fa-list'></i> Listar Atendimentos</a>
                         <?php
                         }
                         ?>
@@ -81,10 +85,10 @@ if (isset($this->Dados['form'][0])) {
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label>
-                        <span tabindex="0" data-toggle="tooltip" data-placement="right" data-html="true" title="Caso esse atendimento tenha prioridade sobre outros, selecione a opção SIM.">
+                        <span class="text-danger">* </span> Prioridade
+                        <span class="text-secondary" tabindex="0" data-toggle="tooltip" data-placement="right" data-html="true" title="Caso esse atendimento tenha prioridade sobre outros, selecione a opção SIM.">
                             <i class="fas fa-question-circle"></i>
                         </span>
-                        Prioridade
                     </label>
                     <select name="prioridade" id="prioridade" class="form-control">
                         <?php
@@ -105,6 +109,15 @@ if (isset($this->Dados['form'][0])) {
                     </select>
                 </div>
                 <div class="form-group col-md-12">
+                    <label>
+                        <span class="text-danger">* </span> Data Fatal
+                        <span class="text-secondary" tabindex="0" data-toggle="tooltip" data-placement="right" data-html="true" title="Data limite para a entrega do atendimento.">
+                            <i class="fas fa-question-circle"></i>
+                        </span>
+                    </label>
+                    <input name="data_fatal" class="form-control" type="date" required>
+                </div>
+                <div class="form-group col-md-12">
                     <label><span class="text-danger">* </span>Demanda</label>
                     <select name="adms_demanda_id" id="adms_demanda_id" class="form-control">
                         <option value="">Selecione</option>
@@ -123,7 +136,11 @@ if (isset($this->Dados['form'][0])) {
                 </div>
                 <div class="form-group col-md-12">
                     <label><span class="text-danger">* </span>Situação do Atendimento</label>
-                    <select name="adms_sits_atendimento_id" id="adms_sits_atendimento_id" class="form-control">
+                    <select name="adms_sits_atendimento_id" id="adms_sits_atendimento_id" class="form-control" <?php
+                        if ($dadosAtendimento['situacao_funcionario'] != 2) {
+                            echo "disabled";
+                        }
+                        ?>>
                         <option value="">Selecione</option>
                         <?php
                         foreach ($this->Dados['select']['sitsat'] as $sitAtendimento) {
@@ -141,7 +158,11 @@ if (isset($this->Dados['form'][0])) {
 
                 <div class="form-group col-md-12">
                     <label><span class="text-danger">* </span>Funcinário</label>
-                    <select name="adms_funcionario_id" id="adms_funcionario_id" class="form-control">
+                    <select name="adms_funcionario_id" id="adms_funcionario_id" class="form-control" <?php
+                    if ($dadosAtendimento['situacao_funcionario'] != 2) {
+                        echo "";
+                    }
+                    ?>>
                         <option value="">Selecione</option>
                         <?php
                         foreach ($this->Dados['select']['func'] as $funcionario) {
@@ -162,7 +183,7 @@ if (isset($this->Dados['form'][0])) {
             <p>
                 <span class="text-danger">* </span>Campo obrigatório
             </p>
-            <input type="submit" name="EditAtendimento" value="Salvar" class="btn btn-warning">
+            <input type="submit" name="EditAtendimento" value="Salvar" class="btn btn-outline-success">
         </form>
     </div>
 </div>

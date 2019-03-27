@@ -14,10 +14,10 @@ if (!defined('URL')) {
                 <span class="d-none d-md-block">
                     <?php
                     if ($this->Dados['botao']['sincro_permi']) {
-                        echo "<a href='" . URLADM . "sincro-pg-niv-ac/sincro-pg-niv-ac' class='btn btn-outline-warning btn-sm'>Sincronizar</a> ";
+                        echo "<a href='" . URLADM . "sincro-pg-niv-ac/sincro-pg-niv-ac' class='btn btn-outline-dark btn-sm'><i class='fas fa-sync-alt'></i> Sincronizar</a> ";
                     }
                     if ($this->Dados['botao']['cad_nivac']) {
-                        echo "<a href='" . URLADM . "cadastrar-niv-ac/cad-niv-ac' class='btn btn-outline-success btn-sm'>Cadastrar</a> ";
+                        echo "<a href='" . URLADM . "cadastrar-niv-ac/cad-niv-ac' class='btn btn-outline-success btn-sm'><i class='fas fa-plus'></i> Cadastrar</a> ";
                     }
                     ?>
                 </span>
@@ -56,13 +56,13 @@ if (!defined('URL')) {
         }
         ?>
         <div class="table-responsive">
-            <table class="table table-striped table-hover table-bordered">
-                <thead>
+            <table class="table table-striped table-hover table-border">
+                <thead class="bg-info text-light">
                     <tr>
                         <th>ID</th>
                         <th>Nome</th>
                         <th class="d-none d-sm-table-cell">Ordem</th>
-                        <th class="text-center">Ações</th>
+                        <th class="text-right">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -75,7 +75,7 @@ if (!defined('URL')) {
                             <th><?php echo $id; ?></th>
                             <td><?php echo $nome; ?></td>
                             <td class="d-none d-sm-table-cell"><?php echo $ordem; ?></td>
-                            <td class="text-center">
+                            <td class="text-right">
                                 <span class="d-none d-md-block">
                                     <?php
                                     if ($qnt_linhas_exe <= 2) {
@@ -89,16 +89,32 @@ if (!defined('URL')) {
                                     }
                                     $qnt_linhas_exe++;
                                     if ($this->Dados['botao']['list_permi']) {
-                                        echo "<a href='" . URLADM . "permissoes/listar/1?niv=$id' class='btn btn-outline-info btn-sm'>Permissões</a> ";
+                                        ?>
+                                        <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Permissões"> 
+                                            <a href= "<?php echo URLADM . 'permissoes/listar/1?niv='.$id ?>" class="btn btn-outline-info btn-sm"><i class="fas fa-unlock-alt"></i></a>
+                                        </span>
+                                        <?php
                                     }
                                     if ($this->Dados['botao']['vis_nivac']) {
-                                        echo "<a href='" . URLADM . "ver-niv-ac/ver-niv-ac/$id' class='btn btn-outline-primary btn-sm'>Visualizar</a> ";
+                                        ?>
+                                        <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Visualizar"> 
+                                            <a href=" <?php echo URLADM . 'ver-niv-ac/ver-niv-ac/'.$id ?>" class="btn btn-outline-primary btn-sm"><i class='far fa-eye'></i></a> 
+                                        </span>
+                                        <?php
                                     }
                                     if ($this->Dados['botao']['edit_nivac']) {
-                                        echo "<a href='" . URLADM . "editar-niv-ac/edit-niv-ac/$id' class='btn btn-outline-warning btn-sm'>Editar</a> ";
+                                        ?>
+                                        <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Editar"> 
+                                            <a href=" <?php echo URLADM . 'editar-niv-ac/edit-niv-ac/'.$id ?>" class="btn btn-outline-warning btn-sm"><i class='fas fa-edit'></i></a>
+                                        </span>
+                                        <?php
                                     }
                                     if ($this->Dados['botao']['del_nivac']) {
-                                        echo "<a href='" . URLADM . "apagar-niv-ac/apagar-niv-ac/$id' class='btn btn-outline-danger btn-sm' data-confirm='Tem certeza de que deseja excluir o item selecionado?'>Apagar</a> ";
+                                        ?>
+                                        <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Apagar"> 
+                                         <a href=" <?php echo URLADM . 'apagar-niv-ac/apagar-niv-ac/'.$id ?>" class="btn btn-outline-danger btn-sm" data-confirm='Tem certeza de que deseja excluir o item selecionado?'><i class='fas fa-trash'></i></a>
+                                        </span>
+                                        <?php
                                     }
                                     ?>
                                 </span>

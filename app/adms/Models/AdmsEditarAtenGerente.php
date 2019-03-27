@@ -29,7 +29,8 @@ class AdmsEditarAtenGerente
     {
         $this->DadosId = (int) $DadosId;
         $verUsuario = new \App\adms\Models\helper\AdmsRead();
-        $verUsuario->fullRead("SELECT * FROM adms_atendimentos WHERE id =:id LIMIT :limit","id=" . $this->DadosId . "&limit=1");
+        $verUsuario->fullRead("SELECT id, adms_demanda_id, adms_sits_atendimento_id, adms_funcionario_id, prioridade, adms_sits_atendimentos_funcionario_id situacao_funcionario, data_fatal 
+                              FROM adms_atendimentos WHERE id =:id LIMIT :limit","id=" . $this->DadosId . "&limit=1");
         $this->Resultado = $verUsuario->getResultado();
         return $this->Resultado;
     }
@@ -61,37 +62,30 @@ class AdmsEditarAtenGerente
     public function altAtendimento(array $Dados)
     {
         $this->Dados = $Dados;
+
+
         if ($this->Dados['prioridade'] != 1) {
             $this->Dados['prioridade'] = 2;
         }
-        if (($this->Dados['adms_sits_atendimento_id'] == 1) AND  ($this->Dados['adms_funcionario_id'] == '')) {
-            unset($this->Dados['adms_funcionario_id']);
-        }
-        if (($this->Dados['adms_sits_atendimento_id'] == 4) AND  ($this->Dados['adms_funcionario_id'] == '') ) {
-            unset($this->Dados['adms_funcionario_id']);
-        }
-        if ($this->Dados['adms_sits_atendimento_id'] == 2 OR $this->Dados['adms_sits_atendimento_id'] == 3) {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Você não pode alterar esse atendimento para 'Iniciado' ou 'Concluído'. Apenas o funcionário responsável pelo atendimento pode fazer essas alterações.", "danger");
+
+        if (empty($this->Dados['data_fatal'])) {
+            unset($this->Dados['data_fatal']);
+        }
+
+        $valCampos = new \App\adms\Models\helper\AdmsCampoVazio();
+        $valCampos->validarDados($this->Dados);
+
+        if ($valCampos->getResultado()) {
+
+            $this->updateEditDemanda();
+
+        } else {
+
             $this->Resultado = false;
-
         }
-        else {
 
-            $valCampos = new \App\adms\Models\helper\AdmsCampoVazio();
-            $valCampos->validarDados($this->Dados);
 
-            if ($valCampos->getResultado()) {
-
-                $this->updateEditDemanda();
-
-            } else {
-
-                $this->Resultado = false;
-            }
-
-        }
 
 
     }
@@ -99,10 +93,12 @@ class AdmsEditarAtenGerente
 
     private function updateEditDemanda()
     {
+
         if (!isset($this->Dados['adms_funcionario_id'])){
             $this->Dados['adms_funcionario_id'] = null;
         }
         $this->Dados['modified'] = date('Y-m-d H:i:s');
+
 
         $upEditDemanda = new \App\adms\Models\helper\AdmsUpdate();
         $upEditDemanda->exeUpdate("adms_atendimentos", $this->Dados, "WHERE id =:id", "id={$this->Dados['id']}");

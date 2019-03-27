@@ -33,7 +33,7 @@ if (isset($this->Dados['form'][0])) {
             ?>
             <div class="p-2">
                 <span class="d-block">
-                    <a href="<?php echo URLADM . 'ver-usuario/ver-usuario/'.$valorFom['id']; ?>" class="btn btn-primary btn-sm">Visualizar</a>
+                    <a href="<?php echo URLADM . 'ver-usuario/ver-usuario/'.$valorFom['id']; ?>" class="btn btn-outline-primary btn-sm"><i class="far fa-eye"></i> Visualizar</a>
                 </span>
             </div>
                 <?php
@@ -161,7 +161,7 @@ if (isset($this->Dados['form'][0])) {
             <p>
                 <span class="text-danger">* </span>Campo obrigatório
             </p>
-            <input type="submit" name="EditUsuario" value="Salvar" class="btn btn-warning">
+            <input type="submit" name="EditUsuario" value="Salvar" class="btn btn-outline-success">
         </form>
     </div>
 </div>

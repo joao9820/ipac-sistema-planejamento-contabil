@@ -27,7 +27,7 @@ class AdmsVerAtendGerente
         $this->DadosId = (int) $DadosId;
 
         $verAtendimento = new \App\adms\Models\helper\AdmsRead();
-        $verAtendimento->fullRead("SELECT aten.id, aten.adms_funcionario_id funcionario, aten.descricao, aten.created, 
+        $verAtendimento->fullRead("SELECT aten.id, aten.adms_funcionario_id funcionario, aten.descricao, aten.created, aten.data_fatal,
                           aten.modified, aten.prioridade, aten.duracao_atendimento, aten.inicio_atendimento, 
                           aten.fim_atendimento, aten.arquivado_gerente, aten.cancelado_p_user, aten.at_tempo_restante,aten.at_iniciado, aten.at_pausado, aten.at_tempo_excedido,
                         demanda.nome nome_demanda, demanda.id id_demanda, 

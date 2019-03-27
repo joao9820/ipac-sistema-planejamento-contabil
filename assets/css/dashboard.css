@@ -74,9 +74,14 @@ body {
 }
 .content{
     width: 100%;
+    background: #FFF;
+}
+.list-group-item {
+    border: none;
 }
 .titulo{
     font-size: 2.0rem !important;
+    margin-bottom: 48px !important;
 }
 
 

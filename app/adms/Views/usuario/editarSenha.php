@@ -19,7 +19,7 @@ if (!defined('URL')) {
             </div>
             <div class="p-2">
                 <span class="d-block">
-                    <a href="<?php echo URLADM . 'ver-usuario/ver-usuario/'.$this->Dados['form']; ?>" class="btn btn-primary btn-sm">Visualizar</a>
+                    <a href="<?php echo URLADM . 'ver-usuario/ver-usuario/'.$this->Dados['form']; ?>" class="btn btn-outline-primary btn-sm"><i class='far fa-eye'></i> Visualizar</a>
                 </span>
             </div>
         </div><hr>
@@ -42,7 +42,7 @@ if (!defined('URL')) {
             <p>
                 <span class="text-danger">* </span>Campo obrigatório
             </p>
-            <input type="submit" name="EditSenha" value="Salvar" class="btn btn-warning">
+            <input type="submit" name="EditSenha" value="Salvar" class="btn btn-outline-success">
         </form>
     </div>
 </div>

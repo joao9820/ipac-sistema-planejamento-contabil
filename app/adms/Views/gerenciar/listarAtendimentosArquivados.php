@@ -28,7 +28,7 @@ $pg = $this->Dados['pg'];
             if ($this->Dados['botao']['list_atendimento']) {
                 ?>
                 <div class="p-2">
-                    <a href="<?php echo URLADM . 'gerenciar-atendimento/listar'; ?>" class="btn btn-info btn-sm">Voltar</a>
+                    <a href="<?php echo URLADM . 'gerenciar-atendimento/listar'; ?>" class="btn btn-outline-info btn-sm"><i class="fas fa-undo-alt"></i> Voltar</a>
                 </div>
                 <?php
             }
@@ -58,8 +58,8 @@ $pg = $this->Dados['pg'];
 
 
             <div class="table-responsive">
-                <table class="table table-striped table-hover table-bordered">
-                    <thead>
+                <table class="table table-striped table-hover">
+                    <thead class="bg-info text-light my-4">
                     <tr>
                         <th class="d-none d-lg-table-cell">Cod.</th>
                         <th class="">Funcionário</th>
@@ -68,7 +68,7 @@ $pg = $this->Dados['pg'];
                         <th class="">Cliente</th>
                         <th class="d-none d-lg-table-cell">Empresa</th>
                         <th class="">Data/Hora</th>
-                        <th class="text-center">Ações</th>
+                        <th class="text-right">Ações</th>
                     </tr>
                     </thead>
 
@@ -80,16 +80,20 @@ $pg = $this->Dados['pg'];
 
                         ?>
 
-                        <tr class="<?php if (($nome_situacao == "Cancelado") OR ($id_situacao == 4)) {
-                            echo "text-secondary";
-                        } else {
-                            echo "text-dark";
-                        } ?>">
-                            <td class="d-none d-lg-table-cell"><?php if ($id < 10) {
-                                    echo "0" . $id;
-                                } else {
-                                    echo $id;
-                                } ?></td>
+                        <tr>
+                            <td class="d-none d-lg-table-cell">
+                                <?php
+                                    if ($id < 10){
+                                        echo "000".$id;
+                                    } elseif ($id < 100){
+                                        echo "00".$id;
+                                    } elseif ($id < 100){
+                                        echo "0".$id;
+                                    } else {
+                                        echo $id;
+                                    }
+                                ?>
+                            </td>
                             <td>
                                 <?php
                                 if (empty($funcionario)) {
@@ -113,27 +117,39 @@ $pg = $this->Dados['pg'];
                                 </span>
                             </td>
                             <td><?php echo date('d/m/Y H:i', strtotime($created)); ?></td>
-                            <td class="text-center">
+                            <td class="text-right">
                                         <span class="d-none d-md-block">
                                             <?php
                                             if ($this->Dados['botao']['vis_atendimento']) { ?>
-                                                <a href="<?php echo URLADM . 'atendimento-gerente/ver/' . $id . '?pg=' . $this->Dados['pg']; ?>"
-                                                   class="btn btn-info btn-sm my-md-1">Visualizar</a>
+                                                <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Visualizar">
+                                                    <a href="<?php echo URLADM . 'atendimento-gerente/ver/' . $id . '?pg=' . $this->Dados['pg']; ?>"
+                                                        class="btn btn-outline-primary btn-sm my-md-1">
+                                                        <i class="far fa-eye"></i>
+                                                    </a>
+                                                </span>
                                                 <?php
                                             }
                                             ?>
                                             <?php
                                             if (($this->Dados['botao']['edit_atendimento']) AND (($nome_situacao != "Cancelado") AND ($id_situacao != 4))) { ?>
-                                                <a href="<?php echo URLADM . 'atendimento-gerente/editar/' . $id . '?pg=' . $this->Dados['pg']; ?>"
-                                                   class="btn btn-warning btn-sm my-md-1">Editar</a>
+                                                <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Editar">
+                                                    <a href="<?php echo URLADM . 'atendimento-gerente/editar/' . $id . '?pg=' . $this->Dados['pg']; ?>"
+                                                       class="btn btn-outline-warning btn-sm my-md-1">
+                                                        <i class="far fa-edit"></i>
+                                                    </a>
+                                                </span>
                                                 <?php
                                             }
                                             ?>
                                             <?php
                                             if ($this->Dados['botao']['desarqui_atendimento']) { ?>
-                                                <a href="<?php echo URLADM . 'atendimento-gerente/desarquivar/' . $id . '?pg=' . $this->Dados['pg']; ?>"
-                                                   class="btn btn-dark btn-sm my-md-1"
-                                                   data-desarquivar='Tem certeza que deseja desarquivar o atendimento selecionado?'>Desarquivar</a>
+                                                <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Desarquivar">
+                                                    <a href="<?php echo URLADM . 'atendimento-gerente/desarquivar/' . $id . '?pg=' . $this->Dados['pg']; ?>"
+                                                       class="btn btn-outline-dark btn-sm my-md-1"
+                                                       data-desarquivar='Tem certeza que deseja desarquivar o atendimento selecionado?'>
+                                                        <i class="fas fa-box-open"></i>
+                                                    </a>
+                                                </span>
                                                 <?php
                                             }
                                             ?>

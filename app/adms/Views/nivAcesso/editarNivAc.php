@@ -18,7 +18,7 @@ if (isset($this->Dados['form'][0])) {
             if ($this->Dados['botao']['vis_nivac']) {
                 ?>
                 <div class="p-2">
-                    <a href="<?php echo URLADM . 'ver-niv-ac/ver-niv-ac/' . $valorForm['id']; ?>" class="btn btn-outline-primary btn-sm">Visualizar</a>
+                    <a href="<?php echo URLADM . 'ver-niv-ac/ver-niv-ac/' . $valorForm['id']; ?>" class="btn btn-outline-primary btn-sm"><i class='far fa-eye'></i> Visualizar</a>
                 </div>
                 <?php
             }

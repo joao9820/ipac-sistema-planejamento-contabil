@@ -32,7 +32,7 @@ if (isset($this->Dados['form'][0])) {
             if ($this->Dados['botao']['list_demanda']) {
                 ?>
                 <div class="p-2">
-                    <a href="<?php echo URLADM . 'demandas/listar'; ?>" class="btn btn-info btn-sm">Listar</a>
+                    <a href="<?php echo URLADM . 'demandas/listar'; ?>" class="btn btn-outline-info btn-sm"><i class="fas fa-list"></i> Listar Demandas</a>
                 </div>
                 <?php
             }
@@ -65,7 +65,7 @@ if (isset($this->Dados['form'][0])) {
             <p>
                 <span class="text-danger">* </span>Campo obrigatório
             </p>
-            <input type="submit" name="CadDemanda" value="Cadastrar" class="btn btn-warning">
+            <input type="submit" name="CadDemanda" value="Cadastrar" class="btn btn-outline-success">
         </form>
     </div>
 </div>

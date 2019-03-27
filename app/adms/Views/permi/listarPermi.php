@@ -21,7 +21,7 @@ if (!defined('URL')) {
             if ($this->Dados['botao']['list_nivac']) {
                 ?>
                 <div class="p-2">
-                    <a href="<?php echo URLADM . 'nivel-acesso/listar'; ?>" class="btn btn-outline-info btn-sm">Nível de Acesso</a>
+                    <a href="<?php echo URLADM . 'nivel-acesso/listar'; ?>" class="btn btn-outline-info btn-sm"><i class="fas fa-key"></i> Nível de Acesso</a>
                 </div>
                 <?php
             }
@@ -45,7 +45,7 @@ if (!defined('URL')) {
         ?>
         <div class="table-responsive">
             <table class="table table-striped table-hover table-bordered">
-                <thead>
+                <thead class="bg-info text-light" >
                 <tr>
                     <th>ID</th>
                     <th>Página</th>
@@ -134,7 +134,12 @@ if (!defined('URL')) {
                                         }
                                         $qnt_linhas_exe++;
                                         if ($this->Dados['botao']['edit_niv_ac_pg_menu']) {
-                                            echo "<a href='" . URLADM . "editar-niv-ac-pg-menu/edit-niv-ac-pg-menu/$id?niv={$this->Dados['dados_nivac'][0]['id']}&pg={$this->Dados['pg']}' class='btn btn-outline-warning btn-sm'>Editar</a> ";
+                                            ?>
+                                            <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Editar"> 
+                                            <?php echo "<a href='" . URLADM . "editar-niv-ac-pg-menu/edit-niv-ac-pg-menu/$id?niv={$this->Dados['dados_nivac'][0]['id']}&pg={$this->Dados['pg']}' class='btn btn-outline-warning btn-sm'><i class='fas fa-edit'></i></a> ";
+                                            ?>
+                                            </span>
+                                            <?php
                                         }
                                     ?>
                                 </span>

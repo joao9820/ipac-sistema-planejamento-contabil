@@ -25,8 +25,8 @@ if ($this->Dados['arquivado'][0]) {
                 ?>
                 <a href="<?php echo URLADM . 'novo-atendimento/novo'; ?>">
                     <div class="p-2 mr-auto">
-                        <button class="btn btn-success btn-sm">
-                            Novo
+                        <button class="btn btn-outline-success btn-sm">
+                            <i class="far fa-calendar-plus"></i> Novo
                         </button>
                     </div>
                 </a>
@@ -40,8 +40,8 @@ if ($this->Dados['arquivado'][0]) {
                     <a href="<?php echo URLADM . 'atendimento/arquivado'; ?>">
                         <div class="p-2">
                             <span tabindex="0" data-placement="left" data-toggle="tooltip" title="<?php echo $teste['num_result_arquivado'] . ' - atendimentos arquivados.'; ?>">
-                                <button class="btn btn-secondary btn-sm">
-                                    Arquivados
+                                <button class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-archive"></i> Arquivados
                                 </button>
                             </span>
                         </div>
@@ -78,8 +78,8 @@ if ($this->Dados['arquivado'][0]) {
 
 
             <div class="table-responsive">
-                <table class="table table-striped table-hover table-bordered">
-                    <thead>
+                <table class="table table-striped table-hover border">
+                    <thead class="bg-info text-light">
                     <tr>
                         <?php
                         if ($_SESSION['adms_niveis_acesso_id'] <= 3) {
@@ -120,7 +120,7 @@ if ($this->Dados['arquivado'][0]) {
                             ?>
                             <td><?php echo $demanda; ?></td>
                             <td>
-                                <span tabindex="0" data-toggle="tooltip" data-placement="right" data-html="true" title="<?php
+                                <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="<?php
                                     if ($id_situacao == 1) {
                                         echo "Seu atendimento foi solicitado. Ele será encaminhado ao setor responsável e seu status será alterado para <span class='text-primary'>Iniciado</span>.";
                                     } elseif ($id_situacao == 2) {
@@ -138,13 +138,15 @@ if ($this->Dados['arquivado'][0]) {
                             <td class="d-none d-sm-table-cell"><?php echo date('H:i', strtotime($created)); ?></td>
                             <td class="text-center">
                                         <span class="d-none d-md-block">
-                                            <?php
-                                            if ($this->Dados['botao']['vis_atendimento']) { ?>
-                                                <a href="<?php echo URLADM . 'ver-demanda/ver-demanda/' . $id; ?>"
-                                                   class="btn btn-info btn-sm my-md-1">Visualizar</a>
+                                            <span tabindex="0" data-toggle="tooltip" data-placement="left" title="Visualizar">
                                                 <?php
-                                            }
-                                            ?>
+                                                if ($this->Dados['botao']['vis_atendimento']) { ?>
+                                                    <a href="<?php echo URLADM . 'ver-demanda/ver-demanda/' . $id; ?>"
+                                                       class="btn btn-info btn-sm my-md-1"><i class="far fa-eye"></i></a>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </span>
                                             <?php
                                             if ($this->Dados['botao']['edit_atendimento']) { ?>
                                                 <a href="<?php echo URLADM . 'editar-demanda/edit-demanda/' . $id; ?>"
@@ -154,10 +156,15 @@ if ($this->Dados['arquivado'][0]) {
                                             ?>
                                             <?php
                                             if (($this->Dados['botao']['can_atendimento']) AND ($id_situacao == 1)) { ?>
-                                                <a href="<?php echo URLADM . 'cancelar-atendimento/cancelar/' . $id . '?pg='.$this->Dados['pg']; ?>"
-                                                   class="btn btn-danger btn-sm my-md-1"
-                                                   data-cancelar='Tem certeza que deseja excluir o atendimento selecionado?'>Cancelar</a>
-                                            <?php } elseif (($this->Dados['botao']['can_atendimento']) AND ($id_situacao == 4)) { ?>
+                                                <span class="d-none d-md-block">
+                                                    <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Cancelar">
+                                                        <a href="<?php echo URLADM . 'cancelar-atendimento/cancelar/' . $id . '?pg='.$this->Dados['pg']; ?>"
+                                                           class="btn btn-outline-danger btn-sm my-md-1"
+                                                           data-cancelar='Tem certeza que deseja excluir o atendimento selecionado?'><i class="fas fa-ban"></i></a>
+                                                    </span>
+                                                </span>
+                                            <?php } elseif (($this->Dados['botao']['can_atendimento']) AND ($id_situacao == 4)) {?> 
+          
                                                 <span tabindex="0" data-placement="left" data-toggle="tooltip" title="Atendimento cancelado.">
                                                     <i class="fas fa-question-circle"></i>
                                                 </span>

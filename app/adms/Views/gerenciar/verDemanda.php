@@ -22,13 +22,13 @@ extract($this->Dados['dados_demanda'][0]);
                 <span class="d-none d-md-block">
                    <?php
                    if ($this->Dados['botao']['list_demanda']) {
-                       echo "<a href='" . URLADM . "demandas/listar' class='btn btn-info btn-sm'>Listar</a> ";
+                       echo "<a href='" . URLADM . "demandas/listar' class='btn btn-outline-info btn-sm'><i class='fas fa-list'></i> Listar Demandas</a> ";
                    }
                    if ($this->Dados['botao']['edit_demanda']) {
-                       echo "<a href='" . URLADM . "editar-demanda/edit-demanda/$id' class='btn btn-warning btn-sm'>Editar</a> ";
+                       echo "<a href='" . URLADM . "editar-demanda/edit-demanda/$id' class='btn btn-outline-warning btn-sm'><i class='fas fa-edit'></i> Editar</a> ";
                    }
                    if ($this->Dados['botao']['del_demanda']) {
-                       echo "<a href='" . URLADM . "apagar-demanda/apagar-demanda/$id' class='btn btn-danger btn-sm' data-confirmDema='Tem certeza que deseja excluir a demanda selecionada e todas as atividades nela cadastrada?'>Apagar</a> ";
+                       echo "<a href='" . URLADM . "apagar-demanda/apagar-demanda/$id' class='btn btn-outline-danger btn-sm' data-confirmDema='Tem certeza que deseja excluir a demanda selecionada e todas as atividades nela cadastrada?'><i class='fas fa-trash'></i> Apagar</a> ";
                    }
                    ?>
                 </span>
@@ -165,11 +165,11 @@ extract($this->Dados['dados_demanda'][0]);
                            <?php
                            if ($this->Dados['botaoAtividade']['cad_atividade']) { ?>
                                <a href="<?php echo URLADM . 'cadastrar-atividade/cad-atividade/' . $id; ?>"
-                                  class="btn btn-success btn-sm my-md-1">Cadastrar</a>
+                                  class="btn btn-outline-success btn-sm my-md-1"><i class="fas fa-plus"></i> Cadastrar Atividade</a>
                                <?php
                            }
                            ?>
-                </span> Atividade
+                </span>
         </div>
 
 
@@ -196,8 +196,8 @@ extract($this->Dados['dados_demanda'][0]);
 
 
             <div class="table-responsive">
-                <table class="table table-striped table-hover table-bordered">
-                    <thead>
+                <table class="table table-striped table-hover table-border">
+                    <thead class="bg-info text-light">
                     <tr>
                         <th class="">Ordem</th>
                         <th class="">Atividade</th>
@@ -220,31 +220,41 @@ extract($this->Dados['dados_demanda'][0]);
                             <td><?php echo $nome; ?></td>
                             <td class="d-none d-sm-table-cell"><?php echo $descricao; ?></td>
                             <td class="d-none d-sm-table-cell"><?php echo date('H:i',strtotime($duracao)); ?></td>
-                            <td class="text-center">
-                                        <span class="d-none d-md-block">
-                                            <?php
-                                            if ($this->Dados['botaoAtividade']['vis_atividade']) { ?>
-                                                <a href="<?php echo URLADM . 'ver-atividade/ver-atividade/' . $id; ?>"
-                                                   class="btn btn-info btn-sm my-md-1">Visualizar</a>
-                                                <?php
-                                            }
-                                            ?>
-                                            <?php
-                                            if ($this->Dados['botaoAtividade']['edit_atividade']) { ?>
-                                                <a href="<?php echo URLADM . 'editar-atividade/edit-atividade/' . $id; ?>"
-                                                   class="btn btn-warning btn-sm my-md-1">Editar</a>
-                                                <?php
-                                            }
-                                            ?>
-                                            <?php
-                                            if ($this->Dados['botaoAtividade']['del_atividade']) { ?>
-                                                <a href="<?php echo URLADM . 'apagar-atividade/apagar-atividade/' . $id; ?>"
-                                                   class="btn btn-danger btn-sm my-md-1"
-                                                   data-confirm='Tem certeza que deseja excluiro item selecionado?'>Apagar</a>
-                                                <?php
-                                            }
-                                            ?>
+                            <td class="text-right">
+                                <span class="d-none d-md-block">
+
+                                    <?php
+                                    if ($this->Dados['botaoAtividade']['vis_atividade']) { ?>
+                                        <a href="<?php echo URLADM . 'ver-atividade/ver-atividade/' . $id; ?>"
+                                           class="btn btn-info btn-sm my-md-1">Visualizar</a>
+                                        <?php
+                                    }
+                                    ?>
+                                    
+                                    <?php
+                                    if ($this->Dados['botaoAtividade']['edit_atividade']) { ?>
+                                        <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Editar">
+                                            <a href="<?php echo URLADM . 'editar-atividade/edit-atividade/' . $id; ?>"
+                                               class="btn btn-outline-warning btn-sm my-md-1"><i class="fas fa-edit"></i></a>
                                         </span>
+                                        <?php
+                                    }
+                                    ?>
+                                    
+                                    
+                                    <?php
+                                    if ($this->Dados['botaoAtividade']['del_atividade']) { ?>
+                                        <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Apagar">
+                                            <a href="<?php echo URLADM . 'apagar-atividade/apagar-atividade/' . $id; ?>"
+                                               class="btn btn-outline-danger btn-sm my-md-1"
+                                               data-confirm='Tem certeza que deseja excluiro item selecionado?'><i class='fas fa-trash'></i></a>
+                                        </span>
+                                        <?php
+                                    }
+                                    ?>
+                                </span>
+                                    
+                    
                                 <div class="dropdown d-block d-md-none">
                                     <button class="btn btn-primary dropdown-toggle btn-sm" type="button"
                                             id="acoesListar" data-toggle="dropdown" aria-haspopup="true"

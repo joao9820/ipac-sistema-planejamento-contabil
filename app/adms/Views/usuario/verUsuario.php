@@ -22,16 +22,16 @@ extract($this->Dados['dados_usuario'][0]);
                 <span class="d-none d-md-block">
                    <?php
                    if ($this->Dados['botao']['list_usuario']) {
-                       echo "<a href='" . URLADM . "usuarios/listar' class='btn btn-info btn-sm'>Listar</a> ";
+                       echo "<a href='" . URLADM . "usuarios/listar' class='btn btn-outline-info btn-sm'><i class='fas fa-list'></i> Listar Usuários</a> ";
                    }
                    if ($this->Dados['botao']['edit_usuario']) {
-                       echo "<a href='" . URLADM . "editar-usuario/edit-usuario/$id' class='btn btn-warning btn-sm'>Editar</a> ";
+                       echo "<a href='" . URLADM . "editar-usuario/edit-usuario/$id' class='btn btn-outline-warning btn-sm'><i class='fas fa-user-edit'></i> Editar Usuário</a> ";
                    }
                    if ($this->Dados['botao']['edit_senha']) {
-                       echo "<a href='" . URLADM . "editar-senha/edit-senha/$id' class='btn btn-secondary btn-sm'>Editar Senha</a> ";
+                       echo "<a href='" . URLADM . "editar-senha/edit-senha/$id' class='btn btn-outline-secondary btn-sm'><i class='fas fa-lock'></i> Editar Senha</a> ";
                    }
                    if ($this->Dados['botao']['del_usuario']) {
-                       echo "<a href='" . URLADM . "apagar-usuario/apagar-usuario/$id' class='btn btn-danger btn-sm' data-confirm='Tem certeza de que deseja excluir o item selecionado?'>Apagar</a> ";
+                       echo "<a href='" . URLADM . "apagar-usuario/apagar-usuario/$id' class='btn btn-outline-danger btn-sm' data-confirm='Tem certeza de que deseja excluir o item selecionado?'><i class='fas fa-trash'></i> Apagar</a> ";
                    }
                    ?>
                 </span>

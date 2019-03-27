@@ -17,7 +17,7 @@ if (isset($this->Dados['form'][0])) {
             if ($this->Dados['botao']['list_nivac']) {
                 ?>
                 <div class="p-2">
-                    <a href="<?php echo URLADM . 'nivel-acesso/listar'; ?>" class="btn btn-outline-info btn-sm">Listar</a>
+                    <a href="<?php echo URLADM . 'nivel-acesso/listar'; ?>" class="btn btn-outline-info btn-sm"><i class="fas fa-list"></i> Listar Níveis de Acesso</a>
                 </div>
                 <?php
             }

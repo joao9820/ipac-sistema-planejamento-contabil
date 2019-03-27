@@ -20,21 +20,14 @@ $pg = $this->Dados['pg'];
                     <span class="d-none d-md-block">
                         <?php
                         if ($this->Dados['botao']['list_atendimento']) {
-                            echo "<a href='" . URLADM . "gerenciar-atendimento/listar/$pg' class='btn btn-info btn-sm'>Listar Atendimentos</a> ";
+                            echo "<a href='" . URLADM . "gerenciar-atendimento/listar/$pg' class='btn btn-outline-info btn-sm'><i class='fas fa-list'></i> Listar Atendimentos</a> ";
                         }
                         if ($this->Dados['botao']['edit_atendimento'] AND $cancelado_p_user !=1) {
-                            if ($id_situacao != 2) {
-                                echo "<a href='" . URLADM . "atendimento-gerente/editar/$id?pg=$pg' class='btn btn-outline-warning btn-sm'>Editar</a> ";
-                            } else {
-                                echo '<span tabindex="0" data-placement="left" data-toggle="tooltip" title="Atendimento sendo realizado pelo funcionário responsável. Nenhuma alteração pode ser feita no momento.">';
-                                echo "<a href='#' class='btn btn-secondary btn-sm disabled'>Editar</a> ";
-                                echo '</span>';
-                            }
-
+                            echo "<a href='" . URLADM . "atendimento-gerente/editar/$id?pg=$pg' class='btn btn-outline-warning btn-sm'><i class='far fa-edit'></i> Editar</a> ";
                         }
                         if (($this->Dados['botao']['arqui_atendimento']) AND ($arquivado_gerente != 1)) {
-                            echo "<a href='" . URLADM . "atendimento-gerente/arquivar/$id' class='btn btn-secondary btn-sm' 
-                                    data-arquivo='Tem certeza que deseja arquivar o atendimento selecionado?'>Arquivar</a> ";
+                            echo "<a href='" . URLADM . "atendimento-gerente/arquivar/$id' class='btn btn-outline-secondary btn-sm' 
+                                    data-arquivo='Tem certeza que deseja arquivar o atendimento selecionado?'><i class='fas fa-folder-open'></i> Arquivar</a> ";
                         }
                         ?>
                     </span>
@@ -45,21 +38,13 @@ $pg = $this->Dados['pg'];
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="acoesListar">
                             <?php
                             if ($this->Dados['botao']['list_atendimento']) {
-                                echo "<a class='dropdown-item' href='" . URLADM . "gerenciar-atendimento/listar/$pg'>Listar Atendimentos</a>";
+                                echo "<a class='dropdown-item' href='" . URLADM . "gerenciar-atendimento/listar/$pg'><i class='fas fa-list'></i> Listar Atendimentos</a>";
                             }
                             if ($this->Dados['botao']['edit_atendimento'] AND $cancelado_p_user !=1) {
-                                if ($id_situacao != 2) {
-                                    echo "<a class='dropdown-item' href='" . URLADM . "atendimento-gerente/editar/$id$id?pg=$pg'>Editar</a>";
-                                } else {
-
-                                    echo "<a href='#' class='dropdown-item disabled'>
-                                            <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Atendimento sendo realizado pelo funcionário responsável. Nenhuma alteração pode ser feita no momento.'>
-                                                <i class='fas fa-question-circle'></i>
-                                            </span>Editar</a> ";
-                                }
+                                echo "<a class='dropdown-item' href='" . URLADM . "atendimento-gerente/editar/$id?pg=$pg'><i class='far fa-edit'></i> Editar</a>";
                             }
                             if ($this->Dados['botao']['arqui_atendimento']) {
-                                echo "<a class='dropdown-item' href='" . URLADM . "atendimento-gerente/arquivar/$id' data-arquivo='Tem certeza que deseja arquivar o atendimento selecionado?'>Arquivar</a>";
+                                echo "<a class='dropdown-item' href='" . URLADM . "atendimento-gerente/arquivar/$id' data-arquivo='Tem certeza que deseja arquivar o atendimento selecionado?'><i class='fas fa-folder-open'></i> Arquivar</a>";
                             }
                             ?>
                         </div>
@@ -86,13 +71,37 @@ $pg = $this->Dados['pg'];
             <dl class="row">
 
                 <dt class="col-sm-3">ID</dt>
-                <dd class="col-sm-9"><?php echo $id; ?></dd>
+                <dd class="col-sm-9"><?php
+                    if ($id < 10){
+                        echo "000".$id;
+                    } elseif ($id < 100){
+                        echo "00".$id;
+                    } elseif ($id < 100){
+                        echo "0".$id;
+                    } else {
+                        echo $id;
+                    }
+                    ?></dd>
 
                 <dt class="col-sm-3">Tipo</dt>
                 <dd class="col-sm-9"><?php echo $nome_demanda; ?></dd>
 
                 <dt class="col-sm-3">Situação</dt>
                 <dd class="col-sm-9"><span class="badge badge-<?php echo $cor; ?>"><?php echo $nome_situacao; ?></span></dd>
+
+                <dt class="col-sm-3">Data Fatal: </dt>
+                <dd class="col-sm-9">
+                    <?php
+                    if (empty($data_fatal)) {
+                        echo "<span>Este atendimento ainda não tem uma data fatal.</span>";
+                        echo "<a class='nav-link' href='" . URLADM . "atendimento-gerente/editar/$id?pg=$pg'>Clique aqui para definir!</a>";
+                    } else {
+                        echo '<i class="fas fa-angle-double-right text-secondary"></i> ';
+                        echo date('d/m/Y', strtotime($data_fatal));
+                        echo ' <i class="fas fa-angle-double-left text-secondary"></i>';
+                    }
+                    ?>
+                </dd>
 
                 <dt class="col-sm-3">Descrição</dt>
                 <dd class="col-sm-9"><?php echo $descricao; ?></dd>
@@ -108,7 +117,7 @@ $pg = $this->Dados['pg'];
 
                 <dt class="col-sm-3">Tempo previsto para o Atendimento: </dt>
                 <dd class="col-sm-9">
-                    <span tabindex="0" data-placement="top" data-toggle="tooltip" title="Essa previsão é feita com base no tempo de execução da demanda selecionada.">
+                    <span class="text-secondary" tabindex="0" data-placement="top" data-toggle="tooltip" title="Essa previsão é feita com base no tempo de execução da demanda selecionada.">
                     <i class="fas fa-question-circle"></i>
                     </span>
                     <?php

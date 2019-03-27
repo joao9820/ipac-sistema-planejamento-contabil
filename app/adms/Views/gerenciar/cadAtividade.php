@@ -40,7 +40,7 @@ if (isset($this->Dados['form_demanda_id'][0])) {
             if ($this->Dados['botao']['list_demanda']) {
                 ?>
                 <div class="p-2">
-                    <a href="<?php echo URLADM . 'ver-demanda/ver-demanda/'.$valorFormId['id']; ?>" class="btn btn-info btn-sm">Listar</a>
+                    <a href="<?php echo URLADM . 'ver-demanda/ver-demanda/'.$valorFormId['id']; ?>" class="btn btn-outline-info btn-sm"><i class="far fa-eye"></i> Visualizar</a>
                 </div>
                 <?php
             }
@@ -80,7 +80,7 @@ if (isset($this->Dados['form_demanda_id'][0])) {
             <p>
                 <span class="text-danger">* </span>Campo obrigatório
             </p>
-            <input type="submit" name="CadAtividade" value="Cadastrar" class="btn btn-warning">
+            <input type="submit" name="CadAtividade" value="Cadastrar" class="btn btn-outline-success">
         </form>
     </div>
 </div>

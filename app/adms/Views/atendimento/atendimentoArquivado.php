@@ -20,8 +20,8 @@ if (!defined('URL')) {
                 ?>
                 <a href="<?php echo URLADM . 'atendimento/listar'; ?>">
                     <div class="p-2">
-                        <button class="btn btn-primary btn-sm">
-                            Voltar
+                        <button class="btn btn-outline-primary btn-sm">
+                            <i class='fas fa-list'></i> Listar Demandas
                         </button>
                     </div>
                 </a>

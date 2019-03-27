@@ -8,7 +8,7 @@ if (!defined('URL')) {
     <div class="list-group-item">
         <div class="d-flex">
             <div class="mr-auto p-2">
-                <h2 class="display-4 titulo">Listar Usuários</h2>
+                <h2 class="display-4 titulo">Usuários</h2>
             </div>
             <?php
             if ($this->Dados['botao']['cad_usuario']) {
@@ -16,7 +16,7 @@ if (!defined('URL')) {
                 <a href="<?php echo URLADM . 'cadastrar-usuario/cad-usuario'; ?>">
                     <div class="p-2">
                         <button class="btn btn-outline-success btn-sm">
-                            Cadastrar
+                            <i class="fas fa-user-plus"></i> Cadastrar
                         </button>
                     </div>
                 </a>
@@ -42,14 +42,14 @@ if (!defined('URL')) {
         }
         ?>
         <div class="table-responsive">
-            <table class="table table-striped table-hover table-bordered">
-                <thead>
+            <table class="table table-striped table-hover table-border">
+                <thead class="bg-info text-light">
                 <tr>
                     <th>ID</th>
                     <th>Nome</th>
-                    <th class="d-none d-sm-table-cell">E-mail</th>
+                    <th class="d-none d-lg-table-cell">E-mail</th>
                     <th class="d-none d-lg-table-cell">Situação</th>
-                    <th class="text-center">Ações</th>
+                    <th class="text-right">Ações</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -64,20 +64,32 @@ if (!defined('URL')) {
                         <td class="d-none d-lg-table-cell">
                             <span class="badge badge-<?php echo $cor_cr; ?>"><?php echo $nome_sit; ?></span>
                         </td>
-                        <td class="text-center">
-                                <span class="d-none d-md-block">
+                        <td class="text-right">
+                            <span class="d-none d-md-block">
+                                <?php
+                                if ($this->Dados['botao']['vis_usuario']) { ?>
+                                    <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Visualzar">
+                                        <a href=" <?php echo URLADM . 'ver-usuario/ver-usuario/'.$id ?>" class="btn btn-outline-primary btn-sm my-md"><i class="far fa-eye"></i></a>
+                                    </span>
                                     <?php
-                                    if ($this->Dados['botao']['vis_usuario']) {
-                                        echo "<a href='". URLADM . "ver-usuario/ver-usuario/$id' class='btn btn-outline-primary btn-sm'>Visualizar</a> ";
-                                    }
-                                    if ($this->Dados['botao']['edit_usuario']) {
-                                        echo "<a href='". URLADM . "editar-usuario/edit-usuario/$id' class='btn btn-outline-warning btn-sm'>Editar</a> ";
-                                    }
-                                    if ($this->Dados['botao']['del_usuario']) {
-                                        echo "<a href='". URLADM . "apagar-usuario/apagar-usuario/$id' class='btn btn-outline-danger btn-sm' data-confirm='Tem certeza de que deseja excluir o item selecionado?'>Apagar</a> ";
-                                    }
-                                    ?>
-                                </span>
+                                }
+
+                                if ($this->Dados['botao']['edit_usuario']) { ?>
+                                    <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Editar">
+                                        <a href="<?php echo URLADM . 'editar-usuario/edit-usuario/'. $id ?>" class="btn btn-outline-warning btn-sm"><i class="fas fa-edit"></i></a>
+                                    </span>
+                                    <?php
+                                }
+
+                                if ($this->Dados['botao']['del_usuario']) { ?>
+                                    <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Apagar">
+                                        <a href="<?php echo URLADM . 'apagar-usuario/apagar-usuario/'.$id ?>" class='btn btn-outline-danger btn-sm' data-confirm='Tem certeza de que deseja excluir o item selecionado?'><i class='fas fa-trash'></i></a>
+                                    </span>
+                                    <?php
+                                }
+                                ?>
+                            </span>
+                            
                             <div class="dropdown d-block d-md-none">
                                 <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="acoesListar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Ações

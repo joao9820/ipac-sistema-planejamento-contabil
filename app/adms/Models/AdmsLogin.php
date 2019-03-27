@@ -17,6 +17,7 @@ class AdmsLogin
 {
     private $Dados;
     private $Resultado;
+    private $DadosHoraE;
 
     public function getResultado()
     {
