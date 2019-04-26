@@ -14,6 +14,11 @@
             <div class="mr-auto p-2">
                 <h2 class="display-4 titulo">Departamentos</h2>
             </div>
+            <div class="d-flex p-2">
+                <span class="d-block">
+                    <a href="<?php echo URLADM . 'jornada-de-trabalho/listar'; ?>" class="btn btn-outline-info btn-sm"><i class="fas fa-list"></i> Listar Funcionários</a>
+                </span>
+            </div>
         </div>
         <?php
         if (empty($this->Dados['listarDepartamentos'])) {

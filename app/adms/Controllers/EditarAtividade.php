@@ -8,6 +8,11 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsEditarAtividade;
+use App\adms\Models\AdmsMenu;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -19,10 +24,12 @@ class EditarAtividade
 
     private $Dados;
     private $DadosId;
+    private $DemandaId;
 
     public function editAtividade($DadosId = null)
     {
         $this->Dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+        $this->DemandaId = filter_input(INPUT_GET, 'demanda', FILTER_DEFAULT);
         $this->DadosId = $DadosId;
         //var_dump($this->DadosId);
         //$this->DadosId = (int) $DadosId[1];
@@ -45,7 +52,11 @@ class EditarAtividade
 
             unset($this->Dados['EditAtividade']);
 
-            $editAtividade = new \App\adms\Models\AdmsEditarAtividade();
+            if(empty($this->Dados['atividade_antecessora_id'])){
+                unset($this->Dados['atividade_antecessora_id']);
+            }
+
+            $editAtividade = new AdmsEditarAtividade();
             // Chamando o metodo para alterar a atividade
             $editAtividade->altAtividade($this->Dados);
             if ($editAtividade->getResultado())
@@ -67,7 +78,7 @@ class EditarAtividade
 
         } else {
 
-            $dadosAtividade = new \App\adms\Models\AdmsEditarAtividade();
+            $dadosAtividade = new AdmsEditarAtividade();
             $this->Dados['form'] = $dadosAtividade->verAtividade($this->DadosId);
             $this->Dados['formDemanda'] = $dadosAtividade->verAtividade($this->DadosId);
 
@@ -83,14 +94,18 @@ class EditarAtividade
             if ($this->Dados['form']) {
 
                 $botao = ['vis_demanda' => ['menu_controller' => 'ver-demanda', 'menu_metodo' => 'ver-demanda']];
-                $listarBotao = new \App\adms\Models\AdmsBotao();
+                $listarBotao = new AdmsBotao();
                 $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
                 //Carregar Menu
-                $listarMenu = new \App\adms\Models\AdmsMenu();
+                $listarMenu = new AdmsMenu();
                 $this->Dados['menu'] = $listarMenu->itemMenu();
+
+                $listarAtividades = new AdmsEditarAtividade();
+                $this->Dados['listaAtividades'] = $listarAtividades->listarAtividades($this->DadosId, $this->DemandaId);
+
                 //Carregar a view
-                $carregarView = new \Core\ConfigView("adms/Views/gerenciar/editarAtividade", $this->Dados);
+                $carregarView = new ConfigView("adms/Views/gerenciar/editarAtividade", $this->Dados);
                 $carregarView->renderizar();
             } else {
                 $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Você não tem permissão de editar a atividade selecionada!</div>";

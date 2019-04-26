@@ -33,7 +33,7 @@ if (isset($this->Dados['form'][0])) {
             ?>
             <div class="p-2">
                 <span class="d-block">
-                    <a href="<?php echo URLADM . 'jornada-de-trabalho/listar'; ?>" class="btn btn-outline-primary btn-sm"><i class="fas fa-list"></i> Listar Funcionários</a>
+                    <a href="<?php echo URLADM . 'jornada-de-trabalho/listar'; ?>" class="btn btn-outline-info btn-sm"><i class="fas fa-list"></i> Listar Funcionários</a>
                 </span>
             </div>
                 <?php
@@ -46,12 +46,11 @@ if (isset($this->Dados['form'][0])) {
         <div class="d-flex mb-5">
             <div class="p-2">
                 <span class="d-block">
-                    <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Cadastrar departamento">
-                        <a href="#" class="btn btn-outline-info btn-sm"><i class="fas fa-list-ol"></i> Departamento</a>
+                    <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Adicionar hora extra para este funcionário">
+                        <a href="<?php echo URLADM . 'hora-extra/listar/1?func='. $valorForm['id']; ?>" class="btn btn-outline-success btn-sm"><i class="fas fa-plus-square"></i> Adicionar Hora Extra</a>
                     </span>
                 </span>
             </div>
-
         </div>
 
 
@@ -71,40 +70,54 @@ if (isset($this->Dados['form'][0])) {
 
                     <input name="id" type="hidden" value="<?php if (isset($valorForm['id'])) { echo $valorForm['id']; } ?>">
 
-                    <div class="form-group">
-                        <label for="Departamento"><span class="text-danger">* </span>Departamento</label>
-                        <select name="adms_departamento_id" id="Departamento" class="form-control">
-                            <option>Selecione um departamento</option>
-                            <?php
-                            foreach ($this->Dados['select']['departamento'] as $departamento) {
-                                extract($departamento);
-                                if ($valorForm['adms_departamento_id'] == $id_departamento)
-                                {
-                                    echo "<option value='$id_departamento' selected>$nome_departamento</option>";
-                                }
-                                else {
-                                    echo "<option value='$id_departamento'>$nome_departamento</option>";
-                                }
 
-                            }
-                            ?>
-                        </select>
+                    <div class="form-row mb-3">
+                        <div class="col-md-12">
+                            <label>Departamento</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                </div>
+                                <select name="adms_departamento_id" id="Departamento" class="form-control">
+                                    <option>Selecione um departamento</option>
+                                    <?php
+                                    foreach ($this->Dados['select']['departamento'] as $departamento) {
+                                        extract($departamento);
+                                        if ($valorForm['adms_departamento_id'] == $id_departamento)
+                                        {
+                                            echo "<option value='$id_departamento' selected>$nome_departamento</option>";
+                                        }
+                                        else {
+                                            echo "<option value='$id_departamento'>$nome_departamento</option>";
+                                        }
+
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
 
                     <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label><span class="text-danger">* </span>Jornada de Trabalho</label>
-                            <input name="jornada_de_trabalho" type="time" class="form-control"
-                                   value="<?php if (isset($valorForm['jornada_de_trabalho']) and !empty($valorForm['jornada_de_trabalho'])) { echo date('H:i', strtotime($valorForm['jornada_de_trabalho'])); } ?>">
+                        <div class="col-md-12">
+                            <label>Jornada de Trabalho</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-business-time"></i>
+                                    </div>
+                                </div>
+                                <input name="jornada_de_trabalho" type="time" class="form-control"
+                                       value="<?php if (isset($valorForm['jornada_de_trabalho']) and !empty($valorForm['jornada_de_trabalho'])) { echo date('H:i', strtotime($valorForm['jornada_de_trabalho'])); } ?>">
+                            </div>
                         </div>
                     </div>
 
-                    <p>
-                        <span class="text-danger">* </span>Campo obrigatório
-                    </p>
                     <input type="hidden" name="EditFuncionario" value="Salvar" class="btn btn-outline-success">
-                    <button  class="btn btn-outline-success" type="submit"><i class="fas fa-save"></i> Salvar</button>
+                    <button  class="btn btn-outline-success mt-5" type="submit">Salvar</button>
                 </form>
             </div>
 

@@ -475,8 +475,6 @@ if (!defined('URL')) {
                                 <th class="d-none d-lg-table-cell">Descrição</th>
                                 <th class="d-none d-lg-table-cell">Data solititação</th>
                                 <th class="">Hora de início</th>
-                                <th class="">Hora atividade</th>
-                                <th class="">Horá disponível</th>
                                 <th class=""><span tabindex="0" data-placement="left" data-toggle="tooltip"
                                                    title="Caso a hora atual menos a hora de inicio seja maior que o tempo de execução da atividade, o contador ficará vermelhor e negativo.">Tempo Restante</span>
                                 </th>

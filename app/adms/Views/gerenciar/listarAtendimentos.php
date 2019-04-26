@@ -20,6 +20,18 @@
         border-radius: 5px;
         padding: 2px 4px;
     }
+    .btnOpcoes {
+        min-width: 80px;
+        margin-right: 4px;
+    }
+    .bg-progresso {
+        background: #edf0f2;
+        border: 1px solid rgba(0,0,0,0.125);
+    }
+    .progress {
+        font-size: .7em;
+        font-weight: 800;
+    }
 </style>
 <div class="content p-1">
     <div class="list-group-item">
@@ -64,17 +76,51 @@
         ?>
 
 
+        <form method="post" action="" class="form-inline my-4">
+
+
+
+            <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Caso não escolha uma data inicial será considerado a data atual">
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+                    </div>
+                    <input name="dataInicial" type="date" pattern="[0-9]{2}\/[0-9]{2}\/[0-9]{4}$" class="form-control" id="inlineFormInputGroupUsername2">
+                </div>
+            </span>
+
+
+            <span class="mr-2">até</span>
+
+            <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Data final">
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+                    </div>
+                    <input name="dataFinal" type="date" pattern="[0-9]{2}\/[0-9]{2}\/[0-9]{4}$" class="form-control" id="inlineFormInputGroupUsername2" required>
+                </div>
+            </span>
+
+            <button class="btn btn-outline-warning mb-2 mr-2"><i class="fas fa-search"></i></button>
+            <a href="#" class="btn btn-outline-secondary mb-2"><i class="fas fa-eraser"></i></a>
+        </form>
+
 
         <div class="table-responsive">
             <table class="table table-striped table-hover ">
                 <thead class="bg-info text-light my-4">
                 <tr>
                     <th class="d-none d-lg-table-cell">Cod.</th>
-                    <th class="">Funcionário</th>
+                    <th class="">Funcionários</th>
+                    <th>Atividades</th>
+                    <th>Progresso</th>
                     <th class="">Tipo</th>
                     <th class="">Status</th>
                     <th class="">Cliente</th>
-                    <th class="d-none d-lg-table-cell">Empresa</th>
                     <th class="">Data/Solicitação</th>
                     <th class="text-right">Ações</th>
                 </tr>
@@ -103,25 +149,63 @@
                             ?>
                         </td>
                         <td>
+                            <span class="d-flex justify-content-start">
+                                <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Clique para acessar a página de visualização dos funfionários responsável por este atendimento'>
+                                    <a href="<?php echo URLADM . 'atendimento-funcionarios/listar/' . $adms_demanda_id .'?aten='.$id; ?>" class="btn btn-outline-secondary border-0 btn-sm mb-2 btnOpcoes"  >
+                                        <i class="fas fa-pen-square"></i> Planejamento
+                                    </a>
+                                </span>
+
+                            </span>
+                        </td>
+                        <td>
+                            <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Concluídas/Total atividades">
+                                <span class="badge badge-secondary">
+                                <?php
+                                    if ($total_atividade != null) {
+                                        if ($total_atividade_concluida == null) {
+                                            $total_atividade_concluida = 0;
+                                        }
+                                        echo $total_atividade_concluida . "/" . $total_atividade;
+                                    } else {
+                                        echo "--";
+                                    }
+                                ?>
+                                </span>
+                            </span>
+                        </td>
+                        <td>
                             <?php
-                            if (empty($funcionario)) {
-                                echo "-";
-                            } else { echo $funcionario; }
-                            if ($nome_situacao != "Cancelado") {
-                                if ($situacao_atendimento == 2) {
-                                    echo '<span class="badge badge-warning ml-1">';
-                                        echo "Executando";
-                                    echo '</span>';
-                                } elseif ($situacao_atendimento == 3) {
-                                    echo '<span class="badge badge-danger ml-1">';
-                                        echo "Pausado";
-                                    echo '</span>';
-                                } elseif ($situacao_atendimento == 4) {
-                                    echo '<span class="badge badge-secondary ml-1">';
-                                        echo "Finalizado";
-                                    echo '</span>';
+                                if ($total_atividade != null){
+                            ?>
+                            <div class="progress bg-progresso">
+                                <?php
+                                $total = (int)$total_atividade;
+                                $concluido = (int)$total_atividade_concluida;
+                                $porcentagem = ($concluido * 100) / $total;
+                                $porcentagem = number_format($porcentagem, 0, '.', '');
+                                //echo number_format($porcentagem, 2, '.', '') . "%";
+                                if ($porcentagem < 10){
+                                    $corPorcent = "danger text-secondary";
+                                } elseif ($porcentagem < 50){
+                                    $corPorcent = "warning";
+                                } elseif ($porcentagem < 100 ){
+                                    $corPorcent = "primary";
+                                } elseif ($porcentagem == 100) {
+                                    $corPorcent = "success";
                                 }
-                            }
+                                ?>
+
+                                <div class="progress-bar bg-<?php echo $corPorcent; ?>" role="progressbar" style="width: <?php echo $porcentagem; ?>%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                    <?php
+                                        echo $porcentagem . "%";
+                                    ?>
+                                </div>
+                            </div>
+                            <?php
+                            } else {
+                                    echo "--";
+                                }
                             ?>
                         </td>
                         <td><?php echo $nome_demanda; ?></td>
@@ -130,7 +214,6 @@
                                 <?php echo $nome_situacao; ?>
                             </span>
                         </td>
-                        <td><?php echo $cliente; ?></td>
                         <td class="d-none d-sm-table-cell">
                             <span tabindex="0" data-placement="top" data-toggle="tooltip" title="<?php echo $emp_nome; ?>">
                                 <?php echo $fantasia; ?>
@@ -138,7 +221,7 @@
                         </td>
                         <td>
                             <div class="dataAtendimento">
-                                <span class="data"><?php echo date('d/m/Y H:i', strtotime($created)); ?></span>
+                                <span class="data"><i class="far fa-calendar-alt"></i> <?php echo date('d/m/Y \a\s H\hi', strtotime($created)); ?></span>
                             </div>
                         </td>
                         <td class="text-right">
@@ -200,25 +283,15 @@
                             </div>
                         </td>
                     </tr>
-
                     <?php
                 }
                 ?>
-
-
-
                 </tbody>
-
             </table>
-
             <?php
-
-            echo $this->Dados['paginacao'];
-
+                echo $this->Dados['paginacao'];
             ?>
-
         </div>
-
 
     </div>
 </div>

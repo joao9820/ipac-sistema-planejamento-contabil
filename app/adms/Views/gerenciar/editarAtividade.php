@@ -77,6 +77,20 @@ if (!defined('URL')) {
                            value="<?php if (isset($valorForm['ordem'])) { echo $valorForm['ordem']; } ?>">
                 </div>
                 <div class="form-group col-md-10">
+                    <label><span class="text-danger">* </span>Selecione uma atividade antecessora</label>
+                    <label>
+                        <select name="atividade_antecessora_id" class="form-control">
+                            <option value="">Selecione</option>
+                            <?php
+                             foreach ($this->Dados['listaAtividades'] as $atividade){
+                                 extract($atividade);
+                                 echo '<option value="'.$id.'">'.$nome.'</option>';
+                             }
+                            ?>
+                        </select>
+                    </label>
+                </div>
+                <div class="form-group col-md-10">
                     <label><span class="text-danger">* </span>Descrição</label>
                     <textarea name="descricao" class="form-control" rows="3"><?php if(isset($valorForm['descricao'])) {echo $valorForm['descricao'];}?></textarea>
 

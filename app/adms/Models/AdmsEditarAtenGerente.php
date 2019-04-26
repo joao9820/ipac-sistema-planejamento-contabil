@@ -19,6 +19,7 @@ class AdmsEditarAtenGerente
     private $Resultado;
     private $Dados;
     private $DadosId;
+    private $DadosDemandaId;
 
     public function getResultado()
     {
@@ -99,6 +100,11 @@ class AdmsEditarAtenGerente
         }
         $this->Dados['modified'] = date('Y-m-d H:i:s');
 
+        $demandaId = $this->Dados['adms_demanda_id'];
+
+        $this->verTotalHoras($demandaId);
+        $this->Dados['duracao_atendimento'] = $this->Resultado[0]['total_horas'];
+
 
         $upEditDemanda = new \App\adms\Models\helper\AdmsUpdate();
         $upEditDemanda->exeUpdate("adms_atendimentos", $this->Dados, "WHERE id =:id", "id={$this->Dados['id']}");
@@ -117,6 +123,17 @@ class AdmsEditarAtenGerente
 
         }
 
+    }
+
+    public function verTotalHoras($DadosDemandaId)
+    {
+        $this->DadosDemandaId = (int) $DadosDemandaId;
+
+        $qtdHoras = new \App\adms\Models\helper\AdmsRead();
+        $qtdHoras->fullRead("SELECT time_format( SEC_TO_TIME( SUM( TIME_TO_SEC( duracao ) ) ),'%H:%i:%s') 
+                                    AS total_horas FROM adms_atividades where adms_demanda_id=:adms_demanda_id", "adms_demanda_id={$this->DadosDemandaId}");
+        $this->Resultado = $qtdHoras->getResultado();
+        return $this->Resultado;
     }
 
 

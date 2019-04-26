@@ -1,0 +1,5 @@
+[26-Feb-2019 16:00:45 America/Sao_Paulo] PHP Notice:  Undefined variable: valorForm in /home/ipaconli/public_html/adm/app/adms/Views/usuario/cadUsuario.php on line 88
+[26-Feb-2019 16:11:30 America/Sao_Paulo] PHP Notice:  Undefined variable: valorForm in /home/ipaconli/public_html/adm/app/adms/Views/usuario/cadUsuario.php on line 88
+[26-Feb-2019 16:16:26 America/Sao_Paulo] PHP Notice:  Undefined variable: valorForm in /home/ipaconli/public_html/adm/app/adms/Views/menu/cadMenu.php on line 66
+[28-Feb-2019 14:21:32 America/Sao_Paulo] PHP Warning:  unlink(../assets/imagens/artigo/8/): Is a directory in /home/ipaconli/public_html/adm/app/adms/Models/helper/AdmsApagarImg.php on line 34
+[01-Mar-2019 13:28:36 America/Sao_Paulo] PHP Notice:  Undefined variable: valorForm in /home/ipaconli/public_html/adm/app/adms/Views/usuario/cadUsuario.php on line 88

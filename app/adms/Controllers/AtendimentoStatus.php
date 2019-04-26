@@ -7,6 +7,10 @@
  */
 
 namespace App\adms\Controllers;
+
+use \App\adms\Models\AdmsAtendimentoStatus;
+
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -19,6 +23,7 @@ class AtendimentoStatus
     private $Status;
     private $PageId;
     private $PageVer;
+    private $AtendimentoId;
 
     public function alterar($DadosId = null)
     {
@@ -26,11 +31,13 @@ class AtendimentoStatus
         $this->Status = filter_input(INPUT_GET, "status", FILTER_SANITIZE_NUMBER_INT);
         $this->PageId = filter_input(INPUT_GET, "pg", FILTER_SANITIZE_NUMBER_INT);
         $this->PageVer = filter_input(INPUT_GET, "ver", FILTER_SANITIZE_NUMBER_INT);
+        $this->AtendimentoId = filter_input(INPUT_GET, 'aten', FILTER_DEFAULT);
 
-        if (!empty($this->DadosId) AND ! empty($this->Status) AND ! empty($this->PageId)) {
 
-            $alterarStatus = new \App\adms\Models\AdmsAtendimentoStatus();
-            $alterarStatus->alterarStatus($this->DadosId, $this->Status);
+        if (!empty($this->DadosId) AND !empty($this->Status) AND !empty($this->PageId) AND !empty($this->AtendimentoId)) {
+
+            $alterarStatus = new AdmsAtendimentoStatus();
+            $alterarStatus->alterarStatus($this->DadosId, $this->Status, $this->AtendimentoId);
 
             if (isset($this->PageVer) AND !empty($this->PageVer)) {
 
@@ -39,13 +46,13 @@ class AtendimentoStatus
 
             } else {
 
-                $UrlDestino = URLADM . "atendimento-pendente/listar/{$this->PageId}";
+                $UrlDestino = URLADM . "atendimentos/listar/{$this->PageId}";
                 header("Location: $UrlDestino");
 
             }
         }
         else {
-            $UrlDestino = URLADM . 'atendimento-pendente/listar';
+            $UrlDestino = URLADM . 'atendimentos/listar';
             header("Location: $UrlDestino");
         }
     }

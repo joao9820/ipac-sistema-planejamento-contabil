@@ -8,6 +8,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsApagarImg;
+use App\adms\Models\helper\AdmsDelete;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -34,21 +39,23 @@ class AdmsApagarUsuario
 
         if ($this->DadosUsuario) {
 
-            $apagarUsuario = new \App\adms\Models\helper\AdmsDelete();
-            $apagarUsuario->exeDelete("adms_usuarios", "WHERE id=:id", "id={$this->DadosId}");
+
+            $apagarUsuario = new AdmsDelete();
+            $apagarUsuario->exeDelete("adms_usuarios", "id=:id", "id={$this->DadosId}");
             if ($apagarUsuario->getResultado()) {
+
                 // Apagar a imagem antiga se existir
-                $apagar = new \App\adms\Models\helper\AdmsApagarImg();
+                $apagar = new AdmsApagarImg();
                 $apagar->apagarImg('assets/imagens/usuario/' . $this->DadosId . '/' . $this->DadosUsuario[0]['imagem'], 'assets/imagens/usuario/' . $this->DadosId);
 
-                $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+                $alertMensagem = new AdmsAlertMensagem();
                 $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Usuário apagado com sucesso", "success");
                 $this->Resultado = true;
 
             }
             else {
 
-                $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+                $alertMensagem = new AdmsAlertMensagem();
                 $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","O usuário não foi apagado", "danger");
                 $this->Resultado = false;
 
@@ -57,7 +64,7 @@ class AdmsApagarUsuario
         }
         else {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $alertMensagem = new AdmsAlertMensagem();
             $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","Você não tem permissão para apagar o usuário selecionado", "danger");
             $this->Resultado = false;
 
@@ -69,7 +76,7 @@ class AdmsApagarUsuario
     public function verUsuario()
     {
 
-        $verUsuario = new \App\adms\Models\helper\AdmsRead();
+        $verUsuario = new AdmsRead();
         $verUsuario->fullRead("SELECT user.imagem   
                         FROM adms_usuarios user 
                         INNER JOIN adms_niveis_acessos nivel_aces ON nivel_aces.id=user.adms_niveis_acesso_id 

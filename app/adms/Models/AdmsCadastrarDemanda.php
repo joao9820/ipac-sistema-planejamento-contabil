@@ -2,6 +2,10 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsCreate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -26,7 +30,7 @@ class AdmsCadastrarDemanda
     {
         $this->Dados = $Dados;
 
-        $valCampoVazio = new \App\adms\Models\helper\AdmsCampoVazio();
+        $valCampoVazio = new AdmsCampoVazio();
         $valCampoVazio->validarDados($this->Dados);
 
         if ($valCampoVazio->getResultado()) {
@@ -44,7 +48,7 @@ class AdmsCadastrarDemanda
     private function valNomeDemandaUnico()
     {
         $EditarUnico = false;
-        $valCampoUnico = new \App\adms\Models\helper\AdmsValCampoUnico();
+        $valCampoUnico = new AdmsValCampoUnico();
         $valCampoUnico->valCampo("adms_demandas", "nome",$this->Dados['nome'], $EditarUnico);
 
         if ($valCampoUnico->getResultado()){
@@ -54,7 +58,7 @@ class AdmsCadastrarDemanda
         }
         else {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $alertMensagem = new AdmsAlertMensagem();
             $_SESSION['msg'] = $alertMensagem->alertMensagem("Oops!","Está demanda já foi cadastrada", "danger");
             $this->Resultado = false;
 
@@ -68,21 +72,21 @@ class AdmsCadastrarDemanda
         $this->Dados['created'] = date("Y-m-d H:i:s");
         //var_dump($this->Dados);
 
-        $cadDemanda = new \App\adms\Models\helper\AdmsCreate();
+        $cadDemanda = new AdmsCreate();
         $cadDemanda->exeCreate("adms_demandas", $this->Dados);
 
         if ($cadDemanda->getResultado())
         {
 
             $this->UltimoIdInserido = $cadDemanda->getResultado();
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $alertMensagem = new AdmsAlertMensagem();
             $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Demanda cadastrada com sucesso", "success");
             $this->Resultado = true;
 
         }
         else {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $alertMensagem = new AdmsAlertMensagem();
             $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","A demanda não foi cadastrada", "danger");
             $this->Resultado = false;
 

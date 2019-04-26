@@ -40,7 +40,8 @@ class AdmsDelete extends AdmsConn
 
     private function executarInstrucao()
     {
-        $this->Query = "DELETE FROM {$this->Tabela} {$this->Termos}";
+        $this->Query = "DELETE FROM {$this->Tabela} WHERE {$this->Termos}";
+
         $this->conexao();
         try {
             $this->Query->execute($this->Values);

@@ -115,7 +115,7 @@ if (isset($this->Dados['form'][0])) {
                             <i class="fas fa-question-circle"></i>
                         </span>
                     </label>
-                    <input name="data_fatal" class="form-control" type="date" required>
+                    <input name="data_fatal" class="form-control" type="date">
                 </div>
                 <div class="form-group col-md-12">
                     <label><span class="text-danger">* </span>Demanda</label>

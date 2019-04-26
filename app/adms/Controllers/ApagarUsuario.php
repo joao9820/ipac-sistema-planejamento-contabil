@@ -8,6 +8,8 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsApagarUsuario;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -23,7 +25,7 @@ class ApagarUsuario
         if (!empty($this->DadosId))
         {
 
-            $apagarUsuario = new \App\adms\Models\AdmsApagarUsuario();
+            $apagarUsuario = new AdmsApagarUsuario();
             $apagarUsuario->apagarUsuario($this->DadosId);
 
         }

@@ -45,11 +45,11 @@ class FuncionarioVerAtendimento
                 $this->Dados['pg'] = 1;
             }
 
-            $carregarView = new \Core\ConfigView('adms/Views/atendimento/funcionario/verAtendimentoFuncionario', $this->Dados);
+            $carregarView = new \Core\ConfigView('adms/Views/atendimento/funcionario_view/verAtendimentoFuncionario', $this->Dados);
             $carregarView->renderizar();
         }
         else {
-            $UrlDestino = URLADM . 'atendimento-pendente/listar';
+            $UrlDestino = URLADM . 'atendimentos/listar';
             header("Location: $UrlDestino");
         }
 

@@ -8,6 +8,11 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsCadastrarAtividade;
+use App\adms\Models\AdmsMenu;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -29,11 +34,9 @@ class CadastrarAtividade
 
         if (!empty($this->Dados['CadAtividade']))
         {
-
             unset($this->Dados['CadAtividade']);
-            //var_dump($this->Dados);
-            //die;
-            $cadAtividade = new \App\adms\Models\AdmsCadastrarAtividade();
+
+            $cadAtividade = new AdmsCadastrarAtividade();
             $cadAtividade->cadAtividade($this->Dados);
             if ($cadAtividade->getResultado())
             {
@@ -45,7 +48,6 @@ class CadastrarAtividade
             else {
 
                 $this->verDemandaId();
-
                 $this->Dados['form'] = $this->Dados;
                 $this->cadAtividadeViewPriv();
 
@@ -65,11 +67,11 @@ class CadastrarAtividade
     {
         //Carregar e exibir o botão de acordo com o nível de acesso
         $botao = ['list_demanda' => ['menu_controller' => 'demandas', 'menu_metodo' => 'listar']];
-        $listarBotao = new \App\adms\Models\AdmsBotao();
+        $listarBotao = new AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
         //Carregar Menu
-        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
         //Carregar a view
         $carregarView = new \Core\ConfigView("adms/Views/gerenciar/cadAtividade", $this->Dados);
@@ -79,12 +81,11 @@ class CadastrarAtividade
 
     private function verDemandaId()
     {
-        $verDemanda = new \App\adms\Models\helper\AdmsRead();
+        $verDemanda = new AdmsRead();
         $verDemanda->fullRead("SELECT id 
                         FROM adms_demandas dmd 
                         WHERE id =:id LIMIT :limit", "id={$this->DadosId}&limit=1");
         $this->Dados['form_demanda_id'] = $verDemanda->getResultado();
-        //var_dump($verDemanda->getResultado());
     }
 
 }

@@ -18,8 +18,8 @@ class Home
         $qtdUser->verTotUser($_SESSION['adms_empresa_id']);
         $this->Dados['usuarios'] = $qtdUser->getResultado();
 
-        $qtdDemandas = new \App\adms\Models\AdmsHome();
-        $this->Dados['demandas'] = $qtdDemandas->verTotDemandas();
+        $atendimentos = new \App\adms\Models\AdmsHome();
+        $this->Dados['atendimentos_total'] = $atendimentos->verAtendimentos();
 
         $listarMenu = new \App\adms\Models\AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();

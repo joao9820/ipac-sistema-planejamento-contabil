@@ -11,6 +11,7 @@ if (!defined('URL')) {
 if(!empty($this->Dados['dados_demanda'][0]))
 {
 extract($this->Dados['dados_demanda'][0]);
+$demanda_id = $id;
 ?>
 <div class="content p-1">
     <div class="list-group-item">
@@ -203,16 +204,20 @@ extract($this->Dados['dados_demanda'][0]);
                         <th class="">Atividade</th>
                         <th class="d-none d-lg-table-cell">Descrição</th>
                         <th class="d-none d-lg-table-cell">Duração</th>
+                        <th>Atividade Antecessora</th>
                         <th class="text-center">Ações</th>
                     </tr>
                     </thead>
 
                     <tbody>
                     <?php
-
+                    $cont = 0;
                     foreach ($this->Dados['atividades'] as $atividade) {
                         extract($atividade);
-
+                        if($cont == 0){
+                            $ante = $nome;
+                        }
+                        $cont++;
                         ?>
 
                         <tr>
@@ -220,6 +225,7 @@ extract($this->Dados['dados_demanda'][0]);
                             <td><?php echo $nome; ?></td>
                             <td class="d-none d-sm-table-cell"><?php echo $descricao; ?></td>
                             <td class="d-none d-sm-table-cell"><?php echo date('H:i',strtotime($duracao)); ?></td>
+                            <td><?php echo $nome_ante; ?></td>
                             <td class="text-right">
                                 <span class="d-none d-md-block">
 
@@ -234,7 +240,7 @@ extract($this->Dados['dados_demanda'][0]);
                                     <?php
                                     if ($this->Dados['botaoAtividade']['edit_atividade']) { ?>
                                         <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Editar">
-                                            <a href="<?php echo URLADM . 'editar-atividade/edit-atividade/' . $id; ?>"
+                                            <a href="<?php echo URLADM . 'editar-atividade/edit-atividade/' . $id .'?demanda='.$demanda_id; ?>"
                                                class="btn btn-outline-warning btn-sm my-md-1"><i class="fas fa-edit"></i></a>
                                         </span>
                                         <?php
@@ -268,7 +274,7 @@ extract($this->Dados['dados_demanda'][0]);
                                         <?php } ?>
                                         <?php if ($this->Dados['botaoAtividade']['edit_atividade']) { ?>
                                             <a class="dropdown-item"
-                                               href="<?php echo URLADM . 'editar-atividade/edit-atividade/' . $id; ?>">Editar</a>
+                                               href="<?php echo URLADM . 'editar-atividade/edit-atividade/' . $id.'?demanda='.$demanda_id; ?>">Editar</a>
                                         <?php } ?>
                                         <?php if ($this->Dados['botaoAtividade']['del_atividade']) { ?>
                                             <a class="dropdown-item"

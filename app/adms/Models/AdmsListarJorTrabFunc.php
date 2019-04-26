@@ -17,7 +17,7 @@ class AdmsListarJorTrabFunc
 {
     private $Resultado;
     private $PageId;
-    private $LimiteResultado = 40; // Define a quantidade de usuarios por páginas
+    private $LimiteResultado = 50; // Define a quantidade de usuarios por páginas
     private $ResultadoPg;
 
 
@@ -27,7 +27,10 @@ class AdmsListarJorTrabFunc
     }
 
 
-
+    /**
+     * @param null $PageId
+     * @return mixed
+     */
     public function listarFuncionarios($PageId = null)
     {
         $this->PageId = (int) $PageId;
@@ -42,12 +45,12 @@ class AdmsListarJorTrabFunc
 
 
         $listarFunc = new \App\adms\Models\helper\AdmsRead();
-        $listarFunc->fullRead("SELECT user.id, user.nome, user.apelido, user.jornada_de_trabalho, 
-                        depto.nome departamento, 
-                        carg.cargo
+        $listarFunc->fullRead("SELECT user.id, user.nome, user.apelido, user.email, user.imagem, user.jornada_de_trabalho, 
+                        depto.nome departamento,
+                        plan.hora_inicio, plan.hora_termino, plan.hora_inicio2, plan.hora_termino2
                         FROM adms_usuarios user 
                         LEFT JOIN adms_departamentos depto ON depto.id=user.adms_departamento_id
-                        LEFT JOIN adms_cargos carg ON carg.id=user.adms_cargo_id
+                        LEFT JOIN adms_planejamento plan ON plan.adms_funcionario_id=user.id
                         INNER JOIN adms_niveis_acessos nivac ON nivac.id=user.adms_niveis_acesso_id
                         WHERE user.adms_niveis_acesso_id=:adms_niveis_acesso_id AND nivac.ordem >=:ordem AND user.adms_empresa_id =:empresa
                         ORDER BY user.nome ASC LIMIT :limit OFFSET :offset", "adms_niveis_acesso_id=4&ordem=".$_SESSION['ordem_nivac']."&empresa=".$_SESSION['adms_empresa_id']."&limit={$this->LimiteResultado}&offset={$offset}");

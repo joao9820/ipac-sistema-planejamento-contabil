@@ -75,6 +75,16 @@ $(document).ready(function () {
         return false;
     });
 
+    $('a[data-confirmAgendar]').click(function (ev) {
+        var href = $(this).attr('href');
+        if (!$('#confirm-delete').length) {
+            $('body').append('<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-danger text-white">EXCLUIR AGENDAMENTO DE HORA <EXTRA></EXTRA><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><h3 class="text-secondary text-center">Tem certeza que deseja excluir o agendamento da hora extra?</h3></div><div class="modal-footer"><button type="button" class="btn btn-outline-success" data-dismiss="modal"><i class="fas fa-ban"></i> Cancelar</button><a class="btn btn-outline-danger" id="dataComfirmOK"><i class="fas fa-trash-alt"></i> Excluir</a></div></div></div></div>');
+        }
+        $('#dataComfirmOK').attr('href', href);
+        $('#confirm-delete').modal({show: true});
+        return false;
+    });
+
     $('a[data-cancelar]').click(function (ev) {
         var href = $(this).attr('href');
         if (!$('#confirm-cancelar').length) {
@@ -147,6 +157,16 @@ $(document).ready(function () {
         }
         $('#dataComfirmOKfina').attr('href', href);
         $('#confirmFinalizar').modal({show: true});
+        return false;
+    });
+
+    $('a[data-confirmInterromper]').click(function (ev) {
+        var href = $(this).attr('href');
+        if (!$('#confirmInterromper').length) {
+            $('body').append('<div class="modal fade" id="confirmInterromper" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-warning text-white">Interromper Atendimento<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body text-center"><h3 class="text-secondary text-center">Tem certeza que deseja interromper o atendimento? Será necessário informar o motivo.</h3></div><div class="modal-footer"><button type="button" class="btn btn-outline-secondary" data-dismiss="modal"><i class="fas fa-ban"></i> Cancelar</button><a class="btn btn-outline-success" id="dataComfirmOKi"><i class="fas fa-clock"></i> Interromper</a></div></div></div></div>');
+        }
+        $('#dataComfirmOKi').attr('href', href);
+        $('#confirmInterromper').modal({show: true});
         return false;
     });
 

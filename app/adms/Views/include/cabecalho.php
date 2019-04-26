@@ -19,7 +19,7 @@ if (!defined('URL')) {
     <!-- Fonticons -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
 
-    <title>Blog - Admin IPAC</title>
+    <title>Admin IPAC</title>
 
     <style>
         body {

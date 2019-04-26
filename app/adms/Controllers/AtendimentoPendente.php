@@ -18,16 +18,10 @@ class AtendimentoPendente
     private $Dados;
     private $PageId;
     private $DadosModal;
-
     public function listar($PageId = null)
     {
 
         $this->DadosModal = filter_input_array(INPUT_GET, 'modal', FILTER_DEFAULT);
-        $this->Dados['teste'] = $this->DadosModal;
-        if ($this->DadosModal){
-            $this->Dados['teste'] = $this->DadosModal;
-        }
-
         $this->PageId = (int) $PageId ? $PageId : 1;
 
         //Array botoes
@@ -44,6 +38,7 @@ class AtendimentoPendente
 
 
         $listarAtendimento = new \App\adms\Models\AdmsListarAtendimentoPendente();
+        $this->Dados['jornadaDeTrabalho'] = $listarAtendimento->verCargaHoraria();
         $this->Dados['listAtendimentoPendente']= $listarAtendimento->listarAtendimento($this->PageId);
         $this->Dados['paginacao'] = $listarAtendimento->getResultadoPg();
         $this->Dados['listAtendimentoPendenteUrgente'] = $listarAtendimento->listarAtendimentoUrgente();
@@ -54,7 +49,6 @@ class AtendimentoPendente
         $carregarView = new \Core\ConfigView("adms/Views/atendimento/funcionario/atendimentoPendente", $this->Dados);
         $carregarView->renderizar();
     }
-
 
 
 }

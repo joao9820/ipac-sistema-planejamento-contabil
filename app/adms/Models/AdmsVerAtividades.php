@@ -36,9 +36,11 @@ class AdmsVerAtividades
 
 
         $verAtividade = new \App\adms\Models\helper\AdmsRead();
-        $verAtividade->fullRead("SELECT ativ.* 
+        $verAtividade->fullRead("SELECT ativ.id, ativ.nome, ativ.duracao, ativ.ordem, ativ.descricao ,
+                        antecessora.nome nome_ante
                         FROM adms_atividades ativ 
                         INNER JOIN adms_demandas dmd ON dmd.id=ativ.adms_demanda_id 
+                        LEFT JOIN adms_atividades antecessora ON antecessora.atividade_antecessora_id=ativ.id 
                         WHERE ativ.adms_demanda_id =:adms_demanda_id 
                         ORDER BY ativ.ordem ASC ", "adms_demanda_id={$this->DadosId}");
         $this->Resultado = $verAtividade->getResultado();

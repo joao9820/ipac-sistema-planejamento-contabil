@@ -300,7 +300,27 @@ $pg = $this->Dados['pg'];
 
 
                         <dt class="col-sm-3">Duração total do atendimento:</dt>
-                        <dd class="col-sm-9">Ainda statico</dd>
+                        <dd class="col-sm-9">
+                            <?php
+                            if (!empty($fim_atendimento)) {
+                                $date_time = new DateTime($inicio_atendimento);
+                                $result = $date_time->diff(new DateTime($fim_atendimento));
+
+                                echo $result->format('%m mês(s), %d dia(s), %H hora(s) e %i minuto(s)');
+
+                                $totalA = [
+                                        'ano' => $result->format('%y'),
+                                        'mes' => $result->format('%m'),
+                                        'dia' => $result->format('%d'),
+                                        'hora' => $result->format('%H'),
+                                        'minuto' => $result->format('%i'),
+                                        'segundo' => $result->format('%s')];
+                                //var_dump($totalA);
+
+
+                            }
+                            ?>
+                        </dd>
                         <?php
                     }
                 ?>

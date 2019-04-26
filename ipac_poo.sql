@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: 27-Mar-2019 às 13:04
+-- Generation Time: 21-Mar-2019 às 15:42
 -- Versão do servidor: 5.7.23
 -- versão do PHP: 7.2.10
 
@@ -41,7 +41,6 @@ CREATE TABLE IF NOT EXISTS `adms_atendimentos` (
   `created` datetime NOT NULL,
   `adms_funcionario_id` int(11) DEFAULT NULL,
   `adms_sits_atendimentos_funcionario_id` int(11) NOT NULL DEFAULT '1',
-  `data_fatal` date DEFAULT NULL,
   `prioridade` int(11) NOT NULL DEFAULT '2',
   `arquivado_gerente` int(11) NOT NULL DEFAULT '2',
   `duracao_atendimento` varchar(8) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -53,20 +52,20 @@ CREATE TABLE IF NOT EXISTS `adms_atendimentos` (
   `at_tempo_excedido` time DEFAULT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Extraindo dados da tabela `adms_atendimentos`
 --
 
-INSERT INTO `adms_atendimentos` (`id`, `adms_demanda_id`, `adms_sits_atendimento_id`, `arquivado`, `descricao`, `adms_usuario_id`, `cancelado_p_user`, `adms_empresa_id`, `created`, `adms_funcionario_id`, `adms_sits_atendimentos_funcionario_id`, `data_fatal`, `prioridade`, `arquivado_gerente`, `duracao_atendimento`, `inicio_atendimento`, `fim_atendimento`, `at_iniciado`, `at_pausado`, `at_tempo_restante`, `at_tempo_excedido`, `modified`) VALUES
-(1, 1, 2, 2, 'Primeiro atendimento de teste.', 1, 2, 1, '2019-01-31 19:45:38', 44, 3, NULL, 1, 2, '03:00:00', '2019-02-20 13:43:11', NULL, '2019-03-18 16:47:55', '2019-03-18 16:47:58', '00:00:00', '00:22:35', '2019-03-25 16:42:21'),
-(2, 1, 4, 1, 'AtualizaÃ§Ã£o urgente.', 1, 2, 1, '2019-01-31 19:46:45', 5, 1, NULL, 2, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-02-20 15:08:39'),
-(3, 1, 2, 2, 'Teste cliente', 46, 2, 1, '2019-02-03 16:51:16', 12, 4, '2019-03-28', 2, 2, '03:00:00', '2019-02-18 13:04:15', '2019-02-20 16:41:22', '2019-02-20 14:11:22', '2019-02-20 14:11:31', '00:00:00', '00:07:38', '2019-03-27 12:46:55'),
-(4, 4, 4, 2, 'Novo teste', 1, 2, 2, '2019-02-12 15:51:28', 5, 4, NULL, 2, 2, '15:23:00', '2019-02-19 12:56:44', '2019-02-20 17:49:11', '2019-02-20 17:46:01', '2019-02-20 14:22:02', '14:20:42', NULL, '2019-02-21 14:08:37'),
-(5, 4, 2, 2, 'Atendimento normal', 1, 2, 2, '2019-02-20 17:54:05', 5, 3, NULL, 2, 2, '09:17:00', '2019-02-21 16:56:48', NULL, '2019-03-26 15:21:35', '2019-03-26 15:26:19', '09:08:48', NULL, '2019-03-26 15:26:19'),
-(6, 1, 4, 1, 'descriÃ§Ã£o', 1, 2, 1, '2019-02-21 12:58:25', 5, 4, NULL, 2, 2, '03:00:00', '2019-02-21 12:59:51', '2019-02-21 13:01:18', '2019-02-21 13:00:11', '2019-02-21 13:00:16', '02:59:40', NULL, '2019-03-25 17:56:27'),
-(7, 1, 2, 2, 'NOvooo', 1, 2, 1, '2019-02-21 16:58:45', 5, 4, NULL, 2, 2, '04:00:00', '2019-02-21 16:59:06', '2019-03-26 14:10:21', '2019-03-26 14:10:17', '2019-02-22 11:44:24', '03:34:50', NULL, '2019-03-26 14:10:21');
+INSERT INTO `adms_atendimentos` (`id`, `adms_demanda_id`, `adms_sits_atendimento_id`, `arquivado`, `descricao`, `adms_usuario_id`, `cancelado_p_user`, `adms_empresa_id`, `created`, `adms_funcionario_id`, `adms_sits_atendimentos_funcionario_id`, `prioridade`, `arquivado_gerente`, `duracao_atendimento`, `inicio_atendimento`, `fim_atendimento`, `at_iniciado`, `at_pausado`, `at_tempo_restante`, `at_tempo_excedido`, `modified`) VALUES
+(1, 1, 2, 2, 'Primeiro atendimento de teste.', 1, 2, 1, '2019-01-31 19:45:38', 44, 3, 1, 2, '03:00:00', '2019-02-20 13:43:11', NULL, '2019-03-18 16:47:55', '2019-03-18 16:47:58', '00:00:00', '00:22:35', '2019-03-18 16:47:58'),
+(2, 1, 4, 1, 'AtualizaÃ§Ã£o urgente.', 1, 2, 1, '2019-01-31 19:46:45', 44, 1, 2, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-02-20 15:08:39'),
+(3, 1, 2, 2, 'Teste cliente', 46, 2, 1, '2019-02-03 16:51:16', 44, 4, 2, 2, '03:00:00', '2019-02-18 13:04:15', '2019-02-20 16:41:22', '2019-02-20 14:11:22', '2019-02-20 14:11:31', '00:00:00', '00:07:38', '2019-02-20 16:41:22'),
+(4, 4, 4, 2, 'Novo teste', 1, 2, 2, '2019-02-12 15:51:28', 44, 4, 2, 2, '15:23:00', '2019-02-19 12:56:44', '2019-02-20 17:49:11', '2019-02-20 17:46:01', '2019-02-20 14:22:02', '14:20:42', NULL, '2019-02-21 14:08:37'),
+(5, 4, 2, 2, 'Atendimento normal', 1, 2, 2, '2019-02-20 17:54:05', 44, 3, 2, 2, '09:17:00', '2019-02-21 16:56:48', NULL, '2019-02-21 17:19:26', '2019-02-21 17:19:31', '09:15:40', NULL, '2019-02-21 17:19:31'),
+(6, 1, 4, 2, 'descriÃ§Ã£o', 1, 2, 1, '2019-02-21 12:58:25', 44, 4, 2, 2, '03:00:00', '2019-02-21 12:59:51', '2019-02-21 13:01:18', '2019-02-21 13:00:11', '2019-02-21 13:00:16', '02:59:40', NULL, '2019-02-21 14:06:32'),
+(7, 1, 2, 2, 'NOvooo', 1, 2, 1, '2019-02-21 16:58:45', 44, 3, 2, 2, '04:00:00', '2019-02-21 16:59:06', NULL, '2019-02-22 11:44:19', '2019-02-22 11:44:24', '03:34:54', NULL, '2019-02-22 11:44:24');
 
 -- --------------------------------------------------------
 
@@ -241,7 +240,6 @@ DROP TABLE IF EXISTS `adms_departamentos`;
 CREATE TABLE IF NOT EXISTS `adms_departamentos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
-  `icon` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL,
   `descricao` varchar(220) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
@@ -253,10 +251,11 @@ CREATE TABLE IF NOT EXISTS `adms_departamentos` (
 -- Extraindo dados da tabela `adms_departamentos`
 --
 
-INSERT INTO `adms_departamentos` (`id`, `nome`, `icon`, `descricao`, `created`, `modified`) VALUES
-(1, 'ContÃ¡bil\r\n', 'fas fa-calculator', NULL, '2019-03-21 00:00:00', NULL),
-(2, 'Fiscal', 'fas fa-money-bill-alt', NULL, '2019-03-21 00:00:00', NULL),
-(3, 'Folha', 'far fa-copy', NULL, '2019-03-21 00:00:00', NULL);
+INSERT INTO `adms_departamentos` (`id`, `nome`, `descricao`, `created`, `modified`) VALUES
+(1, 'Contábil', NULL, '2019-03-21 00:00:00', NULL),
+(2, 'Fiscal', NULL, '2019-03-21 00:00:00', NULL),
+(3, 'Folha', NULL, '2019-03-21 00:00:00', NULL),
+(4, 'Financeiro', NULL, '2019-03-21 00:00:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -339,7 +338,7 @@ CREATE TABLE IF NOT EXISTS `adms_logs_atendimentos` (
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=376 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=369 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Extraindo dados da tabela `adms_logs_atendimentos`
@@ -713,14 +712,7 @@ INSERT INTO `adms_logs_atendimentos` (`id`, `status_log`, `adms_atendimento_id`,
 (365, 'Iniciado', 7, '2019-02-22 11:44:19', NULL),
 (366, 'Pausado', 7, '2019-02-22 11:44:24', NULL),
 (367, 'Iniciado', 1, '2019-03-18 16:47:54', NULL),
-(368, 'Pausado', 1, '2019-03-18 16:47:58', NULL),
-(369, 'Iniciado', 7, '2019-03-26 14:10:17', NULL),
-(370, 'Iniciado', 5, '2019-03-26 14:41:19', NULL),
-(371, 'Pausado', 5, '2019-03-26 14:43:17', NULL),
-(372, 'Iniciado', 5, '2019-03-26 14:53:33', NULL),
-(373, 'Pausado', 5, '2019-03-26 14:53:43', NULL),
-(374, 'Iniciado', 5, '2019-03-26 15:21:35', NULL),
-(375, 'Pausado', 5, '2019-03-26 15:26:19', NULL);
+(368, 'Pausado', 1, '2019-03-18 16:47:58', NULL);
 
 -- --------------------------------------------------------
 
@@ -777,7 +769,7 @@ CREATE TABLE IF NOT EXISTS `adms_nivacs_pgs` (
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=823 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=816 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Extraindo dados da tabela `adms_nivacs_pgs`
@@ -1288,22 +1280,22 @@ INSERT INTO `adms_nivacs_pgs` (`id`, `permissao`, `ordem`, `dropdown`, `lib_menu
 (561, 2, 82, 2, 2, 4, 6, 84, 1, '2019-02-03 13:13:19', NULL),
 (562, 2, 83, 2, 2, 4, 6, 85, 1, '2019-02-03 13:13:19', NULL),
 (563, 2, 84, 2, 2, 4, 6, 86, 1, '2019-02-03 13:13:19', NULL),
-(564, 1, 85, 2, 1, 11, 1, 87, 1, '2019-02-03 18:09:17', '2019-03-25 17:36:12'),
-(565, 1, 85, 2, 1, 11, 2, 87, 1, '2019-02-03 18:09:17', '2019-03-25 17:37:14'),
-(566, 1, 85, 2, 1, 11, 3, 87, 1, '2019-02-03 18:09:17', '2019-03-25 17:37:30'),
-(567, 1, 85, 2, 1, 10, 4, 87, 1, '2019-02-03 18:09:17', '2019-03-25 17:38:54'),
+(564, 1, 85, 1, 1, 11, 1, 87, 1, '2019-02-03 18:09:17', '2019-02-12 15:26:29'),
+(565, 2, 85, 2, 2, 6, 2, 87, 1, '2019-02-03 18:09:17', '2019-02-03 19:16:51'),
+(566, 2, 85, 2, 2, 4, 3, 87, 1, '2019-02-03 18:09:17', NULL),
+(567, 1, 85, 1, 1, 10, 4, 87, 1, '2019-02-03 18:09:17', '2019-02-03 19:35:31'),
 (568, 2, 85, 2, 2, 4, 5, 87, 1, '2019-02-03 18:09:17', NULL),
 (569, 2, 85, 2, 2, 4, 6, 87, 1, '2019-02-03 18:09:17', NULL),
 (570, 1, 86, 2, 2, 11, 1, 88, 1, '2019-02-03 18:14:33', '2019-02-14 14:43:05'),
 (571, 2, 86, 2, 2, 4, 2, 88, 1, '2019-02-03 18:14:33', '2019-02-03 19:16:48'),
 (572, 2, 86, 2, 2, 4, 3, 88, 1, '2019-02-03 18:14:33', NULL),
-(573, 2, 86, 1, 2, 10, 4, 88, 1, '2019-02-03 18:14:33', '2019-03-25 17:38:35'),
+(573, 2, 86, 1, 1, 10, 4, 88, 1, '2019-02-03 18:14:33', '2019-02-14 14:33:43'),
 (574, 2, 86, 2, 2, 4, 5, 88, 1, '2019-02-03 18:14:33', NULL),
 (575, 2, 86, 2, 2, 4, 6, 88, 1, '2019-02-03 18:14:33', NULL),
-(576, 1, 87, 1, 2, 11, 1, 89, 1, '2019-02-03 18:18:40', '2019-03-25 17:36:20'),
+(576, 1, 87, 1, 1, 11, 1, 89, 1, '2019-02-03 18:18:40', '2019-02-12 15:27:07'),
 (577, 2, 87, 2, 2, 4, 2, 89, 1, '2019-02-03 18:18:40', NULL),
 (578, 2, 87, 2, 2, 4, 3, 89, 1, '2019-02-03 18:18:40', NULL),
-(579, 1, 87, 1, 2, 10, 4, 89, 1, '2019-02-03 18:18:40', '2019-03-25 17:38:42'),
+(579, 1, 87, 1, 1, 10, 4, 89, 1, '2019-02-03 18:18:40', '2019-02-03 19:35:40'),
 (580, 2, 87, 2, 2, 4, 5, 89, 1, '2019-02-03 18:18:40', NULL),
 (581, 2, 87, 2, 2, 4, 6, 89, 1, '2019-02-03 18:18:40', NULL),
 (582, 1, 88, 1, 1, 5, 1, 90, 1, '2019-02-03 18:40:08', '2019-02-04 13:12:46'),
@@ -1526,9 +1518,9 @@ INSERT INTO `adms_nivacs_pgs` (`id`, `permissao`, `ordem`, `dropdown`, `lib_menu
 (799, 2, 106, 2, 2, 4, 5, 108, 1, '2019-02-22 14:06:13', NULL),
 (800, 2, 106, 2, 2, 4, 6, 108, 1, '2019-02-22 14:06:13', NULL),
 (801, 2, 106, 2, 2, 4, 7, 108, 1, '2019-02-22 14:06:13', NULL),
-(802, 1, 107, 1, 1, 13, 1, 109, 1, '2019-03-21 12:59:20', '2019-03-25 12:55:00'),
-(803, 1, 107, 1, 1, 13, 2, 109, 1, '2019-03-21 12:59:20', '2019-03-25 12:57:13'),
-(804, 1, 107, 1, 1, 13, 3, 109, 1, '2019-03-21 12:59:20', '2019-03-25 12:57:30'),
+(802, 1, 107, 2, 1, 13, 1, 109, 1, '2019-03-21 12:59:20', '2019-03-21 13:03:33'),
+(803, 1, 107, 2, 1, 13, 2, 109, 1, '2019-03-21 12:59:20', '2019-03-21 13:03:16'),
+(804, 1, 107, 2, 1, 13, 3, 109, 1, '2019-03-21 12:59:20', '2019-03-21 13:03:52'),
 (805, 2, 107, 2, 2, 4, 4, 109, 1, '2019-03-21 12:59:20', NULL),
 (806, 2, 107, 2, 2, 4, 5, 109, 1, '2019-03-21 12:59:20', NULL),
 (807, 2, 107, 2, 2, 4, 6, 109, 1, '2019-03-21 12:59:20', NULL),
@@ -1539,14 +1531,7 @@ INSERT INTO `adms_nivacs_pgs` (`id`, `permissao`, `ordem`, `dropdown`, `lib_menu
 (812, 2, 108, 2, 2, 4, 4, 110, 1, '2019-03-21 13:41:42', NULL),
 (813, 2, 108, 2, 2, 4, 5, 110, 1, '2019-03-21 13:41:42', NULL),
 (814, 2, 108, 2, 2, 4, 6, 110, 1, '2019-03-21 13:41:42', NULL),
-(815, 2, 108, 2, 2, 4, 7, 110, 1, '2019-03-21 13:41:42', NULL),
-(816, 1, 109, 1, 1, 13, 1, 111, 1, '2019-03-25 12:15:18', '2019-03-25 12:54:53'),
-(817, 1, 109, 1, 1, 13, 2, 111, 1, '2019-03-25 12:15:18', '2019-03-25 12:57:05'),
-(818, 1, 109, 1, 1, 13, 3, 111, 1, '2019-03-25 12:15:18', '2019-03-25 12:57:34'),
-(819, 2, 109, 2, 2, 4, 4, 111, 1, '2019-03-25 12:15:18', NULL),
-(820, 2, 109, 2, 2, 4, 5, 111, 1, '2019-03-25 12:15:18', NULL),
-(821, 2, 109, 2, 2, 4, 6, 111, 1, '2019-03-25 12:15:18', NULL),
-(822, 2, 109, 2, 2, 4, 7, 111, 1, '2019-03-25 12:15:18', NULL);
+(815, 2, 108, 2, 2, 4, 7, 110, 1, '2019-03-21 13:41:42', NULL);
 
 -- --------------------------------------------------------
 
@@ -1600,7 +1585,7 @@ CREATE TABLE IF NOT EXISTS `adms_paginas` (
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=112 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=111 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Extraindo dados da tabela `adms_paginas`
@@ -1691,7 +1676,7 @@ INSERT INTO `adms_paginas` (`id`, `controller`, `metodo`, `menu_controller`, `me
 (84, 'CadastrarSitPg', 'cadSitPg', 'cadastrar-sit-pg', 'cad-sit-pg', 'Cadastrar SituaÃ§Ã£o de PÃ¡gina', 'FormulÃ¡rio para cadastrar situaÃ§Ã£o de pÃ¡gina', 2, '', 2, 1, 1, '2019-02-03 10:21:25', NULL),
 (85, 'EditarSitPg', 'editSitPg', 'editar-sit-pg', 'edit-sit-pg', 'Editar situaÃ§Ã£o de pÃ¡gina', 'FormulÃ¡rio para editar situaÃ§Ã£o de pÃ¡gina', 2, '', 3, 1, 1, '2019-02-03 10:21:25', '2019-02-03 10:21:25'),
 (86, 'ApagarSitPg', 'apagarSitPg', 'apagar-sit-pg', 'apagar-sit-pg', 'Apagar SituaÃ§Ã£o de PÃ¡gina', 'PÃ¡gina para apagar situaÃ§Ã£o de pÃ¡gina', 2, '', 4, 1, 1, '2019-02-03 10:21:25', NULL),
-(87, 'AtendimentoPendente', 'listar', 'atendimento-pendente', 'listar', 'Atendimento Pendente Func', 'PÃ¡gina para os funcionÃ¡rios visualizar os atendimentos pendente.                                                                                ', 2, 'fas fa-exclamation-circle', 1, 1, 1, '2019-02-03 18:09:17', '2019-03-25 17:34:46'),
+(87, 'AtendimentoPendente', 'listar', 'atendimento-pendente', 'listar', 'Pendente', 'PÃ¡gina para visualizar os atendimentos pendente.                                                                ', 2, 'fas fa-exclamation-circle', 1, 1, 1, '2019-02-03 18:09:17', '2019-02-03 18:50:52'),
 (88, 'AtendimentoEmAndamento', 'listar', 'atendimento-em-andamento', 'listar', 'Em Andamento', 'PÃ¡gina para listar os atendimentos em andamento.                                ', 2, 'fas fa-hourglass-half', 1, 1, 1, '2019-02-03 18:14:33', '2019-02-03 18:46:08'),
 (89, 'AtendimentoConcluido', 'listar', 'atendimento-concluido', 'listar', 'ConcluÃ­do', 'PÃ¡gina para listar todos os atendimentos concluÃ­do.                ', 2, 'fas fa-clipboard-check', 1, 1, 1, '2019-02-03 18:18:40', '2019-02-03 18:24:39'),
 (90, 'GerenciarAtendimento', 'listar', 'gerenciar-atendimento', 'listar', 'Atendimentos', 'PÃ¡gina para o gerente administrar todos os atendimentos, definindo a qual funcionÃ¡rio ele serÃ¡ encaminhado.                ', 2, 'fas fa-id-badge', 1, 1, 1, '2019-02-03 18:40:08', '2019-02-03 18:44:46'),
@@ -1714,8 +1699,7 @@ INSERT INTO `adms_paginas` (`id`, `controller`, `metodo`, `menu_controller`, `me
 (107, 'LogsAtendimento', 'listar', 'logs-atendimento', 'listar', 'HistÃ³rico do Atendimento', 'PÃ¡gina para ver o histÃ³rico de atividade do atendimento.', 2, '', 1, 1, 1, '2019-02-19 17:12:36', NULL),
 (108, 'Error', 'erro404', 'error', 'erro-404', 'PÃ¡gina de erro 404', 'PÃ¡gina para informar que a pÃ¡gina nÃ£o foi encontrada.', 1, '', 6, 1, 1, '2019-02-22 14:06:13', NULL),
 (109, 'JornadaDeTrabalho', 'listar', 'jornada-de-trabalho', 'listar', 'Jornada de Trabalho FuncionÃ¡rios', 'PÃ¡gina para definir a jornada de trabalho dos funcionÃ¡rios                ', 2, 'fas fa-briefcase', 1, 1, 1, '2019-03-21 12:59:20', '2019-03-21 13:08:56'),
-(110, 'EditarJornadaDeTrabalho', 'editar', 'editar-jornada-de-trabalho', 'editar', 'Editar Jornada de Trabalho do FuncinÃ¡rio', 'Editar a jornada de trabalho do funcionÃ¡rio                ', 2, '', 3, 1, 1, '2019-03-21 13:41:42', '2019-03-21 14:56:39'),
-(111, 'Departamentos', 'listar', 'departamentos', 'listar', 'Departamentos', 'PÃ¡gina para listar todos os departamentos.', 2, 'fas fa-table', 1, 1, 1, '2019-03-25 12:15:18', NULL);
+(110, 'EditarJornadaDeTrabalho', 'editar', 'editar-jornada-de-trabalho', 'editar', 'Editar Jornada de Trabalho do FuncinÃ¡rio', 'Editar a jornada de trabalho do funcionÃ¡rio                ', 2, '', 3, 1, 1, '2019-03-21 13:41:42', '2019-03-21 14:56:39');
 
 -- --------------------------------------------------------
 
@@ -1945,45 +1929,43 @@ CREATE TABLE IF NOT EXISTS `adms_usuarios` (
   `adms_departamento_id` int(11) DEFAULT NULL,
   `adms_cargo_id` int(11) DEFAULT NULL,
   `jornada_de_trabalho` time DEFAULT NULL,
-  `hora_extra` time DEFAULT NULL,
   `adms_empresa_id` int(11) DEFAULT NULL,
   `adms_niveis_acesso_id` int(11) NOT NULL,
   `adms_sits_usuario_id` int(11) NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=48 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=47 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Extraindo dados da tabela `adms_usuarios`
 --
 
-INSERT INTO `adms_usuarios` (`id`, `nome`, `apelido`, `email`, `usuario`, `senha`, `recuperar_senha`, `chave_descadastro`, `conf_email`, `imagem`, `adms_departamento_id`, `adms_cargo_id`, `jornada_de_trabalho`, `hora_extra`, `adms_empresa_id`, `adms_niveis_acesso_id`, `adms_sits_usuario_id`, `created`, `modified`) VALUES
-(1, 'Dhemes Mota', 'Dhemes', 'dhemes.mota@gmail.com', 'dhemes.mota@gmail.com', '$2y$10$zUfJ362RhXWrT7NxmP3CoewTjbHAdi8QitJgsi.Wc6YEUJ288XkAq', '2ea5c30c4086dad96aa3ed06796246d1', NULL, NULL, 'socios.png', NULL, NULL, NULL, '05:00:00', 1, 1, 1, '2019-01-21 00:00:00', '2019-03-21 12:46:00'),
-(2, 'Keliane Barbosa Silva', 'Kelly', 'kelly@gmail.com', 'kelly@gmail.com', '$2y$10$9QEwRvlnsfnvhitgQtuxIeXwEMrtuvYhTEE2/jWrQYL408lQNRmHm', 'c0deabfeb011a559fdb86c6d171f2aa2', NULL, NULL, 'familia.jpg', NULL, NULL, NULL, NULL, 2, 1, 1, '2019-01-21 00:00:00', '2019-01-27 00:58:44'),
-(3, 'Dhemes Ipac', 'Ipac', 'dhemes.ipacti@gmail.com', 'dhemes.ipacti@gmail.com', '$2y$10$Lnq0DTdl8nrF3rMIRo2R.eviCsFfD09dwh3vNcfzQFlmH8mWWlUIS', 'a30df274760ac31c510c18e4498629ad', NULL, NULL, 'familia-.jpg', 1, 1, '06:00:00', NULL, 1, 4, 1, '2019-01-22 19:38:18', '2019-03-21 17:34:28'),
-(38, 'Administrador', 'Admin', 'admin@admin.com', 'admin', '$2y$10$NGAQ2iZISFV77GqeTy0I2uqYGDoH7bmOUy5xv23fMv/t9RJwcC6lu', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, 1, 2, 1, '2019-01-29 16:45:34', NULL),
-(30, 'Novo teste', 'Novo teste', 'novoteste@gmail.com', 'novoteste@gmail.com', '$2y$10$KZJqsML7CqowU3oD78X0r.s1XW7P/2PGbJCLtKb.syy7botIg/iki', NULL, NULL, NULL, '30aef3a5c265e557591a4da196da87b4.jpg', NULL, NULL, NULL, NULL, 2, 5, 1, '2019-01-27 19:08:54', NULL),
-(29, 'Teste Usuario foto', 'Teste Usuario foto', 'testeusuario@gmail.com', 'testeusuario@gmail.com', '$2y$10$MGGTHAJz6XpJ/QBoBH6aBOAPXsZH6yvntv/b7Iwb5Z0XEjdrSNOC2', NULL, NULL, NULL, 'ux-787980-1280.jpg', NULL, NULL, NULL, '05:00:00', 2, 2, 1, '2019-01-27 19:06:13', NULL),
-(8, 'Ana', 'Maria', 'maria@gmail.com', 'maria@gmail.com', '$2y$10$3dYmL4HnDtRNoOZVUAIASO9I6o28r4ovwTrCqMPXQtzAZ88GWmjkC', NULL, NULL, 'deb8634f6f9a64caa8789a11004e3d3f', NULL, 3, 1, '08:00:00', NULL, 1, 4, 1, '2019-01-25 23:34:06', '2019-03-25 14:34:31'),
-(10, 'Miriam', 'Suellen', 'miram@gmail.com', 'miriam@gmail.com', '$2y$10$lvNk4TKtWcFbji7xQofKd.vXuI2NIVN8cUSrh7d3Mr8hlcITmuLya', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 5, 2, '2019-01-27 00:53:34', '2019-01-27 17:30:43'),
-(11, 'Dhemes12', 'Cezar', 'dhemes12@gmail.com', 'dhemes12@gmail.com', '$2y$10$1kcZHkZbPijpodrKL2J8kOweRFMZeAWtjKk3dqPFOCfm5Gtzo1s1e', NULL, NULL, NULL, '7c0eb1f9dcde785b32d79c361ee69a78.jpg', NULL, NULL, NULL, NULL, 2, 1, 1, '2019-01-27 00:55:50', '2019-01-27 15:36:27'),
-(12, 'Dhemes14', 'dhemes14', 'dhemes14@gmail.com', 'dhemes14@gmail.com', '$2y$10$b0bfhh659BQlWHjV0O9mN.blbo4ZMpome666d1.svH7tBIkgzXDFm', NULL, NULL, NULL, 'pexels-photo-247791.png', 1, 1, '06:00:00', NULL, 1, 4, 5, '2019-01-27 01:07:35', '2019-03-21 17:33:40'),
-(31, 'Realizar Novo ep 2', 'Realizar Novo ep 2', 'novoep2@gmail.com', 'novoep2@gmail.com', '$2y$10$S9/LHhbD0Du0VD2GOngGjOK7tCSt3Yf3645DvFxrn8D583/1y5ZsO', NULL, NULL, NULL, '71260232331b19a491dc646a22fa3eee.jpg', NULL, NULL, NULL, NULL, 2, 5, 1, '2019-01-27 19:19:55', NULL),
-(17, 'Dhemes44', 'Dhemes44', 'dhemes44@gmail.com', 'dhemes44@gmail.com', '$2y$10$/Cz8IXgzC5OQ5d4PmqVyMeltV6SWj.yLAVazJR.nTKgqIwF0ze3US', NULL, NULL, NULL, 'bem-no-trabalho.jpg', NULL, NULL, NULL, NULL, 1, 2, 2, '2019-01-27 01:32:23', '2019-01-28 16:44:57'),
-(21, 'Miriam Mota', 'miriam', 'miriamsuellen.mota@gmail.com', 'miriamsuellen.mota@gmail.com', '$2y$10$CffqNx7Wx6f2x9k5xt.UW.ARcJXBCbX2X8ixx0.7jL9DSFyN7GH0m', NULL, NULL, NULL, '30aef3a5c265e557591a4da196da87b4.jpg', NULL, NULL, NULL, '05:00:00', 2, 2, 1, '2019-01-27 01:48:44', '2019-01-27 19:40:55'),
-(27, 'Maria Empresa 2', 'Maria', 'mariaep2@gmail.com', 'mariaep2@gmail.com', '$2y$10$XHs0LHqO2O7AoGWYGvUdcewtsdWQ6MTspt2gFfSgt9ZHjX35iMmu2', NULL, NULL, NULL, 'air240-airflow-w.png', NULL, NULL, NULL, NULL, 2, 3, 3, '2019-01-27 18:46:59', '2019-01-27 18:48:12'),
-(28, 'Teste ep 2', 'Teste 2', 'testeep2@gmail.com', 'testeep2@gmail.com', '$2y$10$CCirQwfNeG3cJO4dQibQPea4ECPIRhUbg9CR.TBccYuj4.fugTJ8W', NULL, NULL, '0f7c521ca19b751ce981cd8dd6d38fda', '71260232331b19a491dc646a22fa3eee.jpg', NULL, NULL, NULL, NULL, 2, 3, 1, '2019-01-27 18:49:15', '2019-01-27 22:35:48'),
-(32, 'Realizar Novo ep 3', 'Realizar Novo ep 3', 'novoep3@gmail.com', 'novoep3@gmail.com', '$2y$10$YEAJ4XF9D6HbJe/VYj2yj.YCQpiqPo3v6ZyiJgaDSbDqnAHxdVCxy', NULL, NULL, NULL, 'business-cellphone-codes-92904.jpg', NULL, NULL, NULL, NULL, 2, 5, 1, '2019-01-27 19:21:36', NULL),
-(33, 'Realizar Novo ep 4', 'Realizar Novo ep 4', 'novoep4@gmail.com', 'novoep4@gmail.com', '$2y$10$8SBmZkEMdILfAHdrweOEkeRrTl.tgqMMe7ZA2oI4nLL3jPdsSbPJu', NULL, NULL, NULL, 'familia.jpg', NULL, NULL, NULL, NULL, 2, 4, 1, '2019-01-27 19:25:59', NULL),
-(34, 'Realizar Novo ep 5', 'Realizar Novo ep 5', 'novoep5@gmail.com', 'novoep5@gmail.com', '$2y$10$5qsPdUJLhVXHX70PE7GEE.K1elg5H5S4Ria36Plb8ZSMCDV/ZWrKG', NULL, NULL, NULL, 'cd172ed1dd9f567fb573ee31777a6bb6.jpg', NULL, NULL, NULL, NULL, 2, 4, 1, '2019-01-27 19:29:15', NULL),
-(35, 'Realizar Novo ep 6', 'Realizar Novo ep 6', 'novoep6@gmail.com', 'novoep6@gmail.com', '$2y$10$/Pue.1Ifkbef1ujoLpLZxuF5Jf7lrV4K2ILjDF6C5O2abt3Z7jMbu', NULL, NULL, NULL, '71260232331b19a491dc646a22fa3eee.jpg', NULL, NULL, NULL, NULL, 2, 4, 1, '2019-01-27 19:34:59', NULL),
-(36, 'Realizar Novo ep 7', 'Realizar Novo ep 7', 'novoep7@gmail.com', 'novoep7@gmail.com', '$2y$10$d0wDOn9WfLXFmYo33ClLKuM86nGW4UCCzcsDhLJ66UAGeTtWk2a0O', NULL, NULL, NULL, 'familia-22.jpg', NULL, NULL, NULL, NULL, 2, 4, 1, '2019-01-27 19:38:30', '2019-01-27 19:41:10'),
-(37, 'Realizar Novo ep 8', 'Realizar Novo ep 8', 'novoep8@gmail.com', 'novoep8@gmail.com', '$2y$10$.VPehMvqpQiUt9GpQNoS3eekLFRrLGJ0MRQ27TPxPg9AWEKVQZauy', NULL, NULL, NULL, '71260232331b19a491dc646a22fa3eee.jpg', NULL, NULL, NULL, NULL, 2, 3, 1, '2019-01-27 19:40:29', NULL),
-(43, 'Gerente', 'gerente', 'gerente@gmail.com', 'gerente@gmail.com', '$2y$10$SxHxlE1xBtewUtcQQzzYI.Cd/.cHk..v5k1Ac3Z.n6YK4AW3whFNO', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, 1, 3, 1, '2019-02-02 20:43:18', NULL),
-(44, 'FuncionÃ¡rio', 'FuncionÃ¡rio', 'funcionario@gmail.com', 'funcionario@gmail.com', '$2y$10$h.UGiYzaMMcv3dsuoeqhkOQhT1UJDaiWAaioDe32ImAmDpnvL6QBS', NULL, NULL, NULL, '', 2, 1, '08:00:00', NULL, 1, 4, 1, '2019-02-02 20:44:00', NULL),
-(46, 'Cliente', 'Cliente', 'cliente@gmail.com', 'cliente@gmail.com', '$2y$10$gF3l/JRopJiwPvIqRMlIN.qkfeRrAYuSl3uSVWXxE2FSxrkYGvcbq', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, 2, 6, 1, '2019-02-02 20:45:35', NULL),
-(47, 'JoÃ£o', 'joÃ£o', 'joao@gmail.com', 'joao999', '$2y$10$49FRMXaQCsbN4rGCRISg9Os0kwD/XGre60mtS5H5C8rGEo0fVAPdu', NULL, NULL, NULL, '', 1, 1, '09:00:00', NULL, 1, 4, 1, '2019-03-21 17:35:24', '2019-03-25 14:34:39');
+INSERT INTO `adms_usuarios` (`id`, `nome`, `apelido`, `email`, `usuario`, `senha`, `recuperar_senha`, `chave_descadastro`, `conf_email`, `imagem`, `adms_departamento_id`, `adms_cargo_id`, `jornada_de_trabalho`, `adms_empresa_id`, `adms_niveis_acesso_id`, `adms_sits_usuario_id`, `created`, `modified`) VALUES
+(1, 'Dhemes Mota', 'Dhemes', 'dhemes.mota@gmail.com', 'dhemes.mota@gmail.com', '$2y$10$zUfJ362RhXWrT7NxmP3CoewTjbHAdi8QitJgsi.Wc6YEUJ288XkAq', '2ea5c30c4086dad96aa3ed06796246d1', NULL, NULL, 'socios.png', NULL, NULL, NULL, 1, 1, 1, '2019-01-21 00:00:00', '2019-03-21 12:46:00'),
+(2, 'Keliane Barbosa Silva', 'Kelly', 'kelly@gmail.com', 'kelly@gmail.com', '$2y$10$9QEwRvlnsfnvhitgQtuxIeXwEMrtuvYhTEE2/jWrQYL408lQNRmHm', 'c0deabfeb011a559fdb86c6d171f2aa2', NULL, NULL, 'familia.jpg', NULL, NULL, NULL, 2, 1, 1, '2019-01-21 00:00:00', '2019-01-27 00:58:44'),
+(3, 'Dhemes Ipac', 'Ipac', 'dhemes.ipacti@gmail.com', 'dhemes.ipacti@gmail.com', '$2y$10$Lnq0DTdl8nrF3rMIRo2R.eviCsFfD09dwh3vNcfzQFlmH8mWWlUIS', 'a30df274760ac31c510c18e4498629ad', NULL, NULL, 'familia-.jpg', NULL, NULL, NULL, 1, 4, 1, '2019-01-22 19:38:18', '2019-03-21 14:39:00'),
+(38, 'Administrador', 'Admin', 'admin@admin.com', 'admin', '$2y$10$NGAQ2iZISFV77GqeTy0I2uqYGDoH7bmOUy5xv23fMv/t9RJwcC6lu', NULL, NULL, NULL, '', NULL, NULL, NULL, 1, 2, 1, '2019-01-29 16:45:34', NULL),
+(30, 'Novo teste', 'Novo teste', 'novoteste@gmail.com', 'novoteste@gmail.com', '$2y$10$KZJqsML7CqowU3oD78X0r.s1XW7P/2PGbJCLtKb.syy7botIg/iki', NULL, NULL, NULL, '30aef3a5c265e557591a4da196da87b4.jpg', NULL, NULL, NULL, 2, 5, 1, '2019-01-27 19:08:54', NULL),
+(29, 'Teste Usuario foto', 'Teste Usuario foto', 'testeusuario@gmail.com', 'testeusuario@gmail.com', '$2y$10$MGGTHAJz6XpJ/QBoBH6aBOAPXsZH6yvntv/b7Iwb5Z0XEjdrSNOC2', NULL, NULL, NULL, 'ux-787980-1280.jpg', NULL, NULL, NULL, 2, 2, 1, '2019-01-27 19:06:13', NULL),
+(8, 'Ana', 'Maria', 'maria@gmail.com', 'maria@gmail.com', '$2y$10$3dYmL4HnDtRNoOZVUAIASO9I6o28r4ovwTrCqMPXQtzAZ88GWmjkC', NULL, NULL, 'deb8634f6f9a64caa8789a11004e3d3f', NULL, NULL, NULL, NULL, 1, 4, 1, '2019-01-25 23:34:06', '2019-02-11 17:16:40'),
+(10, 'Miriam', 'Suellen', 'miram@gmail.com', 'miriam@gmail.com', '$2y$10$lvNk4TKtWcFbji7xQofKd.vXuI2NIVN8cUSrh7d3Mr8hlcITmuLya', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 5, 2, '2019-01-27 00:53:34', '2019-01-27 17:30:43'),
+(11, 'Dhemes12', 'Cezar', 'dhemes12@gmail.com', 'dhemes12@gmail.com', '$2y$10$1kcZHkZbPijpodrKL2J8kOweRFMZeAWtjKk3dqPFOCfm5Gtzo1s1e', NULL, NULL, NULL, '7c0eb1f9dcde785b32d79c361ee69a78.jpg', NULL, NULL, NULL, 2, 1, 1, '2019-01-27 00:55:50', '2019-01-27 15:36:27'),
+(12, 'Dhemes14', 'dhemes14', 'dhemes14@gmail.com', 'dhemes14@gmail.com', '$2y$10$b0bfhh659BQlWHjV0O9mN.blbo4ZMpome666d1.svH7tBIkgzXDFm', NULL, NULL, NULL, 'pexels-photo-247791.png', NULL, NULL, NULL, 1, 4, 5, '2019-01-27 01:07:35', '2019-02-02 22:22:07'),
+(31, 'Realizar Novo ep 2', 'Realizar Novo ep 2', 'novoep2@gmail.com', 'novoep2@gmail.com', '$2y$10$S9/LHhbD0Du0VD2GOngGjOK7tCSt3Yf3645DvFxrn8D583/1y5ZsO', NULL, NULL, NULL, '71260232331b19a491dc646a22fa3eee.jpg', NULL, NULL, NULL, 2, 5, 1, '2019-01-27 19:19:55', NULL),
+(17, 'Dhemes44', 'Dhemes44', 'dhemes44@gmail.com', 'dhemes44@gmail.com', '$2y$10$/Cz8IXgzC5OQ5d4PmqVyMeltV6SWj.yLAVazJR.nTKgqIwF0ze3US', NULL, NULL, NULL, 'bem-no-trabalho.jpg', NULL, NULL, NULL, 1, 2, 2, '2019-01-27 01:32:23', '2019-01-28 16:44:57'),
+(21, 'Miriam Mota', 'miriam', 'miriamsuellen.mota@gmail.com', 'miriamsuellen.mota@gmail.com', '$2y$10$CffqNx7Wx6f2x9k5xt.UW.ARcJXBCbX2X8ixx0.7jL9DSFyN7GH0m', NULL, NULL, NULL, '30aef3a5c265e557591a4da196da87b4.jpg', NULL, NULL, NULL, 2, 2, 1, '2019-01-27 01:48:44', '2019-01-27 19:40:55'),
+(27, 'Maria Empresa 2', 'Maria', 'mariaep2@gmail.com', 'mariaep2@gmail.com', '$2y$10$XHs0LHqO2O7AoGWYGvUdcewtsdWQ6MTspt2gFfSgt9ZHjX35iMmu2', NULL, NULL, NULL, 'air240-airflow-w.png', NULL, NULL, NULL, 2, 3, 3, '2019-01-27 18:46:59', '2019-01-27 18:48:12'),
+(28, 'Teste ep 2', 'Teste 2', 'testeep2@gmail.com', 'testeep2@gmail.com', '$2y$10$CCirQwfNeG3cJO4dQibQPea4ECPIRhUbg9CR.TBccYuj4.fugTJ8W', NULL, NULL, '0f7c521ca19b751ce981cd8dd6d38fda', '71260232331b19a491dc646a22fa3eee.jpg', NULL, NULL, NULL, 2, 3, 1, '2019-01-27 18:49:15', '2019-01-27 22:35:48'),
+(32, 'Realizar Novo ep 3', 'Realizar Novo ep 3', 'novoep3@gmail.com', 'novoep3@gmail.com', '$2y$10$YEAJ4XF9D6HbJe/VYj2yj.YCQpiqPo3v6ZyiJgaDSbDqnAHxdVCxy', NULL, NULL, NULL, 'business-cellphone-codes-92904.jpg', NULL, NULL, NULL, 2, 5, 1, '2019-01-27 19:21:36', NULL),
+(33, 'Realizar Novo ep 4', 'Realizar Novo ep 4', 'novoep4@gmail.com', 'novoep4@gmail.com', '$2y$10$8SBmZkEMdILfAHdrweOEkeRrTl.tgqMMe7ZA2oI4nLL3jPdsSbPJu', NULL, NULL, NULL, 'familia.jpg', NULL, NULL, NULL, 2, 4, 1, '2019-01-27 19:25:59', NULL),
+(34, 'Realizar Novo ep 5', 'Realizar Novo ep 5', 'novoep5@gmail.com', 'novoep5@gmail.com', '$2y$10$5qsPdUJLhVXHX70PE7GEE.K1elg5H5S4Ria36Plb8ZSMCDV/ZWrKG', NULL, NULL, NULL, 'cd172ed1dd9f567fb573ee31777a6bb6.jpg', NULL, NULL, NULL, 2, 4, 1, '2019-01-27 19:29:15', NULL),
+(35, 'Realizar Novo ep 6', 'Realizar Novo ep 6', 'novoep6@gmail.com', 'novoep6@gmail.com', '$2y$10$/Pue.1Ifkbef1ujoLpLZxuF5Jf7lrV4K2ILjDF6C5O2abt3Z7jMbu', NULL, NULL, NULL, '71260232331b19a491dc646a22fa3eee.jpg', NULL, NULL, NULL, 2, 4, 1, '2019-01-27 19:34:59', NULL),
+(36, 'Realizar Novo ep 7', 'Realizar Novo ep 7', 'novoep7@gmail.com', 'novoep7@gmail.com', '$2y$10$d0wDOn9WfLXFmYo33ClLKuM86nGW4UCCzcsDhLJ66UAGeTtWk2a0O', NULL, NULL, NULL, 'familia-22.jpg', NULL, NULL, NULL, 2, 4, 1, '2019-01-27 19:38:30', '2019-01-27 19:41:10'),
+(37, 'Realizar Novo ep 8', 'Realizar Novo ep 8', 'novoep8@gmail.com', 'novoep8@gmail.com', '$2y$10$.VPehMvqpQiUt9GpQNoS3eekLFRrLGJ0MRQ27TPxPg9AWEKVQZauy', NULL, NULL, NULL, '71260232331b19a491dc646a22fa3eee.jpg', NULL, NULL, NULL, 2, 3, 1, '2019-01-27 19:40:29', NULL),
+(43, 'Gerente', 'gerente', 'gerente@gmail.com', 'gerente@gmail.com', '$2y$10$SxHxlE1xBtewUtcQQzzYI.Cd/.cHk..v5k1Ac3Z.n6YK4AW3whFNO', NULL, NULL, NULL, '', NULL, NULL, NULL, 1, 3, 1, '2019-02-02 20:43:18', NULL),
+(44, 'FuncionÃ¡rio', 'FuncionÃ¡rio', 'funcionario@gmail.com', 'funcionario@gmail.com', '$2y$10$h.UGiYzaMMcv3dsuoeqhkOQhT1UJDaiWAaioDe32ImAmDpnvL6QBS', NULL, NULL, NULL, '', 2, 1, '08:00:00', 1, 4, 1, '2019-02-02 20:44:00', NULL),
+(46, 'Cliente', 'Cliente', 'cliente@gmail.com', 'cliente@gmail.com', '$2y$10$gF3l/JRopJiwPvIqRMlIN.qkfeRrAYuSl3uSVWXxE2FSxrkYGvcbq', NULL, NULL, NULL, '', NULL, NULL, NULL, 2, 6, 1, '2019-02-02 20:45:35', NULL);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

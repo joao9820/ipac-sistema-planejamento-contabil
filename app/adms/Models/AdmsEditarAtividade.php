@@ -8,6 +8,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -19,6 +24,7 @@ class AdmsEditarAtividade
     private $Resultado;
     private $Dados;
     private $DadosId;
+    private $DemandaId;
 
     public function getResultado()
     {
@@ -28,7 +34,7 @@ class AdmsEditarAtividade
     public function verAtividade($DadosId)
     {
         $this->DadosId = (int) $DadosId;
-        $verUsuario = new \App\adms\Models\helper\AdmsRead();
+        $verUsuario = new AdmsRead();
         $verUsuario->fullRead("SELECT * 
                         FROM adms_atividades  
                         WHERE id =:id LIMIT :limit",
@@ -37,11 +43,26 @@ class AdmsEditarAtividade
         return $this->Resultado;
     }
 
+    public function listarAtividades($DadosId, $DemandaId)
+    {
+        $this->DadosId = (int) $DadosId;
+        $this->DemandaId = (int) $DemandaId;
+
+        $listar = new AdmsRead();
+        $listar->fullRead("SELECT id, nome 
+                        FROM adms_atividades  
+                        WHERE adms_demanda_id=:adms_demanda_id 
+                        AND id<>:id",
+            "adms_demanda_id={$this->DemandaId}&id={$this->DadosId}");
+        $this->Resultado = $listar->getResultado();
+        return $this->Resultado;
+    }
+
     public function altAtividade(array $Dados)
     {
         $this->Dados = $Dados;
 
-        $valCampos = new \App\adms\Models\helper\AdmsCampoVazio();
+        $valCampos = new AdmsCampoVazio();
         $valCampos->validarDados($this->Dados);
 
         if ($valCampos->getResultado()) {
@@ -60,7 +81,7 @@ class AdmsEditarAtividade
     private function valCampos()
     {
 
-        $valCampoUnico = new \App\adms\Models\helper\AdmsRead();
+        $valCampoUnico = new AdmsRead();
         $valCampoUnico->fullRead("SELECT id 
                         FROM adms_atividades 
                         WHERE id <>:id AND nome =:nome AND adms_demanda_id =:adms_demanda_id LIMIT :limit",
@@ -70,7 +91,7 @@ class AdmsEditarAtividade
 
         if ($valCampoUnico->getResultado()){
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $alertMensagem = new AdmsAlertMensagem();
             $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","Atividade já cadastrada para a demanda selecionada", "danger");
             $this->Resultado = false;
 
@@ -90,20 +111,20 @@ class AdmsEditarAtividade
         $this->Dados['modified'] = date('Y-m-d H:i:s');
 
 
-        $upEditAtividade = new \App\adms\Models\helper\AdmsUpdate();
+        $upEditAtividade = new AdmsUpdate();
 
         $upEditAtividade->exeUpdate("adms_atividades", $this->Dados, "WHERE id =:id", "id={$this->Dados['id']}");
         if ($upEditAtividade->getResultado())
         {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $alertMensagem = new AdmsAlertMensagem();
             $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Atividade atualizada com sucesso", "success");
             $this->Resultado = true;
 
         }
         else {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $alertMensagem = new AdmsAlertMensagem();
             $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","A atividade não foi atualizada", "danger");
             $this->Resultado = false;
 

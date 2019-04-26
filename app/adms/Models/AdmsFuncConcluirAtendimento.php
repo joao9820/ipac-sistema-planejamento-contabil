@@ -7,7 +7,12 @@
  */
 
 namespace App\adms\Models;
-use \DateTime;
+
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+use DateTime;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -17,23 +22,27 @@ class AdmsFuncConcluirAtendimento
 {
     private $DadosId;
     private $Status;
-    private $StatusLog;
     private $Resultado;
-    private $DadosDemandaId;
-    private $DemandaId;
     private $Dados;
-    private $Log;
-    private $DadosLog;
-    private $ResultadoStsIniciado;
-    private $ResultadoDemanda;
     private $ResultadoTempo;
+    private $AtendimentoId;
 
-    public function alterar($DadosId = null, $Status = null)
+    /**
+     * @param null $DadosId
+     * @param null $Status
+     * @throws \Exception
+     */
+    public function alterar($DadosId = null, $Status = null, $AtendimentoId = null)
     {
         $this->DadosId = (int) $DadosId;
         $this->Status = (int) $Status;
+        $this->AtendimentoId = (int) $AtendimentoId;
 
         if ($this->Status == 2){
+
+            $this->Dados['adms_sits_atendimentos_funcionario_id'] = 3;
+            $this->Dados['at_pausado'] = date("Y-m-d H:i:s");
+//$this->Dados['adms_sits_atendimento_id'] = 2;
 
             $this->buscarTempoRestante();
             if (empty($this->ResultadoTempo[0]['at_tempo_excedido'])) {
@@ -91,24 +100,37 @@ class AdmsFuncConcluirAtendimento
 
             }
 
+        } elseif ( $this->Status == 3) {
+            $this->Dados['adms_sits_atendimentos_funcionario_id'] = 2;
+            $this->Dados['at_iniciado'] = date("Y-m-d H:i:s");
+//$this->Dados['adms_sits_atendimento_id'] = 2;
+
+            $alertMensagem = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagem("Atendimento", "retomado");
+
         }
 
         $this->Dados['adms_sits_atendimentos_funcionario_id'] = 4;
         $this->Dados['fim_atendimento'] = date("Y-m-d H:i:s");
         $this->Dados['modified'] = date("Y-m-d H:i:s");
 
-        $upAtendimento = new \App\adms\Models\helper\AdmsUpdate();
-        $upAtendimento->exeUpdate("adms_atendimentos", $this->Dados, "WHERE id =:id", "id={$this->DadosId}");
+        //$this->verificarAtividadesConcluidas();
+        //die;
+
+        $upAtendimento = new AdmsUpdate();
+        $upAtendimento->exeUpdate("adms_atendimento_funcionarios", $this->Dados, "WHERE id =:id", "id={$this->DadosId}");
         if ($upAtendimento->getResultado()){
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $this->verificarAtividadesConcluidas();
+
+            $alertMensagem = new AdmsAlertMensagem();
             $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Atendimento finalizado com sucesso", "success");
             $this->Resultado = true;
 
         }
         else {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
+            $alertMensagem = new AdmsAlertMensagem();
             $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Desculpe! Erro ao finalizar atendimento.", "danger");
             $this->Resultado = false;
 
@@ -120,9 +142,34 @@ class AdmsFuncConcluirAtendimento
     private function buscarTempoRestante()
     {
         $tempoRestante = new \App\adms\Models\helper\AdmsRead();
-        $tempoRestante->fullRead("SELECT at_tempo_restante, at_iniciado, at_tempo_excedido FROM adms_atendimentos 
+        $tempoRestante->fullRead("SELECT at_tempo_restante, at_iniciado, at_tempo_excedido FROM adms_atendimento_funcionarios 
                 WHERE id=:id AND adms_funcionario_id =:adms_funcionario_id", "id={$this->DadosId}&adms_funcionario_id={$_SESSION['usuario_id']}");
         $this->ResultadoTempo = $tempoRestante->getResultado();
+    }
+
+    private function verificarAtividadesConcluidas()
+    {
+        $consultar = new AdmsRead();
+        $consultar->fullRead("SELECT COUNT(id) AS total_atividades,COUNT(CASE WHEN adms_sits_atendimentos_funcionario_id = 4 THEN id END) AS total_atividades_finalizada
+        FROM adms_atendimento_funcionarios
+        WHERE adms_atendimento_id =:adms_atendimento_id","adms_atendimento_id={$this->AtendimentoId}");
+        $resultado_aten = $consultar->getResultado();
+        $total_atividades = $resultado_aten[0]['total_atividades'];
+        $total_atividades_finalizada = $resultado_aten[0]['total_atividades_finalizada'];
+
+        if ($total_atividades == $total_atividades_finalizada){
+            //echo "atendimento finalizado";
+
+            $DadosAten['adms_sits_atendimento_id'] = 3;
+            $DadosAten['fim_atendimento'] = date('Y-m-d H:i:s');
+            $DadosAten['modified'] = date('Y-m-d H:i:s');
+
+            $finalizar_aten = new AdmsUpdate();
+            $finalizar_aten->exeUpdate("adms_atendimentos", $DadosAten,"WHERE id=:id","id={$this->AtendimentoId}");
+            return $finalizar_aten->getResultado();
+
+        }
+
     }
 
 }

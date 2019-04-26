@@ -19,6 +19,17 @@ class AdmsHome
         return $this->Resultado;
     }
 
+    public function verAtendimentos()
+    {
+        $ver = new \App\adms\Models\helper\AdmsRead();
+        $ver->fullRead("SELECT atendi.adms_sits_atendimento_id id_status_aten, situacao.nome, count(atendi.id) as total 
+                        FROM adms_atendimentos atendi
+                        INNER JOIN adms_sits_atendimentos situacao ON situacao.id=atendi.adms_sits_atendimento_id 
+                        GROUP BY atendi.adms_sits_atendimento_id;");
+        $this->Resultado = $ver->getResultado();
+
+        return $this->Resultado;
+    }
 
     public function verTotUser($EmpId)
     {

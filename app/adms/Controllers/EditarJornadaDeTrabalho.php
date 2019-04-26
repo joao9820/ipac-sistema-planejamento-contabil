@@ -43,23 +43,39 @@ class EditarJornadaDeTrabalho
         if (!empty($this->Dados['EditFuncionario']))
         {
 
+
             unset($this->Dados['EditFuncionario']);
 
-            $editFunc = new \App\adms\Models\AdmsEditarJorDeTrab();
-            $editFunc->updateEditFuncionario($this->Dados);
-            if ($editFunc->getResultado())
-            {
+            if (empty($this->Dados['jornada_de_trabalho'])) {
+                unset($this->Dados['jornada_de_trabalho']);
+            }
 
-                //$_SESSION['msg'] = "<div class='alert alert-success'>Funcionário editado com sucesso!</div>";
+            if (empty($this->Dados['adms_departamento_id'])) {
+                unset($this->Dados['adms_departamento_id']);
+            }
+
+            if (empty($this->Dados['adms_departamento_id']) and empty($this->Dados['jornada_de_trabalho']))
+            {
+                $_SESSION['msg'] = "<div class='alert alert-secondary'>Nenhum funcionário atualizado!</div>";
                 $UrlDestino = URLADM .'jornada-de-trabalho/listar';
                 header("Location: $UrlDestino");
+            } else {
 
-            }
-            else {
+                $editFunc = new \App\adms\Models\AdmsEditarJorDeTrab();
+                $editFunc->updateEditFuncionario($this->Dados);
+                if ($editFunc->getResultado()) {
 
-                $this->Dados['form'] = $this->Dados;
+                    //$_SESSION['msg'] = "<div class='alert alert-success'>Funcionário editado com sucesso!</div>";
+                    $UrlDestino = URLADM . 'jornada-de-trabalho/listar';
+                    header("Location: $UrlDestino");
 
-                $this->editFuncionarioViewPriv();
+                } else {
+
+                    $this->Dados['form'] = $this->Dados;
+
+                    $this->editFuncionarioViewPriv();
+
+                }
 
             }
 
