@@ -92,4 +92,22 @@ class Funcoes
         return $valor_resultado;
     }
 
+    /*
+     * Somar time a uma data
+     */
+    function sbtrair_horas_in_hours($HoraMaior, $HoraMenor)
+    {
+        $help = explode(':', $HoraMaior);
+        try {
+            $data = new DateTime(date('H:i', strtotime($HoraMenor)));
+        } catch (\Exception $e) {
+            return $e;
+        }
+        $data->modify('-' . $help[0] . ' hours');
+        $data->modify('-' . $help[1] . ' minutes');
+        $somaHoraInicio = $data->format('H:i');
+        $valor_resultado = date('H:i:s', strtotime($somaHoraInicio));
+        return $valor_resultado;
+    }
+
 }
