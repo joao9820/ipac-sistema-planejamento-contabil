@@ -230,7 +230,8 @@ class AdmsAtendimentoFuncionarios {
                      * mas ultrapassa as 18 horas do dia
                      *
                      */
-
+                    
+                    //Como entra apenas uma vez nessa condição, quando o horário da ultima atividade for maior que a HoraTermino2 o horário da ultima atividade pode ser definido igual a HoraTermino2
                     $help = explode(':', $this->HoraTermino2);
                     $data = new DateTime(date('H:i', strtotime($this->UltimaAtividadeLoop[0]['hora_fim_planejado'])));
                     $data->modify('-' . $help[0] . ' hours');

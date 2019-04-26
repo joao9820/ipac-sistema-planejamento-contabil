@@ -37,12 +37,6 @@ class AdmsAtendimentoFuncionariosApagar {
         $buscarOrdem->buscarUltOrdemAtvFunc($this->FuncId);          
         $ultimaOrdem = (int) $buscarOrdem->getResultado()[0]['ordem']; 
         
-        echo $ultimaOrdem; //OK
-        //die();
-        
-        echo $this->atenFuncId;
-        //die();
-        
         $buscarOrdem->buscarOrdem($this->atenFuncId); //Apenas obtém os dados necessários antes de serem deletados e os atribuem na classe
         $ordemApagada = $buscarOrdem->getResultado();
         
@@ -50,7 +44,7 @@ class AdmsAtendimentoFuncionariosApagar {
         $exFunc->exeDelete("adms_atendimento_funcionarios", "adms_atendimento_id=:adms_atendimento_id AND adms_funcionario_id=:adms_funcionario_id AND adms_atividade_id=:adms_atividade_id", "adms_atendimento_id={$this->AtenId}&adms_funcionario_id={$this->FuncId}&adms_atividade_id={$this->AtivId}");
          
         $this->Resultado = $exFunc->getResultado();
-
+        
         if ($this->Resultado) { //se conseguir apagar verficará se deve reordenenar
             
             if ($ordemApagada < $ultimaOrdem) { //Se não for a ultima ordem, reordena.

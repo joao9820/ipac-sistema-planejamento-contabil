@@ -122,7 +122,7 @@ class AdmsAtendimentoFuncionarioEditar
             $inserirOrdem->inserirOrdemAtvFunc($this->Dados['adms_funcionario_id']);          
             $this->Dados['ordem'] = $inserirOrdem->getResultado(); //Busca a ultima ordem do funcionário e adiciona 1
             
-            $this->moverAtividade();
+            $this->moverAtividade(); //Buscando ordem do antigo funcionario antes de atualizar
             
             // Realizar a atualização da atividade
             $update = new AdmsUpdate();
@@ -283,7 +283,7 @@ class AdmsAtendimentoFuncionarioEditar
         
         $buscarOrdem = new \App\adms\Models\AdmsAtendimentoFuncionariosReordenar();
             
-        $buscarOrdem->buscarUltOrdemAtvFunc($this->Condicao['adms_funcionario_id_ant']);          
+        $buscarOrdem->buscarUltOrdemAtvFunc($this->Condicao['adms_funcionario_id_ant']); //Retorna a ordem e atribui o id do funcinario na classe         
         $this->ultimaOrdem = (int) $buscarOrdem->getResultado()[0]['ordem'];
         
         $buscarOrdem->buscarOrdem($this->Condicao['id_aten_fun']); //Antes de atualizar

@@ -45,7 +45,7 @@ class AdmsAtendimentoFuncionariosReordenar {
         $reordemHoraInicio = $this->horaInicio; //O primeiro inicia pela hora do inicio da atv apagada, porém os outros irão sempre pegar da hora final do anterior
         
         var_dump($resultadoBD);
-        
+        //die();
         echo $reordemHoraInicio;
         //die();
 
@@ -126,7 +126,7 @@ class AdmsAtendimentoFuncionariosReordenar {
             $this->atenFuncId = $aten_func_id;
         }
         
-        echo $this->atenFuncId;
+        //echo $this->atenFuncId;
         
         $listar = new AdmsRead();
 
