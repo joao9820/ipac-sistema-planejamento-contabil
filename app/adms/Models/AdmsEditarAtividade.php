@@ -25,6 +25,7 @@ class AdmsEditarAtividade
     private $Dados;
     private $DadosId;
     private $DemandaId;
+    private $Sucessora;
 
     public function getResultado()
     {
@@ -49,10 +50,11 @@ class AdmsEditarAtividade
         $this->DemandaId = (int) $DemandaId;
 
         $listar = new AdmsRead();
-        $listar->fullRead("SELECT id, nome 
+        $listar->fullRead("SELECT id, nome, atividade_sucessora_id
                         FROM adms_atividades  
                         WHERE adms_demanda_id=:adms_demanda_id 
-                        AND id<>:id",
+                        AND id<>:id 
+                        AND id NOT IN (SELECT atividade_sucessora_id FROM adms_atividades WHERE atividade_sucessora_id <> 'null')",
             "adms_demanda_id={$this->DemandaId}&id={$this->DadosId}");
         $this->Resultado = $listar->getResultado();
         return $this->Resultado;
@@ -110,6 +112,16 @@ class AdmsEditarAtividade
     {
         $this->Dados['modified'] = date('Y-m-d H:i:s');
 
+        $this->verificarSucessora();
+        if ($this->Sucessora){
+            $alertMensagem = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Essa atividade já é sucessora da atividade selecionada. Por tanto não pode ter a mesma como sucessora.", "danger");
+            return $this->Resultado = false;
+
+        } else {
+            echo "não existe continue";
+            //die;
+        }
 
         $upEditAtividade = new AdmsUpdate();
 
@@ -130,6 +142,16 @@ class AdmsEditarAtividade
 
         }
 
+    }
+
+    private function verificarSucessora()
+    {
+        $verif = new AdmsRead();
+        $verif->fullRead("SELECT id 
+                        FROM adms_atividades 
+                        WHERE id=:id AND atividade_sucessora_id =:atividade_editar LIMIT :limit",
+            "id={$this->Dados['atividade_sucessora_id']}&atividade_editar={$this->Dados['id']}&limit=1");
+        $this->Sucessora =$verif->getResultado();
     }
 
 

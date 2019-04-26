@@ -40,7 +40,7 @@ class AdmsVerAtividades
                         antecessora.nome nome_ante
                         FROM adms_atividades ativ 
                         INNER JOIN adms_demandas dmd ON dmd.id=ativ.adms_demanda_id 
-                        LEFT JOIN adms_atividades antecessora ON antecessora.atividade_antecessora_id=ativ.id 
+                        LEFT JOIN adms_atividades antecessora ON antecessora.atividade_sucessora_id=ativ.id 
                         WHERE ativ.adms_demanda_id =:adms_demanda_id 
                         ORDER BY ativ.ordem ASC ", "adms_demanda_id={$this->DadosId}");
         $this->Resultado = $verAtividade->getResultado();

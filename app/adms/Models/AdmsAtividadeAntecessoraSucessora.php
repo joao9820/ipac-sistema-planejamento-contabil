@@ -16,5 +16,7 @@ if (!defined('URL')) {
 
 class AdmsAtividadeAntecessoraSucessora
 {
+
+
     
 }

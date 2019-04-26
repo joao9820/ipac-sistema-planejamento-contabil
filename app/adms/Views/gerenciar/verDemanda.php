@@ -175,6 +175,7 @@ $demanda_id = $id;
 
 
         <?php
+        var_dump($this->Dados['atividades']);
         if (empty($this->Dados['atividades'])) {
             ?>
 
