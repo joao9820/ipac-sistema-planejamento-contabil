@@ -298,6 +298,13 @@ class AdmsAtendimentoFuncionarios {
         AND adms_funcionario_id=:adms_funcionario_id 
         ORDER BY data_inicio_planejado DESC, hora_inicio_planejado DESC LIMIT :limit", "data_inicio_planejado={$this->DataLoop}&adms_funcionario_id={$this->Dados['adms_funcionario_id']}&limit=1");
         if ($dataHora->getResultado()) {
+            /*
+             *  Caso a ultima atividade tenha inicio antes das 12 e finalizada depois das 12
+             * (supondo que o horario de almoço do funcionário comece as 12),
+             * calcular a duração do tempo para almoço que o funicionário tem
+             * e atribuir essa soma na hora_fim_planejado, que servirá como base para
+             * a hora de inicio da próxima atividade
+             */
             $this->UltimaAtividadeLoop = $dataHora->getResultado();
         } else {
             $this->UltimaAtividadeLoop[0]['hora_fim_planejado'] = "08:00:00";
