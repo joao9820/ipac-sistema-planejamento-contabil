@@ -2,8 +2,8 @@
 session_start();
 ob_start();
 
-define('URL', 'http://localhost/ipac-sistema-planejamento-contabil/');
-define('URLADM', 'http://localhost/ipac-sistema-planejamento-contabil/adm/');
+define('URL', 'http://localhost/ipac-poo/');
+define('URLADM', 'http://localhost/ipac-poo/adm/');
 
 define('CONTROLER', 'Home');
 define('METODO', 'index');
