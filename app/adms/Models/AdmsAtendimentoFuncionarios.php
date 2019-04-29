@@ -15,6 +15,7 @@ use App\adms\Models\helper\AdmsCreateRow;
 use App\adms\Models\helper\AdmsDelete;
 use App\adms\Models\helper\AdmsRead;
 use DateTime;
+use App\adms\Models\AdmsVerificarDataFatal;
 
 if (!defined('URL')) {
     header("Location: /");
@@ -105,6 +106,20 @@ class AdmsAtendimentoFuncionarios {
 
     public function registrar($Dados = null) {
         $this->Dados = $Dados;
+
+        /*
+         * Chamando class para verificar se a data fatal pode ser definida para o dia escolhido
+         * Caso a data fatal não possa ser definida para a data escolhida pelo fato do funcionário
+         * já ter muitas atividades e não conseguir realizar mais uma até essa data especifica.
+         */
+        $DataFatalP = new AdmsVerificarDataFatal($this->Dados['adms_funcionario_id'], $this->Dados['data_fatal']);
+        if ($DataFatalP->getPermissaoResult()['status'] == false){
+
+            $alertaMensagem = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alertaMensagem->alertMensagemSimples($DataFatalP->getPermissaoResult()['msg'], "danger");
+            
+            return $this->Resultado = false;
+        }
 
         /*
          * Aqui realizo a chamada para a função que vai verificar se a atividade
