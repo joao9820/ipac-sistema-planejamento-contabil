@@ -52,7 +52,7 @@ extract($this->Dados['jornadaDeTrabalho']);
 
 
     <?php
-        var_dump($this->Dados['planejamento']);
+        //var_dump($this->Dados['planejamento']);
         if($this->Dados['planejamento']){
             extract($this->Dados['planejamento']);
             if (!empty($hora_extra)) {
@@ -231,7 +231,7 @@ extract($this->Dados['jornadaDeTrabalho']);
 
                         <tbody>
                         <?php
-                        var_dump($this->Dados['listarAtendimentos']);
+                        //var_dump($this->Dados['listarAtendimentos']);
                         // Listar atendimentos
                             // Temporario para exibir luz de aviso
                             $contLuz = 0;
@@ -323,9 +323,18 @@ extract($this->Dados['jornadaDeTrabalho']);
                                 ?>
                             </td>
                             <td>
+                                <span class="d-flex flex-column align-items-baseline">
                                 <?php
-                                    echo date('d/m/Y', strtotime($data_inicio_planejado));
+                                    echo "<span>" . date('d/m/Y', strtotime($data_inicio_planejado)) . "</span>";
+                                    if (($hora_inicio_planejado < $hora_termino2) and ($hora_fim_planejado > $hora_termino2)){
+
+                                        $data = new DateTime(date('Y-m-d', strtotime($data_inicio_planejado)));
+                                        $data->modify('+1 day');
+                                        $dia_seguinte = $data->format('d/m/Y');
+                                        echo "<span class='mt-4'>$dia_seguinte</span>";
+                                    }
                                 ?>
+                                </span>
                             </td>
                             <td class="planejamento_i_t d-flex flex-column justify-content-between">
 
@@ -375,7 +384,48 @@ extract($this->Dados['jornadaDeTrabalho']);
                                                     echo date('H:i', strtotime($hora_fim));
                                                 echo '</span>';
                                             echo '</span>';
-                                        } else {
+
+                                        } elseif (($hora_inicio_planejado < $hora_termino2) and ($hora_fim_planejado > $hora_termino2)){
+                                            $valorex = explode(':', $hora_inicio_planejado);
+                                            $data = new DateTime(date('H:i', strtotime($hora_termino2)));
+                                            $data->modify('-' . $valorex[0] . ' hours');
+                                            $data->modify('-' . $valorex[1] . ' minutes');
+                                            $hora_trabex = $data->format('H:i'); // Obtendo o resultado de horas a serem trabalhada antes do fim expediente
+
+                                            $valor2ex = explode(':', $hora_trabex);
+                                            $data = new DateTime(date('H:i', strtotime($duracao_atividade)));
+                                            $data->modify('-' . $valor2ex[0] . ' hours');
+                                            $data->modify('-' . $valor2ex[1] . ' minutes');
+                                            $hora_restex = $data->format('H:i'); // o tempo restante a ser trabalhado na atividade no proximo dia
+
+                                            $valor3ex = explode(':', $hora_restex);
+                                            $data = new DateTime(date('H:i', strtotime($hora_inicio)));
+                                            $data->modify('+' . $valor3ex[0] . ' hours');
+                                            $data->modify('+' . $valor3ex[1] . ' minutes');
+                                            $hora_fimex = $data->format('H:i'); // somar hora de inicio_2 com hora_rest para exibir quando deve concluir a atividade
+
+                                            echo '<span class="d-flex justify-content-between">';
+                                                echo '<span id="horaInicioCp" class="badge badge-secondary">';
+                                                echo date('H:i', strtotime($hora_inicio_planejado));
+                                                echo '</span>';
+                                                echo '<span id="horaTerminoCp" class="badge badge-danger">';
+                                                echo date('H:i', strtotime($hora_termino2));
+                                                echo '</span>';
+                                            echo '</span>';
+                                            // intervalo almoço
+                                            echo "<small class='text-danger'>Fim expediente</small>";
+                                            echo '<span class="d-flex justify-content-between mt-2">';
+                                                echo '<span id="horaInicioCp" class="badge badge-danger">';
+                                                echo date('H:i', strtotime($hora_inicio));
+                                                echo '</span>';
+                                                echo '<span id="horaTerminoCp" class="badge badge-secondary">';
+                                                echo date('H:i', strtotime($hora_fimex));
+                                                echo '</span>';
+                                            echo '</span>';
+
+
+                                        }
+                                        else {
                                         ?>
                                         <span class="d-flex justify-content-between">
                                             <span id="horaInicioCp" class="badge badge-secondary">
