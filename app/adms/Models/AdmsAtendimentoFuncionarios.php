@@ -327,12 +327,12 @@ class AdmsAtendimentoFuncionarios {
         }
     }
     
-<<<<<<< HEAD
+
     public function getBuscarUltimaAtiviFunc(){
         return $this->UltimaAtividade;
     }
-=======
->>>>>>> 2705b23c3c9adfb096de8874cecacf61cb9fa843
+
+
     // Buscar a ultima atividade na data selecionada para o funcionário selecionado
     private function buscarUltimaAtividadeDefineData($DataLoop = null) {
         $this->DataLoop = $DataLoop;
