@@ -145,13 +145,14 @@ class AdmsAtendimentoFuncionarios {
                     $this->horaInicioFunc = $inicioAti->getResultado();
 
                     // Pegar o tempo excedito da atividade do dia anterior e somar com a hora de inicio planejado do juncionario para o proximo dia
+                    
                     if ($this->Dados['data_inicio_planejado'] == date('Y-m-d')){
                         $horaAtual = date('H:i:s');
                         $partes = explode(':', $horaAtual);
                     } else {
                         $partes = explode(':', $this->horaInicioFunc[0]['hora_inicio']);
                     }
-
+                    //Utilizar como função em reordenar para no caso de tempo excedido somar ao inicio da atividade no outro dia
                     $segundosAtividades = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
                     $resultado = $segundosAtividades + $this->TempoExcedido; // Pegando o tempo excedido e somando com a hora de inicio
                     $this->Dados['hora_inicio_planejado'] = gmdate("H:i:s",$resultado);
@@ -277,7 +278,13 @@ class AdmsAtendimentoFuncionarios {
     }
 
     // Buscar a ultima atividade na data selecionada para o funcionário selecionado
-    private function buscarUltimaAtiviFunc() {
+    public function buscarUltimaAtiviFunc($Funcionario = null, $Data = null) {
+        
+        if (!empty($Funcionario) and !empty($Data)){
+            $this->Dados['adms_funcionario_id'] = $Funcionario;
+            $this->Dados['data_inicio_planejado'] = $Data;
+        }
+        
         $dataHora = new AdmsRead();
         $dataHora->fullRead("SELECT hora_fim_planejado 
         FROM adms_atendimento_funcionarios 
@@ -287,6 +294,10 @@ class AdmsAtendimentoFuncionarios {
         if ($dataHora->getResultado()) {
             $this->UltimaAtividade = $dataHora->getResultado();
         }
+    }
+    
+    public function getBuscarUltimaAtiviFunc(){
+        return $this->UltimaAtividade;
     }
     // Buscar a ultima atividade na data selecionada para o funcionário selecionado
     private function buscarUltimaAtividadeDefineData($DataLoop = null) {
@@ -304,8 +315,14 @@ class AdmsAtendimentoFuncionarios {
         }
     }
 
-    // Verificar se já existe atividade registrada para o funcionário na data especificado no registro
-    private function verificarExisteAtividade() {
+    // Verificar se já existe atividade registrada para o funcionário na data especificado no registro --ALTERADO PARA REORDENAR
+    public function verificarExisteAtividade($Funcionario = null, $Data = null) {
+        
+        if (!empty($Funcionario) and !empty($Data)){
+            $this->Dados['adms_funcionario_id'] = $Funcionario;
+            $this->Dados['data_inicio_planejado'] = $Data;
+        }
+        
         $dataHora = new AdmsRead();
         $dataHora->fullRead("SELECT id 
         FROM adms_atendimento_funcionarios 
@@ -315,6 +332,10 @@ class AdmsAtendimentoFuncionarios {
         if ($dataHora->getResultado()) {
             $this->jaExiste = $dataHora->getResultado();
         }
+    }
+    
+    public function getVerificarExisteAtividade(){
+        return $this->jaExiste;
     }
 
     // Verificar se já existe data e hora registrada para outra atividade

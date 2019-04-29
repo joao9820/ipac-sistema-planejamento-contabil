@@ -4,15 +4,16 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/AdmsAtendimentoFuncionariosApagar.php</file>
+            <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/AdmsCadastrarAtendimento.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/atendimento/cadAtendimento.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Controllers/ApagarNivAc.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/atendimento/funcionario/atendimentoPendente.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/pagina/listarPagina.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/AdmsBotao.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/AdmsAtendimentoFuncionariosReordenar.php</file>
-            <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/gerenciar/funcionarios/atendimentoFuncionarios.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/AdmsAtendimentoFuncionarios.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Controllers/CadastrarPagina.php</file>
+            <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Controllers/GerenciarAtendimento.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/pagina/verPagina.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/gerenciar/cadAtividade.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/nivAcesso/verNivAc.php</file>
@@ -20,6 +21,7 @@
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/gerenciar/listarJornadaDeTrabalhoFuncionario.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Controllers/Usuarios.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/helper/AdmsCreateRow.php</file>
+            <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/AdmsListarAtendGerente.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Controllers/Atendimento.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Controllers/ApagarMenu.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/helper/AdmsDelete.php</file>
@@ -45,6 +47,7 @@
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/include/header.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/AdmsEditarPerfil.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Controllers/ApagarGrupoPg.php</file>
+            <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/funcoes/Funcoes.php</file>
         </group>
     </open-files>
 </project-private>

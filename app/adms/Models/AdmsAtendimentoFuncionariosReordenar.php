@@ -11,6 +11,7 @@ namespace App\adms\Models;
 use App\adms\Models\helper\AdmsDelete;
 use App\adms\Models\helper\AdmsRead;
 use DateTime;
+
 /**
  * Description of AdmsAtendimentoFuncionariosReordenar
  *
@@ -26,13 +27,14 @@ class AdmsAtendimentoFuncionariosReordenar {
     private $dataOrdemApagada;
     private $Resultado;
     private $atenFuncId;
-    
+    private $novaData;
+    private $tempoExcedido;
+
     function getResultado() {
         return $this->Resultado;
     }
 
     public function reordenarAtv() {  //Os valores necessários podem vir de outros métodos
-        
         $reordenar = new AdmsRead(); //Encontrará todas as ordens para decrementar 1 a partir de uma condição
 
         $reordenar->fullRead("SELECT ordem FROM adms_atendimento_funcionarios 
@@ -43,7 +45,7 @@ class AdmsAtendimentoFuncionariosReordenar {
         $resultadoBD = $reordenar->getResultado();
 
         $reordemHoraInicio = $this->horaInicio; //O primeiro inicia pela hora do inicio da atv apagada, porém os outros irão sempre pegar da hora final do anterior
-        
+
         var_dump($resultadoBD);
         //die();
         echo $reordemHoraInicio;
@@ -58,22 +60,52 @@ class AdmsAtendimentoFuncionariosReordenar {
 
             $this->ordemAtual = $novaOrdem['ordem'];
 
-
             //Se a data for a mesma altera a ordem e o horário, caso não seja altera so o horário
-            if ($this->buscarDuracaoAtvReordem()[0]['data_inicio_planejado'] == $this->dataOrdemApagada) {
-                $this->DadosOrd['hora_inicio_planejado'] = $reordemHoraInicio;
 
-                $this->atualizarHoraAtv(); //Passa a ordem que está no momento
+            $this->DadosOrd['hora_inicio_planejado'] = $reordemHoraInicio;
 
-                $this->DadosOrd['hora_fim_planejado'] = $this->Dados['hora_fim_planejado'];
+            $this->atualizarHoraAtv(); //Passa a ordem que está no momento
 
-                var_dump($this->DadosOrd);
-                //die();
+            $this->DadosOrd['hora_fim_planejado'] = $this->Dados['hora_fim_planejado'];
 
-                $reordemHoraInicio = $this->DadosOrd['hora_fim_planejado']; //será a hora que vai ser atualizada nesta ordem  
-            } else {
-                unset($this->DadosOrd['hora_inicio_planejado']); //Apaga as posições para não atualizar,fica somente a posição ordem
-                unset($this->DadosOrd['hora_fim_planejado']);
+            var_dump($this->DadosOrd);
+
+            print_r($this->DadosOrd);
+
+             //será a hora que vai ser atualizada nesta ordem    
+
+            $reordemDia = new \App\adms\Models\AdmsAtendimentoFuncionarios();
+            
+            $reordemDia->defineData($this->FuncId, $this->dataOrdemApagada); //Verifica entre outras coisas se a hora da ultima atividade ultrapassou a jornada
+            $this->tempoExcedido = $reordemDia->getDefineData()['tempo_excedido'];
+            $this->novaData = $reordemDia->getDefineData()['data_inicio_planejado'];
+
+            
+        if ($this->novaData != $this->dataOrdemApagada) { //Se sim significa que a data de inicio mudou e consequentemente a hora também
+                
+                $this->DadosOrd['data_inicio_planejado'] = $this->novaData;
+                
+                $reordemDia->verificarExisteAtividade($this->FuncId, $this->novaData); //Verifica se existe atividade pra esse dia
+                
+                if($reordemDia->getVerificarExisteAtividade()){
+                    
+                    $reordemDia->buscarUltimaAtiviFunc($this->FuncId, $this->novaData);
+                    $this->DadosOrd['hora_fim_planejado'] = $reordemDia->getBuscarUltimaAtiviFunc();
+                    
+               
+                    
+                }else{
+                    
+                    
+                    
+                }
+                
+                $reordemHoraInicio = $this->DadosOrd['hora_fim_planejado'];
+            }else{
+                
+                $this->DadosOrd['data_inicio_planejado'] = $this->dataOrdemApagada;
+                $reordemHoraInicio = $this->DadosOrd['hora_fim_planejado'];
+                
             }
 
             //Obs: A coluna terá um apelido gerado como ordem (posição do array) portanto o link referente a outro valor não pode ter nome igual
@@ -81,6 +113,7 @@ class AdmsAtendimentoFuncionariosReordenar {
             $updateOrdem->exeUpdate("adms_atendimento_funcionarios", $this->DadosOrd, "WHERE adms_funcionario_id = :adms_funcionario_id AND ordem = :novaOrdem", "adms_funcionario_id={$this->FuncId}&novaOrdem={$novaOrdem['ordem']}");
         }
 
+        //die();
         echo 'Print_r: <br/>';
         print_r($this->DadosOrd);
 
@@ -120,63 +153,60 @@ class AdmsAtendimentoFuncionariosReordenar {
     }
 
     public function buscarOrdem($aten_func_id = NULL) { //Busca a ordem que está sendo apagada ou em relação ao id, atualizada
-        
-        if(!empty($aten_func_id)){
-            
+        if (!empty($aten_func_id)) {
+
             $this->atenFuncId = $aten_func_id;
         }
-        
+
         //echo $this->atenFuncId;
-        
+
         $listar = new AdmsRead();
 
         //Busca a ordem da atividade a ser apagada
         $listar->fullRead("SELECT hora_inicio_planejado, ordem, data_inicio_planejado FROM adms_atendimento_funcionarios
-                WHERE id = :id", 
-                "id={$this->atenFuncId}");
+                WHERE id = :id", "id={$this->atenFuncId}");
 
         $ordem = $listar->getResultado();
-        
+
         $ordemApagada = (int) $ordem[0]['ordem'];
         $horaInicioOrdemApagada = $ordem[0]['hora_inicio_planejado'];
 
         $this->ordem = $ordemApagada;
         $this->horaInicio = $horaInicioOrdemApagada;
         $this->dataOrdemApagada = $ordem[0]['data_inicio_planejado'];
-        
-        $this->Resultado = $this->ordem;     
-        
+
+        $this->Resultado = $this->ordem;
+
         var_dump($ordem);
         //die();
     }
-    
+
     public function buscarUltOrdemAtvFunc($id_func = NULL) {
-        
-        if(!empty($id_func)){ //Pelo apagar passa o id pois não chama o inserirOrdem apenas busca inserir a ordem
-            $this->FuncId = $id_func;        
+
+        if (!empty($id_func)) { //Pelo apagar passa o id pois não chama o inserirOrdem apenas busca inserir a ordem
+            $this->FuncId = $id_func;
         }
-        
+
         $ordemAtv = new AdmsRead();
         $ordemAtv->fullRead("SELECT MAX(ordem) as ordem
         FROM adms_atendimento_funcionarios 
         WHERE adms_funcionario_id=:adms_funcionario_id LIMIT :limit", "adms_funcionario_id={$this->FuncId}&limit=1");
-       
+
         $this->Resultado = $ordemAtv->getResultado();
     }
-    
+
     public function inserirOrdemAtvFunc($id_func) {
-        
-        $this->FuncId = $id_func; 
-       
+
+        $this->FuncId = $id_func;
+
         $this->buscarUltOrdemAtvFunc();
-         
+
         if ($this->Resultado != NULL) {
 
             $ordem = $this->Resultado;
             //var_dump($ordem[0]['ordem']);
 
             $this->Resultado = (int) $ordem[0]['ordem'] + 1; //Resultado desta função
-            
         } else {
             $this->Resultado = 1;
         }
