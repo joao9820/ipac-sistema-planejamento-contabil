@@ -45,6 +45,8 @@ class AdmsAtendimentoFuncionarios {
     private $HoraTermino2;
     private $DataLoop;
     private $UltimaAtividadeLoop;
+    private $HoraInicio2;
+    private $HoraTermino;
 
     /**
      * @return mixed
@@ -150,6 +152,9 @@ class AdmsAtendimentoFuncionarios {
                         $horaAtual = date('H:i:s');
                         $partes = explode(':', $horaAtual);
                     } else {
+                        /*
+                         * Somar com hora de almoço aqui
+                         */
                         $partes = explode(':', $this->horaInicioFunc[0]['hora_inicio']);
                     }
                     //Utilizar como função em reordenar para no caso de tempo excedido somar ao inicio da atividade no outro dia
@@ -286,30 +291,87 @@ class AdmsAtendimentoFuncionarios {
         }
         
         $dataHora = new AdmsRead();
-        $dataHora->fullRead("SELECT hora_fim_planejado 
+        $dataHora->fullRead("SELECT hora_fim_planejado, hora_inicio_planejado
         FROM adms_atendimento_funcionarios 
         WHERE data_inicio_planejado=:data_inicio_planejado
         AND adms_funcionario_id=:adms_funcionario_id 
         ORDER BY data_inicio_planejado DESC, hora_inicio_planejado DESC LIMIT :limit", "data_inicio_planejado={$this->Dados['data_inicio_planejado']}&adms_funcionario_id={$this->Dados['adms_funcionario_id']}&limit=1");
         if ($dataHora->getResultado()) {
-            $this->UltimaAtividade = $dataHora->getResultado();
+
+            $compara_hora_fim = $dataHora->getResultado()[0]['hora_fim_planejado'];
+            $compara_hora_inicio = $dataHora->getResultado()[0]['hora_inicio_planejado'];
+
+            if (($compara_hora_inicio < $this->HoraTermino) and ($compara_hora_fim > $this->HoraTermino)) {
+                /*
+                 * Aqui vai somar a $Duracao_almoco com $this->UltimaAtividadeLoop[0]['hora_fim_planejado']
+                 *
+                 * Atenção, quase pronto, mas falta testar. ta dando erro
+                 */
+                $this->UltimaAtividade = $dataHora->getResultado();
+
+                $diferencaHoras = new Funcoes();
+                $Duracao_almoco = $diferencaHoras->sbtrair_horas_in_hours($this->HoraInicio2, $this->HoraTermino);
+
+                //echo $Duracao_almoco;
+                $this->UltimaAtividade[0]['hora_fim_planejado'] = $diferencaHoras->somar_time_in_hours($Duracao_almoco, $this->UltimaAtividade[0]['hora_fim_planejado']);
+
+
+            } else {
+                $this->UltimaAtividade = $dataHora->getResultado();
+            }
+            /*
+            var_dump($this->UltimaAtividade);
+            echo $this->UltimaAtividade[0]['hora_fim_planejado'];
+            die;
+            */
         }
     }
     
+<<<<<<< HEAD
     public function getBuscarUltimaAtiviFunc(){
         return $this->UltimaAtividade;
     }
+=======
+>>>>>>> 2705b23c3c9adfb096de8874cecacf61cb9fa843
     // Buscar a ultima atividade na data selecionada para o funcionário selecionado
     private function buscarUltimaAtividadeDefineData($DataLoop = null) {
         $this->DataLoop = $DataLoop;
         $dataHora = new AdmsRead();
-        $dataHora->fullRead("SELECT hora_fim_planejado 
+        $dataHora->fullRead("SELECT hora_fim_planejado, hora_inicio_planejado
         FROM adms_atendimento_funcionarios 
         WHERE data_inicio_planejado=:data_inicio_planejado
         AND adms_funcionario_id=:adms_funcionario_id 
         ORDER BY data_inicio_planejado DESC, hora_inicio_planejado DESC LIMIT :limit", "data_inicio_planejado={$this->DataLoop}&adms_funcionario_id={$this->Dados['adms_funcionario_id']}&limit=1");
         if ($dataHora->getResultado()) {
-            $this->UltimaAtividadeLoop = $dataHora->getResultado();
+            /*
+             *  Caso a ultima atividade tenha inicio antes das 12 e finalizada depois das 12
+             * (supondo que o horario de almoço do funcionário comece as 12),
+             * calcular a duração do tempo para almoço que o funicionário tem
+             * e atribuir essa soma na hora_fim_planejado, que servirá como base para
+             * a hora de inicio da próxima atividade
+             *
+             * $this->HoraInicio2 - $this->HoraTermino
+             */
+
+            $diferencaHoras = new Funcoes();
+            $Duracao_almoco = $diferencaHoras->sbtrair_horas_in_hours($this->HoraInicio2, $this->HoraTermino);
+            $hora_fim_ultima_ativ = $this->UltimaAtividadeLoop[0]['hora_fim_planejado'];
+            $hora_inicio_ultima_ativ = $this->UltimaAtividadeLoop[0]['hora_inicio_planejado'];
+            if (($hora_inicio_ultima_ativ < $this->HoraTermino) and ($hora_fim_ultima_ativ > $this->HoraTermino)) {
+                /*
+                 * Aqui vai somar a $Duracao_almoco com $this->UltimaAtividadeLoop[0]['hora_fim_planejado']
+                 *
+                 * Atenção, quase pronto, mas falta testar. ta dando erro
+                 */
+
+                $this->UltimaAtividadeLoop[0]['hora_fim_planejado'] = $diferencaHoras->somar_time_in_hours($Duracao_almoco, $this->UltimaAtividadeLoop[0]['hora_fim_planejado']);
+            } else {
+                $this->UltimaAtividadeLoop = $dataHora->getResultado();
+            }
+            //var_dump($this->UltimaAtividadeLoop);
+            //die;
+
+            //$this->UltimaAtividadeLoop = $dataHora->getResultado();
         } else {
             $this->UltimaAtividadeLoop[0]['hora_fim_planejado'] = "08:00:00";
         }
@@ -476,7 +538,8 @@ class AdmsAtendimentoFuncionarios {
 
         if ($this->HoraExtra) { //Soma as horas extras para aquele dia do funcionario e o resultado é somado com sua jornada normal
             $jornadaDia->fullRead("
-                SELECT TIME_TO_SEC(planejamento.jornada_trabalho) + SUM(TIME_TO_SEC(hora_extra.total)) as total, planejamento.hora_termino2 
+                SELECT TIME_TO_SEC(planejamento.jornada_trabalho) + SUM(TIME_TO_SEC(hora_extra.total)) as total, planejamento.hora_termino2, 
+                       planejamento.hora_inicio2, planejamento.hora_termino
                 FROM adms_hora_extra hora_extra 
                 INNER JOIN adms_planejamento planejamento 
                 ON hora_extra.adms_usuario_id = planejamento.adms_funcionario_id
@@ -485,7 +548,8 @@ class AdmsAtendimentoFuncionarios {
             );
         } else { //Traz apenas a jornada normal do funcionário cadastrado
             $jornadaDia->fullRead("
-                SELECT TIME_TO_SEC(planejamento.jornada_trabalho) as total, planejamento.hora_termino2 
+                SELECT TIME_TO_SEC(planejamento.jornada_trabalho) as total, planejamento.hora_termino2 , 
+                       planejamento.hora_inicio2, planejamento.hora_termino
                 FROM adms_planejamento planejamento
                 WHERE adms_funcionario_id = :funcionario
                 GROUP BY planejamento.hora_termino2", "funcionario={$this->Dados['adms_funcionario_id']}"
@@ -493,6 +557,8 @@ class AdmsAtendimentoFuncionarios {
         }
         $this->JornadaFunc = $jornadaDia->getResultado();
         $this->HoraTermino2 = $jornadaDia->getResultado()[0]['hora_termino2'];
+        $this->HoraInicio2 = $jornadaDia->getResultado()[0]['hora_inicio2'];
+        $this->HoraTermino = $jornadaDia->getResultado()[0]['hora_termino'];
         $jornada = $jornadaDia->getResultado(); //obtém o resultado da jornada do if ou do else
         return $jornada;
     }
