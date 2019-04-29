@@ -92,7 +92,7 @@ class AdmsAtendimentoFuncionariosReordenar {
                     $reordemDia->buscarUltimaAtiviFunc($this->FuncId, $this->novaData);
                     $this->DadosOrd['hora_fim_planejado'] = $reordemDia->getBuscarUltimaAtiviFunc();
                     
-               
+               //fsadaees
                     
                 }else{
                     
