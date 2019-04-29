@@ -9,6 +9,9 @@
 namespace App\adms\Models;
 
 
+use App\adms\Models\funcoes\BuscarDuracaoAtividades;
+use App\adms\Models\funcoes\BuscarDuracaoJornadaT;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -23,7 +26,7 @@ class AdmsVerificarDataFatal
     public function __construct($Funcionario_id, $DataFatal)
     {
         $this->Funcionario_id = (int) $Funcionario_id;
-        $this->DataFatal = (int) $DataFatal;
+        $this->DataFatal = date('Y-m-d',strtotime($DataFatal));
 
         $this->verificar();
     }
@@ -45,6 +48,26 @@ class AdmsVerificarDataFatal
     private function verificar()
     {
 
+        // buscando a duração das atividades
+        $buscar_duracao_ati = new BuscarDuracaoAtividades($this->Funcionario_id, $this->DataFatal);
+        if ($buscar_duracao_ati->getDuracaoAtividade()['status']){
+            $duracao_ativ_do_dia = (int)$buscar_duracao_ati->getDuracaoAtividade()['duracao_atividade_sc'];
+        } else {
+            $duracao_ativ_do_dia = 0;
+        }
+
+        // buscar jornada de trabalho
+        $buscar_jornada = new BuscarDuracaoJornadaT($this->Funcionario_id, $this->DataFatal);
+        if ($buscar_jornada->getDuracaoJornada()['status']){
+            $duracao_jornada = (int)$buscar_jornada->getDuracaoJornada()['total'];
+        } else {
+            $duracao_jornada = 0;
+        }
+
+
+        echo $duracao_ativ_do_dia ."<br>";
+        echo $duracao_jornada;
+        die;
         // Definindo o status e msg
         $this->PermissaoResult['status'] = true;
         $this->PermissaoResult['msg'] = "Ok";
