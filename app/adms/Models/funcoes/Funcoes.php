@@ -81,14 +81,15 @@ class Funcoes
     {
         $help = explode(':', $Duracao);
         try {
-            $data = new DateTime(date('H:i', strtotime($Hora)));
+            $data = new DateTime(date('H:i:s', strtotime($Hora)));
         } catch (\Exception $e) {
             return $e;
         }
         $data->modify('+' . $help[0] . ' hours');
         $data->modify('+' . $help[1] . ' minutes');
-        $somaHoraInicio = $data->format('H:i');
+        $somaHoraInicio = $data->format('H:i:s');
         $valor_resultado = date('H:i:s', strtotime($somaHoraInicio));
+
         return $valor_resultado;
     }
 
@@ -97,16 +98,17 @@ class Funcoes
      */
     function sbtrair_horas_in_hours($HoraMaior, $HoraMenor)
     {
-        $help = explode(':', $HoraMaior);
+        $help = explode(':', $HoraMenor);
         try {
-            $data = new DateTime(date('H:i', strtotime($HoraMenor)));
+            $data = new DateTime(date('H:i:s', strtotime($HoraMaior)));
         } catch (\Exception $e) {
             return $e;
         }
         $data->modify('-' . $help[0] . ' hours');
         $data->modify('-' . $help[1] . ' minutes');
-        $somaHoraInicio = $data->format('H:i');
+        $somaHoraInicio = $data->format('H:i:s');
         $valor_resultado = date('H:i:s', strtotime($somaHoraInicio));
+
         return $valor_resultado;
     }
 

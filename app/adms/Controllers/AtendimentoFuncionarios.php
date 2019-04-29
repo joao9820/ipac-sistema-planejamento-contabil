@@ -175,13 +175,13 @@ class AtendimentoFuncionarios
 
         if ($resultado) {
             $alertaMensagem = new AdmsAlertMensagem();
-            
+
             /*
             var_dump($resultado);
             var_dump($resultadoJornada);
             die();
             */
-            
+
             if($resultadoJornada['status']){ //Se for true inseriu e ainda não ultrapassou a jornada do funcionário 
                 $_SESSION['msg'] = $alertaMensagem->alertMensagemSimples("Registrado com sucesso", "success");
             }else{

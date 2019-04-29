@@ -151,6 +151,9 @@ class AdmsAtendimentoFuncionarios {
                         $horaAtual = date('H:i:s');
                         $partes = explode(':', $horaAtual);
                     } else {
+                        /*
+                         * Somar com hora de almoço aqui
+                         */
                         $partes = explode(':', $this->horaInicioFunc[0]['hora_inicio']);
                     }
 
@@ -281,15 +284,42 @@ class AdmsAtendimentoFuncionarios {
     // Buscar a ultima atividade na data selecionada para o funcionário selecionado
     private function buscarUltimaAtiviFunc() {
         $dataHora = new AdmsRead();
-        $dataHora->fullRead("SELECT hora_fim_planejado 
+        $dataHora->fullRead("SELECT hora_fim_planejado, hora_inicio_planejado
         FROM adms_atendimento_funcionarios 
         WHERE data_inicio_planejado=:data_inicio_planejado
         AND adms_funcionario_id=:adms_funcionario_id 
         ORDER BY data_inicio_planejado DESC, hora_inicio_planejado DESC LIMIT :limit", "data_inicio_planejado={$this->Dados['data_inicio_planejado']}&adms_funcionario_id={$this->Dados['adms_funcionario_id']}&limit=1");
         if ($dataHora->getResultado()) {
-            $this->UltimaAtividade = $dataHora->getResultado();
+
+            $compara_hora_fim = $dataHora->getResultado()[0]['hora_fim_planejado'];
+            $compara_hora_inicio = $dataHora->getResultado()[0]['hora_inicio_planejado'];
+
+            if (($compara_hora_inicio < $this->HoraTermino) and ($compara_hora_fim > $this->HoraTermino)) {
+                /*
+                 * Aqui vai somar a $Duracao_almoco com $this->UltimaAtividadeLoop[0]['hora_fim_planejado']
+                 *
+                 * Atenção, quase pronto, mas falta testar. ta dando erro
+                 */
+                $this->UltimaAtividade = $dataHora->getResultado();
+
+                $diferencaHoras = new Funcoes();
+                $Duracao_almoco = $diferencaHoras->sbtrair_horas_in_hours($this->HoraInicio2, $this->HoraTermino);
+
+                //echo $Duracao_almoco;
+                $this->UltimaAtividade[0]['hora_fim_planejado'] = $diferencaHoras->somar_time_in_hours($Duracao_almoco, $this->UltimaAtividade[0]['hora_fim_planejado']);
+
+
+            } else {
+                $this->UltimaAtividade = $dataHora->getResultado();
+            }
+            /*
+            var_dump($this->UltimaAtividade);
+            echo $this->UltimaAtividade[0]['hora_fim_planejado'];
+            die;
+            */
         }
     }
+    
     // Buscar a ultima atividade na data selecionada para o funcionário selecionado
     private function buscarUltimaAtividadeDefineData($DataLoop = null) {
         $this->DataLoop = $DataLoop;
@@ -309,24 +339,26 @@ class AdmsAtendimentoFuncionarios {
              *
              * $this->HoraInicio2 - $this->HoraTermino
              */
-            /*
+
             $diferencaHoras = new Funcoes();
             $Duracao_almoco = $diferencaHoras->sbtrair_horas_in_hours($this->HoraInicio2, $this->HoraTermino);
-            if ($this->UltimaAtividadeLoop[0]['hora_fim_planejado'] < $this->HoraInicio2) {
-                $this->UltimaAtividadeLoop = $dataHora->getResultado();
-            } else {
+            $hora_fim_ultima_ativ = $this->UltimaAtividadeLoop[0]['hora_fim_planejado'];
+            $hora_inicio_ultima_ativ = $this->UltimaAtividadeLoop[0]['hora_inicio_planejado'];
+            if (($hora_inicio_ultima_ativ < $this->HoraTermino) and ($hora_fim_ultima_ativ > $this->HoraTermino)) {
                 /*
                  * Aqui vai somar a $Duracao_almoco com $this->UltimaAtividadeLoop[0]['hora_fim_planejado']
                  *
                  * Atenção, quase pronto, mas falta testar. ta dando erro
                  */
-            /*
-                $this->UltimaAtividadeLoop[0]['hora_fim_planejado'] = $diferencaHoras->somar_time_in_hours($Duracao_almoco, $this->UltimaAtividadeLoop[0]['hora_fim_planejado']);
-                //die;
-            }
-            */
 
-            $this->UltimaAtividadeLoop = $dataHora->getResultado();
+                $this->UltimaAtividadeLoop[0]['hora_fim_planejado'] = $diferencaHoras->somar_time_in_hours($Duracao_almoco, $this->UltimaAtividadeLoop[0]['hora_fim_planejado']);
+            } else {
+                $this->UltimaAtividadeLoop = $dataHora->getResultado();
+            }
+            //var_dump($this->UltimaAtividadeLoop);
+            //die;
+
+            //$this->UltimaAtividadeLoop = $dataHora->getResultado();
         } else {
             $this->UltimaAtividadeLoop[0]['hora_fim_planejado'] = "08:00:00";
         }
