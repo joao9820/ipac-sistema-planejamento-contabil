@@ -231,7 +231,7 @@ extract($this->Dados['jornadaDeTrabalho']);
 
                         <tbody>
                         <?php
-                        //var_dump($this->Dados['listarAtendimentos']);
+                        var_dump($this->Dados['listarAtendimentos']);
                         // Listar atendimentos
                             // Temporario para exibir luz de aviso
                             $contLuz = 0;
@@ -539,7 +539,7 @@ extract($this->Dados['jornadaDeTrabalho']);
 
                     <?php
 
-                    //echo $this->Dados['paginacao'];
+                    echo $this->Dados['paginacao'];
 
                     ?>
 

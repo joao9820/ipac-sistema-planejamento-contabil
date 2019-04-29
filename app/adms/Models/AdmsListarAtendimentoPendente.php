@@ -47,7 +47,7 @@ class AdmsListarAtendimentoPendente
     public function listarAtendimento($PageId = null)
     {
         $this->PageId = (int) $PageId;
-        $paginacao = new AdmsPaginacao(URLADM . 'atendimento-pendente/listar');
+        $paginacao = new AdmsPaginacao(URLADM . 'atendimentos/listar');
         $paginacao->condicao($this->PageId, $this->LimiteResultado);
         $paginacao->paginacao("SELECT COUNT(aten.id) AS num_result
                      FROM adms_atendimento_funcionarios aten
