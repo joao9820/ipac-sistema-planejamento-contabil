@@ -24,18 +24,6 @@ if (!defined('URL')) {
     <div class="list-group-item">
         <div class="d-flex">
             <div class="mr-auto p-2">
-                <h2 class="display-4 titulo">Atendimento - <?php
-                    $id = $_GET['aten'];
-                    if ($id < 10){
-                        echo "000".$id;
-                    } elseif ($id < 100){
-                        echo "00".$id;
-                    } elseif ($id < 100){
-                        echo "0".$id;
-                    } else {
-                        echo $id;
-                    }
-                    ?></h2>
                 <span class="d-block">
                     <a href="<?php echo URLADM . 'gerenciar-atendimento/listar/1'; ?>" class="btn btn-outline-primary btn-sm"><i class="fas fa-arrow-left"></i> Voltar</a>
                 </span>
@@ -53,7 +41,18 @@ if (!defined('URL')) {
     </div>
     <div class="list-group-item border mx-4 mb-4 p-0 rounded">
         <div id="headerDescricaoPg" class="bg-primary">
-            <h3 class="">Atendimento</h3>
+            <h3 class="">Atendimento: <?php
+                $id = $_GET['aten'];
+                if ($id < 10){
+                    echo "000".$id;
+                } elseif ($id < 100){
+                    echo "00".$id;
+                } elseif ($id < 100){
+                    echo "0".$id;
+                } else {
+                    echo $id;
+                }
+                ?></h3>
         </div>
 
         <div class="list-group-item">
@@ -245,12 +244,13 @@ if (!defined('URL')) {
                 </div>
 
                 <div class="col-md-5">
-                    <div class="card border-light mb-3" style="">
-                        <div class="card-header text-primary">Adicionar funcionário no atendimento</div>
+                    <div class="card border-light shadow mb-3" style="">
+                        <div class="card-header text-primary"><i class="fas fa-user-plus"></i> Adicionar funcionário ao atendimento</div>
                         <div class="card-body">
                             <?php
                                 if (empty($this->Dados['atividades'])){
-                                    echo '<h5 class="card-title text-secondary bg-light p-4 rounded">Nenhuma atividade disponível. Já foram todas selecionadas</h5>';
+                                    echo '<h5 class="card-title text-secondary bg-light p-4 rounded text-center"><i class="fas fa-exclamation-circle fa-3x" style="color: #cecece;"></i>
+                                            <br>Nenhuma atividade disponível. Já foram todas selecionadas</h5>';
                                 } else {
                             ?>
 
@@ -263,57 +263,81 @@ if (!defined('URL')) {
 
 
                                 <div class="form-row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="validationCustom01">Funcionário</label>
-                                        <select name="adms_funcionario_id" class="custom-select mr-sm-2" id="validationCustom01" required>
-                                            <option value="">Selecionar</option>
-                                            <?php
+                                    <div class="col-md-12">
+                                        <label for="inputForm">Funcionário</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-funcionario">
+                                                    <i class="fas fa-user-tie"></i>
+                                                </span>
+                                            </div>
+                                            <select name="adms_funcionario_id" class="custom-select mr-sm-2" id="inputForm" aria-describedby="basic-funcionario" required>
+                                                <option value="">Selecionar</option>
+                                                <?php
                                                 foreach ($this->Dados['funcionarios'] as $func){
                                                     extract($func);
                                                     echo "<option value=".$id.">$nome</option>";
                                                 }
-                                            ?>
-                                        </select>
-                                        <div class="valid-feedback">
-                                            Ok
-                                        </div>
-                                        <div class="invalid-feedback">
-                                            Selecione um funcionário
+                                                ?>
+                                            </select>
+                                            <div class="valid-feedback">
+                                                Ok
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Selecione um funcionário
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6 mb-3">
-                                        <label for="validationCustom01">Atividade</label>
-                                        <select name="adms_atividade_id" class="custom-select mr-sm-2" id="validationCustom01" required>
-                                            <option value="">Selecionar</option>
-                                            <?php
+                                    <div class="col-md-6">
+                                        <label for="inputFormAtividade">Atividade</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-atividade">
+                                                    <i class="fas fa-tasks"></i>
+                                                </span>
+                                            </div>
+                                            <select name="adms_atividade_id" class="custom-select mr-sm-2" id="inputFormAtividade" aria-describedby="basic-atividade" required>
+                                                <option value="">Selecionar</option>
+                                                <?php
                                                 foreach ($this->Dados['atividades'] as $ativi){
                                                     extract($ativi);
                                                     echo "<option value=".$id.">$nome</option>";
                                                 }
-                                            ?>
-                                        </select>
-                                        <div class="valid-feedback">
-                                            Ok
-                                        </div>
-                                        <div class="invalid-feedback">
-                                            Selecione uma atividade.
+                                                ?>
+                                            </select>
+                                            <div class="valid-feedback">
+                                                Ok
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Selecione uma atividade.
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6 mb-3">
-                                        <label for="validationCustom03">Data Fatal</label>
-                                        <input type="date" name="data_fatal" pattern="[0-9]{2}\/[0-9]{2}\/[0-9]{4}$" min="<?php echo date('Y-m-d');?>" id="validationCustom03" class="custom-select mr-sm-2" required>
-                                        <div class="valid-feedback">
-                                            Ok
-                                        </div>
-                                        <div class="invalid-feedback">
-                                            Defina a data fatal da atividade
+                                    <div class="col-md-6">
+                                        <label for="inputFormFatal">Data Fatal</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-fatal">
+                                                    <i class="fas fa-calendar-alt"></i>
+                                                </span>
+                                            </div>
+                                            <input type="date" name="data_fatal" pattern="[0-9]{2}\/[0-9]{2}\/[0-9]{4}$" min="<?php echo date('Y-m-d');?>" id="inputFormFatal" class="custom-select mr-sm-2" aria-describedby="basic-fatal" required>
+                                            <div class="valid-feedback">
+                                                Ok
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Defina a data fatal da atividade
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 mb-3 d-flex align-items-end ">
+
+
+
+                                    <div class="col-md-12 mt-3 d-flex align-items-end ">
                                         <input type="hidden" name="Registrar" value="Registrar">
-                                        <button class="btn btn-success btn-block d-block ml-auto" type="submit">Registrar</button>
+                                        <button class="btn btn-success" type="submit">Registrar</button>
                                     </div>
 
                                 </div>

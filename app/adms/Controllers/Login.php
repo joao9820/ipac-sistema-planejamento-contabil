@@ -26,8 +26,17 @@ class Login
             $visualLogin = new \App\adms\Models\AdmsLogin();
             $visualLogin->acesso($this->Dados);
             if($visualLogin->getResultado()){
-                $UrlDestino = URLADM . 'home/index';
-                header("Location: $UrlDestino");
+
+                if ($_SESSION['adms_niveis_acesso_id'] == 4){
+                    $UrlDestino = URLADM . 'atendimentos/listar';
+                    header("Location: $UrlDestino");
+                } elseif ($_SESSION['adms_niveis_acesso_id'] <= 3){
+                    $UrlDestino = URLADM . 'gerenciar-atendimento/listar';
+                    header("Location: $UrlDestino");
+                }else {
+                    $UrlDestino = URLADM . 'home/index';
+                    header("Location: $UrlDestino");
+                }
             }else{
                 $this->Dados['form'] = $this->Dados;
             }
