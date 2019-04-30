@@ -34,11 +34,7 @@ class AtendimentoFuncionarios
     {
 
         $this->DadosForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-        
-        /*
-        var_dump($this->DadosForm);
-        die();
-        */
+
         $atenId = $this->DadosForm['adms_atendimento_id'];
         $demandaId = $this->DadosForm['adms_demanda_id'];
        
@@ -53,7 +49,7 @@ class AtendimentoFuncionarios
                 //$this->data = date('d-m-Y', strtotime($this->DadosForm['data_inicio_planejado'])); //Necessário para inserir na sessão (convertendo o formato de exibição)
                 
                 // condição caso registre está dentro do método abaixo
-                $this->mensagemAlerta($registrar->getResultado(), $registrar->comparaJornada());
+                //$this->mensagemAlerta($registrar->getResultado(), $registrar->comparaJornada());
             
             }
 

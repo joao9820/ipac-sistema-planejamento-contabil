@@ -94,7 +94,7 @@ class Funcoes
     }
 
     /*
-     * Somar time a uma data
+     * Somar time a time
      */
     function sbtrair_horas_in_hours($HoraMaior, $HoraMenor)
     {
@@ -108,6 +108,27 @@ class Funcoes
         $data->modify('-' . $help[1] . ' minutes');
         $somaHoraInicio = $data->format('H:i:s');
         $valor_resultado = date('H:i:s', strtotime($somaHoraInicio));
+
+        return $valor_resultado;
+    }
+
+    /*
+     * Somar ou subtrair dias em uma data
+     */
+    function dia_in_data($Data, $Dias, $Operador = "+")
+    {
+        $Data = date('Y-m-d', strtotime($Data));
+        $Dias = (int) $Dias;
+        $Operador = (string) $Operador;
+
+        try {
+            $data = new DateTime(date('Y-m-d', strtotime($Data)));
+        } catch (\Exception $e) {
+            return $e;
+        }
+        $data->modify($Operador . $Dias . ' days');
+        $valor = $data->format('Y-m-d');
+        $valor_resultado = date('Y-m-d', strtotime($valor));
 
         return $valor_resultado;
     }

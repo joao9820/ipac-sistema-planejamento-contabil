@@ -15,6 +15,7 @@ use App\adms\Models\helper\AdmsCreateRow;
 use App\adms\Models\helper\AdmsDelete;
 use App\adms\Models\helper\AdmsRead;
 use DateTime;
+use App\adms\Models\AdmsVerificarDataFatal;
 
 if (!defined('URL')) {
     header("Location: /");
@@ -82,7 +83,7 @@ class AdmsAtendimentoFuncionarios {
         $this->Atendimento = (int) $Atendimento;
         $listar = new AdmsRead();
         $listar->fullRead("SELECT aten_fun.id id_aten_fun,aten_fun.duracao_atividade, aten_fun.data_fatal, aten_fun.ordem_atividade, aten_fun.adms_sits_atendimentos_funcionario_id sit_func,
-                                    aten_fun.adms_atendimento_id aten_id, aten_fun.adms_funcionario_id func_id, aten_fun.adms_atividade_id ativ_id, aten_fun.adms_demanda_id dema_id, aten_fun.fim_atendimento,
+                                    aten_fun.adms_atendimento_id aten_id, aten_fun.adms_funcionario_id func_id, aten_fun.adms_atividade_id ativ_id, aten_fun.adms_demanda_id dema_id,aten_fun.inicio_atendimento, aten_fun.fim_atendimento,
                                     aten_fun.data_inicio_planejado, aten_fun.hora_inicio_planejado,
                                     sits_func.nome status, 
                                     funcionario.nome, 
@@ -105,6 +106,27 @@ class AdmsAtendimentoFuncionarios {
 
     public function registrar($Dados = null) {
         $this->Dados = $Dados;
+
+        /*
+         * Chamando class para verificar se a data fatal pode ser definida para o dia escolhido
+         * Caso a data fatal não possa ser definida para a data escolhida pelo fato do funcionário
+         * já ter muitas atividades e não conseguir realizar mais uma até essa data especifica.
+         */
+        do {
+            $DataFatalP = new AdmsVerificarDataFatal($this->Dados['adms_funcionario_id'], $this->Dados['data_fatal'], $this->Dados['adms_atividade_id']);
+            if ($DataFatalP->getPermissaoResult()['status'] == false) {
+
+                $soma_data = new Funcoes();
+                $nova_data = $soma_data->dia_in_data($this->Dados['data_fatal'], 1, "+");
+
+                $this->Dados['data_fatal'] = $nova_data;
+
+            } else {
+                $alertaMensagem = new AdmsAlertMensagem();
+                $_SESSION['msg_dia'] = $alertaMensagem->alertMensagemSimples("A data fatal foi definida para o dia " . date('d/m/Y' ,strtotime($this->Dados['data_fatal'])), "info");
+            }
+
+        } while ($DataFatalP->getPermissaoResult()['status'] == false);
 
         /*
          * Aqui realizo a chamada para a função que vai verificar se a atividade
