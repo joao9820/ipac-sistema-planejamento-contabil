@@ -210,18 +210,27 @@ class AdmsAtendimentoFuncionarios {
         while ($laco == 1) {
             //echo $cont ."\n";
             $this->atividadeDuracao($this->FuncionarioId, $novaData);
-
-            $this->buscarJornada();
+            
+            if(!empty($Funcionario) and !empty($Data)){
+               $this->buscarJornada($Funcionario, $Data);
                 // buscar fim da jornada de trabalho e verificar se a ultima atividade registrada para o funcionário, a hora do fim planejado é menor que a hora do fim da jornada
                 // $this->UltimaAtividade[0]['hora_fim_planejado']
-                // $this->HoraTermino2
+                // $this->HoraTermino2 
+            }else{
+                $this->buscarJornada();
+            }
+            
             $this->buscarUltimaAtividadeDefineData($novaData);
             //echo $this->HoraTermino2;
             //echo $this->UltimaAtividadeLoop[0]['hora_fim_planejado'];
-
+            
+            echo $this->JornadaFunc[0]['total'] . '>' . $this->DuracaoTotalAtivi[0]['duracao_atividade_sc'] . ' ' . $this->HoraTermino2 . '>' . $this->UltimaAtividadeLoop[0]['hora_fim_planejado'];
+            //die();
+            
             if (($this->JornadaFunc[0]['total'] > $this->DuracaoTotalAtivi[0]['duracao_atividade_sc']) and ($this->HoraTermino2 > $this->UltimaAtividadeLoop[0]['hora_fim_planejado'])) {
 
                 $this->Dados['data_inicio_planejado'] = $novaData;
+                //die();
                 $laco = 0; // encerra o laço de repetição
                 //break;
 
@@ -269,6 +278,7 @@ class AdmsAtendimentoFuncionarios {
 
 
             }
+            var_dump($this->Dados);
         $cont++;
         }
     }
@@ -282,7 +292,13 @@ class AdmsAtendimentoFuncionarios {
     }
 
     // Buscar a ultima atividade na data selecionada para o funcionário selecionado
-    private function buscarUltimaAtiviFunc() {
+    public function buscarUltimaAtiviFunc($Funcionario = null, $Data = null) {
+        
+         if (!empty($Funcionario) and !empty($Data)){
+            $this->Dados['adms_funcionario_id'] = $Funcionario;
+            $this->Dados['data_inicio_planejado'] = $Data;
+        }
+        
         $dataHora = new AdmsRead();
         $dataHora->fullRead("SELECT hora_fim_planejado, hora_inicio_planejado
         FROM adms_atendimento_funcionarios 
@@ -320,8 +336,12 @@ class AdmsAtendimentoFuncionarios {
         }
     }
     
+    public function getBuscarUltimaAtiviFunc(){
+        return $this->UltimaAtividade;
+    }
+    
     // Buscar a ultima atividade na data selecionada para o funcionário selecionado
-    private function buscarUltimaAtividadeDefineData($DataLoop = null) {
+    public function buscarUltimaAtividadeDefineData($DataLoop = null) {
         $this->DataLoop = $DataLoop;
         $dataHora = new AdmsRead();
         $dataHora->fullRead("SELECT hora_fim_planejado, hora_inicio_planejado
@@ -363,9 +383,21 @@ class AdmsAtendimentoFuncionarios {
             $this->UltimaAtividadeLoop[0]['hora_fim_planejado'] = "08:00:00";
         }
     }
+    
+    public function getBuscarUltimaAtividadeDefineData(){
+        
+        return $this->UltimaAtividadeLoop;
+        
+    }
 
     // Verificar se já existe atividade registrada para o funcionário na data especificado no registro
-    private function verificarExisteAtividade() {
+    public function verificarExisteAtividade($Funcionario = null, $Data = null) {
+        
+        if (!empty($Funcionario) and !empty($Data)){
+            $this->Dados['adms_funcionario_id'] = $Funcionario;
+            $this->Dados['data_inicio_planejado'] = $Data;
+        }
+        
         $dataHora = new AdmsRead();
         $dataHora->fullRead("SELECT id 
         FROM adms_atendimento_funcionarios 
@@ -375,6 +407,10 @@ class AdmsAtendimentoFuncionarios {
         if ($dataHora->getResultado()) {
             $this->jaExiste = $dataHora->getResultado();
         }
+    }
+    
+    public function getVerificarExisteAtividade(){
+        return $this->jaExiste;
     }
 
     // Verificar se já existe data e hora registrada para outra atividade
@@ -491,6 +527,11 @@ class AdmsAtendimentoFuncionarios {
         $this->DuracaoTotalAtivi = $ativDura->getResultado();
     }
     
+    public function getAtividadeDuracao(){
+        return $this->DuracaoTotalAtivi;
+    }
+
+
     private function buscarDuracaoAtv()
     { //Mostra a duração das atividades naquela data para tal funcionario
         $buscarDuracaoAtv = new AdmsRead();
@@ -507,8 +548,13 @@ class AdmsAtendimentoFuncionarios {
         return $duracaoTotalAtv;
     }
     
-    private function buscarJornada() {
-
+    public function buscarJornada($Funcionario = null, $Data = null) {
+        
+        if (!empty($Funcionario) and !empty($Data)){
+            $this->Dados['adms_funcionario_id'] = $Funcionario;
+            $this->Dados['data_inicio_planejado'] = $Data;
+        }
+        
         $this->verificarHoraExtra();
 
         $jornadaDia = new AdmsRead();
@@ -537,7 +583,16 @@ class AdmsAtendimentoFuncionarios {
         $this->HoraInicio2 = $jornadaDia->getResultado()[0]['hora_inicio2'];
         $this->HoraTermino = $jornadaDia->getResultado()[0]['hora_termino'];
         $jornada = $jornadaDia->getResultado(); //obtém o resultado da jornada do if ou do else
+        
+        //var_dump($jornada);
+        //die();
         return $jornada;
+    }
+    
+    public function  getBuscarJornada(){
+       
+        $this->Resultado = ["hora_termino2" => $this->HoraTermino2, "jornadaFunc" => $this->JornadaFunc[0]['total'], "hora_termino" => $this->HoraTermino, "hora_inicio2" => $this->HoraInicio2];
+        return $this->Resultado;
     }
     
     public function comparaJornada() {

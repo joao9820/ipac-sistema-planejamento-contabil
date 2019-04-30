@@ -11,6 +11,7 @@ namespace App\adms\Models;
 use App\adms\Models\helper\AdmsDelete;
 use App\adms\Models\helper\AdmsRead;
 use DateTime;
+use App\adms\Models\funcoes\Funcoes;
 
 /**
  * Description of AdmsAtendimentoFuncionariosReordenar
@@ -29,6 +30,8 @@ class AdmsAtendimentoFuncionariosReordenar {
     private $atenFuncId;
     private $novaData;
     private $tempoExcedido;
+    private $horaInicioFunc;
+    private $duracaoAtv;
 
     function getResultado() {
         return $this->Resultado;
@@ -43,16 +46,17 @@ class AdmsAtendimentoFuncionariosReordenar {
                 ORDER BY ordem", "adms_funcionario_id={$this->FuncId}&ordem={$this->ordem}");
 
         $resultadoBD = $reordenar->getResultado();
-
+        
         $reordemHoraInicio = $this->horaInicio; //O primeiro inicia pela hora do inicio da atv apagada, porém os outros irão sempre pegar da hora final do anterior
 
         var_dump($resultadoBD);
         //die();
         echo $reordemHoraInicio;
         //die();
+        
 
         $updateOrdem = new \App\adms\Models\helper\AdmsUpdate();
-
+        
         foreach ($resultadoBD as $novaOrdem) {
 
             $novaOrdem['ordem'] = (int) $novaOrdem['ordem'];
@@ -63,50 +67,81 @@ class AdmsAtendimentoFuncionariosReordenar {
             //Se a data for a mesma altera a ordem e o horário, caso não seja altera so o horário
 
             $this->DadosOrd['hora_inicio_planejado'] = $reordemHoraInicio;
-
-            $this->atualizarHoraAtv(); //Passa a ordem que está no momento
-
-            $this->DadosOrd['hora_fim_planejado'] = $this->Dados['hora_fim_planejado'];
-
-            var_dump($this->DadosOrd);
-
-            print_r($this->DadosOrd);
-
-             //será a hora que vai ser atualizada nesta ordem    
-
-            $reordemDia = new \App\adms\Models\AdmsAtendimentoFuncionarios();
             
-            $reordemDia->defineData($this->FuncId, $this->dataOrdemApagada); //Verifica entre outras coisas se a hora da ultima atividade ultrapassou a jornada
-            $this->tempoExcedido = $reordemDia->getDefineData()['tempo_excedido'];
-            $this->novaData = $reordemDia->getDefineData()['data_inicio_planejado'];
+            //será a hora que vai ser atualizada nesta ordem    
 
+            $reordemDia = new \App\adms\Models\AdmsReordenarData();
             
-        if ($this->novaData != $this->dataOrdemApagada) { //Se sim significa que a data de inicio mudou e consequentemente a hora também
+            $reordemDia->defineData($this->FuncId, $this->dataOrdemApagada, $reordemHoraInicio); //30/04
+            
+            $this->novaData = $reordemDia->getDefineData()['nova_data'];
+            
+            echo 'Nova Data: ' . $this->novaData;
+            //die();
+            
+            /*
+            $reordemDia->atividadeDuracao($this->FuncId, $this->dataOrdemApagada);
+            $reordemDia->getAtividadeDuracao()[0]['duracao_atividade_sc'];
+            
+            $reordemDia->buscarJornada(($this->FuncId, $this->dataOrdemApagada);
+              */   
+            //die();
+
+            if ($this->novaData != $this->dataOrdemApagada) { //Se sim significa que a data de inicio mudou e consequentemente a hora também, o tempo excedeu
                 
                 $this->DadosOrd['data_inicio_planejado'] = $this->novaData;
                 
-                $reordemDia->verificarExisteAtividade($this->FuncId, $this->novaData); //Verifica se existe atividade pra esse dia
-                
-                if($reordemDia->getVerificarExisteAtividade()){
+                $this->tempoExcedido = $reordemDia->getDefineData()['tempo_excedido'];
+                $reordemDia->verificarExisteAtividade($this->novaData); //Verifica se existe atividade pra esse dia
+
+                if ($reordemDia->getVerificarExisteAtividade()) {
+                    //Se sim busca ultima atividade desse func, atribuido a hora de almoço
+                    $reordemDia->buscarUltimaAtiviFunc();
+                    $this->DadosOrd['hora_fim_planejado'] = $reordemDia->getBuscarUltimaAtiviFunc()[0]['hora_fim_planejado']; //Valor a ser atualizado
                     
-                    $reordemDia->buscarUltimaAtiviFunc($this->FuncId, $this->novaData);
-                    $this->DadosOrd['hora_fim_planejado'] = $reordemDia->getBuscarUltimaAtiviFunc();
+                    $reordemHoraInicio = $this->DadosOrd['hora_fim_planejado']; //A hora de inicio da proxima atividade será a hora final desta
                     
-               //fsadaees
+                }else {
+                    //Código do método registrar em AdmsAtendimentoFuncionarios
                     
-                }else{
+                    //$this->DadosOrd['hora_fim_planejado'] = $reordemHoraInicio; //Pega a hora de fim da atividade anterior e armazena para calcular o excedido se houver
                     
-                    
-                    
+                    $inicioAti = new AdmsRead();
+                    $inicioAti->fullRead("SELECT hora_inicio 
+                    FROM adms_planejamento 
+                    WHERE adms_funcionario_id=:adms_funcionario_id LIMIT :limit", "adms_funcionario_id={$this->FuncId}&limit=1");
+
+                    if ($inicioAti->getResultado()) {
+
+                        $this->horaInicioFunc = $inicioAti->getResultado();
+                        // Pegar o tempo excedito da atividade do dia anterior e somar com a hora de inicio planejado do juncionario para o proximo dia
+                        $partes = explode(':', $this->horaInicioFunc[0]['hora_inicio']);
+
+                        $segundosAtividades = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
+                        $resultado = $segundosAtividades + $this->tempoExcedido; // Pegando o tempo excedido e somando com a hora de inicio
+                        
+                        $this->DadosOrd['hora_fim_planejado'] = gmdate("H:i:s", $resultado); //08:10
+                        $reordemHoraInicio = $this->DadosOrd['hora_fim_planejado'];
+                    }
                 }
+            } else {
                 
-                $reordemHoraInicio = $this->DadosOrd['hora_fim_planejado'];
-            }else{
+                $this->buscarDuracaoAtvReordem(); //Atribui a duracao da atv
+                 
+                $hora_fim = new Funcoes();
+                $this->DadosOrd['hora_fim_planejado'] = $hora_fim->somar_time_in_hours($this->duracaoAtv,  $this->DadosOrd['hora_inicio_planejado']);
                 
                 $this->DadosOrd['data_inicio_planejado'] = $this->dataOrdemApagada;
                 $reordemHoraInicio = $this->DadosOrd['hora_fim_planejado'];
-                
             }
+
+            //$this->atualizarHoraAtv(); //Passa a ordem que está no momento
+
+            //$this->DadosOrd['hora_fim_planejado'] = $this->Dados['hora_fim_planejado'];
+
+            var_dump($this->DadosOrd);
+
+            print_r($this->DadosOrd); 
 
             //Obs: A coluna terá um apelido gerado como ordem (posição do array) portanto o link referente a outro valor não pode ter nome igual
 
@@ -147,9 +182,9 @@ class AdmsAtendimentoFuncionariosReordenar {
         );
 
         $duracaoAtv = $buscarDuracaoAtv->getResultado();
+        $this->duracaoAtv = $duracaoAtv[0]['duracao_atividade'];
         //var_dump($duracaoTotalAtv);
         //die();
-        return $duracaoAtv;
     }
 
     public function buscarOrdem($aten_func_id = NULL) { //Busca a ordem que está sendo apagada ou em relação ao id, atualizada
@@ -211,5 +246,6 @@ class AdmsAtendimentoFuncionariosReordenar {
             $this->Resultado = 1;
         }
     }
+    
 
 }

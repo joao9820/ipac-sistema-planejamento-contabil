@@ -11,6 +11,7 @@
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/pagina/listarPagina.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/AdmsBotao.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/AdmsAtendimentoFuncionariosReordenar.php</file>
+            <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/AdmsListarAtendimentoPendente.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/AdmsAtendimentoFuncionarios.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Controllers/CadastrarPagina.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Controllers/GerenciarAtendimento.php</file>
@@ -40,6 +41,7 @@
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/atendimento/atendimento.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/usuario/listarUsuario.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/pagina/cadPagina.php</file>
+            <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/AdmsReordenarData.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/nivAcesso/listarNicAc.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/AdmsAtendimentoFuncionarioEditar.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/gerenciar/listarDemandas.php</file>
@@ -47,7 +49,6 @@
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/include/header.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/AdmsEditarPerfil.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Controllers/ApagarGrupoPg.php</file>
-            <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/funcoes/Funcoes.php</file>
         </group>
     </open-files>
 </project-private>
