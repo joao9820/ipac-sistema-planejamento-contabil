@@ -33,7 +33,7 @@ class AdmsLogin
         if($this->Resultado){
             $validaLogin = new \App\adms\Models\helper\AdmsRead();
             $validaLogin->fullRead("SELECT user.id, user.nome, user.email, user.senha, user.imagem, user.adms_niveis_acesso_id, user.adms_sits_usuario_id, user.adms_empresa_id, 
-                                          nivac.ordem ordem_nivac  
+                                          nivac.ordem ordem_nivac, nivac.nome nome_nivel
                                           FROM adms_usuarios user 
                                           INNER JOIN adms_niveis_acessos nivac ON nivac.id = user.adms_niveis_acesso_id 
                                           WHERE usuario =:usuario LIMIT :limit", "usuario={$this->Dados['usuario']}&limit=1");
@@ -90,6 +90,7 @@ class AdmsLogin
             $_SESSION['usuario_email'] = $this->Resultado[0]['email'];
             $_SESSION['usuario_imagem'] = $this->Resultado[0]['imagem'];
             $_SESSION['adms_niveis_acesso_id'] = $this->Resultado[0]['adms_niveis_acesso_id'];
+            $_SESSION['nome_nivel'] = $this->Resultado[0]['nome_nivel'];
             $_SESSION['ordem_nivac'] = $this->Resultado[0]['ordem_nivac'];
             $_SESSION['adms_empresa_id'] = $this->Resultado[0]['adms_empresa_id'];
             $this->Resultado = true;
