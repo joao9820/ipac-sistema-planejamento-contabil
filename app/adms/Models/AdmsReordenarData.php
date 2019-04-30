@@ -63,7 +63,6 @@ class AdmsReordenarData {
 
                 $this->Dados['data_inicio_planejado'] = $novaData;
                 echo $this->Dados['data_inicio_planejado'];
-                //die();
                 $laco = 0; // encerra o laço de repetição
                 //break;
 
