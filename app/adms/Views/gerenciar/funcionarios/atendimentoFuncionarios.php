@@ -121,10 +121,10 @@ if (!defined('URL')) {
                                             <th>Data/Hora para Início</th>
                                             <th class="">Departamento</th>
                                             <th class="">Atividade</th>
-                                            <th class="">Ordem</th>
                                             <th class="">Duração</th>
                                             <th class="">Data Fatal</th>
                                             <th>Status</th>
+                                            <th>Data Início Real</th>
                                             <th>Data Término</th>
                                             <th></th>
                                         </tr>
@@ -168,13 +168,22 @@ if (!defined('URL')) {
                                             </td>
                                             <td><?php echo $departamento; ?></td>
                                             <td><?php echo $atividade; ?></td>
-                                            <td><?php echo $ordem_atividade; ?></td>
                                             <td><?php echo date('H:i', strtotime($duracao_atividade)); ?></td>
                                             <td><?php echo date('d/m/Y', strtotime($data_fatal)); ?></td>
                                             <td>
                                                 <span class="badge badge-<?php echo $cor; ?>">
                                                     <?php echo $status; ?>
                                                 </span>
+                                            </td>
+
+                                            <td>
+                                                <?php
+                                                if (!empty($inicio_atendimento)){
+                                                    ?>
+                                                    <?php echo date('d/m/Y H\hi', strtotime($inicio_atendimento)); ?>
+                                                    <?php
+                                                }
+                                                ?>
                                             </td>
 
                                             <td>

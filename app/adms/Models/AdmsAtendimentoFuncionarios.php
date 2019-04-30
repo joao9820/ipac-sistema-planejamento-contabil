@@ -83,7 +83,7 @@ class AdmsAtendimentoFuncionarios {
         $this->Atendimento = (int) $Atendimento;
         $listar = new AdmsRead();
         $listar->fullRead("SELECT aten_fun.id id_aten_fun,aten_fun.duracao_atividade, aten_fun.data_fatal, aten_fun.ordem_atividade, aten_fun.adms_sits_atendimentos_funcionario_id sit_func,
-                                    aten_fun.adms_atendimento_id aten_id, aten_fun.adms_funcionario_id func_id, aten_fun.adms_atividade_id ativ_id, aten_fun.adms_demanda_id dema_id, aten_fun.fim_atendimento,
+                                    aten_fun.adms_atendimento_id aten_id, aten_fun.adms_funcionario_id func_id, aten_fun.adms_atividade_id ativ_id, aten_fun.adms_demanda_id dema_id,aten_fun.inicio_atendimento, aten_fun.fim_atendimento,
                                     aten_fun.data_inicio_planejado, aten_fun.hora_inicio_planejado,
                                     sits_func.nome status, 
                                     funcionario.nome, 

@@ -34,11 +34,7 @@ class AtendimentoFuncionarios
     {
 
         $this->DadosForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-        
-        /*
-        var_dump($this->DadosForm);
-        die();
-        */
+
         $atenId = $this->DadosForm['adms_atendimento_id'];
         $demandaId = $this->DadosForm['adms_demanda_id'];
        
