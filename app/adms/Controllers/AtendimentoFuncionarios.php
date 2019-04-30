@@ -53,7 +53,7 @@ class AtendimentoFuncionarios
                 //$this->data = date('d-m-Y', strtotime($this->DadosForm['data_inicio_planejado'])); //Necessário para inserir na sessão (convertendo o formato de exibição)
                 
                 // condição caso registre está dentro do método abaixo
-                $this->mensagemAlerta($registrar->getResultado(), $registrar->comparaJornada());
+                //$this->mensagemAlerta($registrar->getResultado(), $registrar->comparaJornada());
             
             }
 

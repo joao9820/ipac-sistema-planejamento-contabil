@@ -20,7 +20,6 @@ class VerDuracaoAtividadeId
 {
 
     private $AtividadeId;
-    private $Data;
     private $Atividade;
 
     public function __construct($AtividadeId)

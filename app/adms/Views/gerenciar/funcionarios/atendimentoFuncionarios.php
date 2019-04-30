@@ -65,6 +65,13 @@ if (!defined('URL')) {
 
             ?>
 
+            <?php
+                if(isset($_SESSION['msg_dia'])) {
+                    echo $_SESSION['msg_dia'];
+                    unset($_SESSION['msg_dia']);
+                }
+            ?>
+
             <div class="container-fluid">
                 <div class="row">
 

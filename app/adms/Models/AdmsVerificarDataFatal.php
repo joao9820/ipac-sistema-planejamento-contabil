@@ -9,8 +9,11 @@
 namespace App\adms\Models;
 
 
+use App\adms\Models\funcoes\BuscandoUltimaAtivHoraInicioFim;
 use App\adms\Models\funcoes\BuscarDuracaoAtividades;
 use App\adms\Models\funcoes\BuscarDuracaoJornadaT;
+use App\adms\Models\funcoes\Funcoes;
+use App\adms\Models\funcoes\VerDuracaoAtividadeId;
 
 if (!defined('URL')) {
     header("Location: /");
@@ -23,6 +26,11 @@ class AdmsVerificarDataFatal
     private $DataFatal;
     private $AtividadeId;
     private $PermissaoResult;
+    private $Duracao_ativ_do_dia;
+    private $Duracao_jornada;
+    private $AtividadeSendoRegister;
+    private $HoraFimUltimaAtiv = null;
+    private $FimJornadaTrabalho;
 
     public function __construct($Funcionario_id, $DataFatal, $AtividadeId)
     {
@@ -51,32 +59,58 @@ class AdmsVerificarDataFatal
 
         // buscando a duração das atividades
         $buscar_duracao_ati = new BuscarDuracaoAtividades($this->Funcionario_id, $this->DataFatal, $this->AtividadeId);
-        if ($buscar_duracao_ati->getDuracaoAtividade()['status']){
-            $duracao_ativ_do_dia = (int)$buscar_duracao_ati->getDuracaoAtividade()['duracao_atividade_sc'];
+        if (($buscar_duracao_ati->getDuracaoAtividade()['status']) and ($buscar_duracao_ati->getDuracaoAtividade()['duracao_atividade_sc'] > 0)){
+            $this->Duracao_ativ_do_dia = (int)$buscar_duracao_ati->getDuracaoAtividade()['duracao_atividade_sc'];
+
+            // Pegar a hora de inicio, fim da ultima atividade do funcionário
+            $ultima_atividade = new BuscandoUltimaAtivHoraInicioFim($this->DataFatal, $this->Funcionario_id);
+            $dados_ultima_atividade = $ultima_atividade->getHoraInicioFim();
+            if ($dados_ultima_atividade['status']) {
+
+                // Pegar duração da atividade que está sendo cadastrada
+                $atividade_register = new VerDuracaoAtividadeId($this->AtividadeId);
+                $this->AtividadeSendoRegister = $atividade_register->getDuracaoAtividade()['duracao_atividade_id'];
+
+                $somar_ativ = new Funcoes();
+                $this->HoraFimUltimaAtiv = $somar_ativ->somar_time_in_hours($this->AtividadeSendoRegister, $dados_ultima_atividade['hora_fim_planejado']);
+
+            }
         } else {
-            $duracao_ativ_do_dia = 0;
+            $this->Duracao_ativ_do_dia = 0;
         }
 
         // buscar jornada de trabalho
         $buscar_jornada = new BuscarDuracaoJornadaT($this->Funcionario_id, $this->DataFatal);
-        if ($buscar_jornada->getDuracaoJornada()['status']){
-            $duracao_jornada = $buscar_jornada->getDuracaoJornada()['total'];
-        } else {
-            $duracao_jornada = 0;
-        }
+        if ($buscar_jornada->getDuracaoJornada()['status']) {
+            $this->Duracao_jornada = $buscar_jornada->getDuracaoJornada()['total'];
+            $this->FimJornadaTrabalho = $buscar_jornada->getDuracaoJornada()['hora_termino2'];
 
-        if ($duracao_ativ_do_dia < $duracao_jornada){
-            echo "ok prociga";
-        } else {
-            echo "Definir para outro dia";
+            /*
+             * Comparar se a duração da soma total das atividades é menor que a jornada de trabalho e
+             * verificar se a hora da ultima atividade registrada não ultrapassa a hora de termino da jornada
+             */
+            if ($this->Duracao_ativ_do_dia < $this->Duracao_jornada) {
+                if (empty($this->HoraFimUltimaAtiv)){
+
+                    //echo "ok prossiga";
+                    $this->PermissaoResult['status'] = true;
+
+                } elseif ($this->HoraFimUltimaAtiv < $this->FimJornadaTrabalho){
+
+                    //echo "ok prossiga";
+                    $this->PermissaoResult['status'] = true;
+
+                } else {
+
+                    //echo "Definir para outro dia";
+                    $this->PermissaoResult['status'] = false;
+
+                }
+            } else {
+                //echo "Definir para outro dia";
+                $this->PermissaoResult['status'] = false;
+            }
         }
-        echo $this->DataFatal . "<br>";
-        echo $duracao_ativ_do_dia ."Duracao atividades <br>";
-        echo $duracao_jornada;
-        die;
-        // Definindo o status e msg
-        $this->PermissaoResult['status'] = true;
-        $this->PermissaoResult['msg'] = "Ok";
     }
 
 }

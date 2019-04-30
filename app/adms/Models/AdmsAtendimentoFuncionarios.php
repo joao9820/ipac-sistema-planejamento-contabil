@@ -112,14 +112,21 @@ class AdmsAtendimentoFuncionarios {
          * Caso a data fatal não possa ser definida para a data escolhida pelo fato do funcionário
          * já ter muitas atividades e não conseguir realizar mais uma até essa data especifica.
          */
-        $DataFatalP = new AdmsVerificarDataFatal($this->Dados['adms_funcionario_id'], $this->Dados['data_fatal'], $this->Dados['adms_atividade_id']);
-        if ($DataFatalP->getPermissaoResult()['status'] == false){
+        do {
+            $DataFatalP = new AdmsVerificarDataFatal($this->Dados['adms_funcionario_id'], $this->Dados['data_fatal'], $this->Dados['adms_atividade_id']);
+            if ($DataFatalP->getPermissaoResult()['status'] == false) {
 
-            $alertaMensagem = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertaMensagem->alertMensagemSimples($DataFatalP->getPermissaoResult()['msg'], "danger");
+                $soma_data = new Funcoes();
+                $nova_data = $soma_data->dia_in_data($this->Dados['data_fatal'], 1, "+");
 
-            return $this->Resultado = false;
-        }
+                $this->Dados['data_fatal'] = $nova_data;
+
+            } else {
+                $alertaMensagem = new AdmsAlertMensagem();
+                $_SESSION['msg_dia'] = $alertaMensagem->alertMensagemSimples("A data fatal foi definida para o dia " . date('d/m/Y' ,strtotime($this->Dados['data_fatal'])), "info");
+            }
+
+        } while ($DataFatalP->getPermissaoResult()['status'] == false);
 
         /*
          * Aqui realizo a chamada para a função que vai verificar se a atividade
