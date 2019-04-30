@@ -112,8 +112,7 @@ class AdmsAtendimentoFuncionarios {
          * Caso a data fatal não possa ser definida para a data escolhida pelo fato do funcionário
          * já ter muitas atividades e não conseguir realizar mais uma até essa data especifica.
          */
-
-        $DataFatalP = new AdmsVerificarDataFatal($this->Dados['adms_funcionario_id'], $this->Dados['data_fatal']);
+        $DataFatalP = new AdmsVerificarDataFatal($this->Dados['adms_funcionario_id'], $this->Dados['data_fatal'], $this->Dados['adms_atividade_id']);
         if ($DataFatalP->getPermissaoResult()['status'] == false){
 
             $alertaMensagem = new AdmsAlertMensagem();

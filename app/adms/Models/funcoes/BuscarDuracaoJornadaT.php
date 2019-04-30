@@ -41,28 +41,25 @@ class BuscarDuracaoJornadaT
         $jornadaDia = new AdmsRead();
 
         if ($this->HoraExtra) { //Soma as horas extras para aquele dia do funcionario e o resultado é somado com sua jornada normal
-            $jornadaDia->fullRead("
-                SELECT TIME_TO_SEC(planejamento.jornada_trabalho) + SUM(TIME_TO_SEC(hora_extra.total)) as total, planejamento.hora_termino2, 
-                       planejamento.hora_inicio2, planejamento.hora_termino
-                FROM adms_hora_extra hora_extra 
-                INNER JOIN adms_planejamento planejamento 
-                ON hora_extra.adms_usuario_id = planejamento.adms_funcionario_id
-                WHERE hora_extra.adms_usuario_id = :usuario and hora_extra.data = :data
-                GROUP BY planejamento.hora_termino2", "usuario={$this->FuncionarioId}&data={$this->Data}"
+            $jornadaDia->fullRead("SELECT TIME_TO_SEC(planejamento.jornada_trabalho) + SUM(TIME_TO_SEC(hora_extra.total)) as total, planejamento.hora_termino2, planejamento.hora_inicio2, planejamento.hora_termino
+                                            FROM adms_hora_extra hora_extra 
+                                            INNER JOIN adms_planejamento planejamento 
+                                            ON hora_extra.adms_usuario_id = planejamento.adms_funcionario_id
+                                            WHERE hora_extra.adms_usuario_id = :usuario and hora_extra.data = :data
+                                            GROUP BY planejamento.hora_termino2", "usuario={$this->FuncionarioId}&data={$this->Data}"
             );
         } else { //Traz apenas a jornada normal do funcionário cadastrado
-            $jornadaDia->fullRead("
-                SELECT TIME_TO_SEC(planejamento.jornada_trabalho) as total, planejamento.hora_termino2 , 
-                       planejamento.hora_inicio2, planejamento.hora_termino
-                FROM adms_planejamento planejamento
-                WHERE adms_funcionario_id = :funcionario
-                GROUP BY planejamento.hora_termino2", "funcionario={$this->FuncionarioId}"
+            $jornadaDia->fullRead("SELECT TIME_TO_SEC(planejamento.jornada_trabalho) as total, planejamento.hora_termino2, planejamento.hora_inicio2, planejamento.hora_termino
+                                        FROM adms_planejamento planejamento
+                                        WHERE adms_funcionario_id = :funcionario
+                                        GROUP BY planejamento.hora_termino2", "funcionario={$this->FuncionarioId}"
             );
         }
 
 
         if ($jornadaDia->getResultado()) {
             $this->Jornada = $jornadaDia->getResultado()[0];
+            $this->Jornada['total'] = (int) $this->Jornada['total'];
             $this->Jornada['status'] = true;
         } else {
             $this->Jornada['status'] = false;

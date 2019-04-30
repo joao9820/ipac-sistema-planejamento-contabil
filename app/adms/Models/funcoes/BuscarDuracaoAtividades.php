@@ -20,12 +20,14 @@ class BuscarDuracaoAtividades
 {
     private $FuncionarioId;
     private $Data;
+    private $AtividadeId;
     private $Atividade;
 
-    public function __construct($FuncionarioId, $Data = null)
+    public function __construct($FuncionarioId, $Data = null, $AtividadeId = null)
     {
         $this->FuncionarioId = (int) $FuncionarioId;
         $this->Data = date('Y-m-d', strtotime($Data));
+        $this->AtividadeId = (int) $AtividadeId;
 
         $this->buscar();
     }
@@ -42,8 +44,16 @@ class BuscarDuracaoAtividades
                                 AND data_inicio_planejado =:data_plan
                                 AND adms_sits_atendimentos_funcionario_id NOT IN (4, 5)", "id={$this->FuncionarioId}&data_plan={$this->Data}");
         if ($query->getResultado()) {
+
             $this->Atividade = $query->getResultado()[0];
+            if ($this->AtividadeId != null) {
+                $atividade_a_ser_cadastrada = new VerDuracaoAtividadeId($this->AtividadeId);
+                $nova_atividade = (int) $atividade_a_ser_cadastrada->getDuracaoAtividade()['duracao_atividade_sc_id'];
+
+                $this->Atividade['duracao_atividade_sc'] += $nova_atividade;
+            }
             $this->Atividade['status'] = true;
+
         } else {
             $this->Atividade['status'] = false;
         }

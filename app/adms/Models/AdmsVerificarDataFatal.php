@@ -21,19 +21,20 @@ class AdmsVerificarDataFatal
 {
     private $Funcionario_id;
     private $DataFatal;
+    private $AtividadeId;
     private $PermissaoResult;
 
-    public function __construct($Funcionario_id, $DataFatal)
+    public function __construct($Funcionario_id, $DataFatal, $AtividadeId)
     {
         $this->Funcionario_id = (int) $Funcionario_id;
         $this->DataFatal = date('Y-m-d',strtotime($DataFatal));
+        $this->AtividadeId = (int) $AtividadeId;
 
         $this->verificar();
     }
 
     public function getPermissaoResult()
     {
-        //$this->Permissao = ['status'=>'','msg'=>''];
         return $this->PermissaoResult;
     }
 
@@ -49,7 +50,7 @@ class AdmsVerificarDataFatal
     {
 
         // buscando a duração das atividades
-        $buscar_duracao_ati = new BuscarDuracaoAtividades($this->Funcionario_id, $this->DataFatal);
+        $buscar_duracao_ati = new BuscarDuracaoAtividades($this->Funcionario_id, $this->DataFatal, $this->AtividadeId);
         if ($buscar_duracao_ati->getDuracaoAtividade()['status']){
             $duracao_ativ_do_dia = (int)$buscar_duracao_ati->getDuracaoAtividade()['duracao_atividade_sc'];
         } else {
@@ -59,13 +60,18 @@ class AdmsVerificarDataFatal
         // buscar jornada de trabalho
         $buscar_jornada = new BuscarDuracaoJornadaT($this->Funcionario_id, $this->DataFatal);
         if ($buscar_jornada->getDuracaoJornada()['status']){
-            $duracao_jornada = (int)$buscar_jornada->getDuracaoJornada()['total'];
+            $duracao_jornada = $buscar_jornada->getDuracaoJornada()['total'];
         } else {
             $duracao_jornada = 0;
         }
 
-
-        echo $duracao_ativ_do_dia ."<br>";
+        if ($duracao_ativ_do_dia < $duracao_jornada){
+            echo "ok prociga";
+        } else {
+            echo "Definir para outro dia";
+        }
+        echo $this->DataFatal . "<br>";
+        echo $duracao_ativ_do_dia ."Duracao atividades <br>";
         echo $duracao_jornada;
         die;
         // Definindo o status e msg
