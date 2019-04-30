@@ -89,19 +89,6 @@ $pg = $this->Dados['pg'];
                 <dt class="col-sm-3">Situação</dt>
                 <dd class="col-sm-9"><span class="badge badge-<?php echo $cor; ?>"><?php echo $nome_situacao; ?></span></dd>
 
-                <dt class="col-sm-3">Data Fatal: </dt>
-                <dd class="col-sm-9">
-                    <?php
-                    if (empty($data_fatal)) {
-                        echo "<span>Este atendimento ainda não tem uma data fatal.</span>";
-                        echo "<a class='nav-link' href='" . URLADM . "atendimento-gerente/editar/$id?pg=$pg'>Clique aqui para definir!</a>";
-                    } else {
-                        echo '<i class="fas fa-angle-double-right text-secondary"></i> ';
-                        echo date('d/m/Y', strtotime($data_fatal));
-                        echo ' <i class="fas fa-angle-double-left text-secondary"></i>';
-                    }
-                    ?>
-                </dd>
 
                 <dt class="col-sm-3">Descrição</dt>
                 <dd class="col-sm-9"><?php echo $descricao; ?></dd>
@@ -195,8 +182,8 @@ $pg = $this->Dados['pg'];
                     ?>
                 </dd>
 
-                <dt class="col-sm-3">Funcionário Responsável</dt>
-                <dd class="col-sm-9"><?php echo $funcionario; ?></dd>
+                <dt class="col-sm-3">Funcionário(s) Responsável</dt>
+                <dd class="col-sm-9">(implementar join para listar os funcionários)</dd>
 
                 <dt class="col-sm-3">Prioridade de atendimento? </dt>
                 <dd class="col-sm-9"><?php if ($prioridade == 1){ echo "Sim";} else {echo "Não";} ?></dd>
@@ -204,90 +191,6 @@ $pg = $this->Dados['pg'];
                 <dt class="col-sm-3">Atendimento iniciado em</dt>
                 <dd class="col-sm-9"><?php if (!empty($inicio_atendimento)) {echo date('d/m/Y H:i:s', strtotime($inicio_atendimento));} else {echo "Não iniciado.";} ?></dd>
 
-                <dt class="col-sm-3">Tempo Restante</dt>
-                <dd class="col-sm-9">
-
-                        <?php
-                        if ($id_sits_aten_func == 1) {
-                            echo "--:--";
-                        } elseif ($id_sits_aten_func == 3){
-
-
-                            if (!empty($at_tempo_restante) AND empty($at_tempo_excedido)) {
-                                echo date('H:i:s', strtotime($at_tempo_restante));
-                                echo "<span class='ml-2 badge badge-secondary'>Pausado pelo funcinário</span>";
-                            }
-                            elseif (!empty($at_tempo_excedido)) {
-
-                                echo "<span id='sessao' class='text-danger'>";
-                                echo "-".date('H:i:s', strtotime($at_tempo_excedido));
-                                echo "</span>";
-                                echo "<span class='ml-2 badge badge-danger'>Pausado pelo funcinário - Atendimento atrasado</span>";
-
-                            }
-                            else {
-                                echo "--:--";
-                            }
-
-
-                        }
-                        elseif ($id_sits_aten_func == 2) {
-
-                            if (!empty($at_tempo_restante) AND empty($at_tempo_excedido)) {
-
-                                // Pegando a hora restante do atendimento no banco e transformando em segundos
-                                $at_iniciado = date('Y-m-d H:i:s', strtotime($at_iniciado));
-                                $partes = explode(':', $at_tempo_restante);
-                                $segundosTotal = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
-                                // Pegando a hora do banco em que foi iniciado o atendimento
-                                $at_pausado = date('Y-m-d H:i:s');
-                                $dteStart = new DateTime($at_iniciado);
-                                $dteEnd = new DateTime($at_pausado);
-                                $dteDiff = $dteStart->diff($dteEnd);
-                                $horas_diferenca = $dteDiff->format('%H');
-                                $minutos_diferenca = $dteDiff->format('%i');
-                                $segundos_diferenca = $dteDiff->format('%s');
-                                $segundosAndamento = $horas_diferenca * 3600 + $minutos_diferenca * 60 + $segundos_diferenca;
-
-                                $tempo_restante = $segundosTotal - $segundosAndamento;
-
-                                echo "<span id='sessao' class='text-primary'></span>";
-                                echo "<span class='ml-2 badge badge-warning'>Sendo executado pelo funcionário</span>";
-
-                                $valorControler = 0;
-
-                            }
-                            elseif (!empty($at_tempo_excedido)){
-
-                                // Pegando a hora restante do atendimento no banco e transformando em segundos
-                                $at_iniciado = date('Y-m-d H:i:s', strtotime($at_iniciado));
-                                $partes = explode(':', $at_tempo_excedido);
-                                $segundosTotal = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
-                                // Pegando a hora do banco em que foi iniciado o atendimento
-                                $at_pausado = date('Y-m-d H:i:s');
-                                $dteStart = new DateTime($at_iniciado);
-                                $dteEnd = new DateTime($at_pausado);
-                                $dteDiff = $dteStart->diff($dteEnd);
-                                $horas_diferenca = $dteDiff->format('%H');
-                                $minutos_diferenca = $dteDiff->format('%i');
-                                $segundos_diferenca = $dteDiff->format('%s');
-                                $segundosAndamento = $horas_diferenca * 3600 + $minutos_diferenca * 60 + $segundos_diferenca;
-
-                                $tempo_restante = $segundosTotal + $segundosAndamento;
-
-                                echo "<span id='sessao' class='text-primary'></span>";
-                                echo "<span class='ml-2 badge badge-danger'>Atendimento atrasado - Sendo executado</span>";
-
-                                $valorControler = 1;
-
-                            }
-                            else {
-                                echo "--:--";
-                            }
-                        }
-                        ?>
-
-                </dd>
 
 
                 <?php
@@ -302,6 +205,7 @@ $pg = $this->Dados['pg'];
                         <dt class="col-sm-3">Duração total do atendimento:</dt>
                         <dd class="col-sm-9">
                             <?php
+                            /*
                             if (!empty($fim_atendimento)) {
                                 $date_time = new DateTime($inicio_atendimento);
                                 $result = $date_time->diff(new DateTime($fim_atendimento));
@@ -319,17 +223,14 @@ $pg = $this->Dados['pg'];
 
 
                             }
+                            */
                             ?>
                         </dd>
                         <?php
                     }
                 ?>
 
-
-                <dt class="col-sm-3">Alterado por último em</dt>
-                <dd class="col-sm-9"><?php if (!empty($modified)) {
-                    echo date('d/m/Y H:i:s', strtotime($modified));
-                } ?></dd>
+                
 
             </dl>
 
