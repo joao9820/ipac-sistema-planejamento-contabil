@@ -49,6 +49,7 @@
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/include/header.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/AdmsEditarPerfil.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Controllers/ApagarGrupoPg.php</file>
+            <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/funcoes/Funcoes.php</file>
         </group>
     </open-files>
 </project-private>
