@@ -32,8 +32,9 @@
         font-size: .7em;
         font-weight: 800;
     }
-    span.luzAlert i {
-        text-shadow: 1px 1px 10px rgba(0,0,0,1) !important;
+    .totalAlert {
+        color: red !important;
+        border-color: red !important;
     }
 </style>
 <div class="content p-1">
@@ -140,14 +141,12 @@
 
                     ?>
 
-                    <tr class="
-                        <?php if ($data_fatal_atividade < date('Y-m-d')) {
+                    <tr class="">
+                        <td class="d-none d-lg-table-cell <?php if ($data_fatal_atividade < date('Y-m-d')) {
                             echo "text-danger";
                         } else {
                             echo "text-dark";
-                        } ?>
-                    ">
-                        <td class="d-none d-lg-table-cell">
+                        } ?>">
                             <?php
                                 if ($data_fatal_atividade < date('Y-m-d')){
                                     echo "<span class='luzAlert' tabindex='0' data-placement='right' data-toggle='tooltip' title='Este atendimento está com uma (ou mais) atividade(s) com entrega atrasada(s).'>";
