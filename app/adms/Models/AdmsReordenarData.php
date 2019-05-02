@@ -40,12 +40,8 @@ class AdmsReordenarData {
         $novaData = $Data;
         $this->horaFimAtvAnt = $horaFimAtvAnt;
         
-        $laco = 1;
-        $cont = 1;
-        
         $reordemDia = new \App\adms\Models\AdmsAtendimentoFuncionarios();
         
-        while ($laco == 1) {
             //echo $cont ."\n";
             $reordemDia->atividadeDuracao($this->FuncionarioId, $novaData);
             $this->DuracaoTotalAtivi = $reordemDia->getAtividadeDuracao();
@@ -56,14 +52,11 @@ class AdmsReordenarData {
             $reordemDia->buscarUltimaAtividadeDefineData($novaData);
             $this->UltimaAtividadeLoop = $reordemDia->getBuscarUltimaAtividadeDefineData();
      
-            //echo $this->HoraTermino2;
-            //echo $this->UltimaAtividadeLoop[0]['hora_fim_planejado'];
             
             if (($this->JornadaFunc['jornadaFunc'] > $this->DuracaoTotalAtivi[0]['duracao_atividade_sc']) and ($this->JornadaFunc['hora_termino2'] > $this->horaFimAtvAnt)) {
 
                 $this->Dados['data_inicio_planejado'] = $novaData;
                 echo $this->Dados['data_inicio_planejado'];
-                $laco = 0; // encerra o laço de repetição
                 //break;
 
             } else {
@@ -87,10 +80,6 @@ class AdmsReordenarData {
                     $partes = explode(':', $resultado);
                     $resultado = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
 
-                    //$this->TempoExcedido = $resultado;
-                    //echo $this->UltimaAtividadeLoop[0]['hora_fim_planejado'];
-                    //echo $this->HoraTermino2;
-                    //echo $resultado;
 
                     $this->TempoExcedido = $resultado;
                     //die;
@@ -103,11 +92,9 @@ class AdmsReordenarData {
                 //echo $novaData;
                 
                 $this->Dados['data_inicio_planejado'] = $novaData;
-                $this->horaFimAtvAnt = $this->UltimaAtividadeLoop[0]['hora_fim_planejado']; //Se somar um dia buscará a hora da ultima atividade para esse dia
+                //$this->horaFimAtvAnt = $this->UltimaAtividadeLoop[0]['hora_fim_planejado']; //Se somar um dia buscará a hora da ultima atividade para esse dia
             }
             var_dump($this->Dados);
-        $cont++;
-        }
     }
     
     public function getDefineData(){
