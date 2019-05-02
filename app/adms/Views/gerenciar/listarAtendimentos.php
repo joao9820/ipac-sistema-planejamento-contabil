@@ -36,6 +36,7 @@
         color: red !important;
         border-color: red !important;
     }
+
 </style>
 <div class="content p-1">
     <div class="list-group-item">
@@ -151,11 +152,11 @@
                                 if ($data_fatal_atividade < date('Y-m-d')){
                                     echo "<span class='luzAlert' tabindex='0' data-placement='right' data-toggle='tooltip' title='Este atendimento está com uma (ou mais) atividade(s) com entrega atrasada(s).'>";
                                     echo '<a href="' . URLADM . 'atendimento-funcionarios/listar/' . $adms_demanda_id .'?aten='.$id.'" class="text-danger" >';
-                                        echo '<i class="fas fa-lightbulb"></i>';
+                                        echo '<i class="fas fa-lightbulb faIpac"></i>';
                                     echo '</a>';
                                     echo "</span>";
                                 } else {
-                                    echo '<i class="fas fa-lightbulb text-light"></i>';
+                                    echo '<i class="fas fa-lightbulb text-light faIpac"></i>';
                                 }
                             ?>
                             <?php

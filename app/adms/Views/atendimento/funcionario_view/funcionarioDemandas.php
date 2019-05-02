@@ -185,7 +185,8 @@ extract($this->Dados['jornadaDeTrabalho']);
 
             <h4 class="text-secondary mr-2">Últimos: </h4>
             <?php
-            if (empty($this->Dados['listarAtendimentos'])) {
+                //var_dump($this->Dados['listarAtendimentos']);
+                if (empty($this->Dados['listarAtendimentos'])) {
                 ?>
 
                 <div class="alert alert-secondary alert-dismissible text-center py-5 fade show" role="alert">
@@ -247,19 +248,19 @@ extract($this->Dados['jornadaDeTrabalho']);
                                     if ( !empty($data_fatal) and (date('Y-m-d', strtotime($data_fatal)) == date('Y-m-d'))){
                                 ?>
                                 <span class="text-warning" tabindex='0' data-placement='top' data-toggle='tooltip' title='Aviso! A data limite para concluir o atendimento é hoje.'>
-                                    <i class="fas fa-circle"></i>
+                                    <i class="fas fa-lightbulb faIpac mr-2"></i>
                                 </span>
                                 <?php
                                     } elseif ( !empty($data_fatal) and (date('Y-m-d', strtotime($data_fatal)) < date('Y-m-d'))){
                                 ?>
                                 <span class="text-danger" tabindex='0' data-placement='top' data-toggle='tooltip' title='Atenção! Atendimento ultrapassou a data limite de entrega.'>
-                                    <i class="fas fa-circle"></i>
+                                    <i class="fas fa-lightbulb faIpac mr-2"></i>
                                 </span>
                                 <?php
                                 } else {
                                 ?>
                                 <span class="text-transparente">
-                                    <i class="fas fa-circle"></i>
+                                    <i class="fas fa-lightbulb"></i>
                                 </span>
                                 <?php
                                 }
@@ -271,21 +272,34 @@ extract($this->Dados['jornadaDeTrabalho']);
                                             Iniciar
                                         </a>
                                     </span>
-                                    <a href="#" class="btn btn-secondary btn-sm mb-2 btnOpcoesDisabled disabled">
-                                        Pausar
-                                    </a>
                                     <?php
                                 } elseif ($id_sits_aten_func == 2){
                                     // Iniciado
                                     ?>
+
+
                                     <a href="#" class="btn btn-secondary btn-sm mb-2 btnOpcoesDisabled disabled">
-                                        Continuar
+                                        Em andamento
                                     </a>
+
+                                    <?php
+                                    if ((($hora_inicio_planejado < $hora_termino) and ($hora_fim_planejado > $hora_termino)) or (($hora_inicio_planejado < $hora_termino2) and ($hora_fim_planejado > $hora_termino2))){
+                                    ?>
+
+
                                     <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Clique para pausar o atendimento.'>
                                         <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id_aten_func . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']. '&aten='.$id_atendimento; ?>" class="btn btn-outline-warning btn-sm mb-2" data-sitAtenPausar='Tem certeza que deseja pausar o atendimento?'>
                                             Pausar
                                         </a>
                                     </span>
+
+                                    <?php
+                                    }
+                                    ?>
+
+
+
+
                                     <?php
                                 } elseif ($id_sits_aten_func == 3) {
                                     // Pausado

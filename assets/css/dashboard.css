@@ -3,6 +3,9 @@ span[data-toggle="tooltip"]{
     cursor: pointer;
 }
 /*===================================*/
+.faIpac {
+    font-size: 1.5em;
+}
 .table th {
     font-weight: 400 !important;
     font-size: 1.1em;
