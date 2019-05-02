@@ -9,7 +9,7 @@
         header("Location: /");
         exit();
     }
-//var_dump($this->Dados)
+
 ?>
 <style>
     .dataAtendimento .legenda {
@@ -31,6 +31,9 @@
     .progress {
         font-size: .7em;
         font-weight: 800;
+    }
+    span.luzAlert i {
+        text-shadow: 1px 1px 10px rgba(0,0,0,1) !important;
     }
 </style>
 <div class="content p-1">
@@ -109,6 +112,9 @@
             <a href="#" class="btn btn-outline-secondary mb-2"><i class="fas fa-eraser"></i></a>
         </form>
 
+        <?php
+        //var_dump($this->Dados['listAtendimentos']);
+        ?>
 
         <div class="table-responsive">
             <table class="table table-striped table-hover ">
@@ -134,8 +140,25 @@
 
                     ?>
 
-                    <tr class="<?php if (($nome_situacao == "Cancelado") OR ($id_situacao == 4)) {echo "text-secondary";} else {echo "text-dark";} ?>">
+                    <tr class="
+                        <?php if ($data_fatal_atividade < date('Y-m-d')) {
+                            echo "text-danger";
+                        } else {
+                            echo "text-dark";
+                        } ?>
+                    ">
                         <td class="d-none d-lg-table-cell">
+                            <?php
+                                if ($data_fatal_atividade < date('Y-m-d')){
+                                    echo "<span class='luzAlert' tabindex='0' data-placement='right' data-toggle='tooltip' title='Este atendimento está com uma (ou mais) atividade(s) com entrega atrasada(s).'>";
+                                    echo '<a href="' . URLADM . 'atendimento-funcionarios/listar/' . $adms_demanda_id .'?aten='.$id.'" class="text-danger" >';
+                                        echo '<i class="fas fa-lightbulb"></i>';
+                                    echo '</a>';
+                                    echo "</span>";
+                                } else {
+                                    echo '<i class="fas fa-lightbulb text-light"></i>';
+                                }
+                            ?>
                             <?php
                                 if ($id < 10){
                                     echo "000".$id;

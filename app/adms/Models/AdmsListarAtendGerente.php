@@ -47,7 +47,9 @@ class AdmsListarAtendGerente
             user.nome cliente, 
             emp.fantasia, emp.nome emp_nome,
             totalAtiv.total_atividade,
-            totalConclu.total_atividade_concluida
+            totalConclu.total_atividade_concluida,
+            dataFatalAti.data_fatal_atividade
+
             FROM adms_atendimentos aten 
             INNER JOIN adms_usuarios user ON user.id=aten.adms_usuario_id 
             INNER JOIN adms_empresas emp ON emp.id=aten.adms_empresa_id 
@@ -58,6 +60,11 @@ class AdmsListarAtendGerente
             LEFT JOIN (SELECT adms_atendimento_id, COUNT(adms_atividade_id) AS total_atividade
             FROM  adms_atendimento_funcionarios
             GROUP BY adms_atendimento_id) totalAtiv ON totalAtiv.adms_atendimento_id = aten.id
+              
+            LEFT JOIN (SELECT adms_atendimento_id, MIN(data_fatal) AS data_fatal_atividade
+            FROM  adms_atendimento_funcionarios
+            GROUP BY adms_atendimento_id) dataFatalAti ON dataFatalAti.adms_atendimento_id = aten.id
+
             
             LEFT JOIN (SELECT adms_atendimento_id, COUNT(adms_atividade_id) AS total_atividade_concluida
             FROM  adms_atendimento_funcionarios
