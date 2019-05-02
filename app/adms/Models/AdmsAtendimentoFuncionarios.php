@@ -160,7 +160,7 @@ class AdmsAtendimentoFuncionarios {
             } else {
 
                 $inicioAti = new AdmsRead();
-                $inicioAti->fullRead("SELECT hora_inicio 
+                $inicioAti->fullRead("SELECT hora_inicio, hora_termino2 
                 FROM adms_planejamento 
                 WHERE adms_funcionario_id=:adms_funcionario_id LIMIT :limit", "adms_funcionario_id={$this->Dados['adms_funcionario_id']}&limit=1");
                 
@@ -170,8 +170,18 @@ class AdmsAtendimentoFuncionarios {
 
                     // Pegar o tempo excedito da atividade do dia anterior e somar com a hora de inicio planejado do juncionario para o proximo dia
                     if ($this->Dados['data_inicio_planejado'] == date('Y-m-d')){
-                        $horaAtual = date('H:i:s');
-                        $partes = explode(':', $horaAtual);
+
+                        if((date('H:i:s') < $this->horaInicioFunc[0]['hora_termino2']) and (date('H:i:s') > $this->horaInicioFunc[0]['hora_inicio'])) {
+                            $horaAtual = date('H:i:s');
+                            $partes = explode(':', $horaAtual);
+                        } else {
+                            /*
+                             * Somar com hora de almoço aqui
+                             */
+                            $partes = explode(':', $this->horaInicioFunc[0]['hora_inicio']);
+                        }
+
+
                     } else {
                         /*
                          * Somar com hora de almoço aqui
@@ -336,7 +346,7 @@ class AdmsAtendimentoFuncionarios {
                 /*
                  * Aqui vai somar a $Duracao_almoco com $this->UltimaAtividadeLoop[0]['hora_fim_planejado']
                  *
-                 * Atenção, quase pronto, mas falta testar. ta dando erro
+                 *
                  */
                 $this->UltimaAtividade = $dataHora->getResultado();
 
