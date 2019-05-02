@@ -299,8 +299,8 @@ class AdmsAtendimentoFuncionarios {
                 }
 
 
-
-
+                //var_dump($partes)
+                
                 $data = new DateTime(date('Y-m-d', strtotime($novaData)));
                 $data->modify('+1 day');
                 $novaData = $data->format('Y-m-d');
