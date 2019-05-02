@@ -19,6 +19,20 @@ class Login
 
     public function acesso()
     {
+
+        if (isset($_SESSION['usuario_id'])){
+            if ($_SESSION['adms_niveis_acesso_id'] == 4){
+                $UrlDestino = URLADM . 'atendimentos/listar';
+                header("Location: $UrlDestino");
+            } elseif ($_SESSION['adms_niveis_acesso_id'] <= 3){
+                $UrlDestino = URLADM . 'gerenciar-atendimento/listar';
+                header("Location: $UrlDestino");
+            }else {
+                $UrlDestino = URLADM . 'home/index';
+                header("Location: $UrlDestino");
+            }
+        }
+
         $this->Dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
         if(!empty($this->Dados['SendLogin'])){
