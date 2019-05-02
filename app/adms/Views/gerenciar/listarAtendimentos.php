@@ -143,13 +143,13 @@
                     ?>
 
                     <tr class="">
-                        <td class="d-none d-lg-table-cell <?php if ($data_fatal_atividade < date('Y-m-d')) {
+                        <td class="d-none d-lg-table-cell <?php if (($data_fatal_atividade < date('Y-m-d'))and (!empty($data_fatal_atividade))) {
                             echo "text-danger";
                         } else {
                             echo "text-dark";
                         } ?>">
                             <?php
-                                if ($data_fatal_atividade < date('Y-m-d')){
+                                if (($data_fatal_atividade < date('Y-m-d'))and (!empty($data_fatal_atividade))){
                                     echo "<span class='luzAlert' tabindex='0' data-placement='right' data-toggle='tooltip' title='Este atendimento está com uma (ou mais) atividade(s) com entrega atrasada(s).'>";
                                     echo '<a href="' . URLADM . 'atendimento-funcionarios/listar/' . $adms_demanda_id .'?aten='.$id.'" class="text-danger" >';
                                         echo '<i class="fas fa-lightbulb faIpac"></i>';
