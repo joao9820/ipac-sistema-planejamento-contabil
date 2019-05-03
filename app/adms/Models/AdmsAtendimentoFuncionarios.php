@@ -216,20 +216,42 @@ class AdmsAtendimentoFuncionarios {
             $jornadaFunc = new BuscarDuracaoJornadaT($this->FuncionarioId, $this->Dados['data_inicio_planejado']);
             $pausa_almoco = $jornadaFunc->getDuracaoJornada()['hora_termino'];
             $retorna_trabalho = $jornadaFunc->getDuracaoJornada()['hora_inicio2'];
+            $start_job = $jornadaFunc->getDuracaoJornada()['hora_inicio'];
             if (empty($pausa_almoco)){
                 return $this->Resultado = false;
             }
             if (($this->Dados['hora_inicio_planejado'] < $pausa_almoco)and ($pausa_almoco < $this->Dados['hora_fim_planejado'])) {
                 $calculaAlmoco = new Funcoes();
                 $totalTimeAlmoco = $calculaAlmoco->sbtrair_horas_in_hours($retorna_trabalho, $pausa_almoco);
-                echo "<br>" .$totalTimeAlmoco;
                 $this->Dados['hora_fim_planejado'] = $calculaAlmoco->somar_time_in_hours($totalTimeAlmoco,$this->Dados['hora_fim_planejado']);
             }
             if (($this->Dados['hora_inicio_planejado'] >= $pausa_almoco) and ($this->Dados['hora_inicio_planejado'] < $retorna_trabalho)){
-                $this->Dados['hora_inicio_planejado'] = $retorna_trabalho;
-                $calculaAlmoco = new Funcoes();
-                $this->Dados['hora_fim_planejado'] = $calculaAlmoco->somar_time_in_hours($this->Dados['duracao_atividade'],$this->Dados['hora_inicio_planejado']);
+
+                /*
+                 * calcular se o tempo excedido da atividade anterior termina durante o horario de almoço, se sim, somar horario de almoço
+                 * na hora_inicio_planejado da atividade sendo registrada e somar a duração da atividade definindo a hora_fim_planejado
+                 */
+                $verificarTimeExcedido = new  Funcoes();
+                $timeExcedido = $verificarTimeExcedido->segundos_to_hora($this->TempoExcedido);
+                $horaInicioSemAlmoco = $verificarTimeExcedido->somar_time_in_hours($timeExcedido, $start_job);
+                if ($horaInicioSemAlmoco > $pausa_almoco) {
+
+                    $calcularInicioAfterAlmoco = new Funcoes();
+                    $totalTimeAlmoco = $calcularInicioAfterAlmoco->sbtrair_horas_in_hours($retorna_trabalho, $pausa_almoco);
+                    $this->Dados['hora_inicio_planejado'] = $calcularInicioAfterAlmoco->somar_time_in_hours($totalTimeAlmoco,$this->Dados['hora_inicio_planejado']);
+                    $this->Dados['hora_fim_planejado'] = $calcularInicioAfterAlmoco->somar_time_in_hours($this->Dados['duracao_atividade'], $this->Dados['hora_inicio_planejado']);
+
+                } else {
+                    // Caso a nova atividade a ser registrada inicie durante o almoço, será definida pra ela o novo inicio após o almoço
+                    $this->Dados['hora_inicio_planejado'] = $retorna_trabalho;
+                    $calculaAlmoco = new Funcoes();
+                    $this->Dados['hora_fim_planejado'] = $calculaAlmoco->somar_time_in_hours($this->Dados['duracao_atividade'], $this->Dados['hora_inicio_planejado']);
+                }
             }
+
+
+
+            // Corrigir erro ao registrar uma atividade de 6h que ultrapasse o expediente e almoço do dia seguinte
             
              //Criar objeto de AdmsAtendimentoFuncionarioReordenar para Inserir a ordem
             $inserirOrdem = new \App\adms\Models\AdmsAtendimentoFuncionariosReordenar();

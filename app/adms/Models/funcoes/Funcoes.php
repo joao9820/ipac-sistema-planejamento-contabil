@@ -52,7 +52,7 @@ class Funcoes
     /*
      * Função para converter segundos em horas
      */
-    function segundos_to_hora($Segundos, $Operacao = null, $Hora = null)
+    function segundos_to_hora($Segundos)
     {
         $Segundos = (int) $Segundos;
 
