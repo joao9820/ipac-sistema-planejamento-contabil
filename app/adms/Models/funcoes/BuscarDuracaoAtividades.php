@@ -46,6 +46,8 @@ class BuscarDuracaoAtividades
         if ($query->getResultado()) {
 
             $this->Atividade = $query->getResultado()[0];
+            $this->Atividade['duracao_atividade_sc'] = (int) $this->Atividade['duracao_atividade_sc'];
+
             if ($this->AtividadeId != null) {
                 $atividade_a_ser_cadastrada = new VerDuracaoAtividadeId($this->AtividadeId);
                 $nova_atividade = (int) $atividade_a_ser_cadastrada->getDuracaoAtividade()['duracao_atividade_sc_id'];

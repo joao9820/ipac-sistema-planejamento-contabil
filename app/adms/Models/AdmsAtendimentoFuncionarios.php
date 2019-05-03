@@ -9,7 +9,9 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\funcoes\BuscarDuracaoJornadaT;
 use App\adms\Models\funcoes\Funcoes;
+use App\adms\Models\funcoes\VerificarDataDisponivel;
 use App\adms\Models\helper\AdmsAlertMensagem;
 use App\adms\Models\helper\AdmsCreateRow;
 use App\adms\Models\helper\AdmsDelete;
@@ -134,17 +136,26 @@ class AdmsAtendimentoFuncionarios {
          */
         $this->DataAtual = date('Y-m-d');
         $this->FuncionarioId = $this->Dados['adms_funcionario_id'];
-        $this->defineData();
+        //$this->defineData();
+        $verificarDataDisponivel = new VerificarDataDisponivel($this->FuncionarioId);
+        $DataDefinida = $verificarDataDisponivel->getVertificarDataDisponivel();
+        //var_dump($DataDefinida);
+        $this->Dados['data_inicio_planejado'] = $DataDefinida['data_inicio_nova_atividade'];
+        if ($DataDefinida['tempo_excedido_sc'] != false){
+            $this->TempoExcedido = $DataDefinida['tempo_excedido_sc'];
+        } else {
+            $this->TempoExcedido = 0;
+        }
 
 
         //método para verficar se possui atividade registrada no mesmo atendimento pro mesmo funcionario
         $this->validaRegistroAtv();
-
         if ($this->jaExisteAtv) {
             // Caso a atividade já tenha sido cadastrada
             $UrlDestino = URLADM . 'atendimento-funcionarios/listar/1?aten=' . $this->Dados['adms_atendimento_id'];
             header("Location:$UrlDestino");
         } else {
+
             $this->Dados['created'] = date('Y-m-d H:i:s');
             $this->verificarExisteAtividade();
             if ($this->jaExiste) {
@@ -153,17 +164,17 @@ class AdmsAtendimentoFuncionarios {
                 if ($this->UltimaAtividade[0]) {
                     // Pegando a hora de termino da atividade anterior e passando para o inicio da nova atividade cadastrada
                     $this->Dados['hora_inicio_planejado'] = $this->UltimaAtividade[0]['hora_fim_planejado'];
+
                 } else {
-                    
                     return $this->Resultado = false;
                 }
+
             } else {
 
                 $inicioAti = new AdmsRead();
                 $inicioAti->fullRead("SELECT hora_inicio, hora_termino2 
-                FROM adms_planejamento 
-                WHERE adms_funcionario_id=:adms_funcionario_id LIMIT :limit", "adms_funcionario_id={$this->Dados['adms_funcionario_id']}&limit=1");
-                
+                                            FROM adms_planejamento 
+                                            WHERE adms_funcionario_id=:adms_funcionario_id LIMIT :limit", "adms_funcionario_id={$this->Dados['adms_funcionario_id']}&limit=1");
                 if ($inicioAti->getResultado()) {
 
                     $this->horaInicioFunc = $inicioAti->getResultado();
@@ -175,17 +186,11 @@ class AdmsAtendimentoFuncionarios {
                             $horaAtual = date('H:i:s');
                             $partes = explode(':', $horaAtual);
                         } else {
-                            /*
-                             * Somar com hora de almoço aqui
-                             */
                             $partes = explode(':', $this->horaInicioFunc[0]['hora_inicio']);
                         }
 
 
                     } else {
-                        /*
-                         * Somar com hora de almoço aqui
-                         */
                         $partes = explode(':', $this->horaInicioFunc[0]['hora_inicio']);
                     }
 
@@ -195,6 +200,8 @@ class AdmsAtendimentoFuncionarios {
 
                 }
             }
+
+            // Pegando dados da atividade que está sendo cadastrada
             $this->buscarAtividade();
             $this->Dados['duracao_atividade'] = $this->DadosAtivi[0]['duracao'];
             $this->Dados['at_tempo_restante'] = $this->DadosAtivi[0]['duracao'];
@@ -205,8 +212,26 @@ class AdmsAtendimentoFuncionarios {
             $calcularHoraFimPl = new Funcoes();
             $this->Dados['hora_fim_planejado'] = $calcularHoraFimPl->somar_time_in_hours($this->Dados['duracao_atividade'],$this->Dados['hora_inicio_planejado']);
 
-             //Criar objeto de AdmsAtendimentoFuncionarioReordenar para Inserir a ordem
+            // Buscar Jornada para fazer comparação se será necessário somar a hora de almoço
+            $jornadaFunc = new BuscarDuracaoJornadaT($this->FuncionarioId, $this->Dados['data_inicio_planejado']);
+            $pausa_almoco = $jornadaFunc->getDuracaoJornada()['hora_termino'];
+            $retorna_trabalho = $jornadaFunc->getDuracaoJornada()['hora_inicio2'];
+            if (empty($pausa_almoco)){
+                return $this->Resultado = false;
+            }
+            if (($this->Dados['hora_inicio_planejado'] < $pausa_almoco)and ($pausa_almoco < $this->Dados['hora_fim_planejado'])) {
+                $calculaAlmoco = new Funcoes();
+                $totalTimeAlmoco = $calculaAlmoco->sbtrair_horas_in_hours($retorna_trabalho, $pausa_almoco);
+                echo "<br>" .$totalTimeAlmoco;
+                $this->Dados['hora_fim_planejado'] = $calculaAlmoco->somar_time_in_hours($totalTimeAlmoco,$this->Dados['hora_fim_planejado']);
+            }
+            if (($this->Dados['hora_inicio_planejado'] >= $pausa_almoco) and ($this->Dados['hora_inicio_planejado'] < $retorna_trabalho)){
+                $this->Dados['hora_inicio_planejado'] = $retorna_trabalho;
+                $calculaAlmoco = new Funcoes();
+                $this->Dados['hora_fim_planejado'] = $calculaAlmoco->somar_time_in_hours($this->Dados['duracao_atividade'],$this->Dados['hora_inicio_planejado']);
+            }
             
+             //Criar objeto de AdmsAtendimentoFuncionarioReordenar para Inserir a ordem
             $inserirOrdem = new \App\adms\Models\AdmsAtendimentoFuncionariosReordenar();
             
             $inserirOrdem->inserirOrdemAtvFunc($this->Dados['adms_funcionario_id']);          
@@ -310,6 +335,7 @@ class AdmsAtendimentoFuncionarios {
 
 
             }
+            var_dump($this->TempoExcedido);
             var_dump($this->Dados);
         $cont++;
         }
@@ -342,29 +368,11 @@ class AdmsAtendimentoFuncionarios {
             $compara_hora_fim = $dataHora->getResultado()[0]['hora_fim_planejado'];
             $compara_hora_inicio = $dataHora->getResultado()[0]['hora_inicio_planejado'];
 
-            if (($compara_hora_inicio < $this->HoraTermino) and ($compara_hora_fim > $this->HoraTermino)) {
-                /*
-                 * Aqui vai somar a $Duracao_almoco com $this->UltimaAtividadeLoop[0]['hora_fim_planejado']
-                 *
-                 *
-                 */
-                $this->UltimaAtividade = $dataHora->getResultado();
+            $this->UltimaAtividade = $dataHora->getResultado();
 
-                $diferencaHoras = new Funcoes();
-                $Duracao_almoco = $diferencaHoras->sbtrair_horas_in_hours($this->HoraInicio2, $this->HoraTermino);
-
-                //echo $Duracao_almoco;
-                $this->UltimaAtividade[0]['hora_fim_planejado'] = $diferencaHoras->somar_time_in_hours($Duracao_almoco, $this->UltimaAtividade[0]['hora_fim_planejado']);
-
-
-            } else {
-                $this->UltimaAtividade = $dataHora->getResultado();
-            }
-            /*
-            var_dump($this->UltimaAtividade);
-            echo $this->UltimaAtividade[0]['hora_fim_planejado'];
-            die;
-            */
+            //var_dump($this->UltimaAtividade);
+            //echo $this->UltimaAtividade[0]['hora_fim_planejado'];
+            //die;
         }
     }
     

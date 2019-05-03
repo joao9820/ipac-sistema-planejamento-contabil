@@ -380,6 +380,11 @@ extract($this->Dados['jornadaDeTrabalho']);
                                             $data->modify('+' . $valor3[1] . ' minutes');
                                             $hora_fim = $data->format('H:i'); // somar hora de inicio_2 com hora_rest para exibir quando deve concluir a atividade
 
+                                            if (($hora_fim_planejado < $hora_termino2)) {
+                                                echo "<br>";
+                                                echo $hora_fim_planejado;
+                                            }
+
                                             echo '<span class="d-flex justify-content-between">';
                                                 echo '<span id="horaInicioCp" class="badge badge-secondary">';
                                                     echo date('H:i', strtotime($hora_inicio_planejado));
@@ -398,6 +403,8 @@ extract($this->Dados['jornadaDeTrabalho']);
                                                     echo date('H:i', strtotime($hora_fim));
                                                 echo '</span>';
                                             echo '</span>';
+
+
 
                                         } elseif (($hora_inicio_planejado < $hora_termino2) and ($hora_fim_planejado > $hora_termino2)){
                                             $valorex = explode(':', $hora_inicio_planejado);

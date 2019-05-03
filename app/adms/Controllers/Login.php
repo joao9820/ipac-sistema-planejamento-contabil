@@ -33,7 +33,7 @@ class Login
             }
         }
 
-        
+
 
         $this->Dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
