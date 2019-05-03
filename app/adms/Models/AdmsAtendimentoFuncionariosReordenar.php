@@ -21,7 +21,7 @@ use App\adms\Models\funcoes\Funcoes;
 class AdmsAtendimentoFuncionariosReordenar {
 
     private $FuncId;
-    //private $FuncIdAtual;
+    private $dataAtual;
     private $ordem;
     private $horaInicio;
     private $DadosOrd;
@@ -47,7 +47,18 @@ class AdmsAtendimentoFuncionariosReordenar {
                 ORDER BY ordem", "adms_funcionario_id={$this->FuncId}&ordem={$this->ordem}");
 
         $resultadoBD = $reordenar->getResultado();
-
+        
+        $this->dataAtual = date('Y-m-d');
+        $this->horaAtual = date('H:i:s');
+        
+        $diferencaHoras = new Funcoes();
+        $horaAtual = $diferencaHoras->hora_to_segundos($this->horaAtual);
+        $horaInicio = $diferencaHoras->hora_to_segundos($this->horaInicio);
+        
+        if((($this->dataOrdemApagada == $this->dataAtual) && ($horaAtual > $horaInicio))){ //Se não continuará com a hora atribuida anteriormente
+            $this->horaInicio = $this->horaAtual;
+        }
+        
         $reordemHoraInicio = $this->horaInicio; //O primeiro inicia pela hora do inicio da atv apagada, porém os outros irão sempre pegar da hora final do anterior
 
         var_dump($resultadoBD);
@@ -62,7 +73,7 @@ class AdmsAtendimentoFuncionariosReordenar {
             $this->ordemAtual = $novaOrdem['ordem'];
 
             //Se a data for a mesma altera a ordem e o horário, caso não seja altera so o horário
-
+            
             $this->DadosOrd['hora_inicio_planejado'] = $reordemHoraInicio; //9:30
 
             //será a hora que vai ser atualizada nesta ordem    
