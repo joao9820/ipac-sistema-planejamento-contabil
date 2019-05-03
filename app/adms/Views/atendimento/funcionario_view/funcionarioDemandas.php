@@ -65,11 +65,12 @@ extract($this->Dados['jornadaDeTrabalho']);
             }
         }
 
+        /*
         echo $hora_inicio ."<br>";
         echo $hora_termino."<br>";
         echo $hora_inicio2."<br>";
         echo $hora_termino2."<br>";
-
+        */
     ?>
     <span class="d-block my-3 ml-4">
         <button onclick="Parametros('<?php echo $hora_inicio; ?>', '<?php echo $hora_termino; ?>', '<?php echo $hora_inicio2; ?>', '<?php echo $hora_termino2; ?>', '<?php echo $adms_funcionario_id; ?>')"
