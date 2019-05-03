@@ -21,6 +21,7 @@ use App\adms\Models\funcoes\Funcoes;
 class AdmsAtendimentoFuncionariosReordenar {
 
     private $FuncId;
+    //private $FuncIdAtual;
     private $ordem;
     private $horaInicio;
     private $DadosOrd;
@@ -50,10 +51,6 @@ class AdmsAtendimentoFuncionariosReordenar {
         $reordemHoraInicio = $this->horaInicio; //O primeiro inicia pela hora do inicio da atv apagada, porém os outros irão sempre pegar da hora final do anterior
 
         var_dump($resultadoBD);
-        //die();
-        echo $reordemHoraInicio;
-        //die();
-
 
         $updateOrdem = new \App\adms\Models\helper\AdmsUpdate();
 
@@ -66,7 +63,7 @@ class AdmsAtendimentoFuncionariosReordenar {
 
             //Se a data for a mesma altera a ordem e o horário, caso não seja altera so o horário
 
-            $this->DadosOrd['hora_inicio_planejado'] = $reordemHoraInicio;
+            $this->DadosOrd['hora_inicio_planejado'] = $reordemHoraInicio; //9:30
 
             //será a hora que vai ser atualizada nesta ordem    
 
@@ -76,7 +73,7 @@ class AdmsAtendimentoFuncionariosReordenar {
 
             $this->novaData = $reordemDia->getDefineData()['nova_data'];
 
-            echo 'Nova Data: ' . $this->novaData;
+            echo '<br/>Nova Data: ' . $this->novaData;
             //die();
 
             if ($this->novaData != $this->dataOrdemApagada) { //Se sim significa que a data de inicio mudou e consequentemente a hora também, o tempo excedeu
@@ -127,6 +124,10 @@ class AdmsAtendimentoFuncionariosReordenar {
                 $this->DadosOrd['data_inicio_planejado'] = $this->dataOrdemApagada;
                 
                 $reordemHoraInicio = $this->DadosOrd['hora_fim_planejado'];
+                
+                echo 'Print_r: <br/>';
+                print_r($this->DadosOrd);
+                //die();
             }
 
             //$this->atualizarHoraAtv(); //Passa a ordem que está no momento
@@ -142,8 +143,7 @@ class AdmsAtendimentoFuncionariosReordenar {
         }
 
         //die();
-        echo 'Print_r: <br/>';
-        print_r($this->DadosOrd);
+        ;
 
         //die();           
     }
@@ -209,8 +209,9 @@ class AdmsAtendimentoFuncionariosReordenar {
         //die();
     }
 
-    public function buscarUltOrdemAtvFunc($id_func = NULL) {
-
+    public function buscarUltOrdemAtvFunc($id_func = NULL) { 
+    //Quando vier por parâmetro salvamos esse func_id para atualizar as ordens e o planejamento, senão será só pra inserção da ordem na hora do registro, sem necessidade de salvar
+        
         if (!empty($id_func)) { //Pelo apagar passa o id pois não chama o inserirOrdem apenas busca inserir a ordem
             $this->FuncId = $id_func;
         }
@@ -227,7 +228,7 @@ class AdmsAtendimentoFuncionariosReordenar {
 
         $this->FuncId = $id_func;
 
-        $this->buscarUltOrdemAtvFunc();
+        $this->buscarUltOrdemAtvFunc(); //Quando edita ou insere ordem é com o func_id atual, quando apaga ou edita planejamento é com o func_id antigo
 
         if ($this->Resultado != NULL) {
 

@@ -67,7 +67,6 @@ class AdmsReordenarData {
             if ($this->JornadaFunc['hora_termino2'] < $this->horaFimAtvAnt) {
 
                 /*
-                 * ATENÇÃO PAREI AQUI
                  * calcular o tempo excedido quando a soma total das atividades não ultrapassa a jornada de trabalho
                  * mas ultrapassa as 18 horas do dia
                  *
