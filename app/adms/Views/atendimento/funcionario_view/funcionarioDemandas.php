@@ -373,7 +373,6 @@ extract($this->Dados['jornadaDeTrabalho']);
                                             $data->modify('-' . $valor2[0] . ' hours');
                                             $data->modify('-' . $valor2[1] . ' minutes');
                                             $hora_rest = $data->format('H:i'); // o tempo restante a ser trabalhado na atividade
-echo $hora_rest;
 
                                             $valor3 = explode(':', $hora_rest);
                                             $data = new DateTime(date('H:i', strtotime($hora_inicio2)));
@@ -381,26 +380,77 @@ echo $hora_rest;
                                             $data->modify('+' . $valor3[1] . ' minutes');
                                             $hora_fim = $data->format('H:i'); // somar hora de inicio_2 com hora_rest para exibir quando deve concluir a atividade
 
+                                            if ($hora_fim > $hora_termino2) {
 
-                                            echo '<span class="d-flex justify-content-between">';
+                                                $diferenca = explode(':', $hora_termino2);
+                                                $data = new DateTime(date('H:i', strtotime($hora_fim)));
+                                                $data->modify('-' . $diferenca[0] . ' hours');
+                                                $data->modify('-' . $diferenca[1] . ' minutes');
+                                                $hora_proximo_dia = $data->format('H:i');
+
+                                                $novo_termino = explode(':', $hora_proximo_dia);
+                                                $data = new DateTime(date('H:i', strtotime($hora_inicio)));
+                                                $data->modify('+' . $novo_termino[0] . ' hours');
+                                                $data->modify('+' . $novo_termino[1] . ' minutes');
+                                                $hora_fim = $data->format('H:i');
+
+                                                echo '<span class="d-flex justify-content-between">';
                                                 echo '<span id="horaInicioCp" class="badge badge-secondary">';
-                                                    echo date('H:i', strtotime($hora_inicio_planejado));
+                                                echo date('H:i', strtotime($hora_inicio_planejado));
                                                 echo '</span>';
                                                 echo '<span id="horaTerminoCp" class="badge badge-success">';
-                                                    echo date('H:i', strtotime($hora_termino));
+                                                echo date('H:i', strtotime($hora_termino));
                                                 echo '</span>';
-                                            echo '</span>';
-                                            // intervalo almoço
-                                            echo "<small class='text-success'>Pausa almoço</small>";
-                                            echo '<span class="d-flex justify-content-between mt-2">';
+                                                echo '</span>';
+                                                // intervalo almoço
+                                                echo "<small class='text-success'>Pausa almoço</small>";
+                                                echo '<span class="d-flex justify-content-between mt-2">';
                                                 echo '<span id="horaInicioCp" class="badge badge-success">';
-                                                    echo date('H:i', strtotime($hora_inicio2));
+                                                echo date('H:i', strtotime($hora_inicio2));
                                                 echo '</span>';
-                                                echo '<span id="horaTerminoCp" class="badge badge-secondary">';
-                                                    echo date('H:i', strtotime($hora_fim));
-                                                echo '</span>';
-                                            echo '</span>';
 
+
+
+                                                echo '<span id="horaTerminoCp" class="badge badge-danger">';
+                                                echo date('H:i', strtotime($hora_termino2));
+                                                echo '</span>';
+                                                echo '</span>';
+                                                // fim expediente
+                                                echo "<small class='text-danger'>Fim expediente</small>";
+                                                echo '<span class="d-flex justify-content-between mt-2">';
+                                                echo '<span id="horaInicioCp" class="badge badge-danger">';
+                                                echo date('H:i', strtotime($hora_inicio));
+                                                echo '</span>';
+
+
+                                                // ultima hora da atividade
+                                                echo '<span id="horaTerminoCp" class="badge badge-secondary">';
+                                                echo date('H:i', strtotime($hora_fim));
+                                                echo '</span>';
+                                                echo '</span>';
+
+
+                                            } else {
+
+                                                echo '<span class="d-flex justify-content-between">';
+                                                    echo '<span id="horaInicioCp" class="badge badge-secondary">';
+                                                        echo date('H:i', strtotime($hora_inicio_planejado));
+                                                    echo '</span>';
+                                                    echo '<span id="horaTerminoCp" class="badge badge-success">';
+                                                        echo date('H:i', strtotime($hora_termino));
+                                                    echo '</span>';
+                                                echo '</span>';
+                                                // intervalo almoço
+                                                echo "<small class='text-success'>Pausa almoço</small>";
+                                                echo '<span class="d-flex justify-content-between mt-2">';
+                                                    echo '<span id="horaInicioCp" class="badge badge-success">';
+                                                        echo date('H:i', strtotime($hora_inicio2));
+                                                    echo '</span>';
+                                                    echo '<span id="horaTerminoCp" class="badge badge-secondary">';
+                                                        echo date('H:i', strtotime($hora_fim));
+                                                    echo '</span>';
+                                                echo '</span>';
+                                            }
 
 
                                         } elseif (($hora_inicio_planejado < $hora_termino2) and ($hora_fim_planejado > $hora_termino2)){
