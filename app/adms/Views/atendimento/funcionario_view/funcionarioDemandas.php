@@ -64,12 +64,12 @@ extract($this->Dados['jornadaDeTrabalho']);
                 //echo $hora_termino2;
             }
         }
-        /*
-        echo $hora_inicio;
-        echo $hora_termino;
-        echo $hora_inicio2;
-        echo $hora_termino2;
-        */
+
+        echo $hora_inicio ."<br>";
+        echo $hora_termino."<br>";
+        echo $hora_inicio2."<br>";
+        echo $hora_termino2."<br>";
+
     ?>
     <span class="d-block my-3 ml-4">
         <button onclick="Parametros('<?php echo $hora_inicio; ?>', '<?php echo $hora_termino; ?>', '<?php echo $hora_inicio2; ?>', '<?php echo $hora_termino2; ?>', '<?php echo $adms_funcionario_id; ?>')"
@@ -373,6 +373,7 @@ extract($this->Dados['jornadaDeTrabalho']);
                                             $data->modify('-' . $valor2[0] . ' hours');
                                             $data->modify('-' . $valor2[1] . ' minutes');
                                             $hora_rest = $data->format('H:i'); // o tempo restante a ser trabalhado na atividade
+echo $hora_rest;
 
                                             $valor3 = explode(':', $hora_rest);
                                             $data = new DateTime(date('H:i', strtotime($hora_inicio2)));
@@ -380,10 +381,6 @@ extract($this->Dados['jornadaDeTrabalho']);
                                             $data->modify('+' . $valor3[1] . ' minutes');
                                             $hora_fim = $data->format('H:i'); // somar hora de inicio_2 com hora_rest para exibir quando deve concluir a atividade
 
-                                            if (($hora_fim_planejado < $hora_termino2)) {
-                                                echo "<br>";
-                                                echo $hora_fim_planejado;
-                                            }
 
                                             echo '<span class="d-flex justify-content-between">';
                                                 echo '<span id="horaInicioCp" class="badge badge-secondary">';
@@ -419,11 +416,68 @@ extract($this->Dados['jornadaDeTrabalho']);
                                             $data->modify('-' . $valor2ex[1] . ' minutes');
                                             $hora_restex = $data->format('H:i'); // o tempo restante a ser trabalhado na atividade no proximo dia
 
+
                                             $valor3ex = explode(':', $hora_restex);
                                             $data = new DateTime(date('H:i', strtotime($hora_inicio)));
                                             $data->modify('+' . $valor3ex[0] . ' hours');
                                             $data->modify('+' . $valor3ex[1] . ' minutes');
                                             $hora_fimex = $data->format('H:i'); // somar hora de inicio_2 com hora_rest para exibir quando deve concluir a atividade
+
+                                            if ($hora_fimex > $hora_termino){
+
+                                                $almoco = explode(':', $hora_termino);
+                                                $data = new DateTime(date('H:i', strtotime($hora_inicio2)));
+                                                $data->modify('-' . $almoco[0] . ' hours');
+                                                $data->modify('-' . $almoco[1] . ' minutes');
+                                                $hora_almoco = $data->format('H:i');
+
+                                                $valor3exAlmo = explode(':', $hora_restex);
+                                                $data = new DateTime(date('H:i', strtotime($hora_inicio)));
+                                                $data->modify('+' . $valor3exAlmo[0] . ' hours');
+                                                $data->modify('+' . $valor3exAlmo[1] . ' minutes');
+                                                $hora_fimexSemAlmo = $data->format('H:i');
+
+                                                $valor3exAlmoRes = explode(':', $hora_almoco);
+                                                $data = new DateTime(date('H:i', strtotime($hora_fimexSemAlmo)));
+                                                $data->modify('+' . $valor3exAlmoRes[0] . ' hours');
+                                                $data->modify('+' . $valor3exAlmoRes[1] . ' minutes');
+                                                $hora_fimex = $data->format('H:i');
+
+                                                echo '<span class="d-flex justify-content-between">';
+                                                echo '<span id="horaInicioCp" class="badge badge-secondary">';
+                                                echo date('H:i', strtotime($hora_inicio_planejado));
+                                                echo '</span>';
+                                                echo '<span id="horaTerminoCp" class="badge badge-danger">';
+                                                echo date('H:i', strtotime($hora_termino2));
+                                                echo '</span>';
+                                                echo '</span>';
+                                                // fim expediente
+                                                echo "<small class='text-danger'>Fim expediente</small>";
+                                                echo '<span class="d-flex justify-content-between mt-2">';
+                                                echo '<span id="horaInicioCp" class="badge badge-danger">';
+                                                echo date('H:i', strtotime($hora_inicio));
+                                                echo '</span>';
+
+
+                                                echo '<span id="horaTerminoCp" class="badge badge-success">';
+                                                echo date('H:i', strtotime($hora_termino));
+                                                echo '</span>';
+                                                echo '</span>';
+                                                // intervalo almoço
+                                                echo "<small class='text-success'>Pausa almoço</small>";
+                                                echo '<span class="d-flex justify-content-between mt-2">';
+                                                echo '<span id="horaInicioCp" class="badge badge-success">';
+                                                echo date('H:i', strtotime($hora_inicio2));
+                                                echo '</span>';
+
+                                                // Hora final da atividade
+                                                echo '<span id="horaTerminoCp" class="badge badge-secondary">';
+                                                echo date('H:i', strtotime($hora_fimex));
+                                                echo '</span>';
+                                                echo '</span>';
+
+
+                                            } else {
 
                                             echo '<span class="d-flex justify-content-between">';
                                                 echo '<span id="horaInicioCp" class="badge badge-secondary">';
@@ -433,7 +487,7 @@ extract($this->Dados['jornadaDeTrabalho']);
                                                 echo date('H:i', strtotime($hora_termino2));
                                                 echo '</span>';
                                             echo '</span>';
-                                            // intervalo almoço
+                                            // fim expediente
                                             echo "<small class='text-danger'>Fim expediente</small>";
                                             echo '<span class="d-flex justify-content-between mt-2">';
                                                 echo '<span id="horaInicioCp" class="badge badge-danger">';
@@ -443,7 +497,7 @@ extract($this->Dados['jornadaDeTrabalho']);
                                                 echo date('H:i', strtotime($hora_fimex));
                                                 echo '</span>';
                                             echo '</span>';
-
+}
 
                                         }
                                         else {

@@ -482,19 +482,7 @@ if (!defined('URL')) {
                         </div>
 
                     </div>
-                    <div class="form-row mb-3">
-                        <div class="col-md-6">
-                            <label>Data fatal</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-users"></i>
-                                    </div>
-                                </div>
-                                <input type="date" class="form-control" placeholder="18/10/2019">
-                            </div>
-                        </div>
-                    </div>
+
 
                 </div>
 
