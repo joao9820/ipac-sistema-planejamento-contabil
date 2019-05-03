@@ -82,26 +82,39 @@ class AdmsAtendimentoFuncionarioEditar
                      $this->Atividade['msg'] = "Não foi possível encontrar a última atividade do funcionário";
                 }
             } else {
-                // Buscar a hora de inicio do expediente do funcionário
                 $inicioAti = new AdmsRead();
-                $inicioAti->fullRead("SELECT hora_inicio 
+                $inicioAti->fullRead("SELECT hora_inicio, hora_termino2 
                 FROM adms_planejamento 
                 WHERE adms_funcionario_id=:adms_funcionario_id LIMIT :limit", "adms_funcionario_id={$this->Dados['adms_funcionario_id']}&limit=1");
-
+                
                 if ($inicioAti->getResultado()) {
 
                     $this->horaInicioFunc = $inicioAti->getResultado();
 
                     // Pegar o tempo excedito da atividade do dia anterior e somar com a hora de inicio planejado do juncionario para o proximo dia
-                    $partes = explode(':', $this->horaInicioFunc[0]['hora_inicio']);
-                    /** @var INT $segundosAtividades */
+                    if ($this->Dados['data_inicio_planejado'] == date('Y-m-d')){
+
+                        if((date('H:i:s') < $this->horaInicioFunc[0]['hora_termino2']) and (date('H:i:s') > $this->horaInicioFunc[0]['hora_inicio'])) {
+                            $horaAtual = date('H:i:s');
+                            $partes = explode(':', $horaAtual);
+                        } else {
+                            /*
+                             * Somar com hora de almoço aqui
+                             */
+                            $partes = explode(':', $this->horaInicioFunc[0]['hora_inicio']);
+                        }
+
+
+                    } else {
+                        /*
+                         * Somar com hora de almoço aqui
+                         */
+                        $partes = explode(':', $this->horaInicioFunc[0]['hora_inicio']);
+                    }
+
                     $segundosAtividades = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
                     $resultado = $segundosAtividades + $this->TempoExcedido; // Pegando o tempo excedido e somando com a hora de inicio
                     $this->Dados['hora_inicio_planejado'] = gmdate("H:i:s",$resultado);
-                    //var_dump($this->Dados);
-                    //echo $this->TempoExcedido;
-                    //echo "chegou até aqui";
-                    //die;
                 }
             }
             $this->buscarAtividade();
@@ -119,12 +132,18 @@ class AdmsAtendimentoFuncionarioEditar
            
             $inserirOrdem = new \App\adms\Models\AdmsAtendimentoFuncionariosReordenar();
             
-             $this->removerAtividadeFunc(); //Buscando ordem do antigo funcionario antes de atualizar
-            
             $inserirOrdem->inserirOrdemAtvFunc($this->Dados['adms_funcionario_id']);          
-            $this->Dados['ordem'] = $inserirOrdem->getResultado(); //Busca a ultima ordem do funcionário e adiciona 1
+            $this->Dados['ordem'] = $inserirOrdem->getResultado(); //Busca a ultima ordem do funcionário e adiciona 1, necessario inserir primeiro pois o valor func_id a ser salvo na classe é outro
             
-           
+            $reordenar = new \App\adms\Models\AdmsAtendimentoFuncionariosReordenar();
+            
+            $reordenar->buscarUltOrdemAtvFunc($this->Condicao['adms_funcionario_id_ant']); //Retorna a ordem e atribui o id do funcinario na classe         
+            $this->ultimaOrdem = (int) $reordenar->getResultado()[0]['ordem'];
+        
+            $reordenar->buscarOrdem($this->Condicao['id_aten_fun']); //Verificar se há necessidade de reordenar as atividades e o planejamento
+            $this->ordemRetirada = $reordenar->getResultado(); 
+        
+            echo $this->ultimaOrdem . '<' . $this->ordemRetirada; //Buscando ordem do antigo funcionario antes de atualizar
             
             // Realizar a atualização da atividade
             $update = new AdmsUpdate();
@@ -132,9 +151,7 @@ class AdmsAtendimentoFuncionarioEditar
             if ($update->getResultado()) {
                 // Passando para o atributo Atividade o status = true, registro realizado com sucesso
                 
-                if($this->ordemRetirada < $this->ultimaOrdem){
-                    
-                    $reordenar = new \App\adms\Models\AdmsAtendimentoFuncionariosReordenar();
+                if($this->ordemRetirada < $this->ultimaOrdem){           
                     $reordenar->reordenarAtv();              
                 }
                 
@@ -278,24 +295,5 @@ class AdmsAtendimentoFuncionarioEditar
                                         WHERE adms_usuario_id =:id
                                         AND data =:data_d", "id={$this->FuncionarioId}&data_d={$this->Data}");
         $this->HoraExtra = $verificar->getResultado();
-    }
-    
-    
-    public function removerAtividadeFunc(){
-        
-        $buscarOrdem = new \App\adms\Models\AdmsAtendimentoFuncionariosReordenar();
-            
-        $buscarOrdem->buscarUltOrdemAtvFunc($this->Condicao['adms_funcionario_id_ant']); //Retorna a ordem e atribui o id do funcinario na classe         
-        $this->ultimaOrdem = (int) $buscarOrdem->getResultado()[0]['ordem'];
-        
-        $buscarOrdem->buscarOrdem($this->Condicao['id_aten_fun']); //Verificar se há necessidade de reordenar as atividades e o planejamento
-        $this->ordemRetirada = $buscarOrdem->getResultado(); 
-        
-    }
-    
-    private function remanejarAtividadeFunc(){
-        
-       
-        
     }
 }
