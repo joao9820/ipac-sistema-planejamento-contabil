@@ -61,7 +61,9 @@ class AdmsAtendimentoFuncionariosReordenar {
         
         $reordemHoraInicio = $this->horaInicio; //O primeiro inicia pela hora do inicio da atv apagada, porém os outros irão sempre pegar da hora final do anterior
 
-        var_dump($resultadoBD);
+        //var_dump($resultadoBD);
+        //echo $reordemHoraInicio;
+        //die();
 
         $updateOrdem = new \App\adms\Models\helper\AdmsUpdate();
 
@@ -109,15 +111,21 @@ class AdmsAtendimentoFuncionariosReordenar {
 
                     $segundosAtividades = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
                     $resultado = $segundosAtividades + $this->tempoExcedido; // Pegando o tempo excedido e somando com a hora de inicio
-                           
+                    
+                    echo 'Tempo Excedido em Reordenar: ' . $this->tempoExcedido;
+                    
                     $this->DadosOrd['hora_inicio_planejado'] = gmdate("H:i:s", $resultado); //08:10
                     $this->buscarDuracaoAtvReordem(); //Atribui a duracao da atv
                     
                     $hora_fim = new Funcoes();
                     $this->DadosOrd['hora_fim_planejado'] = $hora_fim->somar_time_in_hours($this->duracaoAtv, $this->DadosOrd['hora_inicio_planejado']); //Hora fim = hora de inicio com o excedente
+                    $reordemDia->buscarUltimaAtiviFuncAlmoco($this->DadosOrd['hora_fim_planejado'], $this->DadosOrd['data_inicio_planejado'], $this->duracaoAtv, $this->tempoExcedido); //Validação
                     
-                    $reordemDia->buscarUltimaAtiviFuncAlmoco($this->DadosOrd['hora_fim_planejado']); //Validação
-                    $this->DadosOrd['hora_fim_planejado'] = $reordemDia->getBuscarUltimaAtiviFuncAlmoco();
+                    if($reordemDia->getBuscarUltimaAtiviFuncAlmoco() != FALSE){ //Se vier algum retorno significa que houve excedente no almoço, senão continuará com os valores obtidos nesta classe
+                    $this->DadosOrd['hora_inicio_planejado'] = $reordemDia->getBuscarUltimaAtiviFuncAlmoco()['hora_inicio'];
+                    $this->DadosOrd['hora_fim_planejado'] = $reordemDia->getBuscarUltimaAtiviFuncAlmoco()['hora_fim'];
+                    }
+                    
                     
                     $reordemHoraInicio = $this->DadosOrd['hora_fim_planejado'];
                 }
@@ -129,11 +137,15 @@ class AdmsAtendimentoFuncionariosReordenar {
                 $hora_fim = new Funcoes();
                 $this->DadosOrd['hora_fim_planejado'] = $hora_fim->somar_time_in_hours($this->duracaoAtv, $this->DadosOrd['hora_inicio_planejado']);
                 
-                $reordemDia->buscarUltimaAtiviFuncAlmoco($this->DadosOrd['hora_fim_planejado']); //Validação
-                $this->DadosOrd['hora_fim_planejado'] = $reordemDia->getBuscarUltimaAtiviFuncAlmoco();
-                
                 $this->DadosOrd['data_inicio_planejado'] = $this->dataOrdemApagada;
                 
+                $reordemDia->buscarUltimaAtiviFuncAlmoco($this->DadosOrd['hora_fim_planejado'], $this->DadosOrd['data_inicio_planejado'], $this->duracaoAtv); //Validação
+               
+                if($reordemDia->getBuscarUltimaAtiviFuncAlmoco() != FALSE){ //Se vier algum retorno significa que houve excedente no almoço, senão continuará com os valores obtidos nesta classe
+                    $this->DadosOrd['hora_inicio_planejado'] = $reordemDia->getBuscarUltimaAtiviFuncAlmoco()['hora_inicio'];
+                    $this->DadosOrd['hora_fim_planejado'] = $reordemDia->getBuscarUltimaAtiviFuncAlmoco()['hora_fim'];
+                }
+                         
                 $reordemHoraInicio = $this->DadosOrd['hora_fim_planejado'];
                 
                 echo 'Print_r: <br/>';

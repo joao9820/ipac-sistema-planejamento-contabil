@@ -11,6 +11,7 @@ namespace App\adms\Models;
 use DateTime;
 use App\adms\Models\funcoes\Funcoes;
 use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\funcoes\BuscarDuracaoJornadaT;
 
 /**
  * Description of AdmsReordenarData
@@ -29,11 +30,11 @@ class AdmsReordenarData {
     private $Dados;
     private $TempoExcedido;
     private $horaFimAtvAnt;
-    
+
     /*
-    function getHoraAlmoco() {
-        return $this->JornadaFunc['hora_termino'];
-    }*/
+      function getHoraAlmoco() {
+      return $this->JornadaFunc['hora_termino'];
+      } */
 
     function getResultado() {
         return $this->Resultado;
@@ -124,29 +125,71 @@ class AdmsReordenarData {
         return $this->jaExiste;
     }
 
-    public function buscarUltimaAtiviFuncAlmoco($horaFimAtv) { //Recebe a hora que está terminando sem intervalo de almoço
+    public function buscarUltimaAtiviFuncAlmoco($horaFimAtv, $data, $duracao, $tempo_excedido = NULL) { //Recebe a hora que está terminando sem intervalo de almoço
+        $this->Dados['data_inicio_planejado'] = $data;
+        $this->Dados['duracao_atividade'] = $duracao;
+
+        $jornadaFunc = new BuscarDuracaoJornadaT($this->FuncionarioId, $this->Dados['data_inicio_planejado']);
+        $pausa_almoco = $jornadaFunc->getDuracaoJornada()['hora_termino'];
+        $retorna_trabalho = $jornadaFunc->getDuracaoJornada()['hora_inicio2'];
+        $start_job = $jornadaFunc->getDuracaoJornada()['hora_inicio'];
+
+        if (empty($pausa_almoco)) {
+            return $this->Resultado = false;
+        }
 
         $compara_hora_inicio = $this->horaFimAtvAnt; //Já está no atributo a hora fim da ultima atv e seria a hora de inicio da atv em questão
+        
+        echo  'Hora inicio atv sem intervalo: ' . $compara_hora_inicio;
+        
+        if (($compara_hora_inicio < $pausa_almoco) and ($pausa_almoco < $horaFimAtv)) {
+            $calculaAlmoco = new Funcoes();
+            $totalTimeAlmoco = $calculaAlmoco->sbtrair_horas_in_hours($retorna_trabalho, $pausa_almoco);
+            $this->Dados['hora_inicio_planejado'] = $compara_hora_inicio;
+            $this->Dados['hora_fim_planejado'] = $calculaAlmoco->somar_time_in_hours($totalTimeAlmoco, $horaFimAtv);
+        }
 
-        if (($compara_hora_inicio < $this->JornadaFunc['hora_termino']) and ($horaFimAtv > $this->JornadaFunc['hora_termino'])) {
+        if (($compara_hora_inicio >= $pausa_almoco) and ($compara_hora_inicio < $retorna_trabalho)) {
+
             /*
-             * Aqui vai somar a $Duracao_almoco com $this->UltimaAtividadeLoop[0]['hora_fim_planejado']
-             *
-             * Atenção, quase pronto, mas falta testar. ta dando erro
+             * calcular se o tempo excedido da atividade anterior termina durante o horario de almoço, se sim, somar horario de almoço
+             * na hora_inicio_planejado da atividade sendo registrada e somar a duração da atividade definindo a hora_fim_planejado
              */
 
-            $diferencaHoras = new Funcoes();
-            $Duracao_almoco = $diferencaHoras->sbtrair_horas_in_hours($this->JornadaFunc['hora_inicio2'], $this->JornadaFunc['hora_termino']); //hora de recomeço das atividades - hora de começo do almoço
+            $verificarTimeExcedido = new Funcoes();
 
-            //echo $Duracao_almoco;
-            $this->UltimaAtividade = $diferencaHoras->somar_time_in_hours($Duracao_almoco, $horaFimAtv); //Soma o intervalo da hora de almoço ao reinicio da atividade que no banco será hora_fim_planejado
-        } else {
-            $this->UltimaAtividade = $horaFimAtv;
+            $timeExcedido = $verificarTimeExcedido->segundos_to_hora($tempo_excedido);
+            
+            echo '<br>Time excedido: ' . $timeExcedido;
+            
+            //die();
+            
+            $horaInicioSemAlmoco = $verificarTimeExcedido->somar_time_in_hours($timeExcedido, $start_job);
+
+            if ($horaInicioSemAlmoco > $pausa_almoco) {
+
+                $calcularInicioAfterAlmoco = new Funcoes();
+                $totalTimeAlmoco = $calcularInicioAfterAlmoco->sbtrair_horas_in_hours($retorna_trabalho, $pausa_almoco);
+                $this->Dados['hora_inicio_planejado'] = $calcularInicioAfterAlmoco->somar_time_in_hours($totalTimeAlmoco, $compara_hora_inicio);
+                $this->Dados['hora_fim_planejado'] = $calcularInicioAfterAlmoco->somar_time_in_hours($this->Dados['duracao_atividade'], $this->Dados['hora_inicio_planejado']);
+            } else {
+                // Caso a nova atividade a ser registrada inicie durante o almoço, será definida pra ela o novo inicio após o almoço
+                $this->Dados['hora_inicio_planejado'] = $retorna_trabalho;
+                $calculaAlmoco = new Funcoes();
+                $this->Dados['hora_fim_planejado'] = $calculaAlmoco->somar_time_in_hours($this->Dados['duracao_atividade'], $this->Dados['hora_inicio_planejado']);
+            }
         }
     }
 
     public function getBuscarUltimaAtiviFuncAlmoco() {
-        return $this->UltimaAtividade;
+
+        if (!empty($this->Dados['hora_inicio_planejado']) && !empty($this->Dados['hora_fim_planejado'])) {
+             $this->Resultado = ["hora_inicio" => $this->Dados['hora_inicio_planejado'], "hora_fim" => $this->Dados['hora_fim_planejado']];
+             echo 'hora fim depois do almoço' .  $this->Resultado['hora_fim'];
+            return $this->Resultado;
+        } else {
+            return FALSE;
+        }
     }
 
 }

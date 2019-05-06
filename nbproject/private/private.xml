@@ -44,11 +44,13 @@
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/AdmsReordenarData.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/nivAcesso/listarNicAc.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/AdmsAtendimentoFuncionarioEditar.php</file>
+            <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/funcoes/BuscandoUltimaAtivHoraInicioFim.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/gerenciar/listarDemandas.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/include/cabecalho_adm.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/include/header.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/AdmsEditarPerfil.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Controllers/ApagarGrupoPg.php</file>
+            <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/funcoes/Funcoes.php</file>
         </group>
     </open-files>
 </project-private>
