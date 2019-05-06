@@ -193,7 +193,7 @@ class AdmsAtendimentoFuncionarios {
 
                     $this->horaInicioFunc = $inicioAti->getResultado();
 
-                    // Pegar o tempo excedito da atividade do dia anterior e somar com a hora de inicio planejado do juncionario para o proximo dia
+                    // Pegar o tempo excedito da atividade do dia anterior e somar com a hora de inicio planejado do funcionario para o proximo dia
                     if ($this->Dados['data_inicio_planejado'] == date('Y-m-d')){
 
                         if((date('H:i:s') < $this->horaInicioFunc[0]['hora_termino2']) and (date('H:i:s') > $this->horaInicioFunc[0]['hora_inicio'])) {

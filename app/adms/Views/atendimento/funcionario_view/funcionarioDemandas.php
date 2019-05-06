@@ -345,7 +345,23 @@ extract($this->Dados['jornadaDeTrabalho']);
 
                                         $data = new DateTime(date('Y-m-d', strtotime($data_inicio_planejado)));
                                         $data->modify('+1 day');
-                                        $dia_seguinte = $data->format('d/m/Y');
+                                        $dia_seguinte = $data->format('Y-m-d');
+                                        // Verificar se é fim de semanda ou não
+                                        $data = getdate(strtotime($dia_seguinte));
+                                        if (($data['wday'] == 6) or ($data['wday'] == 0)) {
+                                            if ($data['wday'] == 6){
+                                                // se for sabado
+                                                $dias = 2;
+                                            } else {
+                                                // se for domingo
+                                                $dias = 1;
+                                            }
+
+                                            $data = new DateTime(date('Y-m-d', strtotime($dia_seguinte)));
+                                            $data->modify('+'.$dias.' day');
+                                            $dia_seguinte = $data->format('Y-m-d');
+                                        }
+                                        $dia_seguinte = date('d/m/Y', strtotime($dia_seguinte));
                                         echo "<span class='mt-4'>$dia_seguinte</span>";
                                     }
                                 ?>
