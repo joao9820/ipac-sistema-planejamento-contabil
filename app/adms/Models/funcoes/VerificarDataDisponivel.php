@@ -65,6 +65,16 @@ class VerificarDataDisponivel
             }
             $novodia = new Funcoes();
             $novaData = $novodia->dia_in_data($novaData,$dias,"+");
+        } else {
+
+            // Verificando se é feriado
+            $feriado = new Funcoes();
+            while ($feriado->isFeriado($novaData)) {
+                // enquanto for feriado será somado mais um dia
+                $novaData = $feriado->dia_in_data($novaData, 1, "+");
+                //echo "teve feriado";
+            }
+
         }
 
         do {
@@ -138,6 +148,16 @@ class VerificarDataDisponivel
                 }
                 $novodia = new Funcoes();
                 $novaData = $novodia->dia_in_data($novaData,$dias,"+");
+            } else {
+
+                // Verificando se é feriado
+                $feriado = new Funcoes();
+                while ($feriado->isFeriado($novaData)) {
+                    // enquanto for feriado será somado mais um dia
+                    $novaData = $feriado->dia_in_data($novaData, 1, "+");
+                    //echo "teve feriado";
+                }
+
             }
 
 
