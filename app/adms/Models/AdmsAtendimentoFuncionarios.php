@@ -114,6 +114,7 @@ class AdmsAtendimentoFuncionarios {
          * Caso a data fatal não possa ser definida para a data escolhida pelo fato do funcionário
          * já ter muitas atividades e não conseguir realizar mais uma até essa data especifica.
          */
+        /*
         do {
             $DataFatalP = new AdmsVerificarDataFatal($this->Dados['adms_funcionario_id'], $this->Dados['data_fatal'], $this->Dados['adms_atividade_id']);
             if ($DataFatalP->getPermissaoResult()['status'] == false) {
@@ -143,7 +144,7 @@ class AdmsAtendimentoFuncionarios {
             }
 
         } while ($DataFatalP->getPermissaoResult()['status'] == false);
-
+        */
         /*
          * Aqui realizo a chamada para a função que vai verificar se a atividade
          * vai ser definida para executar na data atual ou no dia seguinte.

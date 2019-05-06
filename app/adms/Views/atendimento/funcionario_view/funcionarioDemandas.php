@@ -311,23 +311,11 @@ function getFeriados($ano){
                                     <a href="#" class="btn btn-secondary btn-sm mb-2 btnOpcoesDisabled disabled">
                                         Em andamento
                                     </a>
-
-                                    <?php
-                                    if ((($hora_inicio_planejado < $hora_termino) and ($hora_fim_planejado > $hora_termino)) or (($hora_inicio_planejado < $hora_termino2) and ($hora_fim_planejado > $hora_termino2))){
-                                    ?>
-
-
                                     <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Clique para pausar o atendimento.'>
                                         <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id_aten_func . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']. '&aten='.$id_atendimento; ?>" class="btn btn-outline-warning btn-sm mb-2" data-sitAtenPausar='Tem certeza que deseja pausar o atendimento?'>
                                             Pausar
                                         </a>
                                     </span>
-
-                                    <?php
-                                    }
-                                    ?>
-
-
 
 
                                     <?php
