@@ -175,7 +175,7 @@ $demanda_id = $id;
 
 
         <?php
-        var_dump($this->Dados['atividades']);
+        //var_dump($this->Dados['atividades']);
         if (empty($this->Dados['atividades'])) {
             ?>
 
@@ -201,11 +201,11 @@ $demanda_id = $id;
                 <table class="table table-striped table-hover table-border">
                     <thead class="bg-info text-light">
                     <tr>
-                        <th class="">Ordem</th>
+                        <th class="">id</th>
                         <th class="">Atividade</th>
                         <th class="d-none d-lg-table-cell">Descrição</th>
                         <th class="d-none d-lg-table-cell">Duração</th>
-                        <th>Atividade Antecessora</th>
+                        <th>Atividade Sucessora</th>
                         <th class="text-center">Ações</th>
                     </tr>
                     </thead>
@@ -213,6 +213,8 @@ $demanda_id = $id;
                     <tbody>
                     <?php
                     $cont = 0;
+                    $atividades = $this->Dados['atividades'];
+                    //var_dump($atividades);
                     foreach ($this->Dados['atividades'] as $atividade) {
                         extract($atividade);
                         if($cont == 0){
@@ -222,11 +224,21 @@ $demanda_id = $id;
                         ?>
 
                         <tr>
-                            <td><?php echo $ordem; ?></td>
+                            <td><?php echo $id; ?></td>
                             <td><?php echo $nome; ?></td>
                             <td class="d-none d-sm-table-cell"><?php echo $descricao; ?></td>
                             <td class="d-none d-sm-table-cell"><?php echo date('H:i',strtotime($duracao)); ?></td>
-                            <td><?php echo $nome_ante; ?></td>
+                            <td>
+                                <?php
+                                    $sucessora = $atividade_sucessora_id;
+                                    //echo $atividade_sucessora_id;
+                                    foreach ($atividades as $atividadeSucessora){
+                                        if ($sucessora == $atividadeSucessora['id']){
+                                            echo "<span>".$atividadeSucessora['nome']." </span>";
+                                        }
+                                    }
+                                ?>
+                            </td>
                             <td class="text-right">
                                 <span class="d-none d-md-block">
 

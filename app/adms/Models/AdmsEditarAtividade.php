@@ -53,8 +53,7 @@ class AdmsEditarAtividade
         $listar->fullRead("SELECT id, nome, atividade_sucessora_id
                         FROM adms_atividades  
                         WHERE adms_demanda_id=:adms_demanda_id 
-                        AND id<>:id 
-                        AND id NOT IN (SELECT atividade_sucessora_id FROM adms_atividades WHERE atividade_sucessora_id <> 'null')",
+                        AND id<>:id ",
             "adms_demanda_id={$this->DemandaId}&id={$this->DadosId}");
         $this->Resultado = $listar->getResultado();
         return $this->Resultado;
