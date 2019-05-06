@@ -170,7 +170,7 @@ class VerificarDataDisponivel
             $diaAnterior = $novodia->dia_in_data($diaAnterior,$dias,"-");
         }
 
-        
+
         // Pegando dados da ultima atividade do funcionáro na data informada
         $buscarUltAtivAnterior = new BuscandoUltimaAtivHoraInicioFim($diaAnterior, $this->FuncionarioId);
         $HoraFimUltimaAtivAntSc = $buscarUltAtivAnterior->getHoraInicioFim()['hora_fim_planejado_sc'];
