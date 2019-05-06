@@ -121,6 +121,20 @@ class AdmsAtendimentoFuncionarios {
                 $soma_data = new Funcoes();
                 $nova_data = $soma_data->dia_in_data($this->Dados['data_fatal'], 1, "+");
 
+                // Verificar se é fim de semanda ou não
+                $data = getdate(strtotime($nova_data));
+                if (($data['wday'] == 6) or ($data['wday'] == 0)) {
+                    if ($data['wday'] == 6){
+                        // se for sabado
+                        $dias = 2;
+                    } else {
+                        // se for domingo
+                        $dias = 1;
+                    }
+                    $novodia = new Funcoes();
+                    $nova_data = $novodia->dia_in_data($nova_data,$dias,"+");
+                }
+
                 $this->Dados['data_fatal'] = $nova_data;
 
             } else {
@@ -179,7 +193,7 @@ class AdmsAtendimentoFuncionarios {
 
                     $this->horaInicioFunc = $inicioAti->getResultado();
 
-                    // Pegar o tempo excedito da atividade do dia anterior e somar com a hora de inicio planejado do juncionario para o proximo dia
+                    // Pegar o tempo excedito da atividade do dia anterior e somar com a hora de inicio planejado do funcionario para o proximo dia
                     if ($this->Dados['data_inicio_planejado'] == date('Y-m-d')){
 
                         if((date('H:i:s') < $this->horaInicioFunc[0]['hora_termino2']) and (date('H:i:s') > $this->horaInicioFunc[0]['hora_inicio'])) {

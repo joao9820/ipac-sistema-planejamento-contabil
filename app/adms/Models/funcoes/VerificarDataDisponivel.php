@@ -51,8 +51,31 @@ class VerificarDataDisponivel
     private function defineData()
     {
         $novaData = $this->DataAtual;
-        $cont = 1;
         $condicao = true;
+
+        // Verificar se é fim de semanda ou não
+        $data = getdate(strtotime($novaData));
+        if (($data['wday'] == 6) or ($data['wday'] == 0)) {
+            if ($data['wday'] == 6){
+                // se for sabado
+                $dias = 2;
+            } else {
+                // se for domingo
+                $dias = 1;
+            }
+            $novodia = new Funcoes();
+            $novaData = $novodia->dia_in_data($novaData,$dias,"+");
+        } else {
+
+            // Verificando se é feriado
+            $feriado = new Funcoes();
+            while ($feriado->isFeriado($novaData)) {
+                // enquanto for feriado será somado mais um dia
+                $novaData = $feriado->dia_in_data($novaData, 1, "+");
+                //echo "teve feriado";
+            }
+
+        }
 
         do {
             //var_dump($novaData);
@@ -113,6 +136,31 @@ class VerificarDataDisponivel
             $data->modify('+1 day');
             $novaData = $data->format('Y-m-d');
 
+            // Verificar se é fim de semanda ou não
+            $data = getdate(strtotime($novaData));
+            if (($data['wday'] == 6) or ($data['wday'] == 0)) {
+                if ($data['wday'] == 6){
+                    // se for sabado
+                    $dias = 2;
+                } else {
+                    // se for domingo
+                    $dias = 1;
+                }
+                $novodia = new Funcoes();
+                $novaData = $novodia->dia_in_data($novaData,$dias,"+");
+            } else {
+
+                // Verificando se é feriado
+                $feriado = new Funcoes();
+                while ($feriado->isFeriado($novaData)) {
+                    // enquanto for feriado será somado mais um dia
+                    $novaData = $feriado->dia_in_data($novaData, 1, "+");
+                    //echo "teve feriado";
+                }
+
+            }
+
+
 
         } while ($condicao);
 
@@ -127,6 +175,21 @@ class VerificarDataDisponivel
         $data = new DateTime(date('Y-m-d', strtotime($Data)));
         $data->modify('-1 day');
         $diaAnterior = $data->format('Y-m-d');
+
+        // Verificar se é fim de semanda ou não
+        $data = getdate(strtotime($diaAnterior));
+        if (($data['wday'] == 6) or ($data['wday'] == 0)) {
+            if ($data['wday'] == 6){
+                // se for sabado
+                $dias = 1;
+            } else {
+                // se for domingo
+                $dias = 2;
+            }
+            $novodia = new Funcoes();
+            $diaAnterior = $novodia->dia_in_data($diaAnterior,$dias,"-");
+        }
+
 
         // Pegando dados da ultima atividade do funcionáro na data informada
         $buscarUltAtivAnterior = new BuscandoUltimaAtivHoraInicioFim($diaAnterior, $this->FuncionarioId);

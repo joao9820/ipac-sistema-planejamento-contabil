@@ -7,6 +7,35 @@ if (!defined('URL')) {
 //var_dump($this->Dados);
 extract($this->Dados['jornadaDeTrabalho']);
 //echo $hora_extra;
+
+/**
+ * @param $ano ano em que se quer calcular os feriados
+ * @return array com os feriados do ano (fixo e moveis)
+ */
+function getFeriados($ano){
+    $dia = 86400;
+    $datas = array();
+    $datas['pascoa'] = easter_date($ano);
+    $datas['sexta_santa'] = $datas['pascoa'] - (2 * $dia);
+    $datas['carnaval'] = $datas['pascoa'] - (47 * $dia);
+    $datas['corpus_cristi'] = $datas['pascoa'] + (60 * $dia);
+    $feriados = array (
+        '01/01',
+        '02/02', // Navegantes
+        date('d/m',$datas['carnaval']),
+        date('d/m',$datas['sexta_santa']),
+        date('d/m',$datas['pascoa']),
+        '21/04', // Tiradentes
+        '01/05', //  Dia do Trabalho
+        date('d/m',$datas['corpus_cristi']),
+        '07/09', // Dia da Independência do Brasil - 7 de Setembro
+        '12/10', //  Nossa Senhora Aparecida
+        '02/11', // Finados
+        '15/11', // Proclamação da República
+        '25/12', // Natal
+    );
+    return $feriados;
+}
 ?>
 <style>
 
@@ -345,7 +374,36 @@ extract($this->Dados['jornadaDeTrabalho']);
 
                                         $data = new DateTime(date('Y-m-d', strtotime($data_inicio_planejado)));
                                         $data->modify('+1 day');
-                                        $dia_seguinte = $data->format('d/m/Y');
+                                        $dia_seguinte = $data->format('Y-m-d');
+                                        // Verificar se é fim de semanda ou não
+                                        $data = getdate(strtotime($dia_seguinte));
+                                        if (($data['wday'] == 6) or ($data['wday'] == 0)) {
+                                            if ($data['wday'] == 6){
+                                                // se for sabado
+                                                $dias = 2;
+                                            } else {
+                                                // se for domingo
+                                                $dias = 1;
+                                            }
+
+                                            $data = new DateTime(date('Y-m-d', strtotime($dia_seguinte)));
+                                            $data->modify('+'.$dias.' day');
+                                            $dia_seguinte = $data->format('Y-m-d');
+                                        } else {
+                                            // verificar se é feriado
+                                            $diaMes = date('d/m',strtotime($dia_seguinte));
+                                            $ano = date('Y');
+                                            $feriados = getFeriados($ano);
+                                            foreach ($feriados as $feriado) {
+                                                if ($feriado == $diaMes){
+                                                    // somar um dia
+                                                    $data = new DateTime(date('Y-m-d', strtotime($dia_seguinte)));
+                                                    $data->modify('+1 day');
+                                                    $dia_seguinte = $data->format('Y-m-d');
+                                                }
+                                            }
+                                        }
+                                        $dia_seguinte = date('d/m/Y', strtotime($dia_seguinte));
                                         echo "<span class='mt-4'>$dia_seguinte</span>";
                                     }
                                 ?>

@@ -133,5 +133,42 @@ class Funcoes
         return $valor_resultado;
     }
 
+    /*
+     * Verficicar se é feriado
+     */
+    function isFeriado($Data)
+    {
+        $ano = date('Y', strtotime($Data));
+        $dia = 86400;
+        $datas = array();
+        $datas['pascoa'] = easter_date($ano);
+        $datas['sexta_santa'] = $datas['pascoa'] - (2 * $dia);
+        $datas['carnaval'] = $datas['pascoa'] - (47 * $dia);
+        $datas['corpus_cristi'] = $datas['pascoa'] + (60 * $dia);
+        $feriados = array (
+            '01/01',
+            '02/02', // Navegantes
+            date('d/m',$datas['carnaval']),
+            date('d/m',$datas['sexta_santa']),
+            date('d/m',$datas['pascoa']),
+            '21/04', // Tiradentes
+            '01/05', //  Dia do Trabalho
+            date('d/m',$datas['corpus_cristi']),
+            '07/09', // Dia da Independência do Brasil - 7 de Setembro
+            '12/10', //  Nossa Senhora Aparecida
+            '02/11', // Finados
+            '15/11', // Proclamação da República
+            '25/12', // Natal
+        );
+
+        // Percorrer array e verificar se a data informada é feriado
+        $diaMes = date('d/m', strtotime($Data));
+        foreach ($feriados as $feriado) {
+            if ($feriado == $diaMes) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
