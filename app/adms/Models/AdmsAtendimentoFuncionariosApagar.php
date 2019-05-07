@@ -51,7 +51,7 @@ class AdmsAtendimentoFuncionariosApagar {
                 $buscarOrdem->reordenarAtv(); //O FuncId e atenFuncId foram passados nos métodos anteriores
             }
         }
-        //die();
+
         return $this->Resultado;
     }
 }

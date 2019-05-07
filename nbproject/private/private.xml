@@ -41,10 +41,9 @@
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/atendimento/atendimento.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/usuario/listarUsuario.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/pagina/cadPagina.php</file>
-            <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/AdmsReordenarData.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/nivAcesso/listarNicAc.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/AdmsAtendimentoFuncionarioEditar.php</file>
-            <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/funcoes/BuscandoUltimaAtivHoraInicioFim.php</file>
+            <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Models/funcoes/BuscarDuracaoJornadaT.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/gerenciar/listarDemandas.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/include/cabecalho_adm.php</file>
             <file>file:/C:/xampp/htdocs/ipac-poo/adm/app/adms/Views/include/header.php</file>
