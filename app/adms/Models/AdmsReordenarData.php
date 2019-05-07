@@ -30,6 +30,7 @@ class AdmsReordenarData {
     private $Dados;
     private $TempoExcedido;
     private $horaFimAtvAnt;
+    private $comparaHoraInicio;
 
     /*
       function getHoraAlmoco() {
@@ -137,15 +138,20 @@ class AdmsReordenarData {
         if (empty($pausa_almoco)) {
             return $this->Resultado = false;
         }
-
-        $compara_hora_inicio = $this->horaFimAtvAnt; //Já está no atributo a hora fim da ultima atv e seria a hora de inicio da atv em questão
         
-        echo  'Hora inicio atv sem intervalo: ' . $compara_hora_inicio;
+        if(empty($inicio_atv_almoco)){
+            $this->comparaHoraInicio = $this->horaFimAtvAnt; //Já está no atributo a hora fim da ultima atv e seria a hora de inicio da atv em questão
+        }else{
+            $this->comparaHoraInicio = $inicio_atv_almoco;
+        }
         
-        if (($compara_hora_inicio < $pausa_almoco) and ($pausa_almoco < $horaFimAtv)) {
+        
+        echo  'Hora inicio atv sem intervalo: ' . $this->comparaHoraInicio;
+        
+        if (($this->comparaHoraInicio < $pausa_almoco) and ($pausa_almoco < $horaFimAtv)) {
             $calculaAlmoco = new Funcoes();
             $totalTimeAlmoco = $calculaAlmoco->sbtrair_horas_in_hours($retorna_trabalho, $pausa_almoco);
-            $this->Dados['hora_inicio_planejado'] = $compara_hora_inicio;
+            $this->Dados['hora_inicio_planejado'] = $this->comparaHoraInicio;
             $this->Dados['hora_fim_planejado'] = $calculaAlmoco->somar_time_in_hours($totalTimeAlmoco, $horaFimAtv);
         }
         
