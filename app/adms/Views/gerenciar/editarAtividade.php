@@ -76,6 +76,7 @@ if (!defined('URL')) {
                     <input name="ordem" type="number" class="form-control" placeholder=""
                            value="<?php if (isset($valorForm['ordem'])) { echo $valorForm['ordem']; } ?>">
                 </div>
+                <!--
                 <div class="form-group col-md-10">
                     <label><span class="text-danger">* </span>Selecione uma atividade sucessora: </label>
 
@@ -89,6 +90,7 @@ if (!defined('URL')) {
                             ?>
                         </select>
                 </div>
+                -->
                 <div class="form-group col-md-10">
                     <label><span class="text-danger">* </span>Descrição</label>
                     <textarea name="descricao" class="form-control" rows="3"><?php if(isset($valorForm['descricao'])) {echo $valorForm['descricao'];}?></textarea>

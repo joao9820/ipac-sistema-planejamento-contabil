@@ -63,6 +63,10 @@ class AdmsEditarAtividade
     {
         $this->Dados = $Dados;
 
+        if (isset($this->Dados['atividade_sucessora_id'])){
+            unset($this->Dados['atividade_sucessora_id']);
+        }
+
         $valCampos = new AdmsCampoVazio();
         $valCampos->validarDados($this->Dados);
 
@@ -110,7 +114,7 @@ class AdmsEditarAtividade
     private function updateEditAtividade()
     {
         $this->Dados['modified'] = date('Y-m-d H:i:s');
-
+/*
         $this->verificarSucessora();
         if ($this->Sucessora){
             $alertMensagem = new AdmsAlertMensagem();
@@ -121,6 +125,7 @@ class AdmsEditarAtividade
             echo "não existe continue";
             //die;
         }
+*/
 
         $upEditAtividade = new AdmsUpdate();
 

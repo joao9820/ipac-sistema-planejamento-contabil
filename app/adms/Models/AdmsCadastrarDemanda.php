@@ -5,6 +5,7 @@ namespace App\adms\Models;
 use App\adms\Models\helper\AdmsAlertMensagem;
 use App\adms\Models\helper\AdmsCampoVazio;
 use App\adms\Models\helper\AdmsCreate;
+use App\adms\Models\helper\AdmsValCampoUnico;
 
 if (!defined('URL')) {
     header("Location: /");

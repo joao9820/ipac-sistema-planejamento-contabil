@@ -39,7 +39,7 @@ class AdmsVerAtividades
         $verAtividade->fullRead("SELECT id, nome, duracao, ordem, descricao , atividade_sucessora_id
                         FROM adms_atividades 
                         WHERE adms_demanda_id =:adms_demanda_id 
-                        ORDER BY ordem ASC ", "adms_demanda_id={$this->DadosId}");
+                        ORDER BY nome ASC ", "adms_demanda_id={$this->DadosId}");
         $this->Resultado = $verAtividade->getResultado();
 
         return $this->Resultado;

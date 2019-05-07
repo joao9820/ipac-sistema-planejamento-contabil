@@ -17,7 +17,7 @@ class AdmsListarDemandas
 {
     private $Resultado;
     private $PageId;
-    private $LimiteResultado = 10; // Define a quantidade de registro por páginas
+    private $LimiteResultado = 30; // Define a quantidade de registro por páginas
     private $ResultadoPg;
 
 

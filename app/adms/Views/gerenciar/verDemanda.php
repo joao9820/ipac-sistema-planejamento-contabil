@@ -201,11 +201,10 @@ $demanda_id = $id;
                 <table class="table table-striped table-hover table-border">
                     <thead class="bg-info text-light">
                     <tr>
-                        <th class="">id</th>
                         <th class="">Atividade</th>
                         <th class="d-none d-lg-table-cell">Descrição</th>
-                        <th class="d-none d-lg-table-cell">Duração</th>
-                        <th>Atividade Sucessora</th>
+                        <th>Duração</th>
+                        <th class="d-none d-lg-table-cell">Atividade Sucessora</th>
                         <th class="text-center">Ações</th>
                     </tr>
                     </thead>
@@ -224,11 +223,10 @@ $demanda_id = $id;
                         ?>
 
                         <tr>
-                            <td><?php echo $id; ?></td>
                             <td><?php echo $nome; ?></td>
-                            <td class="d-none d-sm-table-cell"><?php echo $descricao; ?></td>
-                            <td class="d-none d-sm-table-cell"><?php echo date('H:i',strtotime($duracao)); ?></td>
-                            <td>
+                            <td class="d-none d-lg-table-cell"><?php echo $descricao; ?></td>
+                            <td><?php echo date('H:i',strtotime($duracao)); ?></td>
+                            <td class="d-none d-lg-table-cell">
                                 <?php
                                     $sucessora = $atividade_sucessora_id;
                                     //echo $atividade_sucessora_id;
