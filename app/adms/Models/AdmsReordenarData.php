@@ -43,7 +43,9 @@ class AdmsReordenarData {
 
     public function defineData($Funcionario = null, $Data = null, $horaFimAtvAnt = null) {
         $this->FuncionarioId = $Funcionario;
-        $novaData = $Data;
+        
+        $novaData = $this->verificarData($Data);
+        
         $this->horaFimAtvAnt = $horaFimAtvAnt;
 
         $reordemDia = new \App\adms\Models\AdmsAtendimentoFuncionarios();
@@ -57,7 +59,6 @@ class AdmsReordenarData {
 
         $reordemDia->buscarUltimaAtividadeDefineData($novaData);
         $this->UltimaAtividadeLoop = $reordemDia->getBuscarUltimaAtividadeDefineData();
-
 
         if (($this->JornadaFunc['jornadaFunc'] > $this->DuracaoTotalAtivi[0]['duracao_atividade_sc']) and ( $this->JornadaFunc['hora_termino2'] > $this->horaFimAtvAnt)) {
 
@@ -94,8 +95,10 @@ class AdmsReordenarData {
             $data->modify('+1 day');
             $novaData = $data->format('Y-m-d');
             //echo $novaData;
-
-            $this->Dados['data_inicio_planejado'] = $novaData;
+            
+            $novaDataDisp = $this->verificarData($novaData);
+                        
+            $this->Dados['data_inicio_planejado'] = $novaDataDisp;
             //$this->horaFimAtvAnt = $this->UltimaAtividadeLoop[0]['hora_fim_planejado']; //Se somar um dia buscará a hora da ultima atividade para esse dia
         }
         var_dump($this->Dados);
@@ -199,6 +202,35 @@ class AdmsReordenarData {
         } else {
             return FALSE;
         }
+    }
+    
+    private function verificarData($novaData){
+       
+        $data = getdate(strtotime($novaData));
+        if (($data['wday'] == 6) or ($data['wday'] == 0)) {
+            if ($data['wday'] == 6){
+                // se for sabado
+                $dias = 2;
+            } else {
+                // se for domingo
+                $dias = 1;
+            }
+            $novodia = new Funcoes();
+            $novaData = $novodia->dia_in_data($novaData,$dias,"+");
+        } else {
+
+            // Verificando se é feriado
+            $feriado = new Funcoes();
+            while ($feriado->isFeriado($novaData)) {
+                // enquanto for feriado será somado mais um dia
+                $novaData = $feriado->dia_in_data($novaData, 1, "+");
+                //echo "teve feriado";
+            }
+
+        }
+        
+       return $novaData; 
+        
     }
 
 }
