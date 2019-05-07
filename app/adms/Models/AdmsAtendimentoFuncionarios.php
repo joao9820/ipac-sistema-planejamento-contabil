@@ -265,7 +265,6 @@ class AdmsAtendimentoFuncionarios {
             }
 
 
-
             // Corrigir erro ao registrar uma atividade de 6h que ultrapasse o expediente e almoço do dia seguinte
             
              //Criar objeto de AdmsAtendimentoFuncionarioReordenar para Inserir a ordem

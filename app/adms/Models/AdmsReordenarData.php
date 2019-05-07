@@ -129,7 +129,7 @@ class AdmsReordenarData {
         return $this->jaExiste;
     }
 
-    public function buscarUltimaAtiviFuncAlmoco($horaFimAtv, $data, $duracao, $tempo_excedido = NULL, $inicio_atv_almoco = NULL) { //Recebe a hora que está terminando sem intervalo de almoço
+    public function buscarUltimaAtiviFuncAlmoco($horaFimAtv, $data, $duracao, $inicio_atv_almoco = NULL,  $tempo_excedido = NULL) { //Recebe a hora que está terminando sem intervalo de almoço
         $this->Dados['data_inicio_planejado'] = $data;
         $this->Dados['duracao_atividade'] = $duracao;
 
