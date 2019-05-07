@@ -86,7 +86,79 @@ CREATE TABLE IF NOT EXISTS `adms_atendimento_funcionarios` (
 
 -- --------------------------------------------------------
 
---
+--127.0.0.1/ipac_poo/adms_atendimento_funcionarios/		http://localhost/phpmyadmin/sql.php?db=ipac_poo&table=adms_atendimento_funcionarios&pos=0
+ A mostrar registos de 0 -  4 (5 total, A consulta demorou 0,0000 segundos.) [adms_funcionario_id: 44... - 44...]
+
+SELECT * FROM `adms_atendimento_funcionarios` ORDER BY `adms_funcionario_id` ASC 
+
+
+id	adms_atendimento_id	adms_funcionario_id   	adms_demanda_id	adms_atividade_id	duracao_atividade	prioridade	ordem	data_inicio_planejado	hora_inicio_planejado	hora_fim_planejado	data_fatal	at_iniciado	at_pausado	at_tempo_restante	at_tempo_excedido	ordem_atividade	adms_sits_atendimentos_funcionario_id	inicio_atendimento	fim_atendimento	created	modified	
+1	2	44	1	1	01:15:00	2	1	2019-05-07	14:24:19	15:39:19	2019-05-30	
+    NULL
+	
+    NULL
+	01:15:00	
+    NULL
+	5	1	
+    NULL
+	
+    NULL
+	2019-05-07 14:24:19	
+    NULL
+	
+2	2	44	1	3	00:15:00	2	2	2019-05-07	15:39:19	15:54:19	2019-05-30	
+    NULL
+	
+    NULL
+	00:15:00	
+    NULL
+	2	1	
+    NULL
+	
+    NULL
+	2019-05-07 14:24:25	
+    NULL
+	
+3	1	44	14	26	06:00:00	2	3	2019-05-07	15:54:19	21:54:19	2019-05-30	
+    NULL
+	
+    NULL
+	06:00:00	
+    NULL
+	4	1	
+    NULL
+	
+    NULL
+	2019-05-07 14:24:33	
+    NULL
+	
+4	1	44	14	24	01:35:00	2	4	2019-05-08	11:54:19	15:29:19	2019-05-30	
+    NULL
+	
+    NULL
+	01:35:00	
+    NULL
+	2	1	
+    NULL
+	
+    NULL
+	2019-05-07 14:24:40	
+    NULL
+	
+5	1	44	14	23	02:45:00	2	5	2019-05-08	15:29:19	18:14:19	2019-05-30	
+    NULL
+	
+    NULL
+	02:45:00	
+    NULL
+	1	1	
+    NULL
+	
+    NULL
+	2019-05-07 14:24:57	
+    NULL
+	
+
 -- Estrutura da tabela `adms_atividades`
 --
 
@@ -2285,3 +2357,4 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
