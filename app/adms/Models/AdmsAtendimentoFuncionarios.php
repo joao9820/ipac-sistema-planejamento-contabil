@@ -249,7 +249,6 @@ class AdmsAtendimentoFuncionarios {
                 $verificarTimeExcedido = new  Funcoes();
                 $timeExcedido = $verificarTimeExcedido->segundos_to_hora($this->TempoExcedido);
                 $horaInicioSemAlmoco = $verificarTimeExcedido->somar_time_in_hours($timeExcedido, $start_job);
-                
                 if ($horaInicioSemAlmoco > $pausa_almoco) {
 
                     $calcularInicioAfterAlmoco = new Funcoes();

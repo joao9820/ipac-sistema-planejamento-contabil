@@ -125,7 +125,7 @@ class AdmsReordenarData {
         return $this->jaExiste;
     }
 
-    public function buscarUltimaAtiviFuncAlmoco($horaFimAtv, $data, $duracao, $tempo_excedido = NULL, $inicio_atv_almoco = NULL) { //Recebe a hora que está terminando sem intervalo de almoço
+    public function buscarUltimaAtiviFuncAlmoco($horaFimAtv, $data, $duracao, $tempo_excedido = NULL) { //Recebe a hora que está terminando sem intervalo de almoço
         $this->Dados['data_inicio_planejado'] = $data;
         $this->Dados['duracao_atividade'] = $duracao;
 
@@ -148,12 +148,9 @@ class AdmsReordenarData {
             $this->Dados['hora_inicio_planejado'] = $compara_hora_inicio;
             $this->Dados['hora_fim_planejado'] = $calculaAlmoco->somar_time_in_hours($totalTimeAlmoco, $horaFimAtv);
         }
-        
-        var_dump($this->Dados);
-        echo 'Tempo Excedido: ' . $tempo_excedido;
-        
-        if (($inicio_atv_almoco >= $pausa_almoco) and ($inicio_atv_almoco < $retorna_trabalho)) {
-            echo 'Entrou aqui! ';
+
+        if (($compara_hora_inicio >= $pausa_almoco) and ($compara_hora_inicio < $retorna_trabalho)) {
+
             /*
              * calcular se o tempo excedido da atividade anterior termina durante o horario de almoço, se sim, somar horario de almoço
              * na hora_inicio_planejado da atividade sendo registrada e somar a duração da atividade definindo a hora_fim_planejado
@@ -173,7 +170,7 @@ class AdmsReordenarData {
 
                 $calcularInicioAfterAlmoco = new Funcoes();
                 $totalTimeAlmoco = $calcularInicioAfterAlmoco->sbtrair_horas_in_hours($retorna_trabalho, $pausa_almoco);
-                $this->Dados['hora_inicio_planejado'] = $calcularInicioAfterAlmoco->somar_time_in_hours($totalTimeAlmoco, $inicio_atv_almoco);
+                $this->Dados['hora_inicio_planejado'] = $calcularInicioAfterAlmoco->somar_time_in_hours($totalTimeAlmoco, $compara_hora_inicio);
                 $this->Dados['hora_fim_planejado'] = $calcularInicioAfterAlmoco->somar_time_in_hours($this->Dados['duracao_atividade'], $this->Dados['hora_inicio_planejado']);
             } else {
                 // Caso a nova atividade a ser registrada inicie durante o almoço, será definida pra ela o novo inicio após o almoço
