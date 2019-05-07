@@ -53,6 +53,7 @@ class AdmsCadastrarAtendimento
     {
         $this->Dados = $Dados;
 
+
         $valCampoVazio = new \App\adms\Models\helper\AdmsCampoVazio();
         $valCampoVazio->validarDados($this->Dados);
 

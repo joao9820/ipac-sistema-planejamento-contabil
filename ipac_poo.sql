@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: 06-Maio-2019 às 17:40
+-- Generation Time: 07-Maio-2019 às 17:35
 -- Versão do servidor: 5.7.23
 -- versão do PHP: 7.2.10
 
@@ -49,29 +49,7 @@ CREATE TABLE IF NOT EXISTS `adms_atendimentos` (
   `at_tempo_excedido` time DEFAULT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Extraindo dados da tabela `adms_atendimentos`
---
-
-INSERT INTO `adms_atendimentos` (`id`, `adms_demanda_id`, `adms_sits_atendimento_id`, `arquivado`, `descricao`, `adms_usuario_id`, `cancelado_p_user`, `adms_empresa_id`, `created`, `data_fatal`, `prioridade`, `arquivado_gerente`, `duracao_atendimento`, `inicio_atendimento`, `fim_atendimento`, `at_tempo_restante`, `at_tempo_excedido`, `modified`) VALUES
-(1, 14, 2, 2, 'DescriÃ§Ã£o 01 para um novo atendimento.', 43, 2, 3, '2019-04-18 15:29:22', NULL, 2, 2, NULL, '2019-04-29 15:13:56', NULL, NULL, NULL, '2019-04-29 15:13:56'),
-(2, 1, 2, 2, 'DescriÃ§Ã£o para novo atendimento.', 1, 2, 2, '2019-04-18 15:37:09', NULL, 2, 2, NULL, '2019-05-02 15:05:15', NULL, NULL, NULL, '2019-05-02 15:05:15'),
-(3, 14, 2, 2, 'novo teste ', 1, 2, 3, '2019-04-22 13:02:36', NULL, 2, 2, NULL, '2019-05-02 15:05:03', NULL, NULL, NULL, '2019-05-02 15:05:03'),
-(4, 1, 2, 2, 'teste', 1, 2, 1, '2019-04-22 14:21:09', NULL, 2, 2, NULL, '2019-05-02 14:35:17', NULL, NULL, NULL, '2019-05-02 14:35:17'),
-(5, 4, 1, 2, 'teste', 1, 2, 1, '2019-04-29 16:17:43', NULL, 2, 2, NULL, NULL, NULL, NULL, NULL, NULL),
-(6, 4, 1, 2, 'Realizando um novo teste', 1, 2, 2, '2019-04-30 13:47:26', NULL, 2, 2, NULL, NULL, NULL, NULL, NULL, NULL),
-(7, 14, 1, 2, 'teste com fim de semana', 1, 2, 3, '2019-05-06 12:09:32', NULL, 2, 2, NULL, NULL, NULL, NULL, NULL, NULL),
-(8, 1, 1, 2, 'teste com fim de semana', 1, 2, 2, '2019-05-06 12:09:41', NULL, 2, 2, NULL, NULL, NULL, NULL, NULL, NULL),
-(9, 4, 1, 2, 'teste com fim de semana', 1, 2, 1, '2019-05-06 12:09:58', NULL, 2, 2, NULL, NULL, NULL, NULL, NULL, NULL),
-(10, 1, 1, 2, 'teste com fim de semana', 1, 2, 3, '2019-05-06 12:10:16', NULL, 2, 2, NULL, NULL, NULL, NULL, NULL, NULL),
-(11, 14, 1, 2, 'teste com fim de semana', 1, 2, 2, '2019-05-06 12:12:57', NULL, 2, 2, NULL, NULL, NULL, NULL, NULL, NULL),
-(12, 14, 1, 2, 'Teste com semana', 1, 2, 1, '2019-05-06 12:30:44', NULL, 2, 2, NULL, NULL, NULL, NULL, NULL, NULL),
-(13, 1, 1, 2, 'testando feriados', 1, 2, 1, '2019-05-06 13:46:52', NULL, 2, 2, NULL, NULL, NULL, NULL, NULL, NULL),
-(14, 14, 2, 2, 'novo', 1, 2, 3, '2019-05-06 15:53:04', NULL, 2, 2, NULL, '2019-05-06 16:46:09', NULL, NULL, NULL, '2019-05-06 16:46:09'),
-(15, 14, 1, 2, 'novo 2', 1, 2, 1, '2019-05-06 15:53:23', NULL, 2, 2, NULL, NULL, NULL, NULL, NULL, NULL),
-(16, 14, 1, 2, 'novo 3', 1, 2, 1, '2019-05-06 15:53:33', NULL, 2, 2, NULL, NULL, NULL, NULL, NULL, NULL);
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -104,58 +82,7 @@ CREATE TABLE IF NOT EXISTS `adms_atendimento_funcionarios` (
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`,`adms_atendimento_id`,`adms_funcionario_id`,`adms_demanda_id`,`adms_atividade_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=55 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Relacionamento entre Atendimento e Funcionários ';
-
---
--- Extraindo dados da tabela `adms_atendimento_funcionarios`
---
-
-INSERT INTO `adms_atendimento_funcionarios` (`id`, `adms_atendimento_id`, `adms_funcionario_id`, `adms_demanda_id`, `adms_atividade_id`, `duracao_atividade`, `prioridade`, `ordem`, `data_inicio_planejado`, `hora_inicio_planejado`, `hora_fim_planejado`, `data_fatal`, `at_iniciado`, `at_pausado`, `at_tempo_restante`, `at_tempo_excedido`, `ordem_atividade`, `adms_sits_atendimentos_funcionario_id`, `inicio_atendimento`, `fim_atendimento`, `created`, `modified`) VALUES
-(2, 1, 44, 14, 24, '01:35:00', 2, 1, '2019-05-03', '16:23:35', '17:58:35', '2019-05-03', NULL, NULL, '01:35:00', NULL, 2, 1, NULL, NULL, '2019-05-03 16:23:35', NULL),
-(3, 1, 44, 14, 26, '06:00:00', 2, 2, '2019-05-03', '17:58:35', '23:58:35', '2019-05-04', NULL, NULL, '06:00:00', NULL, 4, 1, NULL, NULL, '2019-05-03 16:23:54', NULL),
-(5, 1, 44, 14, 23, '02:45:00', 2, 3, '2019-05-04', '15:58:35', '18:43:35', '2019-05-04', NULL, NULL, '02:45:00', NULL, 1, 1, NULL, NULL, '2019-05-03 16:55:01', NULL),
-(6, 1, 44, 14, 25, '02:15:00', 2, 4, '2019-05-05', '08:43:35', '10:58:35', '2019-05-05', NULL, NULL, '02:15:00', NULL, 3, 1, NULL, NULL, '2019-05-03 16:55:38', NULL),
-(8, 3, 44, 14, 26, '06:00:00', 2, 5, '2019-05-05', '10:58:35', '18:58:35', '2019-05-06', NULL, NULL, '06:00:00', NULL, 4, 1, NULL, NULL, '2019-05-03 16:58:28', NULL),
-(9, 3, 44, 14, 23, '02:45:00', 2, 6, '2019-05-06', '08:58:35', '11:43:35', '2019-05-06', NULL, NULL, '02:45:00', NULL, 1, 1, NULL, NULL, '2019-05-03 16:59:03', NULL),
-(10, 3, 44, 1, 1, '01:15:00', 2, 7, '2019-05-06', '11:43:35', '14:58:35', '2019-05-06', NULL, NULL, '01:15:00', NULL, 5, 1, NULL, NULL, '2019-05-03 17:18:46', NULL),
-(11, 2, 44, 1, 1, '01:15:00', 2, 8, '2019-05-06', '14:58:35', '16:13:35', '2019-05-06', NULL, NULL, '01:15:00', NULL, 5, 1, NULL, NULL, '2019-05-06 12:06:26', NULL),
-(12, 2, 44, 1, 3, '00:15:00', 2, 9, '2019-05-06', '16:13:35', '16:28:35', '2019-05-06', NULL, NULL, '00:15:00', NULL, 2, 1, NULL, NULL, '2019-05-06 12:07:20', NULL),
-(13, 2, 44, 1, 5, '00:30:00', 2, 10, '2019-05-06', '16:28:35', '16:58:35', '2019-05-06', NULL, NULL, '00:30:00', NULL, 3, 1, NULL, NULL, '2019-05-06 12:07:28', NULL),
-(14, 2, 44, 1, 9, '00:15:00', 2, 11, '2019-05-06', '16:58:35', '17:13:35', '2019-05-06', NULL, NULL, '00:15:00', NULL, 4, 1, NULL, NULL, '2019-05-06 12:07:51', NULL),
-(15, 4, 44, 1, 1, '01:15:00', 2, 12, '2019-05-06', '17:13:35', '18:28:35', '2019-05-07', NULL, NULL, '01:15:00', NULL, 5, 1, NULL, NULL, '2019-05-06 12:08:04', NULL),
-(16, 4, 44, 1, 3, '00:15:00', 2, 13, '2019-05-07', '08:28:35', '08:43:35', '2019-05-07', NULL, NULL, '00:15:00', NULL, 2, 1, NULL, NULL, '2019-05-06 12:08:11', NULL),
-(17, 4, 44, 1, 5, '00:30:00', 2, 14, '2019-05-07', '08:43:35', '09:13:35', '2019-05-07', NULL, NULL, '00:30:00', NULL, 3, 1, NULL, NULL, '2019-05-06 12:08:18', NULL),
-(18, 4, 44, 1, 9, '00:15:00', 2, 15, '2019-05-07', '09:13:35', '09:28:35', '2019-05-07', NULL, NULL, '00:15:00', NULL, 4, 1, NULL, NULL, '2019-05-06 12:08:25', NULL),
-(19, 5, 44, 4, 17, '01:00:00', 2, 16, '2019-05-07', '09:28:35', '10:28:35', '2019-05-07', NULL, NULL, '01:00:00', NULL, 1, 1, NULL, NULL, '2019-05-06 12:08:33', NULL),
-(20, 5, 44, 4, 20, '01:30:00', 2, 17, '2019-05-07', '10:28:35', '11:58:35', '2019-05-07', NULL, NULL, '01:30:00', NULL, 2, 1, NULL, NULL, '2019-05-06 12:08:40', NULL),
-(21, 6, 44, 4, 17, '01:00:00', 2, 18, '2019-05-07', '11:58:35', '14:58:35', '2019-05-07', NULL, NULL, '01:00:00', NULL, 1, 1, NULL, NULL, '2019-05-06 12:08:49', NULL),
-(22, 6, 44, 4, 20, '01:30:00', 2, 19, '2019-05-07', '14:58:35', '16:28:35', '2019-05-07', NULL, NULL, '01:30:00', NULL, 2, 1, NULL, NULL, '2019-05-06 12:08:57', NULL),
-(23, 7, 44, 14, 23, '02:45:00', 2, 20, '2019-05-07', '16:28:35', '19:13:35', '2019-05-08', NULL, NULL, '02:45:00', NULL, 1, 1, NULL, NULL, '2019-05-06 12:10:30', NULL),
-(24, 7, 44, 14, 24, '01:35:00', 2, 21, '2019-05-08', '09:13:35', '10:48:35', '2019-05-08', NULL, NULL, '01:35:00', NULL, 2, 1, NULL, NULL, '2019-05-06 12:10:47', NULL),
-(25, 7, 44, 14, 25, '02:15:00', 2, 22, '2019-05-08', '10:48:35', '15:03:35', '2019-05-08', NULL, NULL, '02:15:00', NULL, 3, 1, NULL, NULL, '2019-05-06 12:10:53', NULL),
-(26, 7, 44, 14, 26, '06:00:00', 2, 23, '2019-05-08', '15:03:35', '21:03:35', '2019-05-09', NULL, NULL, '06:00:00', NULL, 4, 1, NULL, NULL, '2019-05-06 12:11:00', NULL),
-(27, 8, 44, 1, 1, '01:15:00', 2, 24, '2019-05-09', '11:03:35', '14:18:35', '2019-05-09', NULL, NULL, '01:15:00', NULL, 5, 1, NULL, NULL, '2019-05-06 12:11:10', NULL),
-(28, 8, 44, 1, 3, '00:15:00', 2, 25, '2019-05-09', '14:18:35', '14:33:35', '2019-05-09', NULL, NULL, '00:15:00', NULL, 2, 1, NULL, NULL, '2019-05-06 12:11:17', NULL),
-(29, 8, 44, 1, 5, '00:30:00', 2, 26, '2019-05-09', '14:33:35', '15:03:35', '2019-05-09', NULL, NULL, '00:30:00', NULL, 3, 1, NULL, NULL, '2019-05-06 12:11:23', NULL),
-(30, 8, 44, 1, 9, '00:15:00', 2, 27, '2019-05-09', '15:03:35', '15:18:35', '2019-05-09', NULL, NULL, '00:15:00', NULL, 4, 1, NULL, NULL, '2019-05-06 12:11:30', NULL),
-(31, 9, 44, 4, 17, '01:00:00', 2, 28, '2019-05-09', '15:18:35', '16:18:35', '2019-05-09', NULL, NULL, '01:00:00', NULL, 1, 1, NULL, NULL, '2019-05-06 12:11:39', NULL),
-(32, 9, 44, 4, 20, '01:30:00', 2, 29, '2019-05-09', '16:18:35', '17:48:35', '2019-05-09', NULL, NULL, '01:30:00', NULL, 2, 1, NULL, NULL, '2019-05-06 12:11:46', NULL),
-(33, 10, 44, 1, 1, '01:15:00', 2, 30, '2019-05-09', '17:48:35', '19:03:35', '2019-05-10', NULL, NULL, '01:15:00', NULL, 5, 1, NULL, NULL, '2019-05-06 12:11:58', NULL),
-(34, 10, 44, 1, 3, '00:15:00', 2, 31, '2019-05-10', '09:03:35', '09:18:35', '2019-05-10', NULL, NULL, '00:15:00', NULL, 2, 1, NULL, NULL, '2019-05-06 12:12:06', NULL),
-(35, 10, 44, 1, 5, '00:30:00', 2, 32, '2019-05-10', '09:18:35', '09:48:35', '2019-05-10', NULL, NULL, '00:30:00', NULL, 3, 1, NULL, NULL, '2019-05-06 12:12:13', NULL),
-(36, 10, 44, 1, 9, '00:15:00', 2, 33, '2019-05-10', '09:48:35', '10:03:35', '2019-05-10', NULL, NULL, '00:15:00', NULL, 4, 1, NULL, NULL, '2019-05-06 12:12:19', NULL),
-(37, 11, 44, 14, 23, '02:45:00', 2, 34, '2019-05-10', '10:03:35', '14:48:35', '2019-05-10', NULL, NULL, '02:45:00', NULL, 1, 1, NULL, NULL, '2019-05-06 12:13:07', NULL),
-(41, 11, 44, 14, 26, '06:00:00', 2, 35, '2019-05-10', '14:48:35', '20:48:35', '2019-05-13', NULL, NULL, '06:00:00', NULL, 4, 1, NULL, NULL, '2019-05-06 12:29:48', NULL),
-(42, 11, 44, 14, 24, '01:35:00', 2, 36, '2019-05-13', '10:48:35', '14:23:35', '2019-05-13', NULL, NULL, '01:35:00', NULL, 2, 1, NULL, NULL, '2019-05-06 12:30:10', NULL),
-(43, 11, 44, 14, 25, '02:15:00', 2, 37, '2019-05-13', '14:23:35', '16:38:35', '2019-05-13', NULL, NULL, '02:15:00', NULL, 3, 1, NULL, NULL, '2019-05-06 12:30:23', NULL),
-(44, 12, 44, 14, 26, '06:00:00', 2, 38, '2019-05-13', '16:38:35', '22:38:35', '2019-05-14', NULL, NULL, '06:00:00', NULL, 4, 1, NULL, NULL, '2019-05-06 12:30:58', NULL),
-(45, 12, 44, 14, 23, '02:45:00', 2, 39, '2019-05-14', '14:38:35', '17:23:35', '2019-05-14', NULL, NULL, '02:45:00', NULL, 1, 1, NULL, NULL, '2019-05-06 12:31:46', NULL),
-(46, 12, 44, 14, 24, '01:35:00', 2, 40, '2019-05-14', '17:23:35', '18:58:35', '2019-05-15', NULL, NULL, '01:35:00', NULL, 2, 1, NULL, NULL, '2019-05-06 12:32:08', NULL),
-(47, 13, 44, 1, 1, '01:15:00', 2, 41, '2019-05-15', '08:58:35', '10:13:35', '2019-05-15', NULL, NULL, '01:15:00', NULL, 5, 1, NULL, NULL, '2019-05-06 13:57:37', NULL),
-(52, 14, 69, 14, 26, '06:00:00', 2, 2, '2019-05-06', '17:30:51', '23:30:51', '2019-05-07', '2019-05-06 16:46:09', '2019-05-06 16:46:30', '05:59:39', NULL, 4, 3, '2019-05-06 16:46:09', NULL, '2019-05-06 15:55:57', '2019-05-06 16:46:30'),
-(53, 14, 69, 14, 23, '02:45:00', 2, 3, '2019-05-07', '15:30:51', '18:15:51', '2019-05-07', NULL, NULL, '02:45:00', NULL, 1, 1, NULL, NULL, '2019-05-06 15:56:04', NULL),
-(51, 14, 69, 14, 24, '01:35:00', 2, 1, '2019-05-06', '15:55:51', '17:30:51', '2019-05-06', '2019-05-06 16:45:54', '2019-05-06 16:46:00', '01:34:54', NULL, 2, 3, '2019-05-06 16:45:54', NULL, '2019-05-06 15:55:51', '2019-05-06 16:46:00'),
-(54, 14, 69, 14, 25, '02:15:00', 2, 4, '2019-05-08', '08:15:51', '10:30:51', '2019-05-06', NULL, NULL, '02:15:00', NULL, 3, 1, NULL, NULL, '2019-05-06 17:35:16', NULL);
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Relacionamento entre Atendimento e Funcionários ';
 
 -- --------------------------------------------------------
 
@@ -175,23 +102,52 @@ CREATE TABLE IF NOT EXISTS `adms_atividades` (
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Extraindo dados da tabela `adms_atividades`
 --
 
 INSERT INTO `adms_atividades` (`id`, `nome`, `descricao`, `duracao`, `ordem`, `atividade_sucessora_id`, `adms_demanda_id`, `created`, `modified`) VALUES
-(1, 'AtualizaÃ§Ã£o ContÃ¡bil', 'AtualizaÃ§Ã£o contÃ¡bil mensal dos lanÃ§amentos manuais', '01:15:00', 5, NULL, 1, '2019-01-28 00:00:00', '2019-05-06 15:12:51'),
-(3, 'ReuniÃ£o De Analise SocietÃ¡ria', 'ReuniÃ£o entre o gestor empresarial e o contador para anÃ¡lise contÃ¡bil', '00:15:00', 2, 5, 1, '2019-01-29 00:00:00', '2019-05-06 15:17:13'),
-(5, 'ImportaÃ§Ã£o Dos Arquivos Do Folha', 'Referente a importaÃ§Ã£o dos arquivos do fiscal e da folha para p sistema contÃ¡bil.', '00:30:00', 3, 1, 1, '2019-01-29 14:01:55', '2019-05-06 15:16:34'),
-(17, 'Atividade 1', 'DescriÃ§Ã£o 2', '01:00:00', 1, NULL, 4, '2019-01-29 16:40:45', '2019-03-29 16:33:29'),
-(9, 'ValidaÃ§Ã£o Gerencial Dos LanÃ§amento', 'Referente Ã  validaÃ§Ã£o gerencial dos registros contÃ¡beis mensais.', '00:15:00', 4, 5, 1, '2019-01-29 16:13:23', '2019-05-06 15:17:28'),
-(20, 'Teste atividade', 'DescriÃ§Ã£o de teste', '01:30:00', 2, NULL, 4, '2019-01-30 14:29:11', '2019-03-29 16:33:19'),
-(23, 'Atividade 1 da demanda teste', 'Uma descriÃ§Ã£o da atividade 1 teste', '02:45:00', 1, 26, 14, '2019-04-17 13:15:35', '2019-04-26 16:35:33'),
-(24, 'Atividade 2 da demanda teste', 'Breve descriÃ§Ã£o atividade 2', '01:35:00', 2, 23, 14, '2019-04-17 13:16:02', '2019-04-26 17:00:54'),
-(25, 'Atividade 3 da demanda teste', 'DescriÃ§Ã£o atividade 3', '02:15:00', 3, NULL, 14, '2019-04-17 13:16:31', '2019-04-26 17:02:58'),
-(26, 'Atividade 6 horas', 'Teste 6', '06:00:00', 4, 25, 14, '2019-04-22 13:02:22', '2019-04-26 16:57:38');
+(1, 'ImportaÃ§Ã£o de arquivos xmls', 'Atividade ImportaÃ§Ã£o de arquivos xmls da demanda ApuraÃ§Ã£o fiscal', '01:30:00', 1, NULL, 2, '2019-05-07 12:16:19', '2019-05-07 14:12:31'),
+(2, 'LanÃ§amento em planilha do excell', 'Atividade LanÃ§amento em planilha do excell da demanda ApuraÃ§Ã£o fiscal', '01:30:00', 2, NULL, 2, '2019-05-07 12:25:30', '2019-05-07 14:12:47'),
+(3, 'ConferÃªncia', 'Atividade ConferÃªncia da demanda ApuraÃ§Ã£o fiscal', '01:30:00', 3, NULL, 2, '2019-05-07 12:26:27', '2019-05-07 14:13:07'),
+(4, 'Gerar guias', 'Atividade Gerar guias da demanda ApuraÃ§Ã£o fiscal', '01:30:00', 4, NULL, 2, '2019-05-07 12:30:07', '2019-05-07 14:13:12'),
+(5, 'Salvar relatÃ³rios fiscais', 'Atividade Salvar relatÃ³rios fiscais da demanda ApuraÃ§Ã£o fiscal', '00:30:00', 5, NULL, 2, '2019-05-07 12:30:32', '2019-05-07 14:12:58'),
+(6, 'ValidaÃ§Ã£o do arquivo', 'Atividade ValidaÃ§Ã£o do arquivo da demanda Livro eletrÃ´nico', '01:30:00', 1, NULL, 3, '2019-05-07 12:36:26', '2019-05-07 14:13:52'),
+(7, 'CorreÃ§Ã£o dos erros', 'Atividade CorreÃ§Ã£o dos erros da demanda Livro eletrÃ´nico', '01:30:00', 2, NULL, 3, '2019-05-07 12:39:32', '2019-05-07 14:14:09'),
+(8, 'Salvar recibo de envio', 'Atividade Salvar recibo de envio da demanda Livro eletrÃ´nico', '00:10:00', 3, NULL, 3, '2019-05-07 12:46:02', '2019-05-07 14:15:37'),
+(9, 'ValidaÃ§Ã£o do arquivo', 'Atividade ValidaÃ§Ã£o do arquivo da demanda Sped Pis e Cofins', '01:30:00', 1, NULL, 4, '2019-05-07 12:50:10', '2019-05-07 14:16:14'),
+(10, 'CorreÃ§Ã£o dos erros', 'Atividade CorreÃ§Ã£o dos erros da demanda Sped Pis e Cofins', '01:30:00', 2, NULL, 4, '2019-05-07 12:50:36', '2019-05-07 14:16:24'),
+(11, 'Salvar recibo de envio', 'Atividade Salvar recibo de envio da demanda Sped Pis e Cofins', '00:10:00', 3, NULL, 4, '2019-05-07 12:52:15', '2019-05-07 14:16:34'),
+(12, 'ValidaÃ§Ã£o do arquivo', 'Atividade ImportaÃ§Ã£o de arquivos xmls da demanda Sped Icms/Ipi', '01:30:00', 1, NULL, 5, '2019-05-07 12:56:34', '2019-05-07 14:18:52'),
+(13, 'CorreÃ§Ã£o dos erros', 'Atividade CorreÃ§Ã£o dos erros da demanda Sped Icms/Ipi', '01:30:00', 2, NULL, 5, '2019-05-07 13:01:15', '2019-05-07 14:18:59'),
+(14, 'Salvar recibo de envio', 'Atividade Salvar recibo de envio da demanda Sped Icms/Ipi', '00:10:00', 3, NULL, 5, '2019-05-07 13:01:32', '2019-05-07 14:19:06'),
+(15, 'Fechamento do evento', 'Atividade Fechamento do evento xmls da demanda Efd Reinf', '00:30:00', 1, NULL, 6, '2019-05-07 13:11:24', '2019-05-07 14:19:21'),
+(16, 'Salvar recibo de envio', 'Atividade Salvar recibo de envio da demanda Efd Reinf', '00:10:00', 2, NULL, 6, '2019-05-07 13:11:51', '2019-05-07 14:19:28'),
+(17, 'Baixar os pagamentos da Receita Federal', 'Atividade Salvar recibo de envio da demanda Dctf', '01:30:00', 1, NULL, 7, '2019-05-07 13:12:20', '2019-05-07 14:19:49'),
+(18, 'Gerar arquivo do sistema fiscal', 'Atividade Gerar arquivo do sistema fiscal da demanda Dctf', '00:30:00', 2, NULL, 7, '2019-05-07 13:12:57', '2019-05-07 14:19:57'),
+(19, 'ValidaÃ§Ã£o do arquivo', 'Atividade Gerar arquivo do sistema fiscal da demanda Dctf', '01:30:00', 3, NULL, 7, '2019-05-07 13:13:16', '2019-05-07 14:20:18'),
+(20, 'Informar os pagamentos', 'Atividade Salvar recibo de envio da demanda Dctf', '04:00:00', 4, NULL, 7, '2019-05-07 13:14:07', '2019-05-07 14:20:43'),
+(21, 'Salvar recibo e demonstrativo de envio', 'Atividade Salvar recibo e demonstrativo de envio da demanda Dctf', '00:30:00', 5, NULL, 7, '2019-05-07 13:14:25', '2019-05-07 14:21:10'),
+(22, 'ImportaÃ§Ã£o do fiscal e conferÃªncia', 'Atividade ImportaÃ§Ã£o do fiscal e conferÃªncia da demanda AtualizaÃ§Ã£o contÃ¡bil', '02:30:00', 1, NULL, 1, '2019-05-07 13:15:30', '2019-05-07 14:22:49'),
+(23, 'ImportaÃ§Ã£o do folha e conferÃªncia', 'Atividade ImportaÃ§Ã£o do folha e conferÃªncia da demanda AtualizaÃ§Ã£o contÃ¡bil', '01:30:00', 2, NULL, 1, '2019-05-07 13:16:09', '2019-05-07 14:23:06'),
+(24, 'Baixa da folha de pagamento', 'Atividade Baixa da folha de pagamento da demanda AtualizaÃ§Ã£o contÃ¡bil', '02:30:00', 3, NULL, 1, '2019-05-07 13:16:31', '2019-05-07 14:21:45'),
+(25, 'LanÃ§amento das despesas', 'Atividade LanÃ§amento das despesas da demanda AtualizaÃ§Ã£o contÃ¡bil', '03:30:00', 4, NULL, 1, '2019-05-07 13:20:16', '2019-05-07 14:23:16'),
+(26, 'Baixa de fornecedores', 'Atividade Baixa de fornecedores da demanda AtualizaÃ§Ã£o contÃ¡bil', '03:30:00', 5, NULL, 1, '2019-05-07 13:20:51', '2019-05-07 14:21:56'),
+(27, 'ConciliaÃ§Ã£o bancÃ¡ria', 'Atividade ConciliaÃ§Ã£o bancÃ¡ria da demanda AtualizaÃ§Ã£o contÃ¡bil', '03:30:00', 6, NULL, 1, '2019-05-07 13:21:07', '2019-05-07 14:22:06'),
+(28, 'ConferÃªncia', 'Atividade ConferÃªncia da demanda AtualizaÃ§Ã£o contÃ¡bil', '03:30:00', 7, NULL, 1, '2019-05-07 13:22:25', '2019-05-07 14:22:17'),
+(29, 'Gerar arquivo do sistema', 'Atividade Gerar arquivo do sistema da demanda RelaÃ§Ã£o de faturamento', '00:30:00', 1, NULL, 8, '2019-05-07 13:24:38', '2019-05-07 14:24:00'),
+(30, 'RecÃ¡lculo de imposto', 'Atividade RecÃ¡lculo de imposto', '00:30:00', 1, NULL, 9, '2019-05-07 13:25:51', '2019-05-07 14:24:23'),
+(31, 'Defis', 'Atividade Defis', '02:30:00', 1, NULL, 10, '2019-05-07 13:31:21', '2019-05-07 14:25:02'),
+(32, 'ImportaÃ§Ã£o de arquivos xmls', 'Atividade ImportaÃ§Ã£o de arquivos xmls da demanda RealizaÃ§Ã£o de periÃ³dico', '03:30:00', 1, NULL, 12, '2019-05-07 13:32:56', '2019-05-07 14:25:35'),
+(33, 'LanÃ§amento em planilha do excell', 'Atividade LanÃ§amento em planilha do excell da demanda RealizaÃ§Ã£o de periÃ³dico', '03:30:00', 2, NULL, 12, '2019-05-07 13:33:54', '2019-05-07 14:25:40'),
+(34, 'ConferÃªncia', 'Atividade ConferÃªncia da demanda RealizaÃ§Ã£o de periÃ³dico', '03:30:00', 3, NULL, 12, '2019-05-07 13:34:18', '2019-05-07 14:25:25'),
+(35, 'Baixar arquivos xmls', 'Atividade Baixar arquivos xmls da demanda Gerar guias de icms de fora do DF', '03:30:00', 1, NULL, 13, '2019-05-07 13:37:02', '2019-05-07 14:26:37'),
+(36, 'Realizar o cÃ¡lculo dos impostos', 'Atividade Realizar o cÃ¡lculo dos impostos da demanda Gerar guias de icms de fora do DF', '03:30:00', 2, NULL, 13, '2019-05-07 13:37:18', '2019-05-07 14:27:20'),
+(37, 'Gerar guias', 'Atividade Gerar guias da demanda Gerar guias de icms de fora do DF', '03:30:00', 3, NULL, 13, '2019-05-07 13:37:37', '2019-05-07 14:27:04'),
+(38, 'Enviar as guias', 'Atividade Enviar as guias da demanda Gerar guias de icms de fora do DF', '01:30:00', 4, NULL, 13, '2019-05-07 13:38:28', '2019-05-07 14:26:47'),
+(39, 'ImportaÃ§Ã£o de xml', 'Atividade ImportaÃ§Ã£o de xml', '00:00:00', 1, NULL, 11, '2019-05-07 13:48:23', NULL);
 
 -- --------------------------------------------------------
 
@@ -315,7 +271,7 @@ CREATE TABLE IF NOT EXISTS `adms_demandas` (
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Extraindo dados da tabela `adms_demandas`
@@ -323,8 +279,18 @@ CREATE TABLE IF NOT EXISTS `adms_demandas` (
 
 INSERT INTO `adms_demandas` (`id`, `nome`, `descricao`, `adms_usuario_id`, `duracao_total`, `created`, `modified`) VALUES
 (1, 'AtualizaÃ§Ã£o ContÃ¡bil Mensal', 'Referente Ã  atualizaÃ§Ã£o dos registros contÃ¡beis da empresa de um determinado mÃªs.', 1, NULL, '2019-01-28 00:00:00', '2019-01-30 15:03:21'),
-(4, 'Teste Demanda Exemplo', 'Terceiro teste de cadastro de tipos de demandas. Agora com AcentuaÃ§Ã£o e caracteres especiais.', 1, NULL, '2019-01-28 14:17:46', '2019-02-04 14:48:06'),
-(14, 'Um Demanda para Teste', 'utilizar para teste', 1, NULL, '2019-04-17 13:14:57', NULL);
+(2, 'ApuraÃ§Ã£o fiscal', 'ApuraÃ§Ã£o fiscal', 1, NULL, '2019-05-06 17:54:47', '2019-05-07 12:12:20'),
+(3, 'Livro eletronico', 'Livro eletronico', 1, NULL, '2019-05-06 17:54:58', NULL),
+(4, 'Sped Pis e Cofins', 'Sped Pis e Cofins', 1, NULL, '2019-05-06 17:55:07', NULL),
+(5, 'Sped Icms/Ipi', 'Sped Icms/Ipi', 1, NULL, '2019-05-06 17:55:15', NULL),
+(6, 'Efd Reinf', 'Efd Reinf', 1, NULL, '2019-05-06 17:55:23', NULL),
+(7, 'Dctf', 'Dctf', 1, NULL, '2019-05-06 17:55:36', NULL),
+(8, 'RelaÃ§Ã£o de faturamento', 'RelaÃ§Ã£o de faturamento', 1, NULL, '2019-05-06 17:55:57', NULL),
+(9, 'RecÃ¡lculo de imposto', 'RecÃ¡lculo de imposto', 1, NULL, '2019-05-06 17:56:05', NULL),
+(10, 'Defis', 'Defis', 1, NULL, '2019-05-06 17:56:13', NULL),
+(11, 'ImportaÃ§Ã£o de xml', 'ImportaÃ§Ã£o de xml', 1, NULL, '2019-05-06 17:56:21', NULL),
+(12, 'RealizaÃ§Ã£o de periÃ³dico', 'RealizaÃ§Ã£o de periÃ³dico', 1, NULL, '2019-05-06 17:56:30', NULL),
+(13, 'Gerar guias de icms de fora do DF', 'Gerar guias de icms de fora do DF', 1, NULL, '2019-05-06 17:56:37', NULL);
 
 -- --------------------------------------------------------
 
@@ -362,32 +328,92 @@ INSERT INTO `adms_departamentos` (`id`, `nome`, `icon`, `descricao`, `created`, 
 DROP TABLE IF EXISTS `adms_empresas`;
 CREATE TABLE IF NOT EXISTS `adms_empresas` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(220) COLLATE utf8_unicode_ci NOT NULL,
-  `fantasia` varchar(220) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `cnpj` varchar(14) COLLATE utf8_unicode_ci NOT NULL,
-  `email` varchar(220) COLLATE utf8_unicode_ci NOT NULL,
-  `usuario` varchar(220) COLLATE utf8_unicode_ci NOT NULL,
-  `senha` varchar(220) COLLATE utf8_unicode_ci NOT NULL,
-  `recuperar_senha` varchar(220) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `chave_descadastro` varchar(220) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `conf_email` varchar(220) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `imagem` varchar(220) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `adms_tps_empresa_id` int(11) NOT NULL,
-  `adms_niveis_acesso_id` int(11) NOT NULL,
-  `adms_sits_empresa_id` int(11) NOT NULL,
+  `nome` varchar(220) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `fantasia` varchar(220) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `cnpj` varchar(14) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `email` varchar(220) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `imagem` varchar(220) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `adms_grupo_empresa_id` int(11) DEFAULT NULL,
+  `adms_tps_empresa_id` int(11) NOT NULL DEFAULT '2',
+  `adms_niveis_acesso_id` int(11) NOT NULL DEFAULT '6',
+  `adms_sits_empresa_id` int(11) NOT NULL DEFAULT '1',
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Extraindo dados da tabela `adms_empresas`
 --
 
-INSERT INTO `adms_empresas` (`id`, `nome`, `fantasia`, `cnpj`, `email`, `usuario`, `senha`, `recuperar_senha`, `chave_descadastro`, `conf_email`, `imagem`, `adms_tps_empresa_id`, `adms_niveis_acesso_id`, `adms_sits_empresa_id`, `created`, `modified`) VALUES
-(1, 'IPAC CONTABILIDADE', 'IPAC', '98123456000122', 'ipac@ipaconline.com.br', 'ipac@ipaconline.com.br', '123', NULL, NULL, NULL, NULL, 1, 1, 1, '2019-01-27 00:00:00', NULL),
-(2, 'EMPRESA TESTE', 'TESTE EP', '12123456123478', 'empresateste@gmail.com', 'empresateste@gmail.com', '123', NULL, NULL, NULL, NULL, 2, 1, 1, '2019-01-27 00:00:00', NULL),
-(3, 'COMERCIO E SERVICO LTDA', 'COMERCIO LT', '80243456123478', 'comerciolt@gmail.com', 'comerciolt@gmail.com', '123', NULL, NULL, NULL, NULL, 2, 1, 1, '2019-04-17 00:00:00', NULL);
+INSERT INTO `adms_empresas` (`id`, `nome`, `fantasia`, `cnpj`, `email`, `imagem`, `adms_grupo_empresa_id`, `adms_tps_empresa_id`, `adms_niveis_acesso_id`, `adms_sits_empresa_id`, `created`, `modified`) VALUES
+(1, 'IPAC CONTABILIDADE', 'IPAC', '98123456000122', 'ipac@ipaconline.com.br', NULL, NULL, 1, 1, 1, '2019-01-27 00:00:00', NULL),
+(2, 'ALEX PAGANELLI', 'ALEX PAGANELLI', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(3, 'ALVES E ABREU FILIAL ', 'ALVES E ABREU FILIAL ', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(4, 'ALVES E ABREU MATRIZ ', 'ALVES E ABREU MATRIZ ', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(5, 'AS COMERCIO', 'AS COMERCIO', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(6, 'BELINI PAES', 'BELINI PAES', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(7, 'BHUMI COZINHA NATURAL', 'BHUMI COZINHA NATURAL', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(8, 'BRISA SERVICOS', 'BRISA SERVICOS', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(9, 'C.B. BRASILIA', 'C.B. BRASILIA', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(10, 'CAPILAR COMERCIO', 'CAPILAR COMERCIO', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(11, 'CERRADO COSMETICOS', 'CERRADO COSMETICOS', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(12, 'COCO BAMBU GOIANIA', 'COCO BAMBU GOIANIA', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(13, 'CP PAISAGISMO', 'CP PAISAGISMO', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(14, 'DROGAMIL', 'DROGAMIL', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(15, 'EMERGO BRAZIL PARTICIPACOES', 'EMERGO BRAZIL PARTICIPACOES', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(16, 'ESTRUTURAL EMPREENDIMENTOS', 'ESTRUTURAL EMPREENDIMENTOS', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(17, 'FERRO E ACO', 'FERRO E ACO', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(18, 'FERRO E ACO', 'FERRO E ACO', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(19, 'FERROMIL', 'FERROMIL', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(20, 'FISON COMERCIO', 'FISON COMERCIO', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(21, 'GLENDA FASHION', 'GLENDA FASHION', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(22, 'GLENIO E ANDREIA', 'GLENIO E ANDREIA', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(23, 'GOURMET COMERCIO', 'GOURMET COMERCIO', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(24, 'GOURMET FIT', 'GOURMET FIT', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(25, 'HAPPY BROWNIE', 'HAPPY BROWNIE', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(26, 'JANE ALVES ', 'JANE ALVES ', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(27, 'JB EMPREENDIMENTOS', 'JB EMPREENDIMENTOS', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(28, 'JOHN E JANE', 'JOHN E JANE', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(29, 'LA PANETTERIA', 'LA PANETTERIA', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(30, 'LAKE SIDE APART', 'LAKE SIDE APART', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(31, 'LD COMERCIO', 'LD COMERCIO', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(32, 'LE TERRACE', 'LE TERRACE', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(33, 'LIGHT DESIGN', 'LIGHT DESIGN', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(34, 'LIMA DIAS', 'LIMA DIAS', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(35, 'LUIZ GUILHERME', 'LUIZ GUILHERME', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(36, 'M M COM. DE ROUPAS', 'M M COM. DE ROUPAS', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(37, 'MAMUTE', 'MAMUTE', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(38, 'MAP', 'MAP', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(39, 'ME COMPONENTES', 'ME COMPONENTES', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(40, 'MESA PARA DOZE', 'MESA PARA DOZE', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(41, 'NUTRIFICA COMERCIO', 'NUTRIFICA COMERCIO', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(42, 'NUTRIFICA FILIAL', 'NUTRIFICA FILIAL', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(43, 'PAO BRASILIS', 'PAO BRASILIS', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(44, 'PINTURA PROTETORA', 'PINTURA PROTETORA', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(45, 'POESIA VISUAL', 'POESIA VISUAL', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(46, 'PROTEINAS', 'PROTEINAS', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(47, 'QUALYCREAM COMERCIO', 'QUALYCREAM COMERCIO', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(48, 'RBRITO REZENDE ', 'RBRITO REZENDE ', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(49, 'RESTAURANTE CAPRICHO MINEIRO', 'RESTAURANTE CAPRICHO MINEIRO', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(50, 'RETROESTE COMERCIO ', 'RETROESTE COMERCIO ', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(51, 'RITOCA', 'RITOCA', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(52, 'RONAN BRAGA', 'RONAN BRAGA', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(53, 'RUTE ALVES DE SA', 'RUTE ALVES DE SA', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(54, 'SC COMERCIO', 'SC COMERCIO', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(55, 'SMA', 'SMA', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(56, 'SP COMERCIO', 'SP COMERCIO', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(57, 'SPE SIAS', 'SPE SIAS', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(58, 'SPORT CENTER', 'SPORT CENTER', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(59, 'UP BACK', 'UP BACK', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(60, 'UP BACK FILIAL ', 'UP BACK FILIAL ', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(61, 'UP BACK BUFFET', 'UP BACK BUFFET', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(62, 'UP BACK BUFFET FILIAL', 'UP BACK BUFFET FILIAL', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(63, 'UP BACK BUFFET GO INN', 'UP BACK BUFFET GO INN', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(64, 'UP BACK FILIAL II', 'UP BACK FILIAL II', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(65, 'UP SOLUTIONS', 'UP SOLUTIONS', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(66, 'WALKMED PHARMA', 'WALKMED PHARMA', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL),
+(67, 'ZAMBRI CONFECCAO E COMERCIO', 'ZAMBRI CONFECCAO E COMERCIO', 'NULL', 'NULL', 'NULL', 1, 2, 6, 1, '2019-05-07 19:26:05', NULL);
 
 -- --------------------------------------------------------
 
@@ -420,6 +446,30 @@ INSERT INTO `adms_grps_pgs` (`id`, `nome`, `ordem`, `created`, `modified`) VALUE
 (8, 'Alterar Ordem', 8, '2019-01-28 00:00:00', '2019-02-03 15:37:07'),
 (10, 'Cancelar', 9, '2019-02-04 12:19:51', NULL),
 (11, 'Arquivar', 10, '2019-02-05 12:27:08', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `adms_grupo_empresas`
+--
+
+DROP TABLE IF EXISTS `adms_grupo_empresas`;
+CREATE TABLE IF NOT EXISTS `adms_grupo_empresas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(99) COLLATE utf8_unicode_ci NOT NULL,
+  `gerente_reponsavel_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Extraindo dados da tabela `adms_grupo_empresas`
+--
+
+INSERT INTO `adms_grupo_empresas` (`id`, `nome`, `gerente_reponsavel_id`, `created`, `modified`) VALUES
+(1, 'GRUPO LEILA', 2, '2019-05-07 00:00:00', NULL),
+(2, 'GRUPO FABIO', 3, '2019-05-07 00:00:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -1951,25 +2001,7 @@ CREATE TABLE IF NOT EXISTS `adms_planejamento` (
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Extraindo dados da tabela `adms_planejamento`
---
-
-INSERT INTO `adms_planejamento` (`id`, `hora_inicio`, `hora_termino`, `hora_inicio2`, `hora_termino2`, `jornada_trabalho`, `adms_funcionario_id`, `created`, `modified`) VALUES
-(1, '08:00:00', '12:00:00', '14:00:00', '18:00:00', '08:00:00', 44, '2019-04-02 00:00:00', '2019-04-12 14:51:07'),
-(2, '08:00:00', '12:00:00', '13:00:00', '18:00:00', '09:00:00', 47, '2019-04-04 17:34:19', '2019-04-12 14:56:22'),
-(4, '08:30:00', '12:30:00', '14:30:00', '19:00:00', '08:30:00', 8, '2019-04-05 13:21:37', '2019-04-12 14:53:09'),
-(5, '08:35:00', '12:00:00', '13:00:00', '18:35:00', '09:00:00', 3, '2019-04-05 14:32:31', '2019-04-12 14:51:59'),
-(6, '08:00:00', '12:00:00', '13:30:00', '18:00:00', '08:30:00', 59, '2019-04-09 13:38:11', '2019-04-12 14:52:05'),
-(7, '08:00:00', '13:00:00', '15:00:00', '19:00:00', '09:00:00', 60, '2019-04-10 16:08:33', '2019-04-12 14:52:14'),
-(8, '09:00:00', '12:30:00', '13:00:00', '18:00:00', '08:30:00', 61, '2019-04-10 16:09:14', '2019-04-12 14:52:17'),
-(9, '11:45:00', '15:45:00', '16:00:00', '18:00:00', '06:00:00', 62, '2019-04-10 16:10:12', '2019-04-12 14:52:21'),
-(10, '08:00:00', '12:00:00', '14:00:00', '18:00:00', '08:00:00', 69, '2019-04-11 14:57:15', '2019-04-17 13:09:39'),
-(11, '09:00:00', '12:00:00', '13:00:00', '18:00:00', '08:00:00', 70, '2019-04-11 14:58:09', '2019-04-12 15:16:22'),
-(12, '09:00:00', '13:00:00', '14:00:00', '19:00:00', '09:00:00', 63, '2019-04-12 14:49:42', '2019-04-12 14:52:25'),
-(13, '11:45:00', '15:45:00', '16:00:00', '18:00:00', '06:00:00', 64, '2019-04-12 15:33:36', NULL);
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Acionadores `adms_planejamento`
@@ -2228,7 +2260,7 @@ CREATE TABLE IF NOT EXISTS `adms_usuarios` (
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=71 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Extraindo dados da tabela `adms_usuarios`
@@ -2236,39 +2268,18 @@ CREATE TABLE IF NOT EXISTS `adms_usuarios` (
 
 INSERT INTO `adms_usuarios` (`id`, `nome`, `apelido`, `email`, `usuario`, `senha`, `recuperar_senha`, `chave_descadastro`, `conf_email`, `imagem`, `adms_departamento_id`, `adms_cargo_id`, `jornada_de_trabalho`, `adms_empresa_id`, `adms_niveis_acesso_id`, `adms_sits_usuario_id`, `created`, `modified`) VALUES
 (1, 'Dhemes Mota', 'Dhemes', 'dhemes.mota@gmail.com', 'dhemes.mota@gmail.com', '$2y$10$zUfJ362RhXWrT7NxmP3CoewTjbHAdi8QitJgsi.Wc6YEUJ288XkAq', '2ea5c30c4086dad96aa3ed06796246d1', NULL, NULL, 'socios.png', NULL, NULL, NULL, 1, 1, 1, '2019-01-21 00:00:00', '2019-03-21 12:46:00'),
-(2, 'Keliane Barbosa Silva', 'Kelly', 'kelly@gmail.com', 'kelly@gmail.com', '$2y$10$9QEwRvlnsfnvhitgQtuxIeXwEMrtuvYhTEE2/jWrQYL408lQNRmHm', 'c0deabfeb011a559fdb86c6d171f2aa2', NULL, NULL, 'familia.jpg', NULL, NULL, NULL, 2, 1, 1, '2019-01-21 00:00:00', '2019-01-27 00:58:44'),
-(3, 'FuncionÃ¡rio 03', 'FuncionÃ¡rio 03', 'funcionario03@gmail.com', 'funcionario03@gmail.com', '$2y$10$Lnq0DTdl8nrF3rMIRo2R.eviCsFfD09dwh3vNcfzQFlmH8mWWlUIS', 'a30df274760ac31c510c18e4498629ad', NULL, NULL, 'familia-.jpg', 2, 1, '08:00:00', 1, 4, 1, '2019-01-22 19:38:18', '2019-04-08 16:29:30'),
-(38, 'Administrador', 'Admin', 'admin@admin.com', 'admin', '$2y$10$NGAQ2iZISFV77GqeTy0I2uqYGDoH7bmOUy5xv23fMv/t9RJwcC6lu', NULL, NULL, NULL, '', NULL, NULL, NULL, 1, 2, 1, '2019-01-29 16:45:34', NULL),
-(30, 'Novo teste', 'Novo teste', 'novoteste@gmail.com', 'novoteste@gmail.com', '$2y$10$KZJqsML7CqowU3oD78X0r.s1XW7P/2PGbJCLtKb.syy7botIg/iki', NULL, NULL, NULL, '30aef3a5c265e557591a4da196da87b4.jpg', NULL, NULL, NULL, 2, 5, 1, '2019-01-27 19:08:54', NULL),
-(29, 'Teste Usuario foto', 'Teste Usuario foto', 'testeusuario@gmail.com', 'testeusuario@gmail.com', '$2y$10$MGGTHAJz6XpJ/QBoBH6aBOAPXsZH6yvntv/b7Iwb5Z0XEjdrSNOC2', NULL, NULL, NULL, 'ux-787980-1280.jpg', NULL, NULL, NULL, 2, 2, 1, '2019-01-27 19:06:13', NULL),
-(8, 'FuncionÃ¡rio 02', 'Funcionario 02', 'funcionario02@gmail.com', 'funcionario02@gmail.com', '$2y$10$jWT.SsefTOxWzpn36EbN0OV8tXluM5osdBhBWKT7TT3wUIrPYcxbS', NULL, NULL, 'deb8634f6f9a64caa8789a11004e3d3f', NULL, 3, 1, '08:00:00', 1, 4, 1, '2019-01-25 23:34:06', '2019-04-11 14:18:30'),
-(10, 'Miriam', 'Suellen', 'miram@gmail.com', 'miriam@gmail.com', '$2y$10$lvNk4TKtWcFbji7xQofKd.vXuI2NIVN8cUSrh7d3Mr8hlcITmuLya', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 5, 2, '2019-01-27 00:53:34', '2019-01-27 17:30:43'),
-(65, 'FuncionÃ¡rio 10', 'funcionÃ¡rio 10', 'funcionario10@gmail.com', 'funcionario10', '$2y$10$49FRMXaQCsbN4rGCRISg9Os0kwD/XGre60mtS5H5C8rGEo0fVAPdu', NULL, NULL, NULL, NULL, NULL, NULL, '08:00:00', 1, 4, 1, '2019-04-08 17:35:24', NULL),
-(66, 'FuncionÃ¡rio 11', 'funcionÃ¡rio 11', 'funcionario11@gmail.com', 'funcionario11', '$2y$10$49FRMXaQCsbN4rGCRISg9Os0kwD/XGre60mtS5H5C8rGEo0fVAPdu', NULL, NULL, NULL, NULL, NULL, NULL, '08:00:00', 1, 4, 1, '2019-04-08 17:35:24', NULL),
-(31, 'Realizar Novo ep 2', 'Realizar Novo ep 2', 'novoep2@gmail.com', 'novoep2@gmail.com', '$2y$10$S9/LHhbD0Du0VD2GOngGjOK7tCSt3Yf3645DvFxrn8D583/1y5ZsO', NULL, NULL, NULL, '71260232331b19a491dc646a22fa3eee.jpg', NULL, NULL, NULL, 2, 5, 1, '2019-01-27 19:19:55', NULL),
-(67, 'FuncionÃ¡rio 12', 'funcionÃ¡rio 12', 'funcionario12@gmail.com', 'funcionario12', '$2y$10$49FRMXaQCsbN4rGCRISg9Os0kwD/XGre60mtS5H5C8rGEo0fVAPdu', NULL, NULL, NULL, NULL, NULL, NULL, '08:00:00', 1, 4, 1, '2019-04-08 17:35:24', NULL),
-(21, 'Miriam Mota', 'miriam', 'miriamsuellen.mota@gmail.com', 'miriamsuellen.mota@gmail.com', '$2y$10$CffqNx7Wx6f2x9k5xt.UW.ARcJXBCbX2X8ixx0.7jL9DSFyN7GH0m', NULL, NULL, NULL, '30aef3a5c265e557591a4da196da87b4.jpg', NULL, NULL, NULL, 2, 2, 1, '2019-01-27 01:48:44', '2019-01-27 19:40:55'),
-(27, 'Maria Empresa 2', 'Maria', 'mariaep2@gmail.com', 'mariaep2@gmail.com', '$2y$10$XHs0LHqO2O7AoGWYGvUdcewtsdWQ6MTspt2gFfSgt9ZHjX35iMmu2', NULL, NULL, NULL, 'air240-airflow-w.png', NULL, NULL, NULL, 2, 3, 3, '2019-01-27 18:46:59', '2019-01-27 18:48:12'),
-(28, 'Teste ep 2', 'Teste 2', 'testeep2@gmail.com', 'testeep2@gmail.com', '$2y$10$CCirQwfNeG3cJO4dQibQPea4ECPIRhUbg9CR.TBccYuj4.fugTJ8W', NULL, NULL, '0f7c521ca19b751ce981cd8dd6d38fda', '71260232331b19a491dc646a22fa3eee.jpg', NULL, NULL, NULL, 2, 3, 1, '2019-01-27 18:49:15', '2019-01-27 22:35:48'),
-(32, 'Realizar Novo ep 3', 'Realizar Novo ep 3', 'novoep3@gmail.com', 'novoep3@gmail.com', '$2y$10$YEAJ4XF9D6HbJe/VYj2yj.YCQpiqPo3v6ZyiJgaDSbDqnAHxdVCxy', NULL, NULL, NULL, 'business-cellphone-codes-92904.jpg', NULL, NULL, NULL, 2, 5, 1, '2019-01-27 19:21:36', NULL),
-(33, 'Realizar Novo ep 4', 'Realizar Novo ep 4', 'novoep4@gmail.com', 'novoep4@gmail.com', '$2y$10$8SBmZkEMdILfAHdrweOEkeRrTl.tgqMMe7ZA2oI4nLL3jPdsSbPJu', NULL, NULL, NULL, 'familia.jpg', NULL, NULL, NULL, 2, 4, 1, '2019-01-27 19:25:59', NULL),
-(34, 'Realizar Novo ep 5', 'Realizar Novo ep 5', 'novoep5@gmail.com', 'novoep5@gmail.com', '$2y$10$5qsPdUJLhVXHX70PE7GEE.K1elg5H5S4Ria36Plb8ZSMCDV/ZWrKG', NULL, NULL, NULL, 'cd172ed1dd9f567fb573ee31777a6bb6.jpg', NULL, NULL, NULL, 2, 4, 1, '2019-01-27 19:29:15', NULL),
-(35, 'Realizar Novo ep 6', 'Realizar Novo ep 6', 'novoep6@gmail.com', 'novoep6@gmail.com', '$2y$10$/Pue.1Ifkbef1ujoLpLZxuF5Jf7lrV4K2ILjDF6C5O2abt3Z7jMbu', NULL, NULL, NULL, '71260232331b19a491dc646a22fa3eee.jpg', NULL, NULL, NULL, 2, 4, 1, '2019-01-27 19:34:59', NULL),
-(36, 'Realizar Novo ep 7', 'Realizar Novo ep 7', 'novoep7@gmail.com', 'novoep7@gmail.com', '$2y$10$d0wDOn9WfLXFmYo33ClLKuM86nGW4UCCzcsDhLJ66UAGeTtWk2a0O', NULL, NULL, NULL, 'familia-22.jpg', NULL, NULL, NULL, 2, 4, 1, '2019-01-27 19:38:30', '2019-01-27 19:41:10'),
-(37, 'Realizar Novo ep 8', 'Realizar Novo ep 8', 'novoep8@gmail.com', 'novoep8@gmail.com', '$2y$10$.VPehMvqpQiUt9GpQNoS3eekLFRrLGJ0MRQ27TPxPg9AWEKVQZauy', NULL, NULL, NULL, '71260232331b19a491dc646a22fa3eee.jpg', NULL, NULL, NULL, 2, 3, 1, '2019-01-27 19:40:29', NULL),
-(43, 'Ricardo Santos', 'Ricardo', 'gerente@gmail.com', 'gerente@gmail.com', '$2y$10$SxHxlE1xBtewUtcQQzzYI.Cd/.cHk..v5k1Ac3Z.n6YK4AW3whFNO', NULL, NULL, NULL, 'images.jpg', NULL, NULL, NULL, 1, 3, 1, '2019-02-02 20:43:18', '2019-05-06 12:49:19'),
-(44, 'FuncionÃ¡rio', 'FuncionÃ¡rio', 'funcionario@gmail.com', 'funcionario@gmail.com', '$2y$10$h.UGiYzaMMcv3dsuoeqhkOQhT1UJDaiWAaioDe32ImAmDpnvL6QBS', NULL, NULL, NULL, '', 3, 1, '08:00:00', 1, 4, 1, '2019-02-02 20:44:00', '2019-04-04 17:20:32'),
-(46, 'Cliente', 'Cliente', 'cliente@gmail.com', 'cliente@gmail.com', '$2y$10$gF3l/JRopJiwPvIqRMlIN.qkfeRrAYuSl3uSVWXxE2FSxrkYGvcbq', NULL, NULL, NULL, '', NULL, NULL, NULL, 2, 6, 1, '2019-02-02 20:45:35', NULL),
-(47, 'JoÃ£o', 'joÃ£o', 'joao@gmail.com', 'joao999', '$2y$10$49FRMXaQCsbN4rGCRISg9Os0kwD/XGre60mtS5H5C8rGEo0fVAPdu', NULL, NULL, NULL, '', 3, 1, '08:00:00', 1, 4, 1, '2019-03-21 17:35:24', '2019-04-12 14:55:35'),
-(64, 'FuncionÃ¡rio 09', 'funcionÃ¡rio 09', 'funcionario09@gmail.com', 'funcionario09', '$2y$10$49FRMXaQCsbN4rGCRISg9Os0kwD/XGre60mtS5H5C8rGEo0fVAPdu', NULL, NULL, NULL, NULL, NULL, NULL, '08:00:00', 1, 4, 1, '2019-04-08 17:35:24', NULL),
-(63, 'FuncionÃ¡rio 08', 'funcionÃ¡rio 08', 'funcionario08@gmail.com', 'funcionario08', '$2y$10$49FRMXaQCsbN4rGCRISg9Os0kwD/XGre60mtS5H5C8rGEo0fVAPdu', NULL, NULL, NULL, NULL, 3, NULL, '08:00:00', 1, 4, 1, '2019-04-08 17:35:24', '2019-04-12 14:49:18'),
-(62, 'FuncionÃ¡rio 07', 'funcionÃ¡rio 07', 'funcionario07@gmail.com', 'funcionario07', '$2y$10$49FRMXaQCsbN4rGCRISg9Os0kwD/XGre60mtS5H5C8rGEo0fVAPdu', NULL, NULL, NULL, NULL, 3, NULL, '08:00:00', 1, 4, 1, '2019-04-08 17:35:24', '2019-04-10 16:09:21'),
-(61, 'FuncionÃ¡rio 06', 'funcionÃ¡rio 06', 'funcionario06@gmail.com', 'funcionario06', '$2y$10$49FRMXaQCsbN4rGCRISg9Os0kwD/XGre60mtS5H5C8rGEo0fVAPdu', NULL, NULL, NULL, NULL, 1, NULL, '08:00:00', 1, 4, 1, '2019-04-08 17:35:24', '2019-04-10 16:08:09'),
-(60, 'FuncionÃ¡rio 05', 'funcionÃ¡rio 05', 'funcionario05@gmail.com', 'funcionario05', '$2y$10$49FRMXaQCsbN4rGCRISg9Os0kwD/XGre60mtS5H5C8rGEo0fVAPdu', NULL, NULL, NULL, NULL, 3, NULL, '08:00:00', 1, 4, 1, '2019-04-08 17:35:24', '2019-04-10 16:08:04'),
-(59, 'FuncionÃ¡rio 04', 'funcionÃ¡rio 04', 'funcionario04@gmail.com', 'funcionario04', '$2y$10$49FRMXaQCsbN4rGCRISg9Os0kwD/XGre60mtS5H5C8rGEo0fVAPdu', NULL, NULL, NULL, NULL, 1, NULL, '08:00:00', 1, 4, 1, '2019-04-08 17:35:24', '2019-04-09 13:31:08'),
-(68, 'FuncionÃ¡rio 13', 'funcionÃ¡rio 13', 'funcionario13@gmail.com', 'funcionario13', '$2y$10$49FRMXaQCsbN4rGCRISg9Os0kwD/XGre60mtS5H5C8rGEo0fVAPdu', NULL, NULL, NULL, NULL, NULL, NULL, '08:00:00', 1, 4, 1, '2019-04-08 17:35:24', NULL),
-(69, 'luidfunc', 'luid func', 'luidfunc@mail.com', 'luidfunc', '$2y$10$xZZxorZ8WrJaCxcG8Z3ZQuKb91DasOPx45y8.lKmz3L8ulbcSG0zG', NULL, NULL, NULL, '', 1, NULL, NULL, 1, 4, 1, '2019-04-11 14:56:03', '2019-04-11 15:15:10'),
-(70, 'dhemesfunc', 'dhemes func', 'dhemesfunc@mail.com', 'dhemesfunc', '$2y$10$2oDuciU.B0aT52jv0oHhIOv26qCNt3//HUcB495bByvsZ/78eTisG', NULL, NULL, NULL, '', 2, NULL, NULL, 1, 4, 1, '2019-04-11 14:56:26', '2019-04-11 15:14:51');
+(2, 'JoÃ£o Victor', 'JoÃ£o Victor', 'joaovictorv9820@gmail.com', 'joaovictorv9820@gmail.com', '$2y$10$DfJg9ejX0lT9RLAML5xjB.cBQw4oMKCADSjvBAAIuUhIjtubcM5iC', NULL, NULL, NULL, '', NULL, NULL, NULL, 1, 1, 1, '2019-05-07 17:04:27', '2019-05-07 17:22:11'),
+(3, 'Leila', 'Leila', 'leila@ipaconline.com.br', 'leila@ipaconline.com.br', '$2y$10$QmF5UP.gGTno17D6oTCwJutP7mcPULOMOlVOzNuJWzMofoshEsuUa', NULL, NULL, NULL, '', NULL, NULL, NULL, 1, 3, 1, '2019-05-07 17:08:05', NULL),
+(4, 'FÃ¡bio', 'FÃ¡bio', 'fabio@ipaconline.com.br', 'fabio@ipaconline.com.br', '$2y$10$llg6.tvE0W9HaqVOMmJlVuGYGvY3LvN0XIGXPUaLwZJ6PfMOU9716', NULL, NULL, NULL, '', NULL, NULL, NULL, 1, 3, 1, '2019-05-07 17:08:47', NULL),
+(5, 'Camila', 'Camila', 'camila@ipaconline.com.br', 'camila@ipaconline.com.br', '$2y$10$y0B6VIWmWVLlBv9wp4jqMOITrHpwZZAa.XAjnqk2PU6B1zgkAwMaC', NULL, NULL, NULL, '', NULL, NULL, NULL, 1, 4, 1, '2019-05-07 17:10:28', NULL),
+(6, 'Odilene', 'Odilene', 'odilene@ipaconline.com.br', 'odilene@ipaconline.com.br', '$2y$10$apEyLZsr8hIcpkEe2LdK2OyohLRvieLJZupcHqKi.j1yWvaFxoMNa', NULL, NULL, NULL, '', NULL, NULL, NULL, 1, 4, 1, '2019-05-07 17:11:30', NULL),
+(7, 'Roberta', 'Roberta', 'roberta@ipaconline.com.br', 'roberta@ipaconline.com.br', '$2y$10$tGonwARz/3wJhpAbl/jVteLL/14jAjnEYAOU2Hayq1hgt.Kgu4n0a', NULL, NULL, NULL, '', NULL, NULL, NULL, 1, 4, 1, '2019-05-07 17:12:56', NULL),
+(8, 'Virginia', 'Virginia', 'virginia@ipaconline.com.br', 'virginia@ipaconline.com.br', '$2y$10$B7j/LToJEl8V.3QLKNvvpOI9s3e8To3vYcST7WIpvfRZQgq3O/QBm', NULL, NULL, NULL, '', NULL, NULL, NULL, 1, 4, 1, '2019-05-07 17:13:53', NULL),
+(9, 'Cristovao', 'Cristovao', 'cristovao@ipaconline.com.br', 'cristovao@ipaconline.com.br', '$2y$10$gMvZWuDN2BiYXlBiEx3zpeZLf6Eyhe0aPYJqRMVFcMcEUlFo8GDKq', NULL, NULL, NULL, '', NULL, NULL, NULL, 1, 4, 1, '2019-05-07 17:16:36', NULL),
+(10, 'Jaqueline', 'Jaqueline', 'jaqueline@ipaconline.com.br', 'jaqueline@ipaconline.com.br', '$2y$10$snkesy/ODMGn2MFgMBfqe.2MWloNMIDOtjlHu1045IFag0isaIrOW', NULL, NULL, NULL, '', NULL, NULL, NULL, 1, 4, 1, '2019-05-07 17:17:47', NULL),
+(11, 'Luid', 'Luir', 'luidtorres@gmail.com', 'luidtorres@gmail.com', '$2y$10$bqBxq7dKWKxq5gVcTjgWmO9aKuMLpfFcZw0umlW5oovuIMRIYzrEC', NULL, NULL, NULL, '', NULL, NULL, NULL, 1, 2, 1, '2019-05-07 17:18:40', '2019-05-07 17:20:27'),
+(12, 'Marcia', 'Marcia', 'marcia@ipaconline.com.br', 'marcia@ipaconline.com.br', '$2y$10$Nmy13b/Eb0SCsZgb9miB0e98HvefANcZfsOmYtfrCCCn9y/fKQ6GW', NULL, NULL, NULL, '', NULL, NULL, NULL, 1, 4, 1, '2019-05-07 17:24:11', NULL),
+(13, 'Marcelo', 'Marcelo', 'marcelo@ipaconline.com.br', 'marcelo@ipaconline.com.br', '$2y$10$y5n/ZZuDOzI3b6SsZ5yaB.SEiQf2vOjq8eM3WnzWifqj05z8se.ea', NULL, NULL, NULL, '', NULL, NULL, NULL, 1, 4, 1, '2019-05-07 17:25:00', NULL);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

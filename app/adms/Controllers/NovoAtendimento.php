@@ -28,6 +28,11 @@ class NovoAtendimento
             unset($this->Dados['CadAtendimento']);
             //var_dump($this->Dados);
 
+            if (empty($this->Dados['descricao'])){
+                unset($this->Dados['descricao']);
+            }
+
+
             $cadAtendimento = new \App\adms\Models\AdmsCadastrarAtendimento();
             $cadAtendimento->cadAtendimento($this->Dados);
             if ($cadAtendimento->getResultado())
@@ -40,6 +45,7 @@ class NovoAtendimento
             else {
 
                 $this->Dados['form'] = $this->Dados;
+
                 $this->cadAtendimentoViewPriv();
 
             }
@@ -69,6 +75,9 @@ class NovoAtendimento
         //Carregar Menu
         $listarMenu = new \App\adms\Models\AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
+
+
+
         //Carregar a view
         $carregarView = new \Core\ConfigView("adms/Views/atendimento/cadAtendimento", $this->Dados);
         $carregarView->renderizar();

@@ -75,7 +75,7 @@ if (!defined('URL')) {
                         ?>
 
                         <tr>
-                            <td><?php echo $nome; ?></td>
+                            <td><i class="fas fa-clipboard-list text-secondary"></i> <?php echo $nome; ?></td>
                             <td class="d-none d-lg-table-cell"><?php echo $descricao; ?></td>
                             <td class="text-right">
                                 <span class="d-none d-md-block">

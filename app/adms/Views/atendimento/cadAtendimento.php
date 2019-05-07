@@ -56,13 +56,20 @@ if (isset($this->Dados['form'][0])) {
                         ?>
                         <!-- Apenas o gerente pode visualizar essa parte de selecionar empresa -->
                         <div class="form-group col-md-6">
-                            <label><span class="text-danger">* </span>Selecionar Empresa</label>
-                            <select name="adms_empresa_id" id="adms_empresa_id" class="form-control">
+                            <label for="adms_empresa_id"><span class="text-danger">* </span>Selecionar Empresa</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-empresaid">
+                                        <i class="fas fa-building"></i>
+                                    </span>
+                                </div>
+
+                            <select name="adms_empresa_id" id="adms_empresa_id" class="form-control" aria-describedby="basic-empresaid">
                                 <option value="">Selecione</option>
                                 <?php
                                 foreach ($this->Dados['empresas'] as $empresa) {
                                     extract($empresa);
-                                    if ($valorFom['adms_empresa_id'] == $id) {
+                                    if ($valorFom['adms_empresa_id'] == $id_empresa) {
                                         echo "<option value='$id_empresa' selected>$nome_empresa</option>";
                                     } else {
                                         echo "<option value='$id_empresa'>$nome_empresa</option>";
@@ -71,33 +78,40 @@ if (isset($this->Dados['form'][0])) {
                                 }
                                 ?>
                             </select>
+                            </div>
                         </div>
                         <?php
                     }
                 ?>
 
 
-
                 <div class="form-group col-md-6">
-                    <label><span class="text-danger">* </span>Tipo de Atendimento</label>
-                    <select name="adms_demanda_id" id="nivel-acesso" class="form-control">
-                        <option value="">Selecione</option>
-                        <?php
-                        foreach ($this->Dados['demandas'] as $demanda) {
-                            extract($demanda);
-                            if ($valorFom['adms_demanda_id'] == $id)
-                            {
-                                echo "<option value='$id' selected>$nome</option>";
-                            } else {
-                                echo "<option value='$id'>$nome</option>";
-                            }
+                    <label for="adms_demanda_id"><span class="text-danger">* </span>Tipo de Atendimento</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-demanda_id">
+                                <i class="fas fa-clipboard-list"></i>
+                            </span>
+                        </div>
+                        <select name="adms_demanda_id" id="adms_demanda_id" class="form-control" aria-describedby="basic-demanda_id">
+                            <option value="">Selecione</option>
+                            <?php
+                            foreach ($this->Dados['demandas'] as $demanda) {
+                                extract($demanda);
+                                if ($valorFom['adms_demanda_id'] == $id)
+                                {
+                                    echo "<option value='$id' selected>$nome</option>";
+                                } else {
+                                    echo "<option value='$id'>$nome</option>";
+                                }
 
-                        }
-                        ?>
-                    </select>
+                            }
+                            ?>
+                        </select>
+                    </div>
                 </div>
                 <div class="form-group col-md-10">
-                    <label><span class="text-danger">* </span>Descrição</label>
+                    <label><span class="text-danger"></span>Descrição</label>
                     <textarea name="descricao" class="form-control" rows="3"><?php if(isset($valorForm['descricao'])) {echo $valorForm['descricao'];}?></textarea>
 
                 </div>
