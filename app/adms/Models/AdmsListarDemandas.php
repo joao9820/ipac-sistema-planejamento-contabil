@@ -40,9 +40,10 @@ class AdmsListarDemandas
 
 
         $listarDemandas = new \App\adms\Models\helper\AdmsRead();
-        $listarDemandas->fullRead("SELECT id, nome, descricao  
-                        FROM adms_demandas 
-                        ORDER BY nome ASC LIMIT :limit OFFSET :offset", "limit={$this->LimiteResultado}&offset={$offset}");
+        $listarDemandas->fullRead("SELECT dem.id, dem.nome, dem.descricao, ativ.duracao_total_atividade
+                    FROM adms_demandas dem
+                    LEFT JOIN (SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(duracao))) as duracao_total_atividade, adms_demanda_id FROM adms_atividades GROUP BY adms_demanda_id) ativ ON ativ.adms_demanda_id = dem.id
+                    ORDER BY dem.nome ASC LIMIT :limit OFFSET :offset", "limit={$this->LimiteResultado}&offset={$offset}");
         $this->Resultado = $listarDemandas->getResultado();
         //var_dump($this->Resultado);
         return $this->Resultado;
