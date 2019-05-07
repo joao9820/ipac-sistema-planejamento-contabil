@@ -52,7 +52,11 @@ class AdmsListarAtendimentoPendente
         $paginacao->paginacao("SELECT COUNT(aten.id) AS num_result
                      FROM adms_atendimento_funcionarios aten
                      INNER JOIN adms_atendimentos at ON at.id = aten.adms_atendimento_id
-                     WHERE aten.adms_funcionario_id =:usuario AND at.adms_sits_atendimento_id <>:adms_sits_atendimento_id AND at.prioridade <>:prioridade", "usuario=".$_SESSION['usuario_id']."&adms_sits_atendimento_id=4&prioridade=1");
+                     WHERE aten.adms_funcionario_id =:usuario 
+                       AND (at.adms_sits_atendimento_id <>:adms_sits_atendimento_id AND at.adms_sits_atendimento_id <>:adms_sits_atendimento_conclu)
+                       AND aten.adms_sits_atendimentos_funcionario_id <>:adms_s_atend_func_id 
+                       AND aten.adms_sits_atendimentos_funcionario_id <>:interrompido
+                       AND at.prioridade <>:prioridade", "usuario=".$_SESSION['usuario_id']."&adms_sits_atendimento_id=4&adms_sits_atendimento_conclu=3&prioridade=1&adms_s_atend_func_id=4&interrompido=5");
         $this->ResultadoPg = $paginacao->getResultado();
         $offset = $paginacao->getOffset();
 
