@@ -337,14 +337,14 @@ if (!defined('URL')) {
                                         <p>Definir duração?</p>
                                         <div class="d-flex w-100">
                                             <div class="form-check mr-3">
-                                                <input class="form-check-input" type="radio" name="simNao" id="sim" value="option1">
-                                                <label onclick="definirSim()" class="form-check-label" for="sim">
+                                                <input onclick="definirSim()" class="form-check-input" type="radio" name="simNao" id="sim" value="option1">
+                                                <label  class="form-check-label" for="sim">
                                                     Sim
                                                 </label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="simNao" id="nao" value="option1" checked>
-                                                <label onclick="definirNao()" class="form-check-label" for="nao">
+                                                <input onclick="definirNao()" class="form-check-input" type="radio" name="simNao" id="nao" value="option1" checked>
+                                                <label  class="form-check-label" for="nao">
                                                     Não
                                                 </label>
                                             </div>

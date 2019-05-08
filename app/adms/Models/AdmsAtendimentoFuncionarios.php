@@ -214,13 +214,8 @@ class AdmsAtendimentoFuncionarios {
             //Função para verificar se a duração da atividade foi definida ou não
             
             // Pegando dados da atividade que está sendo cadastrada
-<<<<<<< HEAD
-            $this->buscarAtividade();
-            //$this->Dados['duracao_atividade'] = $this->DadosAtivi[0]['duracao'];
-            $this->Dados['at_tempo_restante'] = $this->DadosAtivi[0]['duracao'];
-=======
             $this->buscarAtividade();            
-            
+            /*
             if ($this->Dados['horas'] > 0 && $this->Dados['minutos'] > 0) {
                 
                 $duracao_atv = [$this->Dados['horas'], $this->Dados['minutos']];
@@ -229,10 +224,12 @@ class AdmsAtendimentoFuncionarios {
          
             }else{
                 $this->Dados['duracao_atividade'] = $this->DadosAtivi[0]['duracao'];
-            }       
+            } */      
             
-            $this->Dados['at_tempo_restante'] = $this->DadosAtivi['duracao_atividade'];
->>>>>>> 49139a9bf02955982506b431088d0ec31151d3b9
+            //Ativar o código acima quando a View estiver finalizada
+            $this->Dados['duracao_atividade'] = $this->DadosAtivi[0]['duracao'];
+
+            $this->Dados['at_tempo_restante'] = $this->DadosAtivi[0]['duracao'];
             $this->Dados['ordem_atividade'] = $this->DadosAtivi[0]['ordem'];
 
             // Somando duração da atividade na hora de inicio
@@ -418,8 +415,35 @@ class AdmsAtendimentoFuncionarios {
             //die;
         }
     }
-
+    
     public function getBuscarUltimaAtiviFunc() {
+        return $this->UltimaAtividade;
+    }
+    
+    public function buscarPrimeiraAtv($Funcionario = null, $Data = null){
+        
+        if (!empty($Funcionario) and !empty($Data)) {
+            $this->Dados['adms_funcionario_id'] = $Funcionario;
+            $this->Dados['data_inicio_planejado'] = $Data;
+        }
+
+        $dataHora = new AdmsRead();
+        $dataHora->fullRead("SELECT hora_fim_planejado, hora_inicio_planejado
+        FROM adms_atendimento_funcionarios 
+        WHERE adms_funcionario_id=:adms_funcionario_id
+        AND ordem = (SELECT MIN(ordem) FROM adms_atendimento_funcionarios WHERE adms_sits_atendimentos_funcionario_id = :adms_sits_atendimentos_funcionario_id AND adms_funcionario_id = :adms_funcionario_id)
+        LIMIT :limit", "adms_funcionario_id={$this->Dados['adms_funcionario_id']}&limit=1");
+        
+        if ($dataHora->getResultado()) {
+            $this->UltimaAtividade = $dataHora->getResultado();
+            //var_dump($this->UltimaAtividade);
+            //echo $this->UltimaAtividade[0]['hora_fim_planejado'];
+            //die;
+        }
+        
+    }
+    
+    public function getBuscarPrimeiraAtv(){
         return $this->UltimaAtividade;
     }
 
