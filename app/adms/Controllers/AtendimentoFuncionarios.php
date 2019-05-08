@@ -199,8 +199,8 @@ class AtendimentoFuncionarios
          */
         $this->Dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         
-        //var_dump($this->Dados);
-        //die();
+        var_dump($this->Dados);
+        die();
         $adms_demanda_id = $this->Dados['adms_demanda_id'];
         $adms_atendimento_id = $this->Dados['adms_atendimento_id'];
 
@@ -227,7 +227,12 @@ class AtendimentoFuncionarios
 
                     unset($this->Dados['verificar_mesmo_funcionario']); // Retirando do array o funcionário antigo
 
-                    // Chamar a model que vai atualizar a atividade
+                    /*Chamar a model que vai atualizar a atividade
+                    if($this->Dados['prioridade'] == '1'){
+                        
+                        
+                        
+                    }*/
                     $upAtividade = new AdmsAtendimentoFuncionarioEditar();
                     $upAtividade->setAtividade($this->Dados, $this->Condicao);
                     // Receber um array de dados contendo o status
