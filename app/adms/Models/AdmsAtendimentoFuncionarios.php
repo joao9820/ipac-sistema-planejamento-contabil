@@ -218,7 +218,7 @@ class AdmsAtendimentoFuncionarios {
 
             // Pegando dados da atividade que está sendo cadastrada
             $this->buscarAtividade();
-            $this->Dados['duracao_atividade'] = $this->DadosAtivi[0]['duracao'];
+            //$this->Dados['duracao_atividade'] = $this->DadosAtivi[0]['duracao'];
             $this->Dados['at_tempo_restante'] = $this->DadosAtivi[0]['duracao'];
             $this->Dados['ordem_atividade'] = $this->DadosAtivi[0]['ordem'];
 

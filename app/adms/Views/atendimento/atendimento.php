@@ -15,7 +15,7 @@ if ($this->Dados['arquivado'][0]) {
     <div class="list-group-item">
         <div class="d-flex">
             <div class="mr-auto p-2">
-                <h2 class="display-4 titulo">Atendimento</h2>
+                <h2 class="display-4 titulo">Solicitações</h2>
             </div>
         </div>
 
@@ -26,7 +26,7 @@ if ($this->Dados['arquivado'][0]) {
                 <a href="<?php echo URLADM . 'novo-atendimento/novo'; ?>">
                     <div class="p-2 mr-auto">
                         <button class="btn btn-outline-success btn-sm">
-                            <i class="far fa-calendar-plus"></i> Novo
+                            <i class="far fa-calendar-plus"></i> Nova
                         </button>
                     </div>
                 </a>

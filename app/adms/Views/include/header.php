@@ -4,14 +4,7 @@ if (!defined('URL')) {
     exit();
 }
 ?>
-<style>
-    #rodapeVersao {
-        position: fixed;
-        bottom: 20px;
-        color: #FFF;
-        left: 10px;
-    }
-</style>
+
 <nav class="navbar navbar-expand navbar-dark">
     <a class="sidebar-toggle mr-3 text-danger cursor">
         <span class="navbar-toggler-icon "></span>
@@ -109,8 +102,6 @@ if (!defined('URL')) {
                 </div>
             </li>
         </ul>
-        <div id="rodapeVersao">
-            Versão 1.0
-        </div>
+
     </div>
 </nav>
