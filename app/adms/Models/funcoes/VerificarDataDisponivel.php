@@ -74,7 +74,6 @@ class VerificarDataDisponivel
                 $novaData = $feriado->dia_in_data($novaData, 1, "+");
                 //echo "teve feriado";
             }
-
         }
 
         do {

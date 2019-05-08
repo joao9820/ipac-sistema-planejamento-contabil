@@ -115,36 +115,36 @@ class AdmsAtendimentoFuncionarios {
          * já ter muitas atividades e não conseguir realizar mais uma até essa data especifica.
          */
         /*
-        do {
-            $DataFatalP = new AdmsVerificarDataFatal($this->Dados['adms_funcionario_id'], $this->Dados['data_fatal'], $this->Dados['adms_atividade_id']);
-            if ($DataFatalP->getPermissaoResult()['status'] == false) {
+          do {
+          $DataFatalP = new AdmsVerificarDataFatal($this->Dados['adms_funcionario_id'], $this->Dados['data_fatal'], $this->Dados['adms_atividade_id']);
+          if ($DataFatalP->getPermissaoResult()['status'] == false) {
 
-                $soma_data = new Funcoes();
-                $nova_data = $soma_data->dia_in_data($this->Dados['data_fatal'], 1, "+");
+          $soma_data = new Funcoes();
+          $nova_data = $soma_data->dia_in_data($this->Dados['data_fatal'], 1, "+");
 
-                // Verificar se é fim de semanda ou não
-                $data = getdate(strtotime($nova_data));
-                if (($data['wday'] == 6) or ($data['wday'] == 0)) {
-                    if ($data['wday'] == 6){
-                        // se for sabado
-                        $dias = 2;
-                    } else {
-                        // se for domingo
-                        $dias = 1;
-                    }
-                    $novodia = new Funcoes();
-                    $nova_data = $novodia->dia_in_data($nova_data,$dias,"+");
-                }
+          // Verificar se é fim de semanda ou não
+          $data = getdate(strtotime($nova_data));
+          if (($data['wday'] == 6) or ($data['wday'] == 0)) {
+          if ($data['wday'] == 6){
+          // se for sabado
+          $dias = 2;
+          } else {
+          // se for domingo
+          $dias = 1;
+          }
+          $novodia = new Funcoes();
+          $nova_data = $novodia->dia_in_data($nova_data,$dias,"+");
+          }
 
-                $this->Dados['data_fatal'] = $nova_data;
+          $this->Dados['data_fatal'] = $nova_data;
 
-            } else {
-                $alertaMensagem = new AdmsAlertMensagem();
-                $_SESSION['msg_dia'] = $alertaMensagem->alertMensagemSimples("A data fatal foi definida para o dia " . date('d/m/Y' ,strtotime($this->Dados['data_fatal'])), "info");
-            }
+          } else {
+          $alertaMensagem = new AdmsAlertMensagem();
+          $_SESSION['msg_dia'] = $alertaMensagem->alertMensagemSimples("A data fatal foi definida para o dia " . date('d/m/Y' ,strtotime($this->Dados['data_fatal'])), "info");
+          }
 
-        } while ($DataFatalP->getPermissaoResult()['status'] == false);
-        */
+          } while ($DataFatalP->getPermissaoResult()['status'] == false);
+         */
         /*
          * Aqui realizo a chamada para a função que vai verificar se a atividade
          * vai ser definida para executar na data atual ou no dia seguinte.
@@ -156,7 +156,7 @@ class AdmsAtendimentoFuncionarios {
         $DataDefinida = $verificarDataDisponivel->getVertificarDataDisponivel();
         //var_dump($DataDefinida);
         $this->Dados['data_inicio_planejado'] = $DataDefinida['data_inicio_nova_atividade'];
-        if ($DataDefinida['tempo_excedido_sc'] != false){
+        if ($DataDefinida['tempo_excedido_sc'] != false) {
             $this->TempoExcedido = $DataDefinida['tempo_excedido_sc'];
         } else {
             $this->TempoExcedido = 0;
@@ -179,11 +179,9 @@ class AdmsAtendimentoFuncionarios {
                 if ($this->UltimaAtividade[0]) {
                     // Pegando a hora de termino da atividade anterior e passando para o inicio da nova atividade cadastrada
                     $this->Dados['hora_inicio_planejado'] = $this->UltimaAtividade[0]['hora_fim_planejado'];
-
                 } else {
                     return $this->Resultado = false;
                 }
-
             } else {
 
                 $inicioAti = new AdmsRead();
@@ -195,67 +193,81 @@ class AdmsAtendimentoFuncionarios {
                     $this->horaInicioFunc = $inicioAti->getResultado();
 
                     // Pegar o tempo excedito da atividade do dia anterior e somar com a hora de inicio planejado do funcionario para o proximo dia
-                    if ($this->Dados['data_inicio_planejado'] == date('Y-m-d')){
+                    if ($this->Dados['data_inicio_planejado'] == date('Y-m-d')) {
 
-                        if((date('H:i:s') < $this->horaInicioFunc[0]['hora_termino2']) and (date('H:i:s') > $this->horaInicioFunc[0]['hora_inicio'])) {
+                        if ((date('H:i:s') < $this->horaInicioFunc[0]['hora_termino2']) and ( date('H:i:s') > $this->horaInicioFunc[0]['hora_inicio'])) {
                             $horaAtual = date('H:i:s');
                             $partes = explode(':', $horaAtual);
                         } else {
                             $partes = explode(':', $this->horaInicioFunc[0]['hora_inicio']);
                         }
-
-
                     } else {
                         $partes = explode(':', $this->horaInicioFunc[0]['hora_inicio']);
                     }
 
                     $segundosAtividades = $partes[0] * 3600 + $partes[1] * 60 + $partes[2];
                     $resultado = $segundosAtividades + $this->TempoExcedido; // Pegando o tempo excedido e somando com a hora de inicio
-                    $this->Dados['hora_inicio_planejado'] = gmdate("H:i:s",$resultado);
-
+                    $this->Dados['hora_inicio_planejado'] = gmdate("H:i:s", $resultado);
                 }
             }
 
+            //Função para verificar se a duração da atividade foi definida ou não
+            
             // Pegando dados da atividade que está sendo cadastrada
+<<<<<<< HEAD
             $this->buscarAtividade();
             //$this->Dados['duracao_atividade'] = $this->DadosAtivi[0]['duracao'];
             $this->Dados['at_tempo_restante'] = $this->DadosAtivi[0]['duracao'];
+=======
+            $this->buscarAtividade();            
+            
+            if ($this->Dados['horas'] > 0 && $this->Dados['minutos'] > 0) {
+                
+                $duracao_atv = [$this->Dados['horas'], $this->Dados['minutos']];
+                
+                $this->Dados['duracao_atividade'] = date('H:i:s', strtotime(implode(':', $duracao_atv))); 
+         
+            }else{
+                $this->Dados['duracao_atividade'] = $this->DadosAtivi[0]['duracao'];
+            }       
+            
+            $this->Dados['at_tempo_restante'] = $this->DadosAtivi['duracao_atividade'];
+>>>>>>> 49139a9bf02955982506b431088d0ec31151d3b9
             $this->Dados['ordem_atividade'] = $this->DadosAtivi[0]['ordem'];
 
             // Somando duração da atividade na hora de inicio
             // Passar os parametros no formato H:i:s
             $calcularHoraFimPl = new Funcoes();
-            $this->Dados['hora_fim_planejado'] = $calcularHoraFimPl->somar_time_in_hours($this->Dados['duracao_atividade'],$this->Dados['hora_inicio_planejado']);
+            $this->Dados['hora_fim_planejado'] = $calcularHoraFimPl->somar_time_in_hours($this->Dados['duracao_atividade'], $this->Dados['hora_inicio_planejado']);
 
             // Buscar Jornada para fazer comparação se será necessário somar a hora de almoço
             $jornadaFunc = new BuscarDuracaoJornadaT($this->FuncionarioId, $this->Dados['data_inicio_planejado']);
             $pausa_almoco = $jornadaFunc->getDuracaoJornada()['hora_termino'];
             $retorna_trabalho = $jornadaFunc->getDuracaoJornada()['hora_inicio2'];
             $start_job = $jornadaFunc->getDuracaoJornada()['hora_inicio'];
-            if (empty($pausa_almoco)){
+            if (empty($pausa_almoco)) {
                 return $this->Resultado = false;
             }
-            if (($this->Dados['hora_inicio_planejado'] < $pausa_almoco)and ($pausa_almoco < $this->Dados['hora_fim_planejado'])) {
+            if (($this->Dados['hora_inicio_planejado'] < $pausa_almoco)and ( $pausa_almoco < $this->Dados['hora_fim_planejado'])) {
                 $calculaAlmoco = new Funcoes();
                 $totalTimeAlmoco = $calculaAlmoco->sbtrair_horas_in_hours($retorna_trabalho, $pausa_almoco);
-                $this->Dados['hora_fim_planejado'] = $calculaAlmoco->somar_time_in_hours($totalTimeAlmoco,$this->Dados['hora_fim_planejado']);
+                $this->Dados['hora_fim_planejado'] = $calculaAlmoco->somar_time_in_hours($totalTimeAlmoco, $this->Dados['hora_fim_planejado']);
             }
-            if (($this->Dados['hora_inicio_planejado'] >= $pausa_almoco) and ($this->Dados['hora_inicio_planejado'] < $retorna_trabalho)){
+            if (($this->Dados['hora_inicio_planejado'] >= $pausa_almoco) and ( $this->Dados['hora_inicio_planejado'] < $retorna_trabalho)) {
 
                 /*
                  * calcular se o tempo excedido da atividade anterior termina durante o horario de almoço, se sim, somar horario de almoço
                  * na hora_inicio_planejado da atividade sendo registrada e somar a duração da atividade definindo a hora_fim_planejado
                  */
-                $verificarTimeExcedido = new  Funcoes();
+                $verificarTimeExcedido = new Funcoes();
                 $timeExcedido = $verificarTimeExcedido->segundos_to_hora($this->TempoExcedido);
                 $horaInicioSemAlmoco = $verificarTimeExcedido->somar_time_in_hours($timeExcedido, $start_job);
                 if ($horaInicioSemAlmoco > $pausa_almoco) {
 
                     $calcularInicioAfterAlmoco = new Funcoes();
                     $totalTimeAlmoco = $calcularInicioAfterAlmoco->sbtrair_horas_in_hours($retorna_trabalho, $pausa_almoco);
-                    $this->Dados['hora_inicio_planejado'] = $calcularInicioAfterAlmoco->somar_time_in_hours($totalTimeAlmoco,$this->Dados['hora_inicio_planejado']);
+                    $this->Dados['hora_inicio_planejado'] = $calcularInicioAfterAlmoco->somar_time_in_hours($totalTimeAlmoco, $this->Dados['hora_inicio_planejado']);
                     $this->Dados['hora_fim_planejado'] = $calcularInicioAfterAlmoco->somar_time_in_hours($this->Dados['duracao_atividade'], $this->Dados['hora_inicio_planejado']);
-
                 } else {
                     // Caso a nova atividade a ser registrada inicie durante o almoço, será definida pra ela o novo inicio após o almoço
                     $this->Dados['hora_inicio_planejado'] = $retorna_trabalho;
@@ -266,13 +278,12 @@ class AdmsAtendimentoFuncionarios {
 
 
             // Corrigir erro ao registrar uma atividade de 6h que ultrapasse o expediente e almoço do dia seguinte
-            
-             //Criar objeto de AdmsAtendimentoFuncionarioReordenar para Inserir a ordem
+            //Criar objeto de AdmsAtendimentoFuncionarioReordenar para Inserir a ordem
             $inserirOrdem = new \App\adms\Models\AdmsAtendimentoFuncionariosReordenar();
-            
-            $inserirOrdem->inserirOrdemAtvFunc($this->Dados['adms_funcionario_id']);          
+
+            $inserirOrdem->inserirOrdemAtvFunc($this->Dados['adms_funcionario_id']);
             $this->Dados['ordem'] = $inserirOrdem->getResultado(); //se for a primeira será 1 senão será a ultima + 1
-          
+
 
             $regist = new AdmsCreateRow();
             $regist->exeCreate("adms_atendimento_funcionarios", $this->Dados);
@@ -289,9 +300,8 @@ class AdmsAtendimentoFuncionarios {
     }
 
     // Definiar a data em que a atividade será registrada
-    public function defineData($Funcionario = null, $Data = null)
-    {
-        if (!empty($Funcionario) and !empty($Data)){
+    public function defineData($Funcionario = null, $Data = null) {
+        if (!empty($Funcionario) and ! empty($Data)) {
             $this->FuncionarioId = $Funcionario;
             $novaData = $Data;
         } else {
@@ -303,33 +313,32 @@ class AdmsAtendimentoFuncionarios {
         while ($laco == 1) {
             //echo $cont ."\n";
             $this->atividadeDuracao($this->FuncionarioId, $novaData);
-            
-            if(!empty($Funcionario) and !empty($Data)){
-               $this->buscarJornada($Funcionario, $Data);
+
+            if (!empty($Funcionario) and ! empty($Data)) {
+                $this->buscarJornada($Funcionario, $Data);
                 // buscar fim da jornada de trabalho e verificar se a ultima atividade registrada para o funcionário, a hora do fim planejado é menor que a hora do fim da jornada
                 // $this->UltimaAtividade[0]['hora_fim_planejado']
                 // $this->HoraTermino2 
-            }else{
+            } else {
                 $this->buscarJornada();
             }
-            
+
             $this->buscarUltimaAtividadeDefineData($novaData);
             //echo $this->HoraTermino2;
             //echo $this->UltimaAtividadeLoop[0]['hora_fim_planejado'];
-            
+
             echo $this->JornadaFunc[0]['total'] . '>' . $this->DuracaoTotalAtivi[0]['duracao_atividade_sc'] . ' ' . $this->HoraTermino2 . '>' . $this->UltimaAtividadeLoop[0]['hora_fim_planejado'];
             //die();
-            
-            if (($this->JornadaFunc[0]['total'] > $this->DuracaoTotalAtivi[0]['duracao_atividade_sc']) and ($this->HoraTermino2 > $this->UltimaAtividadeLoop[0]['hora_fim_planejado'])) {
+
+            if (($this->JornadaFunc[0]['total'] > $this->DuracaoTotalAtivi[0]['duracao_atividade_sc']) and ( $this->HoraTermino2 > $this->UltimaAtividadeLoop[0]['hora_fim_planejado'])) {
 
                 $this->Dados['data_inicio_planejado'] = $novaData;
                 //die();
                 $laco = 0; // encerra o laço de repetição
                 //break;
-
             } else {
 
-                if ($this->HoraTermino2 < $this->UltimaAtividadeLoop[0]['hora_fim_planejado']){
+                if ($this->HoraTermino2 < $this->UltimaAtividadeLoop[0]['hora_fim_planejado']) {
 
                     /*
                      * ATENÇÃO PAREI AQUI
@@ -337,7 +346,7 @@ class AdmsAtendimentoFuncionarios {
                      * mas ultrapassa as 18 horas do dia
                      *
                      */
-                    
+
                     //Como entra apenas uma vez nessa condição, quando o horário da ultima atividade for maior que a HoraTermino2 o horário da ultima atividade pode ser definido igual a HoraTermino2
                     $help = explode(':', $this->HoraTermino2);
                     $data = new DateTime(date('H:i', strtotime($this->UltimaAtividadeLoop[0]['hora_fim_planejado'])));
@@ -361,38 +370,36 @@ class AdmsAtendimentoFuncionarios {
 
 
                 //var_dump($partes)
-                
+
                 $data = new DateTime(date('Y-m-d', strtotime($novaData)));
                 $data->modify('+1 day');
                 $novaData = $data->format('Y-m-d');
                 //echo $novaData;
 
                 $this->Dados['data_inicio_planejado'] = $novaData;
-
-
             }
             var_dump($this->TempoExcedido);
             var_dump($this->Dados);
-        $cont++;
+            $cont++;
         }
     }
 
     /*
      * get Para retornar data_inicio_planejado e TempoExcedido
      */
-    public function getDefineData()
-    {
-        return ['tempo_excedido'=>$this->TempoExcedido, 'data_inicio_planejado'=>$this->Dados['data_inicio_planejado']];
+
+    public function getDefineData() {
+        return ['tempo_excedido' => $this->TempoExcedido, 'data_inicio_planejado' => $this->Dados['data_inicio_planejado']];
     }
 
     // Buscar a ultima atividade na data selecionada para o funcionário selecionado
     public function buscarUltimaAtiviFunc($Funcionario = null, $Data = null) {
-        
-         if (!empty($Funcionario) and !empty($Data)){
+
+        if (!empty($Funcionario) and ! empty($Data)) {
             $this->Dados['adms_funcionario_id'] = $Funcionario;
             $this->Dados['data_inicio_planejado'] = $Data;
         }
-        
+
         $dataHora = new AdmsRead();
         $dataHora->fullRead("SELECT hora_fim_planejado, hora_inicio_planejado
         FROM adms_atendimento_funcionarios 
@@ -411,11 +418,11 @@ class AdmsAtendimentoFuncionarios {
             //die;
         }
     }
-    
-    public function getBuscarUltimaAtiviFunc(){
+
+    public function getBuscarUltimaAtiviFunc() {
         return $this->UltimaAtividade;
     }
-    
+
     // Buscar a ultima atividade na data selecionada para o funcionário selecionado
     public function buscarUltimaAtividadeDefineData($DataLoop = null) {
         $this->DataLoop = $DataLoop;
@@ -440,7 +447,7 @@ class AdmsAtendimentoFuncionarios {
             $Duracao_almoco = $diferencaHoras->sbtrair_horas_in_hours($this->HoraInicio2, $this->HoraTermino);
             $hora_fim_ultima_ativ = $this->UltimaAtividadeLoop[0]['hora_fim_planejado'];
             $hora_inicio_ultima_ativ = $this->UltimaAtividadeLoop[0]['hora_inicio_planejado'];
-            if (($hora_inicio_ultima_ativ < $this->HoraTermino) and ($hora_fim_ultima_ativ > $this->HoraTermino)) {
+            if (($hora_inicio_ultima_ativ < $this->HoraTermino) and ( $hora_fim_ultima_ativ > $this->HoraTermino)) {
                 /*
                  * Aqui vai somar a $Duracao_almoco com $this->UltimaAtividadeLoop[0]['hora_fim_planejado']
                  *
@@ -453,27 +460,25 @@ class AdmsAtendimentoFuncionarios {
             }
             //var_dump($this->UltimaAtividadeLoop);
             //die;
-
             //$this->UltimaAtividadeLoop = $dataHora->getResultado();
         } else {
             $this->UltimaAtividadeLoop[0]['hora_fim_planejado'] = "08:00:00";
         }
     }
-    
-    public function getBuscarUltimaAtividadeDefineData(){
-        
+
+    public function getBuscarUltimaAtividadeDefineData() {
+
         return $this->UltimaAtividadeLoop;
-        
     }
 
     // Verificar se já existe atividade registrada para o funcionário na data especificado no registro
     public function verificarExisteAtividade($Funcionario = null, $Data = null) {
-        
-        if (!empty($Funcionario) and !empty($Data)){
+
+        if (!empty($Funcionario) and ! empty($Data)) {
             $this->Dados['adms_funcionario_id'] = $Funcionario;
             $this->Dados['data_inicio_planejado'] = $Data;
         }
-        
+
         $dataHora = new AdmsRead();
         $dataHora->fullRead("SELECT id 
         FROM adms_atendimento_funcionarios 
@@ -484,8 +489,8 @@ class AdmsAtendimentoFuncionarios {
             $this->jaExiste = $dataHora->getResultado();
         }
     }
-    
-    public function getVerificarExisteAtividade(){
+
+    public function getVerificarExisteAtividade() {
         return $this->jaExiste;
     }
 
@@ -556,8 +561,7 @@ class AdmsAtendimentoFuncionarios {
         $this->Resultado = $func->getResultado();
     }
 
-    public function jornadaTrabalho($FuncionarioId = null, $Data = null)
-    {
+    public function jornadaTrabalho($FuncionarioId = null, $Data = null) {
         $this->FuncionarioId = (int) $FuncionarioId;
         $this->Data = date('Y-m-d', strtotime($Data));
 
@@ -590,8 +594,7 @@ class AdmsAtendimentoFuncionarios {
         $this->HoraExtra = $verificar->getResultado();
     }
 
-    public function atividadeDuracao($FuncionarioId = null, $Data = null)
-    {
+    public function atividadeDuracao($FuncionarioId = null, $Data = null) {
         $this->FuncionarioId = (int) $FuncionarioId;
         $this->Data = date('Y-m-d', strtotime($Data));
         $ativDura = new AdmsRead();
@@ -602,14 +605,12 @@ class AdmsAtendimentoFuncionarios {
         $this->Resultado = $ativDura->getResultado();
         $this->DuracaoTotalAtivi = $ativDura->getResultado();
     }
-    
-    public function getAtividadeDuracao(){
+
+    public function getAtividadeDuracao() {
         return $this->DuracaoTotalAtivi;
     }
 
-
-    private function buscarDuracaoAtv()
-    { //Mostra a duração das atividades naquela data para tal funcionario
+    private function buscarDuracaoAtv() { //Mostra a duração das atividades naquela data para tal funcionario
         $buscarDuracaoAtv = new AdmsRead();
         $buscarDuracaoAtv->fullRead("
         SELECT SUM(TIME_TO_SEC(duracao_atividade)) AS duracao_atv
@@ -623,14 +624,14 @@ class AdmsAtendimentoFuncionarios {
 
         return $duracaoTotalAtv;
     }
-    
+
     public function buscarJornada($Funcionario = null, $Data = null) {
-        
-        if (!empty($Funcionario) and !empty($Data)){
+
+        if (!empty($Funcionario) and ! empty($Data)) {
             $this->Dados['adms_funcionario_id'] = $Funcionario;
             $this->Dados['data_inicio_planejado'] = $Data;
         }
-        
+
         $this->verificarHoraExtra();
 
         $jornadaDia = new AdmsRead();
@@ -659,35 +660,34 @@ class AdmsAtendimentoFuncionarios {
         $this->HoraInicio2 = $jornadaDia->getResultado()[0]['hora_inicio2'];
         $this->HoraTermino = $jornadaDia->getResultado()[0]['hora_termino'];
         $jornada = $jornadaDia->getResultado(); //obtém o resultado da jornada do if ou do else
-        
         //var_dump($jornada);
         //die();
         return $jornada;
     }
-    
-    public function  getBuscarJornada(){
-       
+
+    public function getBuscarJornada() {
+
         $this->Resultado = ["hora_termino2" => $this->HoraTermino2, "jornadaFunc" => $this->JornadaFunc[0]['total'], "hora_termino" => $this->HoraTermino, "hora_inicio2" => $this->HoraInicio2];
         return $this->Resultado;
     }
-    
+
     public function comparaJornada() {
 
         $duracaoTotalAtv = $this->buscarDuracaoAtv(); //Recebe o resultado do método (duracao das ativadades em segundos)
         $jornada = $this->buscarJornada();
-        
+
         /*
           var_dump($duracaoTotalAtv);
           var_dump($jornada);
          */
-        
+
         if ($duracaoTotalAtv[0]['duracao_atv'] > $jornada[0]['total']) { //array com chaves relacionadas às colunas (o array é numerico e possui o indice da coluna da tabela [bidimensional])
             return false; //Ultrapassou a jornada para o funcionario naquele dia    
         } else {
             return true; //Ainda é possivel realizar atividades há horas sobrando na jornada do funcionario na data especificada
         }
     }
-    
+
     private function validaRegistroAtv() {
 
         $validaRegistro = new AdmsRead();
@@ -699,4 +699,13 @@ class AdmsAtendimentoFuncionarios {
 
         $this->jaExisteAtv = $validaRegistro->getResultado();
     }
+
+    private function buscarDuracaoMinAtv() {
+
+        $duracao_min = new AdmsRead();
+        $duracao_min->fullRead("SELECT duracao_min, duracao FROM adms_atividades WHERE id = :id", "id = {$this->Dados['adms_atividade_id']}");
+
+        return $duracao_min->getResultado();
+    }
+
 }
