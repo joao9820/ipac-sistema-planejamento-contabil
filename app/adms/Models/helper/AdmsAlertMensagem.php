@@ -78,7 +78,7 @@ class AdmsAlertMensagem
         $this->DadosCor =
             "
             <div id='mensagemCard' class='card border-{$cor} bg-{$cor} d-none'>
-                <div class='card-body text-light text-center' style='position: relative; min-width: 350px !important;'>
+                <div class='card-body text-light text-center' style='position: relative; min-width: 300px !important;'>
                     <div onclick='fecharAgora()' class='text-right' style='position: absolute; top: 5px; right: 10px'>
                         <i class='fas fa-times' style='cursor: pointer;'></i>
                     </div>
