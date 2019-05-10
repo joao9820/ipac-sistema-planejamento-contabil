@@ -53,4 +53,44 @@ class AdmsAlertMensagem
 
     }
 
+
+    public function alertMensagemJavaScript( $Texto = null, $Cor = null)
+    {
+
+
+        $texto = (string) $Texto;
+        $cor = (string) $Cor ? $Cor : "primary";
+
+        if ($cor == "success"){
+            $textoNegrito = "Sucesso";
+            $icone = "fas fa-check-circle";
+        } elseif ($cor == "danger") {
+            $textoNegrito = "Erro";
+            $icone = "fas fa-times-circle";
+        } elseif ($cor == "primary"){
+            $textoNegrito = "Alerta";
+            $icone = "fas fa-check-circle";
+        } else {
+            $textoNegrito = "Aviso";
+            $icone = "fas fa-exclamation-triangle";
+        }
+
+        $this->DadosCor =
+            "
+            <div id='mensagemCard' class='card border-{$cor} bg-{$cor} d-none'>
+                <div class='card-body text-light text-center' style='position: relative; min-width: 350px !important;'>
+                    <div onclick='fecharAgora()' class='text-right' style='position: absolute; top: 5px; right: 10px'>
+                        <i class='fas fa-times' style='cursor: pointer;'></i>
+                    </div>
+                    <i class='{$icone} fa-2x'></i>
+                    <h5 class='card-title' >{$textoNegrito}</h5>
+                    <p class='card-text'>{$texto}</p>
+                </div>
+            </div>
+            ";
+
+        return $this->DadosCor;
+
+    }
+
 }

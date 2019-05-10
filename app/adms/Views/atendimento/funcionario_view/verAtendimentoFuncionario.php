@@ -98,13 +98,6 @@ $pg = $this->Dados['pg'];
                 </div>
             </div><hr>
             <?php
-            if (isset($_SESSION['msg'])) {
-                echo $_SESSION['msg'];
-                unset($_SESSION['msg']);
-            }
-            ?>
-
-            <?php
                 if ($cancelado_p_user == 1){
                     ?>
                     <div class="alert alert-danger" role="alert">

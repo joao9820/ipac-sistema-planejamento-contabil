@@ -97,12 +97,6 @@ $pg = $this->Dados['pg'];
                     </div>
                 </div>
             </div><hr>
-            <?php
-            if (isset($_SESSION['msg'])) {
-                echo $_SESSION['msg'];
-                unset($_SESSION['msg']);
-            }
-            ?>
 
             <?php
                 if ($cancelado_p_user == 1){
@@ -544,7 +538,18 @@ $pg = $this->Dados['pg'];
     ?>
 <?php
 } else {
-    $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Atendimento não encontrado!</div>";
+    $_SESSION['msg'] = "
+    <div id='mensagemCard' class='card border-danger bg-danger d-none'>
+        <div class='card-body text-light text-center' style='position: relative;'>
+            <div onclick='fecharAgora()' class='text-right' style='position: absolute; top: 5px; right: 10px'>
+                <i class='fas fa-times' style='cursor: pointer;'></i>
+            </div>
+            <i class='fas fa-times-circle fa-3x'></i>
+            <h5 class='card-title'>Erro</h5>
+            <p class='card-text'>Atendimento não encontrado!</p>
+        </div>
+    </div>
+    ";
     $UrlDestino = URLADM . 'gerenciar-atendimento/listar';
     header("Location: $UrlDestino");
 }

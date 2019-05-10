@@ -2,6 +2,8 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -20,7 +22,8 @@ class AltOrdemNivAc
            $altOrdemNivAc = new \App\adms\Models\AdmsAltOrdemNivAc();
            $altOrdemNivAc->altOrdemNivAc($this->DadosId);
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Necessário selecionar um nível de acesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Necessário selecionar um nível de acesso!","danger");
         }
         $UrlDestino = URLADM . 'nivel-acesso/listar';
         header("Location: $UrlDestino");

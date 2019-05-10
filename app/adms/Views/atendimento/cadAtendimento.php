@@ -39,14 +39,6 @@ if (isset($this->Dados['form'][0])) {
             ?>
         </div><hr>
 
-        <?php
-        if(isset($_SESSION['msg'])) {
-            echo $_SESSION['msg'];
-            unset($_SESSION['msg']);
-        }
-
-        ?>
-
         <form method="post" action="" class="col-md-6">
 
             <div class="form-row">

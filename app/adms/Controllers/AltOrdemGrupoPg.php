@@ -8,6 +8,8 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -25,7 +27,8 @@ class AltOrdemGrupoPg
             $altOrdemGrupoPg = new \App\adms\Models\AdmsAltOrdemGrupoPg();
             $altOrdemGrupoPg->altOrdemGrupoPg($this->DadosId);
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Necessário selecionar um grupo de página!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Necessário selecionar um grupo de página!","danger");
         }
         $UrlDestino = URLADM . 'grupo-pg/listar';
         header("Location: $UrlDestino");

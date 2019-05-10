@@ -8,6 +8,8 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -50,8 +52,8 @@ class EditarUsuario
             $editUsuario->altUsuario($this->Dados);
             if ($editUsuario->getResultado())
             {
-
-                $_SESSION['msg'] = "<div class='alert alert-success'>Usuário editado com sucesso!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Usuário atualizado", "success");
                 $UrlDestino = URLADM .'ver-usuario/ver-usuario/'.$this->Dados['id'];
                 header("Location: $UrlDestino");
 

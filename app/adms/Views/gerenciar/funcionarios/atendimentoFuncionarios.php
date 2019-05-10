@@ -57,14 +57,6 @@ if (!defined('URL')) {
 
         <div class="list-group-item">
             <?php
-            if(isset($_SESSION['msg'])) {
-                echo $_SESSION['msg'];
-                unset($_SESSION['msg']);
-            }
-
-            ?>
-
-            <?php
                 if(isset($_SESSION['msg_dia'])) {
                     echo $_SESSION['msg_dia'];
                     unset($_SESSION['msg_dia']);
@@ -302,7 +294,7 @@ if (!defined('URL')) {
                                                 <?php
                                                 foreach ($this->Dados['atividades'] as $ativi){
                                                     extract($ativi);
-                                                    echo "<option onclick='mostrarDivs(this.value)' value=".$id.">$nome</option>";
+                                                    echo "<option onclick='#mostrarDivs()' value=".$id.">$nome</option>";
                                                 }
                                                 ?>
                                             </select>
@@ -337,13 +329,13 @@ if (!defined('URL')) {
                                         <p>Definir duração?</p>
                                         <div class="d-flex w-100">
                                             <div class="form-check mr-3">
-                                                <input onclick="definirSim()" class="form-check-input" type="radio" name="simNao" id="sim" value="option1">
+                                                <input onclick="definirSim()" class="form-check-input" type="radio"  id="sim" value="option1">
                                                 <label  class="form-check-label" for="sim">
                                                     Sim
                                                 </label>
                                             </div>
                                             <div class="form-check">
-                                                <input onclick="definirNao()" class="form-check-input" type="radio" name="simNao" id="nao" value="option1" checked>
+                                                <input onclick="definirNao()" class="form-check-input" type="radio"  id="nao" value="option1" checked>
                                                 <label  class="form-check-label" for="nao">
                                                     Não
                                                 </label>
@@ -418,6 +410,16 @@ if (!defined('URL')) {
 </div>
 
 
+<?php
+if(isset($_SESSION['msg'])) {
+    echo $_SESSION['msg'];
+    unset($_SESSION['msg']);
+}
+
+?>
+
+
+
 
 <script>
 
@@ -489,9 +491,9 @@ if (!defined('URL')) {
 
 
     // Mostrar input radio sim / não
-    function mostrarDivs(hora) {
+    function mostrarDivs() {
+        console.log('ok');
         decisao.classList.remove('d-none');
-        console.log(hora);
         // renderizar horas
         renderHoras();
         // renderizar horas

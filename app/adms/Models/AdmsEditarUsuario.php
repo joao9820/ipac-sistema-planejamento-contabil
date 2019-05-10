@@ -132,7 +132,8 @@ class AdmsEditarUsuario
         {
 
             $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Usuário atualizado com sucesso", "success");
+            //$_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Usuário atualizado com sucesso", "success");
+            $_SESSION['msg'] = $alertMensagem->alertMensagemJavaScript("Usuário atualizado com sucesso", "success");
             $this->Resultado = true;
 
         } else {

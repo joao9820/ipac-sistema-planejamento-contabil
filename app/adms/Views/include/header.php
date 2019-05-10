@@ -4,7 +4,13 @@ if (!defined('URL')) {
     exit();
 }
 ?>
-
+<?php
+    if(isset($_SESSION['msg'])) {
+        echo $_SESSION['msg'];
+        unset($_SESSION['msg']);
+        $_SESSION['alert'] = "ok";
+    }
+?>
 <nav class="navbar navbar-expand navbar-dark">
     <a class="sidebar-toggle mr-3 text-danger cursor">
         <span class="navbar-toggler-icon "></span>

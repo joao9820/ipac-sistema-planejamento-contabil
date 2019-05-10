@@ -3,6 +3,22 @@ span[data-toggle="tooltip"]{
     cursor: pointer;
 }
 /*===================================*/
+/*ALERT COM JAVASCRIPT*/
+#mensagemCard {
+    position: absolute;
+    z-index: 3333;
+    right: 15px;
+    top: 40px;
+    opacity: 0;
+    transition: all .3s ease-in-out;
+    box-shadow: 0 0 10px rgba(0,0,0,.5);
+}
+#mensagemCard h5.card-title {
+    font-size: 1.3em;
+    margin-bottom: .75rem;
+}
+
+/*===================================*/
 .faIpac {
     font-size: 1.5em;
 }

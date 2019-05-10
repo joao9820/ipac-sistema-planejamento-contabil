@@ -32,14 +32,6 @@ if (!defined('URL')) {
         </div>
 
         <?php
-
-
-        if (isset($_SESSION['msg']))
-        {
-            echo $_SESSION['msg'];
-            unset($_SESSION['msg']);
-        }
-
         if (empty($this->Dados['listAtendimentoArquivado'])) {
             ?>
 

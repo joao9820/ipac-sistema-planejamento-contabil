@@ -123,7 +123,7 @@
                 <thead class="bg-info text-light my-4">
                 <tr>
                     <th class="d-none d-lg-table-cell">Cod.</th>
-                    <th class="">Funcionários</th>
+                    <th class="">Planejamento</th>
                     <th>Atividades</th>
                     <th>Progresso</th>
                     <th class="">Tipo</th>
