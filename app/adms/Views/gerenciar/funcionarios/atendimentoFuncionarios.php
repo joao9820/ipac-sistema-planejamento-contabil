@@ -302,7 +302,7 @@ if (!defined('URL')) {
                                                 <?php
                                                 foreach ($this->Dados['atividades'] as $ativi){
                                                     extract($ativi);
-                                                    echo "<option value=".$id.">$nome</option>";
+                                                    echo "<option onclick='mostrarDivs(this.value)' value=".$id.">$nome</option>";
                                                 }
                                                 ?>
                                             </select>
@@ -333,6 +333,61 @@ if (!defined('URL')) {
                                         </div>
                                     </div>
 
+                                    <div id="decisao" class="d-none col-md-12">
+                                        <p>Definir duração?</p>
+                                        <div class="d-flex w-100">
+                                            <div class="form-check mr-3">
+                                                <input onclick="definirSim()" class="form-check-input" type="radio" name="simNao" id="sim" value="option1">
+                                                <label  class="form-check-label" for="sim">
+                                                    Sim
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input onclick="definirNao()" class="form-check-input" type="radio" name="simNao" id="nao" value="option1" checked>
+                                                <label  class="form-check-label" for="nao">
+                                                    Não
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="conteudoHora" class="d-none row col-md-12 mt-3">
+
+                                            <p class="col-md-12">
+                                                Definir duração da atividade
+                                            </p>
+                                        <div class="col-md-6">
+                                            <label for="selecionaHora">Hora</label>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="basic-hora">
+                                                        <i class="fas fa-calendar-alt"></i>
+                                                    </span>
+                                                </div>
+                                                <select class="form-control" id="selecionaHora" aria-describedby="basic-hora">
+                                                    <!-- Lista de horas -->
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label for="selecionaMinuto">Minuto</label>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="basic-minuto">
+                                                        <i class="fas fa-calendar-alt"></i>
+                                                    </span>
+                                                </div>
+                                                <select class="form-control" id="selecionaMinuto" aria-describedby="basic-minuto">
+                                                    <!-- Lista de minutos -->
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
 
 
                                     <div class="col-md-12 mt-3 d-flex align-items-end ">
@@ -361,6 +416,104 @@ if (!defined('URL')) {
     </div>
 
 </div>
+
+
+
+<script>
+
+    // arrays
+    var horas = [
+        '00',
+        '01',
+        '02',
+        '03',
+        '04',
+        '05',
+        '06'
+    ];
+    var minutos = [
+        '00',
+        '10',
+        '20',
+        '30',
+        '40',
+        '50'
+    ];
+
+    // select de hora
+    var selecionaHora = document.querySelector('#selecionaHora');
+    
+    // Função percorrer array
+    function renderHoras() {
+
+        selecionaHora.innerHTML = '';
+
+        for (hora of horas){
+
+            var horaElement = document.createElement('option');
+            horaElement.value = hora;
+            var horaTexto = document.createTextNode(hora);
+            
+            horaElement.appendChild(horaTexto);
+
+            // adicionar cada elemento dentro da div
+            selecionaHora.appendChild(horaElement);
+        }
+    }
+
+
+    var selecionaMinuto = document.getElementById('selecionaMinuto');
+    // Função percorrer array
+    function renderMinutos() {
+
+        selecionaMinuto.innerHTML = '';
+
+        for (minuto of minutos){
+
+            var minutoElement = document.createElement('option');
+            minutoElement.value = minuto;
+            var minutoTexto = document.createTextNode(minuto);
+            
+            minutoElement.appendChild(minutoTexto);
+
+            // adicionar cada elemento dentro da div
+            selecionaMinuto.appendChild(minutoElement);
+        }
+    }
+
+
+    // radios
+    var decisao = document.getElementById('decisao');
+
+    var conteudoHora = document.getElementById('conteudoHora');
+
+
+    // Mostrar input radio sim / não
+    function mostrarDivs(hora) {
+        decisao.classList.remove('d-none');
+        console.log(hora);
+        // renderizar horas
+        renderHoras();
+        // renderizar horas
+        renderMinutos();
+    }
+
+    // Ocultar hora e minuto
+    function definirSim(){
+        conteudoHora.classList.remove('d-none');
+    }
+
+    // Ocultar hora e minuto
+    function definirNao(){
+        conteudoHora.classList.add('d-none');
+    }
+    
+    
+
+</script>
+
+
+
 
 <script>
     // Example starter JavaScript for disabling form submissions if there are invalid fields
