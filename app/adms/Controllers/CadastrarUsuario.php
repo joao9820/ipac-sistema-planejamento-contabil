@@ -8,6 +8,11 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsCadastrarUsuario;
+use App\adms\Models\AdmsMenu;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -29,7 +34,7 @@ class CadastrarUsuario
             unset($this->Dados['CadUsuario']);
             //var_dump($this->Dados);
             $this->Dados['imagem_nova'] = ($_FILES['imagem_nova'] ? $_FILES['imagem_nova'] : null);
-            $cadUsuario = new \App\adms\Models\AdmsCadastrarUsuario();
+            $cadUsuario = new AdmsCadastrarUsuario();
             $cadUsuario->cadUsuario($this->Dados);
             if ($cadUsuario->getResultado())
             {
@@ -58,18 +63,18 @@ class CadastrarUsuario
     private function cadUsuarioViewPriv()
     {
         //Dados do Select
-        $listarSelect = new \App\adms\Models\AdmsCadastrarUsuario();
+        $listarSelect = new AdmsCadastrarUsuario();
         $this->Dados['select'] = $listarSelect->listarCadastrar();
 
         $botao = ['list_usuario' => ['menu_controller' => 'usuarios', 'menu_metodo' => 'listar']];
-        $listarBotao = new \App\adms\Models\AdmsBotao();
+        $listarBotao = new AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
         //Carregar Menu
-        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
         //Carregar a view
-        $carregarView = new \Core\ConfigView("adms/Views/usuario/cadUsuario", $this->Dados);
+        $carregarView = new ConfigView("adms/Views/usuario/cadUsuario", $this->Dados);
         $carregarView->renderizar();
 
     }

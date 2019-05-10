@@ -8,6 +8,11 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsMenu;
+use App\adms\Models\AdmsVerAtendimentoFuncionario;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -27,16 +32,16 @@ class FuncionarioVerAtendimento
 
         if (!empty($this->DadosId)) {
 
-            $verAtendimento = new \App\adms\Models\AdmsVerAtendimentoFuncionario();
+            $verAtendimento = new AdmsVerAtendimentoFuncionario();
             $this->Dados['verAtendimentoFuncionario'] = $verAtendimento->verAtendimento($this->DadosId);
             $this->Dados['total_horas_atendimento'] = $verAtendimento->verTotalHoras($this->Dados['verAtendimentoFuncionario'][0]['id_demanda']);
 
             $botao = ['edit_atendimento' => ['menu_controller' => 'atendimento-funcionario', 'menu_metodo' => 'editar'],
                 'list_atendimento' => ['menu_controller' => 'atendimento-pendente', 'menu_metodo' => 'listar']];
-            $listarBotao = new \App\adms\Models\AdmsBotao();
+            $listarBotao = new AdmsBotao();
             $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-            $listarMenu = new \App\adms\Models\AdmsMenu();
+            $listarMenu = new AdmsMenu();
             $this->Dados['menu'] = $listarMenu->itemMenu();
 
             if ($this->PageId){
@@ -45,7 +50,7 @@ class FuncionarioVerAtendimento
                 $this->Dados['pg'] = 1;
             }
 
-            $carregarView = new \Core\ConfigView('adms/Views/atendimento/funcionario_view/verAtendimentoFuncionario', $this->Dados);
+            $carregarView = new ConfigView('adms/Views/atendimento/funcionario_view/verAtendimentoFuncionario', $this->Dados);
             $carregarView->renderizar();
         }
         else {

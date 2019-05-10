@@ -8,6 +8,11 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsListarAtendimentoPendente;
+use App\adms\Models\AdmsMenu;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -29,20 +34,20 @@ class AtendimentoEmAndamento
                 'vis' => ['menu_controller' => 'funcionario-ver-atendimento', 'menu_metodo' => 'ver-iniciado'],
                 'edit' => ['menu_controller' => 'funcionario-editar-atendimento', 'menu_metodo' => 'edit-iniciado']];
         //var_dump($botao);
-        $listarBotao = new \App\adms\Models\AdmsBotao();
+        $listarBotao = new AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
 
 
-        $listarAtendimento = new \App\adms\Models\AdmsListarAtendimentoPendente();
+        $listarAtendimento = new AdmsListarAtendimentoPendente();
         $this->Dados['listAtendimentoEmAndamento']= $listarAtendimento->listarAtendimento($this->PageId);
         $this->Dados['paginacao'] = $listarAtendimento->getResultadoPg();
 
         $this->Dados['pg'] = $this->PageId;
 
-        $carregarView = new \Core\ConfigView("adms/Views/atendimento/funcionario/atendimentoEmAndamento", $this->Dados);
+        $carregarView = new ConfigView("adms/Views/atendimento/funcionario/atendimentoEmAndamento", $this->Dados);
         $carregarView->renderizar();
     }
 

@@ -2,16 +2,16 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsCadastrarNivAc;
+use App\adms\Models\AdmsMenu;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
 }
 
-/**
- * Description of CadastrarNivAc
- *
- * @copyright (c) year, Cesar Szpak - Celke
- */
 class CadastrarNivAc
 {
 
@@ -22,7 +22,7 @@ class CadastrarNivAc
         $this->Dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         if (!empty($this->Dados['CadNivAc'])) {
             unset($this->Dados['CadNivAc']);
-            $cadNivAc = new \App\adms\Models\AdmsCadastrarNivAc();
+            $cadNivAc = new AdmsCadastrarNivAc();
             $cadNivAc->cadNivAc($this->Dados);
             if ($cadNivAc->getResultado()) {
                 $UrlDestino = URLADM . 'nivel-acesso/listar';
@@ -39,12 +39,12 @@ class CadastrarNivAc
     private function cadNivAcViewPriv()
     {
         $botao = ['list_nivac' => ['menu_controller' => 'nivel-acesso', 'menu_metodo' => 'listar']];
-        $listarBotao = new \App\adms\Models\AdmsBotao();
+        $listarBotao = new AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
         
-        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
-        $carregarView = new \Core\ConfigView("adms/Views/nivAcesso/cadNivAc", $this->Dados);
+        $carregarView = new ConfigView("adms/Views/nivAcesso/cadNivAc", $this->Dados);
         $carregarView->renderizar();
     }
 

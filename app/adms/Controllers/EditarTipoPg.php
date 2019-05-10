@@ -8,6 +8,12 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsEditarTipoPg;
+use App\adms\Models\AdmsMenu;
+use App\adms\Models\helper\AdmsAlertMensagem;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -25,7 +31,8 @@ class EditarTipoPg
         if (!empty($this->DadosId)) {
             $this->editTipoPgPriv();
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Tipo de página não encontrado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Tipo de página não encontrado!","danger");
             $UrlDestino = URLADM . 'tipo-pg/listar';
             header("Location: $UrlDestino");
         }
@@ -34,7 +41,8 @@ class EditarTipoPg
     private function editTipoPgPriv() {
         if (!empty($this->Dados['EditTipoPg'])) {
             unset($this->Dados['EditTipoPg']);
-            $editarTipoPg = new \App\adms\Models\AdmsEditarTipoPg();
+
+            $editarTipoPg = new AdmsEditarTipoPg();
             $editarTipoPg->altTipoPg($this->Dados);
             if ($editarTipoPg->getResultado()) {
                 $UrlDestino = URLADM . 'ver-tipo-pg/ver-tipo-pg/' . $this->Dados['id'];
@@ -44,7 +52,7 @@ class EditarTipoPg
                 $this->editTipoPgViewPriv();
             }
         } else {
-            $verTipoPg = new \App\adms\Models\AdmsEditarTipoPg();
+            $verTipoPg = new AdmsEditarTipoPg();
             $this->Dados['form'] = $verTipoPg->verTipoPg($this->DadosId);
             $this->editTipoPgViewPriv();
         }
@@ -54,15 +62,16 @@ class EditarTipoPg
         if ($this->Dados['form']) {
 
             $botao = ['vis_tpg' => ['menu_controller' => 'ver-tipo-pg', 'menu_metodo' => 'ver-tipo-pg']];
-            $listarBotao = new \App\adms\Models\AdmsBotao();
+            $listarBotao = new AdmsBotao();
             $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-            $listarMenu = new \App\adms\Models\AdmsMenu();
+            $listarMenu = new AdmsMenu();
             $this->Dados['menu'] = $listarMenu->itemMenu();
-            $carregarView = new \Core\ConfigView("adms/Views/tipoPg/editarTipoPg", $this->Dados);
+            $carregarView = new ConfigView("adms/Views/tipoPg/editarTipoPg", $this->Dados);
             $carregarView->renderizar();
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Tipo de página não encontrado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Tipo de página não encontrado!","danger");
             $UrlDestino = URLADM . 'tipo-pg/listar';
             header("Location: $UrlDestino");
         }

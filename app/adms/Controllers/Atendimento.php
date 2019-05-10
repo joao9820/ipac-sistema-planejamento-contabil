@@ -8,6 +8,11 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsListarAtendimento;
+use App\adms\Models\AdmsMenu;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -24,28 +29,29 @@ class Atendimento
         $this->PageId = (int) $PageId ? $PageId : 1;
 
         //Array botoes
-        $botao = ['abrir_atendimento' => ['menu_controller' => 'novo-atendimento', 'menu_metodo' => 'novo'],
+        $botao = [
+            'abrir_atendimento' => ['menu_controller' => 'novo-atendimento', 'menu_metodo' => 'novo'],
             'vis_atendimento' => ['menu_controller' => 'ver-atendimento', 'menu_metodo' => 'ver-atendimento'],
             'edit_atendimento' => ['menu_controller' => 'editar-atendimento', 'menu_metodo' => 'edit-atendimento'],
             'arqui_atendimento' => ['menu_controller' => 'arquivar-atendimento', 'menu_metodo' => 'arquivar'],
             'ver_arqui_atend' => ['menu_controller' => 'atendimento', 'menu_metodo' => 'arquivado'],
             'can_atendimento' => ['menu_controller' => 'cancelar-atendimento', 'menu_metodo' => 'cancelar']];
         //var_dump($botao);
-        $listarBotao = new \App\adms\Models\AdmsBotao();
+        $listarBotao = new AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
 
 
-        $listarAtendimento = new \App\adms\Models\AdmsListarAtendimento();
+        $listarAtendimento = new AdmsListarAtendimento();
         $this->Dados['listAtendimento']= $listarAtendimento->listarAtendimento($this->PageId);
         $this->Dados['paginacao'] = $listarAtendimento->getResultadoPg();
         $this->Dados['arquivado'] = $listarAtendimento->getResultadoArquivado();
 
         $this->Dados['pg'] = $this->PageId;
 
-        $carregarView = new \Core\ConfigView("adms/Views/atendimento/atendimento", $this->Dados);
+        $carregarView = new ConfigView("adms/Views/atendimento/atendimento", $this->Dados);
         $carregarView->renderizar();
     }
 
@@ -59,20 +65,20 @@ class Atendimento
         $botao = ['des_arquiAten' => ['menu_controller' => 'desarquivar-atendimento', 'menu_metodo' => 'aten'],
             'list_atendimento' => ['menu_controller' => 'atendimento', 'menu_metodo' => 'listar']];
         //var_dump($botao);
-        $listarBotao = new \App\adms\Models\AdmsBotao();
+        $listarBotao = new AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
 
 
-        $listarDesAtendimento = new \App\adms\Models\AdmsListarAtendimento();
+        $listarDesAtendimento = new AdmsListarAtendimento();
         $this->Dados['listAtendimentoArquivado']= $listarDesAtendimento->listarAtendimentoArquivado($this->PageId);
         $this->Dados['paginacao'] = $listarDesAtendimento->getResultadoPg();
 
         $this->Dados['pg'] = $this->PageId;
 
-        $carregarView = new \Core\ConfigView("adms/Views/atendimento/atendimentoArquivado", $this->Dados);
+        $carregarView = new ConfigView("adms/Views/atendimento/atendimentoArquivado", $this->Dados);
         $carregarView->renderizar();
     }
 

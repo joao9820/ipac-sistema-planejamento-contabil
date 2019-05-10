@@ -8,6 +8,12 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsEditarDemanda;
+use App\adms\Models\AdmsMenu;
+use App\adms\Models\helper\AdmsAlertMensagem;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -31,7 +37,8 @@ class EditarDemanda
             $this->editDemandaPriv();
 
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Nenhuma demanda encontrado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Nenhuma demanda encontrado!","danger");
             $UrlDestino = URLADM .'demandas/listar';
             header("Location: $UrlDestino");
         }
@@ -45,14 +52,15 @@ class EditarDemanda
 
             unset($this->Dados['EditDemanda']);
 
-            $editDemanda = new \App\adms\Models\AdmsEditarDemanda();
+            $editDemanda = new AdmsEditarDemanda();
 
             // Chamando o metodo para alterar a demanda
             $editDemanda->altDemanda($this->Dados);
             if ($editDemanda->getResultado())
             {
 
-                $_SESSION['msg'] = "<div class='alert alert-success'>Demanda editada com sucesso!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Demanda editada!","success");
                 $UrlDestino = URLADM .'ver-demanda/ver-demanda/'.$this->Dados['id'];
                 header("Location: $UrlDestino");
 
@@ -67,7 +75,7 @@ class EditarDemanda
 
         } else {
 
-            $dadosDemanda = new \App\adms\Models\AdmsEditarDemanda();
+            $dadosDemanda = new AdmsEditarDemanda();
             $this->Dados['form'] = $dadosDemanda->verDemanda($this->DadosId);
 
             $this->editDemandaViewPriv();
@@ -82,17 +90,18 @@ class EditarDemanda
         if ($this->Dados['form']) {
 
             $botao = ['vis_demanda' => ['menu_controller' => 'ver-demanda', 'menu_metodo' => 'ver-demanda']];
-            $listarBotao = new \App\adms\Models\AdmsBotao();
+            $listarBotao = new AdmsBotao();
             $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
             //Carregar Menu
-            $listarMenu = new \App\adms\Models\AdmsMenu();
+            $listarMenu = new AdmsMenu();
             $this->Dados['menu'] = $listarMenu->itemMenu();
             //Carregar a view
-            $carregarView = new \Core\ConfigView("adms/Views/gerenciar/editarDemanda", $this->Dados);
+            $carregarView = new ConfigView("adms/Views/gerenciar/editarDemanda", $this->Dados);
             $carregarView->renderizar();
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Você não tem permissão de editar a demanda selecionada!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Você não tem permissão de editar a demanda selecionada!","danger");
             $UrlDestino = URLADM .'demandas/listar';
             header("Location: $UrlDestino");
         }

@@ -8,6 +8,11 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsCadastrarSit;
+use App\adms\Models\AdmsMenu;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -23,7 +28,7 @@ class CadastrarSit
         $this->Dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         if (!empty($this->Dados['CadSit'])) {
             unset($this->Dados['CadSit']);
-            $cadSit = new \App\adms\Models\AdmsCadastrarSit();
+            $cadSit = new AdmsCadastrarSit();
             $cadSit->cadSit($this->Dados);
             if ($cadSit->getResultado()) {
                 $UrlDestino = URLADM . 'situacao/listar';
@@ -39,16 +44,17 @@ class CadastrarSit
 
     private function cadSitViewPriv()
     {
-        $listarSelect = new \App\adms\Models\AdmsCadastrarSit();
+        $listarSelect = new AdmsCadastrarSit();
         $this->Dados['select'] = $listarSelect->listarCadastrar();
 
         $botao = ['list_sit' => ['menu_controller' => 'situacao', 'menu_metodo' => 'listar']];
-        $listarBotao = new \App\adms\Models\AdmsBotao();
+        $listarBotao = new AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
-        $carregarView = new \Core\ConfigView("adms/Views/situacao/cadSit", $this->Dados);
+
+        $carregarView = new ConfigView("adms/Views/situacao/cadSit", $this->Dados);
         $carregarView->renderizar();
     }
 

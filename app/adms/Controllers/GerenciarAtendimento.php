@@ -9,6 +9,7 @@
 namespace App\adms\Controllers;
 
 use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsListarAtendArquiGerente;
 use App\adms\Models\AdmsListarAtendGerente;
 use App\adms\Models\AdmsMenu;
 use Core\ConfigView;
@@ -67,7 +68,7 @@ class GerenciarAtendimento
         $this->Dados['menu'] = $listarMenu->itemMenu();
 
 
-        $listarAtendimentos = new \App\adms\Models\AdmsListarAtendArquiGerente();
+        $listarAtendimentos = new AdmsListarAtendArquiGerente();
         $this->Dados['listAtendimentosAq']= $listarAtendimentos->listarAtendimentosArquivados($this->PageId);
         $this->Dados['paginacao'] = $listarAtendimentos->getResultadoPgAq();
 

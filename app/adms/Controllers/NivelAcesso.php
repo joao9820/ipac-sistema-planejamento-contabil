@@ -8,6 +8,11 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsListarNivAc;
+use App\adms\Models\AdmsMenu;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -29,17 +34,17 @@ class NivelAcesso
             'del_nivac' => ['menu_controller' => 'apagar-niv-ac', 'menu_metodo' => 'apagar-niv-ac'],
             'ordem_nivac' => ['menu_controller' => 'alt-ordem-niv-ac', 'menu_metodo' => 'alt-ordem-niv-ac'],
             'sincro_permi' => ['menu_controller' => 'sincro-pg-niv-ac', 'menu_metodo' => 'sincro-pg-niv-ac']];
-        $listarBotao = new \App\adms\Models\AdmsBotao();
+        $listarBotao = new AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
 
-        $listarNivAc = new \App\adms\Models\AdmsListarNivAc();
+        $listarNivAc = new AdmsListarNivAc();
         $this->Dados['listNivAc'] = $listarNivAc->listarNivAc($this->PageId);
         $this->Dados['paginacao'] = $listarNivAc->getResultadoPg();
 
-        $carregarView = new \Core\ConfigView("adms/Views/nivAcesso/listarNicAc", $this->Dados);
+        $carregarView = new ConfigView("adms/Views/nivAcesso/listarNicAc", $this->Dados);
         $carregarView->renderizar();
     }
 

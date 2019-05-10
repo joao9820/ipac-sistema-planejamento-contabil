@@ -7,6 +7,11 @@
  */
 
 namespace App\adms\Controllers;
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsCadastrarAtendimento;
+use App\adms\Models\AdmsMenu;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -33,7 +38,7 @@ class NovoAtendimento
             }
 
 
-            $cadAtendimento = new \App\adms\Models\AdmsCadastrarAtendimento();
+            $cadAtendimento = new AdmsCadastrarAtendimento();
             $cadAtendimento->cadAtendimento($this->Dados);
             if ($cadAtendimento->getResultado())
             {
@@ -61,7 +66,7 @@ class NovoAtendimento
     private function cadAtendimentoViewPriv()
     {
         // Listar demandas
-        $listarDemandas = new \App\adms\Models\AdmsCadastrarAtendimento();
+        $listarDemandas = new AdmsCadastrarAtendimento();
         $this->Dados['demandas'] = $listarDemandas->listarDemandas();
         if ($_SESSION['adms_niveis_acesso_id'] <= 3) {
             $this->Dados['empresas'] = $listarDemandas->listarEmpresas();
@@ -69,17 +74,17 @@ class NovoAtendimento
 
         //Carregar e exibir o botão de acordo com o nível de acesso
         $botao = ['list_atendimento' => ['menu_controller' => 'atendimento', 'menu_metodo' => 'listar']];
-        $listarBotao = new \App\adms\Models\AdmsBotao();
+        $listarBotao = new AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
         //Carregar Menu
-        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
 
 
 
         //Carregar a view
-        $carregarView = new \Core\ConfigView("adms/Views/atendimento/cadAtendimento", $this->Dados);
+        $carregarView = new ConfigView("adms/Views/atendimento/cadAtendimento", $this->Dados);
         $carregarView->renderizar();
 
     }

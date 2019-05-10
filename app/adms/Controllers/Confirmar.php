@@ -2,16 +2,14 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsConfirmarEmail;
+use App\adms\Models\helper\AdmsAlertMensagem;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
 }
 
-/**
- * Description of Confirmar
- *
- * @copyright (c) year, Cesar Szpak - Celke
- */
 class Confirmar
 {
 
@@ -21,7 +19,7 @@ class Confirmar
     {
         $this->DadosChave = filter_input(INPUT_GET, 'chave', FILTER_SANITIZE_STRING);
         if (!empty($this->DadosChave)) {
-            $confEmail = new \App\adms\Models\AdmsConfirmarEmail();
+            $confEmail = new AdmsConfirmarEmail();
             $confEmail->confirmarEmail($this->DadosChave);
             if ($confEmail->getResultado()) {
                 $UrlDestino = URLADM . 'login/acesso';
@@ -31,7 +29,8 @@ class Confirmar
                 header("Location: $UrlDestino");
             }
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Link de confirmação inválido!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Link de confirmação inválido!","danger");
             $UrlDestino = URLADM . 'login/acesso';
             header("Location: $UrlDestino");
         }

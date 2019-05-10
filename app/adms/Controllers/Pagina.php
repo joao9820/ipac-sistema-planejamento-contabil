@@ -2,6 +2,11 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsListarPagina;
+use App\adms\Models\AdmsMenu;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -22,18 +27,18 @@ class Pagina
             'vis_pagina' => ['menu_controller' => 'ver-pagina', 'menu_metodo' => 'ver-pagina'],
             'edit_pagina' => ['menu_controller' => 'editar-pagina', 'menu_metodo' => 'edit-pagina'],
             'del_pagina' => ['menu_controller' => 'apagar-pagina', 'menu_metodo' => 'apagar-pagina']];
-        $listarBotao = new \App\adms\Models\AdmsBotao();
+        $listarBotao = new AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
         //var_dump($this->Dados['botao']);
 
-        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
 
-        $listarPagina = new \App\adms\Models\AdmsListarPagina();
+        $listarPagina = new AdmsListarPagina();
         $this->Dados['listPagina'] = $listarPagina->listarPagina($this->PageId);
         $this->Dados['paginacao'] = $listarPagina->getResultadoPg();
 
-        $carregarView = new \Core\ConfigView("adms/Views/pagina/listarPagina", $this->Dados);
+        $carregarView = new ConfigView("adms/Views/pagina/listarPagina", $this->Dados);
         $carregarView->renderizar();
     }
 

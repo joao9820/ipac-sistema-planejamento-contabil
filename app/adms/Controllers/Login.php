@@ -8,6 +8,9 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsLogin;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -39,7 +42,7 @@ class Login
 
         if(!empty($this->Dados['SendLogin'])){
             unset($this->Dados['SendLogin']);
-            $visualLogin = new \App\adms\Models\AdmsLogin();
+            $visualLogin = new AdmsLogin();
             $visualLogin->acesso($this->Dados);
             if($visualLogin->getResultado()){
 
@@ -57,7 +60,7 @@ class Login
                 $this->Dados['form'] = $this->Dados;
             }
         }
-        $carregarView = new \Core\ConfigView("adms/Views/login/acesso", $this->Dados);
+        $carregarView = new ConfigView("adms/Views/login/acesso", $this->Dados);
         $carregarView->renderizarLogin();
     }
 

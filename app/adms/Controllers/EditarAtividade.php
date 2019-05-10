@@ -11,6 +11,7 @@ namespace App\adms\Controllers;
 use App\adms\Models\AdmsBotao;
 use App\adms\Models\AdmsEditarAtividade;
 use App\adms\Models\AdmsMenu;
+use App\adms\Models\helper\AdmsAlertMensagem;
 use Core\ConfigView;
 
 if (!defined('URL')) {
@@ -38,7 +39,8 @@ class EditarAtividade
             $this->editAtividadePriv();
 
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Nenhuma atividade encontrado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Nenhuma atividade encontrado!","danger");
             $UrlDestino = URLADM .'demandas/listar';
             header("Location: $UrlDestino");
         }
@@ -62,7 +64,8 @@ class EditarAtividade
             if ($editAtividade->getResultado())
             {
 
-                $_SESSION['msg'] = "<div class='alert alert-success'>Atividade atualizada com sucesso!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atividade atualizada!","success");
                 $UrlDestino = URLADM .'ver-demanda/ver-demanda/'.$this->Dados['adms_demanda_id'];
                 //echo $UrlDestino;
                 header("Location: $UrlDestino");
@@ -108,7 +111,8 @@ class EditarAtividade
                 $carregarView = new ConfigView("adms/Views/gerenciar/editarAtividade", $this->Dados);
                 $carregarView->renderizar();
             } else {
-                $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Você não tem permissão de editar a atividade selecionada!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Você não tem permissão de editar a atividade selecionada!","danger");
                 $UrlDestino = URLADM .'demandas/listar';
                 header("Location: $UrlDestino");
             }

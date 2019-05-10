@@ -8,6 +8,7 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsAltOrdemItemMenu;
 use App\adms\Models\helper\AdmsAlertMensagem;
 
 if (!defined('URL')) {
@@ -24,7 +25,7 @@ class AltOrdemItemMenu
     {
         $this->DadosId = (int) $DadosId;
         if (!empty($this->DadosId)) {
-            $altOrdemMenu = new \App\adms\Models\AdmsAltOrdemItemMenu();
+            $altOrdemMenu = new AdmsAltOrdemItemMenu();
             $altOrdemMenu->altOrdemMenu($this->DadosId);
         } else {
             $alert = new AdmsAlertMensagem();

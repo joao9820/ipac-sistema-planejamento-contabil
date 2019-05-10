@@ -9,6 +9,7 @@
 namespace App\adms\Controllers;
 
 use App\adms\Models\AdmsApagarUsuario;
+use App\adms\Models\helper\AdmsAlertMensagem;
 
 if (!defined('URL')) {
     header("Location: /");
@@ -31,8 +32,8 @@ class ApagarUsuario
         }
         else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Necessario selecionar um usuário!</div>";
-            $this->Resultado = false;
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Necessario selecionar um usuário!","danger");
 
         }
         $UrlDestino = URLADM .'usuarios/listar';

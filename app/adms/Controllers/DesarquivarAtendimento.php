@@ -8,6 +8,8 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsDesarquivarAtendimento;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -26,7 +28,7 @@ class DesarquivarAtendimento
         $this->PageId = filter_input(INPUT_GET, "pg",FILTER_SANITIZE_NUMBER_INT);
         if (!empty($this->DadosId) AND !empty($this->PageId))
         {
-            $cancelar = new \App\adms\Models\AdmsDesarquivarAtendimento();
+            $cancelar = new AdmsDesarquivarAtendimento();
             $cancelar->desarquivar($this->DadosId);
             $UrlDestino = URLADM . "atendimento/arquivado/{$this->PageId}";
             header("Location: $UrlDestino");

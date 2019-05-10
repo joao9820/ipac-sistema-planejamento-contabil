@@ -8,6 +8,12 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsEditarMenu;
+use App\adms\Models\AdmsMenu;
+use App\adms\Models\helper\AdmsAlertMensagem;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -25,7 +31,8 @@ class EditarMenu
         if (!empty($this->DadosId)) {
             $this->editMenuPriv();
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Item de menu não encontrado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Item de menu não encontrado!","danger");
             $UrlDestino = URLADM . 'menu/listar';
             header("Location: $UrlDestino");
         }
@@ -34,7 +41,8 @@ class EditarMenu
     private function editMenuPriv() {
         if (!empty($this->Dados['EditMenu'])) {
             unset($this->Dados['EditMenu']);
-            $editarMenu = new \App\adms\Models\AdmsEditarMenu();
+
+            $editarMenu = new AdmsEditarMenu();
             $editarMenu->altMenu($this->Dados);
             if ($editarMenu->getResultado()) {
                 $UrlDestino = URLADM . 'ver-menu/ver-menu/' . $this->Dados['id'];
@@ -44,7 +52,7 @@ class EditarMenu
                 $this->editMenuViewPriv();
             }
         } else {
-            $verMenu = new \App\adms\Models\AdmsEditarMenu();
+            $verMenu = new AdmsEditarMenu();
             $this->Dados['form'] = $verMenu->verMenu($this->DadosId);
             $this->editMenuViewPriv();
         }
@@ -52,19 +60,20 @@ class EditarMenu
 
     private function editMenuViewPriv() {
         if ($this->Dados['form']) {
-            $listarSelect = new \App\adms\Models\AdmsEditarMenu();
+            $listarSelect = new AdmsEditarMenu();
             $this->Dados['select'] = $listarSelect->listarCadastrar();
 
             $botao = ['vis_menu' => ['menu_controller' => 'ver-menu', 'menu_metodo' => 'ver-menu']];
-            $listarBotao = new \App\adms\Models\AdmsBotao();
+            $listarBotao = new AdmsBotao();
             $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-            $listarMenu = new \App\adms\Models\AdmsMenu();
+            $listarMenu = new AdmsMenu();
             $this->Dados['menu'] = $listarMenu->itemMenu();
-            $carregarView = new \Core\ConfigView("adms/Views/menu/editarMenu", $this->Dados);
+            $carregarView = new ConfigView("adms/Views/menu/editarMenu", $this->Dados);
             $carregarView->renderizar();
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Item de menu não encontrado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Item de menu não encontrado!","danger");
             $UrlDestino = URLADM . 'menu/listar';
             header("Location: $UrlDestino");
         }

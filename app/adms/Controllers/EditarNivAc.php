@@ -2,6 +2,12 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsEditarNivAc;
+use App\adms\Models\AdmsMenu;
+use App\adms\Models\helper\AdmsAlertMensagem;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -21,7 +27,8 @@ class EditarNivAc
         if (!empty($this->DadosId)) {
             $this->editNivAcPriv();
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Nível de acesso não encontrado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Nível de acesso não encontrado!","danger");
             $UrlDestino = URLADM . 'nivel-acesso/listar';
             header("Location: $UrlDestino");
         }
@@ -31,10 +38,12 @@ class EditarNivAc
     {
         if (!empty($this->Dados['EditNivAc'])) {
             unset($this->Dados['EditNivAc']);
-            $editarNivAc = new \App\adms\Models\AdmsEditarNivAc();
+
+            $editarNivAc = new AdmsEditarNivAc();
             $editarNivAc->altNivAc($this->Dados);
             if ($editarNivAc->getResultado()) {
-                $_SESSION['msg'] = "<div class='alert alert-success'>Nível de acesso editado com sucesso!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Nível de acesso editado!","success");
                 $UrlDestino = URLADM . 'ver-niv-ac/ver-niv-ac/' . $this->Dados['id'];
                 header("Location: $UrlDestino");
             } else {
@@ -42,7 +51,7 @@ class EditarNivAc
                 $this->editNivAcViewPriv();
             }
         } else {
-            $verNivAc = new \App\adms\Models\AdmsEditarNivAc();
+            $verNivAc = new AdmsEditarNivAc();
             $this->Dados['form'] = $verNivAc->verNivAc($this->DadosId);
             $this->editNivAcViewPriv();
         }
@@ -52,15 +61,16 @@ class EditarNivAc
     {
         if ($this->Dados['form']) {            
             $botao = ['vis_nivac' => ['menu_controller' => 'ver-niv-ac', 'menu_metodo' => 'ver-niv-ac']];
-            $listarBotao = new \App\adms\Models\AdmsBotao();
+            $listarBotao = new AdmsBotao();
             $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-            $listarMenu = new \App\adms\Models\AdmsMenu();
+            $listarMenu = new AdmsMenu();
             $this->Dados['menu'] = $listarMenu->itemMenu();
-            $carregarView = new \Core\ConfigView("adms/Views/nivAcesso/editarNivAc", $this->Dados);
+            $carregarView = new ConfigView("adms/Views/nivAcesso/editarNivAc", $this->Dados);
             $carregarView->renderizar();
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Nível de acesso não encontrado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Nível de acesso não encontrado!","danger");
             $UrlDestino = URLADM . 'nivel-acesso/listar';
             header("Location: $UrlDestino");
         }

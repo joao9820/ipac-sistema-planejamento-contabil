@@ -8,6 +8,12 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsEditarSitPg;
+use App\adms\Models\AdmsMenu;
+use App\adms\Models\helper\AdmsAlertMensagem;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -25,7 +31,8 @@ class EditarSitPg
         if (!empty($this->DadosId)) {
             $this->editSitPgPriv();
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Situação de página não encontrado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Situação de página não encontrado!","danger");
             $UrlDestino = URLADM . 'situacao-pg/listar';
             header("Location: $UrlDestino");
         }
@@ -34,7 +41,7 @@ class EditarSitPg
     private function editSitPgPriv() {
         if (!empty($this->Dados['EditSitPg'])) {
             unset($this->Dados['EditSitPg']);
-            $editarSitPg = new \App\adms\Models\AdmsEditarSitPg();
+            $editarSitPg = new AdmsEditarSitPg();
             $editarSitPg->altSitPg($this->Dados);
             if ($editarSitPg->getResultado()) {
                 $UrlDestino = URLADM . 'ver-sit-pg/ver-sit-pg/' . $this->Dados['id'];
@@ -44,7 +51,7 @@ class EditarSitPg
                 $this->editSitPgViewPriv();
             }
         } else {
-            $verSitPg = new \App\adms\Models\AdmsEditarSitPg();
+            $verSitPg = new AdmsEditarSitPg();
             $this->Dados['form'] = $verSitPg->verSitPg($this->DadosId);
             $this->editSitPgViewPriv();
         }
@@ -54,15 +61,16 @@ class EditarSitPg
         if ($this->Dados['form']) {
 
             $botao = ['vis_sit' => ['menu_controller' => 'ver-sit-pg', 'menu_metodo' => 'ver-sit-pg']];
-            $listarBotao = new \App\adms\Models\AdmsBotao();
+            $listarBotao = new AdmsBotao();
             $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-            $listarMenu = new \App\adms\Models\AdmsMenu();
+            $listarMenu = new AdmsMenu();
             $this->Dados['menu'] = $listarMenu->itemMenu();
-            $carregarView = new \Core\ConfigView("adms/Views/situacaoPg/editarSitPg", $this->Dados);
+            $carregarView = new ConfigView("adms/Views/situacaoPg/editarSitPg", $this->Dados);
             $carregarView->renderizar();
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Situação de página não encontrado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Situação de página não encontrado!","danger");
             $UrlDestino = URLADM . 'situacao-pg/listar';
             header("Location: $UrlDestino");
         }
