@@ -109,6 +109,8 @@ class AdmsAtendimentoFuncionarios {
     public function registrar($Dados = null) {
         $this->Dados = $Dados;
 
+        //var_dump($this->Dados);
+        
         /*
          * Chamando class para verificar se a data fatal pode ser definida para o dia escolhido
          * Caso a data fatal não possa ser definida para a data escolhida pelo fato do funcionário
@@ -161,7 +163,10 @@ class AdmsAtendimentoFuncionarios {
         } else {
             $this->TempoExcedido = 0;
         }
-
+        
+        unset($this->Dados['horas']);
+        unset($this->Dados['minutos']);
+        unset($this->Dados['simNao']);
 
         //método para verficar se possui atividade registrada no mesmo atendimento pro mesmo funcionario
         $this->validaRegistroAtv();

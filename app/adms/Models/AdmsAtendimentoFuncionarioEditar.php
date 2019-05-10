@@ -91,11 +91,20 @@ class AdmsAtendimentoFuncionarioEditar {
         $infoAtividades = new AdmsAtendimentoFuncionarios();
         $infoAtividades->verificarExisteAtividade($this->FuncionarioId, $this->Dados['data_inicio_planejado']);
         $this->jaExiste = $infoAtividades->getVerificarExisteAtividade(); //verificar a forma de recebimento desses dados
+        
+        var_dump($this->Condicao['prioridade']);
+        die();
 
         if ($this->jaExiste) {
-            $infoAtividades->buscarUltimaAtiviFunc($this->FuncionarioId, $this->Dados['data_inicio_planejado']);
-
-            $this->UltimaAtividade = $infoAtividades->getBuscarUltimaAtiviFunc();
+            
+            if($this->Condicao['prioridade'] == 2){             
+                $infoAtividades->buscarUltimaAtiviFunc($this->FuncionarioId, $this->Dados['data_inicio_planejado']);
+                $this->UltimaAtividade = $infoAtividades->getBuscarUltimaAtiviFunc();
+            }else{               
+                $infoAtividades->buscarPrimeiraAtv($this->FuncionarioId, $this->Dados['data_inicio_planejado']);
+                $this->UltimaAtividade = $infoAtividades->getBuscarPrimeiraAtv();
+                die();
+            }
 
             if ($this->UltimaAtividade[0]) {
                 // Pegando a hora de termino da atividade anterior e passando para o inicio da nova atividade cadastrada
