@@ -2,6 +2,11 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsListarUsuario;
+use App\adms\Models\AdmsMenu;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -21,17 +26,17 @@ class Usuarios
             'vis_usuario' => ['menu_controller' => 'ver-usuario', 'menu_metodo' => 'ver-usuario'],
             'edit_usuario' => ['menu_controller' => 'editar-usuario', 'menu_metodo' => 'edit-usuario'],
             'del_usuario' => ['menu_controller' => 'apagar-usuario', 'menu_metodo' => 'apagar-usuario']];
-        $listarBotao = new \App\adms\Models\AdmsBotao();
+        $listarBotao = new AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
 
-        $listarUsario = new \App\adms\Models\AdmsListarUsuario();
+        $listarUsario = new AdmsListarUsuario();
         $this->Dados['listUser'] = $listarUsario->listarUsuario($this->PageId);
         $this->Dados['paginacao'] = $listarUsario->getResultadoPg();
 
-        $carregarView = new \Core\ConfigView("adms/Views/usuario/listarUsuario", $this->Dados);
+        $carregarView = new ConfigView("adms/Views/usuario/listarUsuario", $this->Dados);
         $carregarView->renderizar();
     }
 

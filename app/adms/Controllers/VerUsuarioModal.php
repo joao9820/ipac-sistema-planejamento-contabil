@@ -2,6 +2,9 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsVerUsuario;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -17,10 +20,10 @@ class VerUsuarioModal
     {
         $this->DadosId = (int) $DadosId;
         if (!empty($this->DadosId)) {
-            $verUsuario = new \App\adms\Models\AdmsVerUsuario();
+            $verUsuario = new AdmsVerUsuario();
             $this->Dados['dados_usuario'] = $verUsuario->verUsuario($this->DadosId);
 
-            $carregarView = new \Core\ConfigView("adms/Views/usuario/verUsuarioModal", $this->Dados);
+            $carregarView = new ConfigView("adms/Views/usuario/verUsuarioModal", $this->Dados);
             $carregarView->renderizarListar();
         }
     }
