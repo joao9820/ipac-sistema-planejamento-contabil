@@ -11,6 +11,7 @@ namespace App\adms\Controllers;
 
 use App\adms\Models\AdmsAtendimentoFuncionarioEditar;
 use App\adms\Models\AdmsAtendimentoFuncionariosApagar;
+use App\adms\Models\AdmsListarAtendGerente;
 use Core\ConfigView;
 use App\adms\Models\AdmsBotao;
 use App\adms\Models\AdmsMenu;
@@ -77,6 +78,9 @@ class AtendimentoFuncionarios {
         $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
 
+        // Buscando dados do atendimeto
+        $dadosAtendimento = new AdmsListarAtendGerente();
+        $this->Dados['dadosAtendimento'] = $dadosAtendimento->BuscarDadosDoAtendimento($atendimento_id);
 
         $atendFunc = new AdmsAtendimentoFuncionarios();
         $atendFunc->listarFuncionarios();

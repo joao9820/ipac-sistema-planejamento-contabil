@@ -63,12 +63,33 @@ if (!defined('URL')) {
                 }
             ?>
 
-            <div class="container-fluid">
-                <div class="row">
+            <?php
+            // Dados do atendimento
+            //var_dump($this->Dados['dadosAtendimento']);
+            if (!empty($this->Dados['dadosAtendimento'])) {
+                extract($this->Dados['dadosAtendimento']);
+                ?>
+                <div class="container-fluid mb-4">
+                    <div class="row flex-column">
 
-
+                        <div>
+                            <span class="text-dark"><i class="fas fa-clipboard-list text-secondary"></i> Demanda: </span>
+                            <h4><?php echo $nome_demanda ? $nome_demanda : ""; ?></h4>
+                        </div>
+                        <div>
+                            <span class="text-dark"><i class="fas fa-building text-secondary"></i> Empresa Cliente: </span>
+                            <h4><?php echo $fantasia ? $fantasia : ""; ?></h4>
+                        </div>
+                        <div>
+                            <span class="text-dark"><i class="fas fa-calendar-alt text-secondary"></i> Data de Solicitação: </span>
+                            <h4><?php echo $created ? date('d/m/Y \a\s H\hi\m', strtotime($created)) : ""; ?></h4>
+                        </div>
+                        
+                    </div>
                 </div>
-            </div>
+                <?php
+            }
+            ?>
 
             <div class="row">
 
