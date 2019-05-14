@@ -2,6 +2,7 @@
 
 namespace App\adms\Models\helper;
 
+use Exception;
 use PDO;
 
 if (!defined('URL')) {
@@ -12,7 +13,6 @@ if (!defined('URL')) {
 /**
  * Description of StsConn
  *
- * @copyright (c) year, Cesar Szpak - Celke
  */
 class AdmsConn
 {

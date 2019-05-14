@@ -48,7 +48,8 @@ class AdmsUploadImgRed
 
         } else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A extensão da imagem é inválida! Selecione uma imagem JPEG ou PNG.</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("A extensão da imagem é inválida! Selecione uma imagem JPEG ou PNG.","danger");
             $this->Resultado = false;
 
         }

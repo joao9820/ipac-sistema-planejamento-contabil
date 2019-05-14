@@ -56,7 +56,8 @@ class AdmsUploadArquivos
 
         } else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Não foi possível realizar o upload.</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi possível realizar o upload.","danger");
             $this->Resultado = false;
 
         }

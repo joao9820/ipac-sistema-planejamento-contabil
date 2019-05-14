@@ -54,12 +54,14 @@ class AtendimentoFuncionarios {
         }
 
         $atendimento_id = filter_input(INPUT_GET, 'aten', FILTER_DEFAULT);
+        $paginaAtendimentos = filter_input(INPUT_GET, 'pg', FILTER_DEFAULT);
+        $this->Dados['pg'] = $paginaAtendimentos;
 
         $this->DadosId = (int) $DadosId;
         if (empty($this->DadosId) or empty($atendimento_id)) {
             $alert = new AdmsAlertMensagem();
             $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi possível buscar os funcionário do atendimento selecionado.","danger");
-            $UrlDestino = URLADM . 'gerenciar-atendimento/listar/1';
+            $UrlDestino = URLADM . 'gerenciar-atendimento/listar/'.$paginaAtendimentos;
             header("Location: $UrlDestino");
         }
 
@@ -103,6 +105,7 @@ class AtendimentoFuncionarios {
         $func_id = filter_input(INPUT_GET, 'func_id', FILTER_SANITIZE_NUMBER_INT);
         $ativ_id = filter_input(INPUT_GET, 'ativ_id', FILTER_SANITIZE_NUMBER_INT);
         $id_aten_fun = filter_input(INPUT_GET, 'id_aten_fun', FILTER_SANITIZE_NUMBER_INT);
+        $paginaAtendimentos = filter_input(INPUT_GET, 'pg', FILTER_DEFAULT);
 
 
         if (!empty($aten_id) and ! empty($func_id) and ! empty($ativ_id)) {
@@ -116,7 +119,7 @@ class AtendimentoFuncionarios {
             } else {
                 $_SESSION['msg'] = $alert->alertMensagemJavaScript("Registro não deletado.", "danger");
             }
-            $UrlDestino = URLADM . 'atendimento-funcionarios/listar/' . $this->DemandaId . '?aten=' . $aten_id;
+            $UrlDestino = URLADM . 'atendimento-funcionarios/listar/' . $this->DemandaId . '?aten=' . $aten_id.'&pg='.$paginaAtendimentos;
             header("Location: $UrlDestino");
         }
     }
@@ -126,6 +129,8 @@ class AtendimentoFuncionarios {
         $aten_id = filter_input(INPUT_GET, 'aten', FILTER_DEFAULT);
         $func_id = filter_input(INPUT_GET, 'func', FILTER_DEFAULT);
         $data = filter_input(INPUT_GET, 'data', FILTER_DEFAULT);
+        $paginaAtendimentos = filter_input(INPUT_GET, 'pg', FILTER_DEFAULT);
+        $this->Dados['pg'] = $paginaAtendimentos;
 
         if (!empty($aten_id) and ! empty($func_id) and ! empty($data)) {
 
@@ -156,7 +161,7 @@ class AtendimentoFuncionarios {
             $carregarView = new ConfigView("adms/Views/gerenciar/funcionarios/verPlanejamentoFuncionario", $this->Dados);
             $carregarView->renderizar();
         } else {
-            $UrlDestino = URLADM . 'atendimento-funcionarios/listar/' . $this->DadosId . '?aten=' . $aten_id;
+            $UrlDestino = URLADM . 'atendimento-funcionarios/listar/' . $this->DadosId . '?aten=' . $aten_id.'&pg='.$paginaAtendimentos;
             header("Location: $UrlDestino");
         }
     }
@@ -173,7 +178,9 @@ class AtendimentoFuncionarios {
         }
     }
 
-    public function editar() {
+    public function editar($Pagina)
+    {
+        $pagina = (int) $Pagina;
         /*
          * Arry contendo:
          * verificar_mesmo_funcionario <- caso seja igual ao adms_funcionario_id, nada será atualizado
@@ -197,7 +204,7 @@ class AtendimentoFuncionarios {
 
                 // Caso o funcionário não seja substituido e a prioridade continue a mesma nada será atualizado
                 $_SESSION['msg'] = $alert->alertMensagemJavaScript("Nenhum dado atualizado", "warning");
-                $UrlDestino = URLADM . 'atendimento-funcionarios/listar/' . $adms_demanda_id . '?aten=' . $adms_atendimento_id;
+                $UrlDestino = URLADM . 'atendimento-funcionarios/listar/' . $adms_demanda_id . '?aten=' . $adms_atendimento_id.'&pg='.$pagina;
                 header("Location: $UrlDestino");
             } else {
                 $this->Condicao['adms_atividade_id'] = $this->Dados['adms_atividade_id'];
@@ -218,11 +225,11 @@ class AtendimentoFuncionarios {
                 // Receber um array de dados contendo o status
                 if ($upAtividade->getAtividade()['status']) { // Se o status for true então a condição será verdadeira
                     $_SESSION['msg'] = $alert->alertMensagemJavaScript($upAtividade->getAtividade()['msg'], "success");
-                    $UrlDestino = URLADM . 'atendimento-funcionarios/listar/' . $adms_demanda_id . '?aten=' . $adms_atendimento_id;
+                    $UrlDestino = URLADM . 'atendimento-funcionarios/listar/' . $adms_demanda_id . '?aten=' . $adms_atendimento_id.'&pg='.$pagina;
                     header("Location: $UrlDestino");
                 } else {
                     $_SESSION['msg'] = $alert->alertMensagemJavaScript($upAtividade->getAtividade()['msg'], "danger");
-                    $UrlDestino = URLADM . 'atendimento-funcionarios/listar/' . $adms_demanda_id . '?aten=' . $adms_atendimento_id;
+                    $UrlDestino = URLADM . 'atendimento-funcionarios/listar/' . $adms_demanda_id . '?aten=' . $adms_atendimento_id.'&pg='.$pagina;
                     header("Location: $UrlDestino");
                 }
             }

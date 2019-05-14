@@ -30,12 +30,14 @@ class AdmsValSenha
         $this->Senha = $Senha;
 
         if(stristr($this->Senha, "'")){
-            $_SESSION['msg'] = "<div class='alert alert-danger' role='alert'>Erro: Caracter ( ' ) utilizado na senha inválido</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Caracter ( ' ) utilizado na senha inválido!","danger");
             $this->Resultado = false;
         } else {
 
             if(stristr($this->Senha, " ")){
-                $_SESSION['msg'] = "<div class='alert alert-danger' role='alert'>Erro: Proibido utilizar espaço em branco na senha!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Proibido utilizar espaço em branco na senha!","danger");
                 $this->Resultado = false;
             } else {
                 $this->valExtensSenha();
@@ -49,7 +51,8 @@ class AdmsValSenha
     {
         //Verificar se a senha tem menos de 6 caracteres
         if(strlen($this->Senha) < 6){
-            $_SESSION['msg'] = '<div class="alert alert-danger" role="alert">Erro: A senha deve ter no mínimo 6 caracteres</div>';
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("A senha deve ter no mínimo 6 caracteres!","danger");
             $this->Resultado = false;
         } else {
             $this->Resultado = true;

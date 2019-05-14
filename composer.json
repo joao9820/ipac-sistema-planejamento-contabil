@@ -16,6 +16,8 @@
     },
     "require": {
         "phpmailer/phpmailer": "^6.0",
-        "ext-calendar": "*"
+        "ext-calendar": "*",
+        "ext-pdo": "*",
+        "ext-gd": "*"
     }
 }

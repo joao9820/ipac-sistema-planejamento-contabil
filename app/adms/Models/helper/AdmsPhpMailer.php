@@ -13,7 +13,6 @@ if (!defined('URL')) {
 /**
  * Description of AdmsPhpMailer
  *
- * @author Celke
  */
 class AdmsPhpMailer
 {
@@ -31,14 +30,15 @@ class AdmsPhpMailer
     public function emailPhpMailer(array $Dados)
     {
         $this->Dados = $Dados;
-        $credEmail = new \App\adms\Models\helper\AdmsRead();
+        $credEmail = new AdmsRead();
         $credEmail->fullRead("SELECT * FROM adms_confs_emails WHERE id =:id LIMIT :limit", "id=1&limit=1");
         $this->DadosCredEmail = $credEmail->getResultado();
 
         if ((isset($this->DadosCredEmail[0]['host'])) AND ( !empty($this->DadosCredEmail[0]['host']))) {
             $this->confEmail();
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Necessário inserir as credencias do e-mail no administrativo para enviar e-mail!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Necessário inserir as credencias do e-mail no administrativo para enviar e-mail!","danger");
             $this->Resultado = false;
         }
     }
@@ -67,10 +67,12 @@ class AdmsPhpMailer
             $mail->AltBody = $this->Dados['cont_text_email'];
 
             if ($mail->send()) {
-                $_SESSION['msg'] = "<div class='alert alert-success'>E-mail enviado com sucesso!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("E-mail enviado com sucesso!","success");
                 $this->Resultado = true;
             } else {
-                $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: E-mail não foi enviado com sucesso!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("E-mail não foi enviado!","danger");
                 $this->Resultado = false;
             }
         } catch (Exception $e) {

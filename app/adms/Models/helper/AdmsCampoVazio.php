@@ -31,7 +31,8 @@ class AdmsCampoVazio
         $this->Dados = array_map('strip_tags', $this->Dados);
         $this->Dados = array_map('trim', $this->Dados);
         if(in_array('', $this->Dados)){
-            $_SESSION['msg'] = '<div class="alert alert-danger" role="alert">Erro: Necessário preencher todos os campos!</div>';
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Necessário preencher todos os campos!","danger");
             $this->Resultado = false;
         } else {
 

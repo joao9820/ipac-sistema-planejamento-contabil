@@ -124,12 +124,12 @@
                 <tr>
                     <th class="d-none d-lg-table-cell">Cod.</th>
                     <th class="">Planejamento</th>
-                    <th>Atividades</th>
+                    <th><span class='luzAlert' tabindex='0' data-placement='right' data-toggle='tooltip' title='Total de atividades definidas para um ou mais funcionários'>Qtd/Atividades</span></th>
                     <th>Progresso</th>
-                    <th class="">Tipo</th>
-                    <th class="">Status</th>
-                    <th class="">Cliente</th>
-                    <th class="">Data/Solicitação</th>
+                    <th class="">Demanda</th>
+                    <th class="">Status do Atendimento</th>
+                    <th class="">Empresa Cliente</th>
+                    <th class="">Data da Solicitação</th>
                     <th class="text-right">Ações</th>
                 </tr>
                 </thead>
@@ -172,63 +172,84 @@
                             ?>
                         </td>
                         <td>
-                            <span class="d-flex justify-content-start">
+                            <?php
+                            if(($nome_situacao == "Cancelado") AND ($id_situacao == 4)) {
+                                echo "";
+                            } else {
+                                ?>
+                                <span class="d-flex justify-content-start">
                                 <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Clique para acessar a página de visualização dos funfionários responsável por este atendimento'>
-                                    <a href="<?php echo URLADM . 'atendimento-funcionarios/listar/' . $adms_demanda_id .'?aten='.$id; ?>" class="btn btn-outline-secondary border-0 btn-sm mb-2 btnOpcoes"  >
+                                    <a href="<?php echo URLADM . 'atendimento-funcionarios/listar/' . $adms_demanda_id .'?aten='.$id.'&pg='.$this->Dados['pg']; ?>" class="btn btn-outline-secondary border-0 btn-sm mb-2 btnOpcoes"  >
                                         <i class="fas fa-pen-square"></i> Planejamento
                                     </a>
                                 </span>
-
                             </span>
+                                <?php
+                            }
+                            ?>
                         </td>
                         <td>
-                            <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Concluídas/Total atividades">
+                            <?php
+                            if(($nome_situacao == "Cancelado") AND ($id_situacao == 4)) {
+                                echo "";
+                            } else {
+                                ?>
+                                <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Concluídas/Total atividades definidas">
                                 <span class="badge badge-secondary">
                                 <?php
-                                    if ($total_atividade != null) {
-                                        if ($total_atividade_concluida == null) {
-                                            $total_atividade_concluida = 0;
-                                        }
-                                        echo $total_atividade_concluida . "/" . $total_atividade;
-                                    } else {
-                                        echo "--";
+                                if ($total_atividade != null) {
+                                    if ($total_atividade_concluida == null) {
+                                        $total_atividade_concluida = 0;
                                     }
+                                    echo $total_atividade_concluida . "/" . $total_atividade;
+                                } else {
+                                    echo "--";
+                                }
                                 ?>
                                 </span>
                             </span>
+                                <?php
+                            }
+                            ?>
                         </td>
                         <td>
                             <?php
-                                if ($total_atividade != null){
-                            ?>
-                            <div class="progress bg-progresso">
-                                <?php
-                                $total = (int)$total_atividade;
-                                $concluido = (int)$total_atividade_concluida;
-                                $porcentagem = ($concluido * 100) / $total;
-                                $porcentagem = number_format($porcentagem, 0, '.', '');
-                                //echo number_format($porcentagem, 2, '.', '') . "%";
-                                if ($porcentagem < 10){
-                                    $corPorcent = "danger text-secondary";
-                                } elseif ($porcentagem < 50){
-                                    $corPorcent = "warning";
-                                } elseif ($porcentagem < 100 ){
-                                    $corPorcent = "primary";
-                                } elseif ($porcentagem == 100) {
-                                    $corPorcent = "success";
-                                }
-                                ?>
-
-                                <div class="progress-bar bg-<?php echo $corPorcent; ?>" role="progressbar" style="width: <?php echo $porcentagem; ?>%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                    <?php
-                                        echo $porcentagem . "%";
-                                    ?>
-                                </div>
-                            </div>
-                            <?php
+                            if(($nome_situacao == "Cancelado") AND ($id_situacao == 4)) {
+                                echo "";
                             } else {
+                                ?>
+                                <?php
+                                if ($total_atividade != null){
+                                    ?>
+                                    <div class="progress bg-progresso">
+                                        <?php
+                                        $total = (int)$total_atividade;
+                                        $concluido = (int)$total_atividade_concluida;
+                                        $porcentagem = ($concluido * 100) / $total;
+                                        $porcentagem = number_format($porcentagem, 0, '.', '');
+                                        //echo number_format($porcentagem, 2, '.', '') . "%";
+                                        if ($porcentagem < 10){
+                                            $corPorcent = "danger text-secondary";
+                                        } elseif ($porcentagem < 50){
+                                            $corPorcent = "warning";
+                                        } elseif ($porcentagem < 100 ){
+                                            $corPorcent = "primary";
+                                        } elseif ($porcentagem == 100) {
+                                            $corPorcent = "success";
+                                        }
+                                        ?>
+
+                                        <div class="progress-bar bg-<?php echo $corPorcent; ?>" role="progressbar" style="width: <?php echo $porcentagem; ?>%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                            <?php
+                                            echo $porcentagem . "%";
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } else {
                                     echo "--";
                                 }
+                            }
                             ?>
                         </td>
                         <td><?php echo $nome_demanda; ?></td>
@@ -244,7 +265,7 @@
                         </td>
                         <td>
                             <div class="dataAtendimento">
-                                <span class="data"><i class="far fa-calendar-alt"></i> <?php echo date('d/m/Y \a\s H\hi', strtotime($created)); ?></span>
+                                <span class="data bg-light shadow"><i class="far fa-calendar-alt"></i> <?php echo date('d/m/Y \a\s H\hi', strtotime($created)); ?></span>
                             </div>
                         </td>
                         <td class="text-right">
@@ -287,12 +308,12 @@
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="acoesListar">
                                     <?php if ($this->Dados['botao']['vis_atendimento']) { ?>
-                                        <a class="dropdown-item" href="<?php echo URLADM . 'atendimento-gerente/ver/' . $id; ?>">
+                                        <a class="dropdown-item" href="<?php echo URLADM . 'atendimento-gerente/ver/' . $id. '?pg='.$this->Dados['pg']; ?>">
                                             <i class="far fa-eye"></i> Visualizar
                                         </a>
                                     <?php } ?>
                                     <?php if ($this->Dados['botao']['edit_atendimento']) { ?>
-                                        <a class="dropdown-item" href="<?php echo URLADM . 'atendimento-gerente/editar/'.$id; ?>">
+                                        <a class="dropdown-item" href="<?php echo URLADM . 'atendimento-gerente/editar/'.$id. '?pg='.$this->Dados['pg']; ?>">
                                             <i class="far fa-edit"></i> Editar
                                         </a>
                                     <?php } ?>

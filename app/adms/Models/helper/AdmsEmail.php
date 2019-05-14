@@ -39,7 +39,8 @@ class AdmsEmail
             $this->Resultado = true;
         } else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: E-mail inválido!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("E-mail inválido!","danger");
             $this->Resultado = false;
         }
     }

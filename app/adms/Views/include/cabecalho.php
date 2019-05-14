@@ -57,8 +57,30 @@ if (!defined('URL')) {
             color: #333333;
         }
 
+        /*ALERT COM JAVASCRIPT*/
+        #mensagemCard {
+            position: absolute;
+            z-index: 3333;
+            right: 15px;
+            top: 40px;
+            opacity: 0;
+            transition: all .3s ease-in-out;
+            box-shadow: 0 0 10px rgba(0,0,0,.5);
+        }
+        #mensagemCard h5.card-title {
+            font-size: 1.3em;
+            margin-bottom: .75rem;
+        }
+
 
     </style>
 
 </head>
 <body>
+<?php
+    if(isset($_SESSION['msg'])){
+        echo $_SESSION['msg'];
+        unset($_SESSION['msg']);
+        $_SESSION['alert'] = "ok";
+    }
+?>

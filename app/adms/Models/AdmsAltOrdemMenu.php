@@ -8,6 +8,10 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -34,14 +38,15 @@ class AdmsAltOrdemMenu
             $this->verfNivAcPgInferior();
             $this->exeAltOrdemNivAc();
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Não foi alterado a ordem do menu!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi alterado a ordem do menu!","danger");
             $this->Resultado = false;
         }
     }
 
     private function verNivAcPg()
     {
-        $verNivAcPg = new \App\adms\Models\helper\AdmsRead();
+        $verNivAcPg = new AdmsRead();
         $verNivAcPg->fullRead("SELECT nivpg.id, nivpg.ordem, nivpg.adms_niveis_acesso_id
                 FROM adms_nivacs_pgs nivpg
                 INNER JOIN adms_niveis_acessos nivac ON nivac.id=nivpg.adms_niveis_acesso_id
@@ -52,7 +57,7 @@ class AdmsAltOrdemMenu
     private function verfNivAcPgInferior()
     {
         $ordem_super = $this->DadosNivAcPg[0]['ordem'] - 1;
-        $verNivAcPg = new \App\adms\Models\helper\AdmsRead();
+        $verNivAcPg = new AdmsRead();
         $verNivAcPg->fullRead("SELECT nivpg.id, nivpg.ordem, nivpg.adms_niveis_acesso_id
                 FROM adms_nivacs_pgs nivpg
                 WHERE nivpg.ordem =:ordem AND nivpg.adms_niveis_acesso_id =:adms_niveis_acesso_id", "ordem=" . $ordem_super . "&adms_niveis_acesso_id={$this->DadosNivAcPg[0]['adms_niveis_acesso_id']}");
@@ -63,18 +68,20 @@ class AdmsAltOrdemMenu
     {
         $this->Dados['ordem'] = $this->DadosNivAcPg[0]['ordem'];
         $this->Dados['modified'] = date("Y-m-d H:i:s");
-        $upMvBaixo = new \App\adms\Models\helper\AdmsUpdate();
+        $upMvBaixo = new AdmsUpdate();
         $upMvBaixo->exeUpdate("adms_nivacs_pgs", $this->Dados, "WHERE id =:id", "id={$this->DadosNivAvPgInferior[0]['id']}");
 
         $this->Dados['ordem'] = $this->DadosNivAcPg[0]['ordem'] - 1;
-        $upMvCima = new \App\adms\Models\helper\AdmsUpdate();
+        $upMvCima = new AdmsUpdate();
         $upMvCima->exeUpdate("adms_nivacs_pgs", $this->Dados, "WHERE id =:id", "id={$this->DadosNivAcPg[0]['id']}");
 
         if ($upMvCima->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Ordem do menu editado com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Ordem do menu editado!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Não foi alterado a ordem do menu!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi alterado a ordem do menu!","danger");
             $this->Resultado = false;
         }
     }

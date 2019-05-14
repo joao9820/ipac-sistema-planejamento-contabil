@@ -55,7 +55,7 @@ class AdmsPaginacao
     {
         $this->Query = (string) $Query;
         $this->ParseString = (string) $ParseString;
-        $contar = new \App\adms\Models\helper\AdmsRead();
+        $contar = new AdmsRead();
         $contar->fullRead($this->Query, $this->ParseString);
         $this->ResultBd = $contar->getResultado();
 

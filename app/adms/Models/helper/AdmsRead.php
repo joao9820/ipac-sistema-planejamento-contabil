@@ -12,7 +12,6 @@ if (!defined('URL')) {
 /**
  * Description of StsRead
  *
- * @copyright (c) year, Cesar Szpak - Celke
  */
 class AdmsRead extends AdmsConn
 {
@@ -54,7 +53,7 @@ class AdmsRead extends AdmsConn
             $this->getIntrucao();
             $this->Query->execute();
             $this->Resultado = $this->Query->fetchAll();
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->Resultado = null;
         }
     }

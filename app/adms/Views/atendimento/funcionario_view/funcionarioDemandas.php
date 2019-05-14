@@ -5,7 +5,9 @@ if (!defined('URL')) {
 }
 //echo $_SESSION['adms_empresa_id'];
 //var_dump($this->Dados);
-extract($this->Dados['jornadaDeTrabalho']);
+if(!empty($this->Dados['jornadaDeTrabalho'])) {
+    extract($this->Dados['jornadaDeTrabalho']);
+}
 //echo $hora_extra;
 
 /**
@@ -102,10 +104,16 @@ function getFeriados($ano){
         */
     ?>
     <span class="d-block my-3 ml-4">
-        <button onclick="Parametros('<?php echo $hora_inicio; ?>', '<?php echo $hora_termino; ?>', '<?php echo $hora_inicio2; ?>', '<?php echo $hora_termino2; ?>', '<?php echo $adms_funcionario_id; ?>')"
-                class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#editarFuncionarioModal">
-            <i class="fa fa-eye"></i> Ver Planejamento
-        </button>
+        <?php
+        if(!empty($this->Dados['planejamento'])) {
+            ?>
+            <button onclick="Parametros('<?php echo $hora_inicio; ?>', '<?php echo $hora_termino; ?>', '<?php echo $hora_inicio2; ?>', '<?php echo $hora_termino2; ?>', '<?php echo $adms_funcionario_id; ?>')"
+                        class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#editarFuncionarioModal">
+                <i class="fa fa-eye"></i> Ver Planejamento
+            </button>
+            <?php
+        }
+        ?>
     </span>
     <div class="list-group-item border mx-4 mb-4 p-0 rounded">
         <div id="headerDescricaoPg" class="bg-primary">

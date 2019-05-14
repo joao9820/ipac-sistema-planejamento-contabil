@@ -32,7 +32,7 @@ class AdmsEmailUnico
         $this->EditarUnico = $EditarUnico;
         $this->DadoId = $DadoId;
         //Consultar se email já cadastrado no banco
-        $valEmailUnico = new \App\adms\Models\helper\AdmsRead();
+        $valEmailUnico = new AdmsRead();
         if (!empty($this->EditarUnico) AND ($this->EditarUnico == true)) {
 
             $valEmailUnico->fullRead("SELECT id FROM adms_usuarios WHERE email =:email AND id <>:id LIMIT :limit", "email={$this->Email}&limit=1&id={$this->DadoId}");
@@ -46,7 +46,8 @@ class AdmsEmailUnico
         $this->Resultado = $valEmailUnico->getResultado();
         if(!empty($this->Resultado)){
             //Se o $this->Resultado diferente de vazio significa que encontrou dados
-            $_SESSION['msg'] = '<div class="alert alert-danger" role="alert">Erro: Este e-mail já está cadastrado!</div>';
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Este e-mail já está cadastrado!","danger");
             $this->Resultado = false;
 
         } else {

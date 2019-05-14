@@ -8,6 +8,10 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -34,14 +38,15 @@ class AdmsAltOrdemItemMenu
             if ($this->DadosMenuInferior) {
                 $this->exeAltOrdemMenu();
             } else {
-                $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Não foi alterado a ordem do item de menu!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi alterado a ordem do item de menu!","danger");
                 $this->Resultado = false;
             }
         }
     }
 
     private function verMenu() {
-        $verMenu = new \App\adms\Models\helper\AdmsRead();
+        $verMenu = new AdmsRead();
         $verMenu->fullRead("SELECT * FROM adms_menus
                 WHERE id =:id LIMIT :limit", "id=" . $this->DadosId . "&limit=1");
         $this->DadosMenu = $verMenu->getResultado();
@@ -49,7 +54,7 @@ class AdmsAltOrdemItemMenu
 
     private function verfMenuInferior() {
         $ordem_super = $this->DadosMenu[0]['ordem'] - 1;
-        $verMenu = new \App\adms\Models\helper\AdmsRead();
+        $verMenu = new AdmsRead();
         $verMenu->fullRead("SELECT id, ordem FROM adms_menus WHERE ordem =:ordem", "ordem={$ordem_super}");
         $this->DadosMenuInferior = $verMenu->getResultado();
     }
@@ -57,18 +62,20 @@ class AdmsAltOrdemItemMenu
     private function exeAltOrdemMenu() {
         $this->Dados['ordem'] = $this->DadosMenu[0]['ordem'];
         $this->Dados['modified'] = date("Y-m-d H:i:s");
-        $upMvBaixo = new \App\adms\Models\helper\AdmsUpdate();
+        $upMvBaixo = new AdmsUpdate();
         $upMvBaixo->exeUpdate("adms_menus", $this->Dados, "WHERE id =:id", "id={$this->DadosMenuInferior[0]['id']}");
 
         $this->Dados['ordem'] = $this->DadosMenu[0]['ordem'] - 1;
-        $upMvCima = new \App\adms\Models\helper\AdmsUpdate();
+        $upMvCima = new AdmsUpdate();
         $upMvCima->exeUpdate("adms_menus", $this->Dados, "WHERE id =:id", "id={$this->DadosMenu[0]['id']}");
 
         if ($upMvCima->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Ordem do item de menu editado com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Ordem do item de menu editado!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Não foi alterado a ordem do item de menu!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi alterado a ordem do item de menu!","danger");
             $this->Resultado = false;
         }
     }
