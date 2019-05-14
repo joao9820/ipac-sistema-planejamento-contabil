@@ -127,6 +127,9 @@
                     <th><span class='luzAlert' tabindex='0' data-placement='right' data-toggle='tooltip' title='Total de atividades definidas para um ou mais funcionários'>Qtd/Atividades</span></th>
                     <th>Progresso</th>
                     <th class="">Demanda</th>
+                    <th class="">
+                        <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Descrição do atendimento.'>Descrição</span>
+                    </th>
                     <th class="">Status do Atendimento</th>
                     <th class="">Empresa Cliente</th>
                     <th class="">Data da Solicitação</th>
@@ -253,6 +256,17 @@
                             ?>
                         </td>
                         <td><?php echo $nome_demanda; ?></td>
+                        <td class="text-center">
+                            <?php
+                                if (!empty($descricao_atendimento)){
+                            ?>
+                                <span tabindex="0" data-placement="top" data-toggle="tooltip" title="<?php echo $descricao_atendimento; ?>">
+                                    <i class="far fa-file-alt"></i>
+                                </span>
+                            <?php
+                            }
+                            ?>
+                        </td>
                         <td class="">
                             <span class="badge badge-<?php echo $cor; ?>">
                                 <?php echo $nome_situacao; ?>
@@ -265,7 +279,7 @@
                         </td>
                         <td>
                             <div class="dataAtendimento">
-                                <span class="data bg-light shadow"><i class="far fa-calendar-alt"></i> <?php echo date('d/m/Y \a\s H\hi', strtotime($created)); ?></span>
+                                <span class="data bg-light text-secondary shadow"><i class="far fa-calendar-alt"></i> <?php echo date('d/m/Y \a\s H\hi', strtotime($created)); ?></span>
                             </div>
                         </td>
                         <td class="text-right">

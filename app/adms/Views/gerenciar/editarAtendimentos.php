@@ -80,43 +80,15 @@ if (isset($this->Dados['form'][0])) {
 
         <form method="post" action="" class="col-md-6">
 
+            <?php
+            if (isset($this->Dados['select']['descri'])) {
+                extract($this->Dados['select']['descri']);
+            }
+            ?>
+
             <input name="id" type="hidden" value="<?php if (isset($valorForm['id'])) { echo $valorForm['id']; } ?>">
 
             <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label>
-                        <span class="text-danger">* </span> Prioridade
-                        <span class="text-secondary" tabindex="0" data-toggle="tooltip" data-placement="right" data-html="true" title="Caso esse atendimento tenha prioridade sobre outros, selecione a opção SIM.">
-                            <i class="fas fa-question-circle"></i>
-                        </span>
-                    </label>
-                    <select name="prioridade" id="prioridade" class="form-control">
-                        <?php
-                        if ($valorForm['prioridade'] == 1) {
-                            echo "<option value=''>Selecione</option>";
-                            echo "<option value='1' selected>Sim</option>";
-                            echo "<option value='2'>Não</option>";
-                        } elseif ($valorForm['prioridade'] == 2)  {
-                            echo "<option value=''>Selecione</option>";
-                            echo "<option value='1'>Sim</option>";
-                            echo "<option value='2' selected>Não</option>";
-                        }else{
-                            echo "<option value='' selected>Selecione</option>";
-                            echo "<option value='1'>Sim</option>";
-                            echo "<option value='2'>Não</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div class="form-group col-md-12">
-                    <label>
-                        <span class="text-danger">* </span> Data Fatal
-                        <span class="text-secondary" tabindex="0" data-toggle="tooltip" data-placement="right" data-html="true" title="Data limite para a entrega do atendimento.">
-                            <i class="fas fa-question-circle"></i>
-                        </span>
-                    </label>
-                    <input name="data_fatal" class="form-control" type="date">
-                </div>
                 <div class="form-group col-md-12">
                     <label><span class="text-danger">* </span>Demanda</label>
                     <select name="adms_demanda_id" id="adms_demanda_id" class="form-control">
@@ -145,10 +117,12 @@ if (isset($this->Dados['form'][0])) {
                         <?php
                         foreach ($this->Dados['select']['sitsat'] as $sitAtendimento) {
                             extract($sitAtendimento);
-                            if ($valorForm['adms_sits_atendimento_id'] == $id_sits_aten) {
-                                echo "<option value='$id_sits_aten' selected class='text-".$cores_sits_aten."'>$nome_sits_aten</option>";
-                            } else {
-                                echo "<option value='$id_sits_aten' class='text-".$cores_sits_aten."'>$nome_sits_aten</option>";
+                            if ($id_sits_aten != 2) {
+                                if ($valorForm['adms_sits_atendimento_id'] == $id_sits_aten) {
+                                    echo "<option value='$id_sits_aten' selected class='text-" . $cores_sits_aten . "'>$nome_sits_aten</option>";
+                                } else {
+                                    echo "<option value='$id_sits_aten' class='text-" . $cores_sits_aten . "'>$nome_sits_aten</option>";
+                                }
                             }
                         }
                         ?>
@@ -157,26 +131,15 @@ if (isset($this->Dados['form'][0])) {
                 </div>
 
                 <div class="form-group col-md-12">
-                    <label><span class="text-danger">* </span>Funcinário</label>
-                    <select name="adms_funcionario_id" id="adms_funcionario_id" class="form-control" <?php
-                    if ($dadosAtendimento['situacao_funcionario'] != 2) {
-                        echo "";
-                    }
-                    ?>>
-                        <option value="">Selecione</option>
-                        <?php
-                        foreach ($this->Dados['select']['func'] as $funcionario) {
-                            extract($funcionario);
-                            if ($valorForm['adms_funcionario_id'] == $id_func) {
-                                echo "<option value='$id_func' selected>$nome_func</option>";
-                            } else {
-                                echo "<option value='$id_func'>$nome_func</option>";
-                            }
-                        }
-                        ?>
-                    </select>
-
+                    <label>
+                        <span class="text-danger">* </span> Descrição
+                    </label>
+                    <textarea name="descricao" id="descricao" class="form-control"><?php
+                        echo $descricao_atendimento ? $descricao_atendimento : "";
+                        ?></textarea>
                 </div>
+
+
 
             </div>
 

@@ -104,16 +104,12 @@ function getFeriados($ano){
         */
     ?>
     <span class="d-block my-3 ml-4">
-        <?php
-        if(!empty($this->Dados['planejamento'])) {
-            ?>
+        <?php if(!empty($this->Dados['planejamento'])) {?>
             <button onclick="Parametros('<?php echo $hora_inicio; ?>', '<?php echo $hora_termino; ?>', '<?php echo $hora_inicio2; ?>', '<?php echo $hora_termino2; ?>', '<?php echo $adms_funcionario_id; ?>')"
-                        class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#editarFuncionarioModal">
+                    class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#editarFuncionarioModal">
                 <i class="fa fa-eye"></i> Ver Planejamento
             </button>
-            <?php
-        }
-        ?>
+        <?php } ?>
     </span>
     <div class="list-group-item border mx-4 mb-4 p-0 rounded">
         <div id="headerDescricaoPg" class="bg-primary">
@@ -121,6 +117,13 @@ function getFeriados($ano){
         </div>
 
         <div class="list-group-item">
+            <?php
+            if(isset($_SESSION['msg'])) {
+                echo $_SESSION['msg'];
+                unset($_SESSION['msg']);
+            }
+
+            ?>
 
             <div class="container-fluid">
                 <div class="row">
@@ -238,6 +241,8 @@ function getFeriados($ano){
                         <thead class="bg-info text-light">
                         <tr class="text-center">
                             <th class="">Opções</th>
+                            <th class="">Demanda</th>
+                            <th class="">Descricao</th>
                             <th class="">Atividades</th>
                             <th class="">Duração</th>
                             <th class="">Data de início</th>
@@ -250,10 +255,7 @@ function getFeriados($ano){
                             </th>
                             <th class="">Tempo Restante</th>
                             <th class="">Status</th>
-                            <th class="">Cliente</th>
-                            <th class="" tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Data e hora da solicitação">
-                                Data
-                            </th>
+                            <th class="">Empresa</th>
                             <th class="">Ações</th>
                         </tr>
                         <tr>
@@ -344,6 +346,14 @@ function getFeriados($ano){
                                     <?php
                                 }
                                 ?>
+                            </td>
+                            <td>
+                                <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Descrição: <?php echo $descricao_demanda; ?>'>
+                                    <?php echo $nome_demanda ?>
+                                </span>
+                            </td>
+                            <td>
+                                <?php echo $descricao_atendimento ?>
                             </td>
                             <td>
                                 <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Descrição: <?php echo $descricao_atividade; ?>'>
@@ -705,8 +715,8 @@ function getFeriados($ano){
                             </td>
                             <td>
                                  <span tabindex="0" data-toggle="tooltip" data-placement="right" data-html="true" title="<?php echo "Esse é o status que o cliente visualiza nesse momento. Quando houver alterações ele será informado.";?>">
-                                    <span class="badge badge-<?php echo $cor ?>">
-                                        <?php echo $nome_situacao; ?>
+                                    <span class="badge badge-<?php echo $cor_sit_aten_func ?>">
+                                        <?php echo $nome_sits_aten_func; ?>
                                     </span>
                                 </span>
                             </td>
@@ -716,11 +726,6 @@ function getFeriados($ano){
                                         echo strtoupper($fantasia_empresa);
                                     ?>
                                 </span>
-                            </td>
-                            <td>
-                                <?php
-                                    echo date('d/m/Y \a\s H\hi', strtotime($data_solicitacao));
-                                ?>
                             </td>
                             <td class="text-right">
                                 <?php
@@ -743,11 +748,13 @@ function getFeriados($ano){
                                 }
                                 if ( $id_sits_aten_func == 3){
                                 ?>
-                                <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Interromper atendimento temporariamente?">
-                                    <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id_aten_func . '?status=5&pg='.$this->Dados['pg']; ?>" class="btn btn-outline-warning btn-sm mb-2" data-confirmInterromper='Interromper atendimento temporariamente?'>
-                                        <i class="fas fa-hand-paper"></i>
-                                    </a>
-                                </span>
+                                    <!--
+                                        <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Interromper atendimento temporariamente?">
+                                            <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id_aten_func . '?status=5&pg='.$this->Dados['pg']; ?>" class="btn btn-outline-warning btn-sm mb-2" data-confirmInterromper='Interromper atendimento temporariamente?'>
+                                                <i class="fas fa-hand-paper"></i>
+                                            </a>
+                                        </span>
+                                        -->
                                 <?php
                                 }
                                 ?>
@@ -805,13 +812,12 @@ function getFeriados($ano){
 <div class="modal fade" id="editarFuncionarioModal" tabindex="-1" role="dialog" aria-labelledby="editandoFuncionario" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-
             <div class="modal-header">
-                <h5 class="modal-title" id="editandoFuncionario"><i class="fas fa-eye"></i> Ver Planejamento</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+                    <h5 class="modal-title" id="editandoFuncionario"><i class="fas fa-eye"></i> Ver Planejamento</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+              </div>
             <form method="post" action="">
                 <div class="modal-body">
                     <fieldset>

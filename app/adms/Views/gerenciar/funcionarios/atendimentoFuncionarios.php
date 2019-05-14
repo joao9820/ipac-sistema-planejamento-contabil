@@ -84,7 +84,7 @@ if (!defined('URL')) {
                             <span class="text-dark"><i class="fas fa-calendar-alt text-secondary"></i> Data de Solicitação: </span>
                             <h4><?php echo $created ? date('d/m/Y \a\s H\hi\m', strtotime($created)) : ""; ?></h4>
                         </div>
-                        
+
                     </div>
                 </div>
                 <?php

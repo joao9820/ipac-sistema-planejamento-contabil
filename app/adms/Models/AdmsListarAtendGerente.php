@@ -40,7 +40,7 @@ class AdmsListarAtendGerente
 
 
         $listarAtendimento = new AdmsRead();
-        $listarAtendimento->fullRead("SELECT aten.id, aten.adms_demanda_id, aten.created, 
+        $listarAtendimento->fullRead("SELECT aten.id, aten.adms_demanda_id, aten.descricao descricao_atendimento, aten.created, 
             demanda.nome nome_demanda, 
             situacao.nome nome_situacao, situacao.id id_situacao, 
             cr.cor, 
@@ -72,7 +72,7 @@ class AdmsListarAtendGerente
             GROUP BY adms_atendimento_id) totalConclu ON totalConclu.adms_atendimento_id = aten.id
     
             WHERE aten.arquivado_gerente <>:arquivado_gerente 
-            ORDER BY created DESC LIMIT :limit OFFSET :offset", "arquivado_gerente=1&limit={$this->LimiteResultado}&offset={$offset}");
+            ORDER BY aten.id DESC LIMIT :limit OFFSET :offset", "arquivado_gerente=1&limit={$this->LimiteResultado}&offset={$offset}");
         $this->Resultado = $listarAtendimento->getResultado();
         //var_dump($this->Resultado);
         return $this->Resultado;

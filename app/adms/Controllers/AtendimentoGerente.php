@@ -156,7 +156,7 @@ class AtendimentoGerente
             {
 
                 $alert = new AdmsAlertMensagem();
-                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atendimento atualizado!","danger");
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atendimento atualizado!","success");
                 $UrlDestino = URLADM .'atendimento-gerente/ver/'.$this->Dados['id'].'?pg='.$this->PageId;
                 //echo $UrlDestino;
                 header("Location: $UrlDestino");
@@ -187,7 +187,7 @@ class AtendimentoGerente
         if ($this->Dados['form']) {
 
             $listarSelect = new AdmsEditarAtenGerente();
-            $this->Dados['select'] = $listarSelect->listarCadastrar();
+            $this->Dados['select'] = $listarSelect->listarCadastrar($this->DadosId);
             $this->Dados['dadosAtendimento'] = $listarSelect->verAtendimento($this->DadosId);
 
             $botao = ['vis_atendimento' => ['menu_controller' => 'atendimento-gerente', 'menu_metodo' => 'ver'],
