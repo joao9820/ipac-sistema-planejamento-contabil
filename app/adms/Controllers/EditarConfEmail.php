@@ -8,6 +8,10 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsEditarConfEmail;
+use App\adms\Models\AdmsMenu;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -22,7 +26,7 @@ class EditarConfEmail
         $this->Dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         if (!empty($this->Dados['EditConfEmail'])) {
             unset($this->Dados['EditConfEmail']);
-            $editarConfEmail = new \App\adms\Models\AdmsEditarConfEmail();
+            $editarConfEmail = new AdmsEditarConfEmail();
             $editarConfEmail->altConfEmail($this->Dados);
             if ($editarConfEmail->getResultado()) {
                 $UrlDestino = URLADM . 'editar-conf-email/edit-conf-email';
@@ -32,7 +36,7 @@ class EditarConfEmail
                 $this->editConfEmailViewPriv();
             }
         } else {
-            $verConfEmail = new \App\adms\Models\AdmsEditarConfEmail();
+            $verConfEmail = new AdmsEditarConfEmail();
             $this->Dados['form'] = $verConfEmail->verConfEmail();
             $this->editConfEmailViewPriv();
         }
@@ -41,13 +45,14 @@ class EditarConfEmail
     private function editConfEmailViewPriv() {
         if ($this->Dados['form']) {
 
-            $listarMenu = new \App\adms\Models\AdmsMenu();
+            $listarMenu = new AdmsMenu();
             $this->Dados['menu'] = $listarMenu->itemMenu();
 
-            $carregarView = new \Core\ConfigView("adms/Views/confEmail/editarConfEmail", $this->Dados);
+            $carregarView = new ConfigView("adms/Views/confEmail/editarConfEmail", $this->Dados);
             $carregarView->renderizar();
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Formulário para editar os dados do servidor de e-mail não encontrado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Formulário para editar os dados do servidor de e-mail não encontrado!","danger");
             $UrlDestino = URLADM . 'editar-conf-email/edit-conf-email';
             header("Location: $UrlDestino");
         }

@@ -8,6 +8,11 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsListarGrupoPg;
+use App\adms\Models\AdmsMenu;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -28,17 +33,17 @@ class GrupoPg
             'edit_grpg' => ['menu_controller' => 'editar-grupo-pg', 'menu_metodo' => 'edit-grupo-pg'],
             'del_grpg' => ['menu_controller' => 'apagar-grupo-pg', 'menu_metodo' => 'apagar-grupo-pg'],
             'ordem_grpg' => ['menu_controller' => 'alt-ordem-grupo-pg', 'menu_metodo' => 'alt-ordem-grupo-pg']];
-        $listarBotao = new \App\adms\Models\AdmsBotao();
+        $listarBotao = new AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
 
-        $listarGrupoPg = new \App\adms\Models\AdmsListarGrupoPg();
+        $listarGrupoPg = new AdmsListarGrupoPg();
         $this->Dados['listGrupoPg'] = $listarGrupoPg->listarGrupoPg($this->PageId);
         $this->Dados['paginacao'] = $listarGrupoPg->getResultadoPg();
 
-        $carregarView = new \Core\ConfigView("adms/Views/grupoPg/listarGrupoPg", $this->Dados);
+        $carregarView = new ConfigView("adms/Views/grupoPg/listarGrupoPg", $this->Dados);
         $carregarView->renderizar();
     }
 

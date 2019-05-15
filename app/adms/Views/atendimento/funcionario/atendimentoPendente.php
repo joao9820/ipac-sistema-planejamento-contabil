@@ -19,13 +19,6 @@ if (!defined('URL')) {
 
         <?php
 
-
-        if (isset($_SESSION['msg']))
-        {
-            echo $_SESSION['msg'];
-            unset($_SESSION['msg']);
-        }
-
         if (empty($this->Dados['listAtendimentoPendente']) AND empty($this->Dados['listAtendimentoPendenteUrgente']) AND empty($this->Dados['listAtendimentoFinalizado'])) {
             ?>
 

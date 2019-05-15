@@ -8,6 +8,9 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsEsqueceuSenha;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -24,7 +27,7 @@ class EsqueceuSenha
         $this->Dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         if (!empty($this->Dados['RecupUserLogin'])){
 
-            $esqSenha = new \App\adms\Models\AdmsEsqueceuSenha();
+            $esqSenha = new AdmsEsqueceuSenha();
             $esqSenha->esqueceuSenha($this->Dados);
             if($esqSenha->getResultado())
             {
@@ -36,7 +39,7 @@ class EsqueceuSenha
             else
                 {
                     $this->Dados['form'] = $this->Dados;
-                    $carregarView = new \Core\ConfigView("adms/Views/login/esqueceuSenha", $this->Dados);
+                    $carregarView = new ConfigView("adms/Views/login/esqueceuSenha", $this->Dados);
                     $carregarView->renderizarLogin();
 
                 }
@@ -44,7 +47,7 @@ class EsqueceuSenha
         } else
             {
 
-                $carregarView = new \Core\ConfigView("adms/Views/login/esqueceuSenha", $this->Dados);
+                $carregarView = new ConfigView("adms/Views/login/esqueceuSenha", $this->Dados);
                 $carregarView->renderizarLogin();
 
             }

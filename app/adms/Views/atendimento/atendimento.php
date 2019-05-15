@@ -55,13 +55,6 @@ if ($this->Dados['arquivado'][0]) {
 
         <?php
 
-
-        if (isset($_SESSION['msg']))
-        {
-            echo $_SESSION['msg'];
-            unset($_SESSION['msg']);
-        }
-
         if (empty($this->Dados['listAtendimento'])) {
             ?>
 

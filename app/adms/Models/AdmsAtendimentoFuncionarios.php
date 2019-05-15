@@ -101,7 +101,7 @@ class AdmsAtendimentoFuncionarios {
                                     INNER JOIN adms_cors cr ON cr.id = sits_func.adms_cor_id
                                     INNER JOIN adms_planejamento planejar ON planejar.adms_funcionario_id = aten_fun.adms_funcionario_id
                                     WHERE aten_fun.adms_atendimento_id=:adms_atendimento_id
-                                    ORDER BY aten_fun.ordem_atividade ASC", "adms_atendimento_id={$this->Atendimento}");
+                                    ORDER BY funcionario.nome ASC", "adms_atendimento_id={$this->Atendimento}");
         $this->Resultado = $listar->getResultado();
         return $this->Resultado;
     }
@@ -109,8 +109,6 @@ class AdmsAtendimentoFuncionarios {
     public function registrar($Dados = null) {
         $this->Dados = $Dados;
 
-        //var_dump($this->Dados);
-        
         /*
          * Chamando class para verificar se a data fatal pode ser definida para o dia escolhido
          * Caso a data fatal não possa ser definida para a data escolhida pelo fato do funcionário
@@ -163,10 +161,7 @@ class AdmsAtendimentoFuncionarios {
         } else {
             $this->TempoExcedido = 0;
         }
-        
-        unset($this->Dados['horas']);
-        unset($this->Dados['minutos']);
-        unset($this->Dados['simNao']);
+
 
         //método para verficar se possui atividade registrada no mesmo atendimento pro mesmo funcionario
         $this->validaRegistroAtv();
@@ -217,26 +212,35 @@ class AdmsAtendimentoFuncionarios {
             }
 
             //Função para verificar se a duração da atividade foi definida ou não
-            
             // Pegando dados da atividade que está sendo cadastrada
-            $this->buscarAtividade();            
-            /*
-            if ($this->Dados['horas'] > 0 && $this->Dados['minutos'] > 0) {
-                
-                $duracao_atv = [$this->Dados['horas'], $this->Dados['minutos']];
-                
-                $this->Dados['duracao_atividade'] = date('H:i:s', strtotime(implode(':', $duracao_atv))); 
-         
-            }else{
-                $this->Dados['duracao_atividade'] = $this->DadosAtivi[0]['duracao'];
-            } */      
-            
-            //Ativar o código acima quando a View estiver finalizada
-            $this->Dados['duracao_atividade'] = $this->DadosAtivi[0]['duracao'];
 
-            $this->Dados['at_tempo_restante'] = $this->DadosAtivi[0]['duracao'];
+            $this->buscarAtividade();
+
+
+            //echo 'Valor sim ou não' . $this->Dados['simNao'];
+
+            $this->Dados['hora'] = isset($this->Dados['hora']) ? $this->Dados['hora'] : 0; //Se vier valor atribui, senão atribui a 0
+            $this->Dados['minuto'] = isset($this->Dados['minuto']) ? $this->Dados['minuto'] : 0;
+
+            if ($this->Dados['simNao'] == 'option1' && ($this->Dados['hora'] + $this->Dados['minuto'] > 0)) { //As horas e minutos para comparação utiliza-se em inteiro (separados)
+                //echo $this->Dados['hora'] + $this->Dados['minuto'];
+                $duracao_atv = [$this->Dados['hora'], $this->Dados['minuto']];
+
+                $this->Dados['duracao_atividade'] = date('H:i:s', strtotime(implode(':', $duracao_atv)));
+            } else {
+                $this->Dados['duracao_atividade'] = $this->DadosAtivi[0]['duracao'];
+            }
+
+            unset($this->Dados['hora']);
+            unset($this->Dados['minuto']);
+            unset($this->Dados['simNao']); //Retirando posição do array para não causar conflito no BD
+
+            $this->Dados['at_tempo_restante'] = $this->Dados['duracao_atividade'];
             $this->Dados['ordem_atividade'] = $this->DadosAtivi[0]['ordem'];
 
+            //echo $this->Dados['duracao_atividade'];
+
+            //die();
             // Somando duração da atividade na hora de inicio
             // Passar os parametros no formato H:i:s
             $calcularHoraFimPl = new Funcoes();
@@ -286,16 +290,18 @@ class AdmsAtendimentoFuncionarios {
             $inserirOrdem->inserirOrdemAtvFunc($this->Dados['adms_funcionario_id']);
             $this->Dados['ordem'] = $inserirOrdem->getResultado(); //se for a primeira será 1 senão será a ultima + 1
 
+            //var_dump($this->Dados);
+            //die();
 
             $regist = new AdmsCreateRow();
             $regist->exeCreate("adms_atendimento_funcionarios", $this->Dados);
             if ($regist->getResultado()) {
                 $alertaMensagem = new AdmsAlertMensagem();
-                $_SESSION['msg'] = $alertaMensagem->alertMensagemSimples("Resgistrado com sucesso", "success");
+                $_SESSION['msg'] = $alertaMensagem->alertMensagemJavaScript("Atividade definida!", "success");
                 return $this->Resultado = true;
             } else {
                 $alertaMensagem = new AdmsAlertMensagem();
-                $_SESSION['msg'] = $alertaMensagem->alertMensagemSimples("Desculpe! Ocorreu um erro ao registrar. Tente novamente", "danger");
+                $_SESSION['msg'] = $alertaMensagem->alertMensagemJavaScript("Ocorreu um erro ao registrar. Tente novamente", "danger");
                 return $this->Resultado = false;
             }
         }
@@ -732,12 +738,17 @@ class AdmsAtendimentoFuncionarios {
         $this->jaExisteAtv = $validaRegistro->getResultado();
     }
 
-    private function buscarDuracaoMinAtv() {
+ 
+
+    public function buscarDuracaoMinAtv($atenId) {
+
+
 
         $duracao_min = new AdmsRead();
-        $duracao_min->fullRead("SELECT duracao_min, duracao FROM adms_atividades WHERE id = :id", "id = {$this->Dados['adms_atividade_id']}");
+        $duracao_min->fullRead("SELECT nome, duracao, duracao_min FROM adms_atividades WHERE adms_demanda_id = (SELECT adms_demanda_id FROM adms_atendimentos WHERE id = :id)
+                  AND id NOT IN (SELECT adms_atividade_id FROM adms_atendimento_funcionarios WHERE adms_atendimento_id = :id)", "id={$atenId}");
 
-        return $duracao_min->getResultado();
+        $this->Resultado = $duracao_min->getResultado();
     }
 
 }

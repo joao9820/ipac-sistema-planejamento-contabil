@@ -37,8 +37,8 @@ class Planejamento
 
             } else {
 
-                $alertMensagem = new AdmsAlertMensagem();
-                $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","O planejamento não foi atualizado", "danger");
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("O planejamento não foi atualizado!","danger");
                 $UrlDestino = URLADM .'jornada-de-trabalho/listar';
                 header("Location: $UrlDestino");
 
@@ -58,15 +58,16 @@ class Planejamento
 
             } else {
 
-                $alertMensagem = new AdmsAlertMensagem();
-                $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","O planejamento não foi registrado", "danger");
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("O planejamento não foi registrado!","danger");
                 $UrlDestino = URLADM .'jornada-de-trabalho/listar';
                 header("Location: $UrlDestino");
 
             }
 
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Nenhum dado foi alterado! Tente novamente.</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Nenhum dado foi alterado! Tente novamente.","danger");
             $UrlDestino = URLADM .'jornada-de-trabalho/listar';
             header("Location: $UrlDestino");
         }

@@ -8,6 +8,9 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsMenu;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -28,10 +31,10 @@ class TipoPg
             'edit_tpg' => ['menu_controller' => 'editar-tipo-pg', 'menu_metodo' => 'edit-tipo-pg'],
             'del_tpg' => ['menu_controller' => 'apagar-tipo-pg', 'menu_metodo' => 'apagar-tipo-pg'],
             'ordem_tpg' => ['menu_controller' => 'alt-ordem-tipo-pg', 'menu_metodo' => 'alt-ordem-tipo-pg']];
-        $listarBotao = new \App\adms\Models\AdmsBotao();
+        $listarBotao = new AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
 
         $listarTipoPg = new \App\adms\Models\AdmsListarTipoPg();

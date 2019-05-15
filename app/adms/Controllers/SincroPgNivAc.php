@@ -8,6 +8,8 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsSincroPgNivAc;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -18,7 +20,7 @@ class SincroPgNivAc
 
     public function sincroPgNivAc()
     {
-        $sincroPgNivAc = new \App\adms\Models\AdmsSincroPgNivAc();
+        $sincroPgNivAc = new AdmsSincroPgNivAc();
         $sincroPgNivAc->sincroPgNivAc();
         $UrlDestino = URLADM . "nivel-acesso/listar";
         header("Location: $UrlDestino");

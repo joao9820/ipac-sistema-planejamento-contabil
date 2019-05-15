@@ -8,6 +8,11 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsCadastrarDemanda;
+use App\adms\Models\AdmsMenu;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -29,7 +34,7 @@ class CadastrarDemanda
             unset($this->Dados['CadDemanda']);
             //var_dump($this->Dados);
 
-            $cadDemanda = new \App\adms\Models\AdmsCadastrarDemanda();
+            $cadDemanda = new AdmsCadastrarDemanda();
             $cadDemanda->cadDemanda($this->Dados);
             if ($cadDemanda->getResultado())
             {
@@ -57,14 +62,14 @@ class CadastrarDemanda
     {
         //Carregar e exibir o botão de acordo com o nível de acesso
         $botao = ['list_demanda' => ['menu_controller' => 'demandas', 'menu_metodo' => 'listar']];
-        $listarBotao = new \App\adms\Models\AdmsBotao();
+        $listarBotao = new AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
         //Carregar Menu
-        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
         //Carregar a view
-        $carregarView = new \Core\ConfigView("adms/Views/gerenciar/cadDemanda", $this->Dados);
+        $carregarView = new ConfigView("adms/Views/gerenciar/cadDemanda", $this->Dados);
         $carregarView->renderizar();
 
     }

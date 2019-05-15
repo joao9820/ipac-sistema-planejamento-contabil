@@ -53,9 +53,11 @@
                     <a href="#" class="btn btn-outline-info btn-sm"><i class="fas fa-circle"></i> Em andamento</a>
                     <a href="#" class="btn btn-outline-primary btn-sm"><i class="fas fa-check"></i> Concluído</a>
                     <a href="#" class="btn btn-outline-danger btn-sm"><i class="fas fa-ban"></i> Cancelado</a>
+                    <!--
                     <?php if ($this->Dados['botao']['arqui_atendimento']) { ?>
                         <a href="<?php echo URLADM . 'gerenciar-atendimento/arquivado'; ?>" class="btn btn-outline-dark btn-sm"><i class="fas fa-archive"></i> Arquivados</a>
                     <?php } ?>
+                    -->
                 </div>
                 </div>
             </div>
@@ -123,13 +125,16 @@
                 <thead class="bg-info text-light my-4">
                 <tr>
                     <th class="d-none d-lg-table-cell">Cod.</th>
-                    <th class="">Funcionários</th>
-                    <th>Atividades</th>
+                    <th class="">Planejamento</th>
+                    <th><span class='luzAlert' tabindex='0' data-placement='right' data-toggle='tooltip' title='Total de atividades definidas para um ou mais funcionários'>Qtd/Atividades</span></th>
                     <th>Progresso</th>
-                    <th class="">Tipo</th>
-                    <th class="">Status</th>
-                    <th class="">Cliente</th>
-                    <th class="">Data/Solicitação</th>
+                    <th class="">Demanda</th>
+                    <th class="">
+                        <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Descrição do atendimento.'>Descrição</span>
+                    </th>
+                    <th class="">Status do Atendimento</th>
+                    <th class="">Empresa Cliente</th>
+                    <th class="">Data da Solicitação</th>
                     <th class="text-right">Ações</th>
                 </tr>
                 </thead>
@@ -172,66 +177,98 @@
                             ?>
                         </td>
                         <td>
-                            <span class="d-flex justify-content-start">
+                            <?php
+                            if(($nome_situacao == "Cancelado") AND ($id_situacao == 4)) {
+                                echo "";
+                            } else {
+                                ?>
+                                <span class="d-flex justify-content-start">
                                 <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Clique para acessar a página de visualização dos funfionários responsável por este atendimento'>
-                                    <a href="<?php echo URLADM . 'atendimento-funcionarios/listar/' . $adms_demanda_id .'?aten='.$id; ?>" class="btn btn-outline-secondary border-0 btn-sm mb-2 btnOpcoes"  >
+                                    <a href="<?php echo URLADM . 'atendimento-funcionarios/listar/' . $adms_demanda_id .'?aten='.$id.'&pg='.$this->Dados['pg']; ?>" class="btn btn-outline-secondary border-0 btn-sm mb-2 btnOpcoes"  >
                                         <i class="fas fa-pen-square"></i> Planejamento
                                     </a>
                                 </span>
-
                             </span>
+                                <?php
+                            }
+                            ?>
                         </td>
                         <td>
-                            <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Concluídas/Total atividades">
+                            <?php
+                            if(($nome_situacao == "Cancelado") AND ($id_situacao == 4)) {
+                                echo "";
+                            } else {
+                                ?>
+                                <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Concluídas/Total atividades definidas">
                                 <span class="badge badge-secondary">
                                 <?php
-                                    if ($total_atividade != null) {
-                                        if ($total_atividade_concluida == null) {
-                                            $total_atividade_concluida = 0;
-                                        }
-                                        echo $total_atividade_concluida . "/" . $total_atividade;
-                                    } else {
-                                        echo "--";
+                                if ($total_atividade != null) {
+                                    if ($total_atividade_concluida == null) {
+                                        $total_atividade_concluida = 0;
                                     }
+                                    echo $total_atividade_concluida . "/" . $total_atividade;
+                                } else {
+                                    echo "--";
+                                }
                                 ?>
                                 </span>
                             </span>
+                                <?php
+                            }
+                            ?>
                         </td>
                         <td>
                             <?php
-                                if ($total_atividade != null){
-                            ?>
-                            <div class="progress bg-progresso">
-                                <?php
-                                $total = (int)$total_atividade;
-                                $concluido = (int)$total_atividade_concluida;
-                                $porcentagem = ($concluido * 100) / $total;
-                                $porcentagem = number_format($porcentagem, 0, '.', '');
-                                //echo number_format($porcentagem, 2, '.', '') . "%";
-                                if ($porcentagem < 10){
-                                    $corPorcent = "danger text-secondary";
-                                } elseif ($porcentagem < 50){
-                                    $corPorcent = "warning";
-                                } elseif ($porcentagem < 100 ){
-                                    $corPorcent = "primary";
-                                } elseif ($porcentagem == 100) {
-                                    $corPorcent = "success";
-                                }
-                                ?>
-
-                                <div class="progress-bar bg-<?php echo $corPorcent; ?>" role="progressbar" style="width: <?php echo $porcentagem; ?>%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                    <?php
-                                        echo $porcentagem . "%";
-                                    ?>
-                                </div>
-                            </div>
-                            <?php
+                            if(($nome_situacao == "Cancelado") AND ($id_situacao == 4)) {
+                                echo "";
                             } else {
+                                ?>
+                                <?php
+                                if ($total_atividade != null){
+                                    ?>
+                                    <div class="progress bg-progresso">
+                                        <?php
+                                        $total = (int)$total_atividade;
+                                        $concluido = (int)$total_atividade_concluida;
+                                        $porcentagem = ($concluido * 100) / $total;
+                                        $porcentagem = number_format($porcentagem, 0, '.', '');
+                                        //echo number_format($porcentagem, 2, '.', '') . "%";
+                                        if ($porcentagem < 10){
+                                            $corPorcent = "danger text-secondary";
+                                        } elseif ($porcentagem < 50){
+                                            $corPorcent = "warning";
+                                        } elseif ($porcentagem < 100 ){
+                                            $corPorcent = "primary";
+                                        } elseif ($porcentagem == 100) {
+                                            $corPorcent = "success";
+                                        }
+                                        ?>
+
+                                        <div class="progress-bar bg-<?php echo $corPorcent; ?>" role="progressbar" style="width: <?php echo $porcentagem; ?>%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                            <?php
+                                            echo $porcentagem . "%";
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } else {
                                     echo "--";
                                 }
+                            }
                             ?>
                         </td>
                         <td><?php echo $nome_demanda; ?></td>
+                        <td class="text-center">
+                            <?php
+                                if (!empty($descricao_atendimento)){
+                            ?>
+                                <span tabindex="0" data-placement="top" data-toggle="tooltip" title="<?php echo $descricao_atendimento; ?>">
+                                    <i class="far fa-file-alt"></i>
+                                </span>
+                            <?php
+                            }
+                            ?>
+                        </td>
                         <td class="">
                             <span class="badge badge-<?php echo $cor; ?>">
                                 <?php echo $nome_situacao; ?>
@@ -244,7 +281,7 @@
                         </td>
                         <td>
                             <div class="dataAtendimento">
-                                <span class="data"><i class="far fa-calendar-alt"></i> <?php echo date('d/m/Y \a\s H\hi', strtotime($created)); ?></span>
+                                <span class="data bg-light text-secondary shadow"><i class="far fa-calendar-alt"></i> <?php echo date('d/m/Y \a\s H\hi', strtotime($created)); ?></span>
                             </div>
                         </td>
                         <td class="text-right">
@@ -252,7 +289,7 @@
                                 <?php
                                 if ($this->Dados['botao']['vis_atendimento']) { ?>
                                      <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Visualizar">
-                                        <a href="<?php echo URLADM . 'atendimento-gerente/ver/' . $id. '?pg='.$this->Dados['pg']; ?>" class="btn btn-outline-primary btn-sm my-md-1">
+                                        <a href="<?php echo URLADM . 'atendimento-gerente/ver/' . $id. '?pg='.$this->Dados['pg'].'&demanda='.$adms_demanda_id; ?>" class="btn btn-outline-primary btn-sm my-md-1">
                                             <i class="far fa-eye"></i>
                                         </a>
                                      </span>
@@ -262,13 +299,14 @@
                                 <?php
                                 if (($this->Dados['botao']['edit_atendimento']) AND (($nome_situacao != "Cancelado") AND ($id_situacao != 4))) { ?>
                                     <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Editar">
-                                        <a href="<?php echo URLADM . 'atendimento-gerente/editar/'.$id. '?pg='.$this->Dados['pg']; ?>" class="btn btn-outline-warning btn-sm my-md-1">
+                                        <a href="<?php echo URLADM . 'atendimento-gerente/editar/'.$id. '?pg='.$this->Dados['pg'].'&demanda='.$adms_demanda_id; ?>" class="btn btn-outline-warning btn-sm my-md-1">
                                             <i class="far fa-edit"></i>
                                         </a>
                                     </span>
                                     <?php
                                 }
                                 ?>
+                                <!--
                                 <?php
                                 if ($this->Dados['botao']['arquivar_atendimento']) { ?>
                                     <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Arquivar">
@@ -280,6 +318,7 @@
                                     <?php
                                 }
                                 ?>
+                                -->
                             </span>
                             <div class="dropdown d-block d-md-none">
                                 <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="acoesListar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -287,21 +326,23 @@
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="acoesListar">
                                     <?php if ($this->Dados['botao']['vis_atendimento']) { ?>
-                                        <a class="dropdown-item" href="<?php echo URLADM . 'atendimento-gerente/ver/' . $id; ?>">
+                                        <a class="dropdown-item" href="<?php echo URLADM . 'atendimento-gerente/ver/' . $id. '?pg='.$this->Dados['pg'].'&demanda='.$adms_demanda_id; ?>">
                                             <i class="far fa-eye"></i> Visualizar
                                         </a>
                                     <?php } ?>
                                     <?php if ($this->Dados['botao']['edit_atendimento']) { ?>
-                                        <a class="dropdown-item" href="<?php echo URLADM . 'atendimento-gerente/editar/'.$id; ?>">
+                                        <a class="dropdown-item" href="<?php echo URLADM . 'atendimento-gerente/editar/'.$id. '?pg='.$this->Dados['pg'].'&demanda='.$adms_demanda_id; ?>">
                                             <i class="far fa-edit"></i> Editar
                                         </a>
                                     <?php } ?>
+                                    <!--
                                     <?php if ($this->Dados['botao']['arquivar_atendimento']) { ?>
                                         <a class="dropdown-item" href="<?php echo URLADM . 'atendimento-gerente/arquivar/'.$id . '?pg='.$this->Dados['pg']; ?>"
                                            data-arquivo='Tem certeza que deseja arquivar o atendimento selecionado?'>
                                             <i class="fas fa-folder-open"></i> Arquivar
                                         </a>
                                     <?php } ?>
+                                    -->
                                 </div>
                             </div>
                         </td>

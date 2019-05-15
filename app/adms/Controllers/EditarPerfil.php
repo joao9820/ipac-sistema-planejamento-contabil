@@ -8,6 +8,11 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsEditarPerfil;
+use App\adms\Models\AdmsMenu;
+use App\adms\Models\AdmsVerPerfil;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -29,7 +34,7 @@ class EditarPerfil
             //var_dump($this->Dados);
 
             $this->Dados['imagem'] = ($_FILES['imagem'] ? $_FILES['imagem'] : null);
-            $altPerfilBd = new \App\adms\Models\AdmsEditarPerfil();
+            $altPerfilBd = new AdmsEditarPerfil();
             $altPerfilBd->altPerfil($this->Dados);
             if ($altPerfilBd->getResultado()) {
 
@@ -46,7 +51,7 @@ class EditarPerfil
         }
         else {
 
-            $verPerfil = new \App\adms\Models\AdmsVerPerfil();
+            $verPerfil = new AdmsVerPerfil();
             $this->Dados['form'] = $verPerfil->verPerfil();
             $this->altPerfilPriv();
 
@@ -59,9 +64,9 @@ class EditarPerfil
     private function altPerfilPriv()
     {
 
-        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
-        $carregarView = new \Core\ConfigView("adms/Views/usuario/editPerfil", $this->Dados);
+        $carregarView = new ConfigView("adms/Views/usuario/editPerfil", $this->Dados);
         $carregarView->renderizar();
 
     }

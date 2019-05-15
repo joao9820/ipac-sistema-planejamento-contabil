@@ -8,6 +8,11 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsCadastrarGrupoPg;
+use App\adms\Models\AdmsMenu;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -23,7 +28,7 @@ class CadastrarGrupoPg
         $this->Dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         if (!empty($this->Dados['CadGrupoPg'])) {
             unset($this->Dados['CadGrupoPg']);
-            $cadGrupoPg = new \App\adms\Models\AdmsCadastrarGrupoPg();
+            $cadGrupoPg = new AdmsCadastrarGrupoPg();
             $cadGrupoPg->cadGrupoPg($this->Dados);
             if ($cadGrupoPg->getResultado()) {
                 $UrlDestino = URLADM . 'grupo-pg/listar';
@@ -40,12 +45,13 @@ class CadastrarGrupoPg
     private function cadGrupoPgViewPriv()
     {
         $botao = ['list_grpg' => ['menu_controller' => 'grupo-pg', 'menu_metodo' => 'listar']];
-        $listarBotao = new \App\adms\Models\AdmsBotao();
+        $listarBotao = new AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
-        $carregarView = new \Core\ConfigView("adms/Views/grupoPg/cadGrupoPg", $this->Dados);
+
+        $carregarView = new ConfigView("adms/Views/grupoPg/cadGrupoPg", $this->Dados);
         $carregarView->renderizar();
     }
 

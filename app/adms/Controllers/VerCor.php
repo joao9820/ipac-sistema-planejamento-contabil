@@ -8,6 +8,12 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsMenu;
+use App\adms\Models\AdmsVerCor;
+use App\adms\Models\helper\AdmsAlertMensagem;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -24,22 +30,23 @@ class VerCor
 
         $this->DadosId = (int) $DadosId;
         if (!empty($this->DadosId)) {
-            $verCor = new \App\adms\Models\AdmsVerCor();
+            $verCor = new AdmsVerCor();
             $this->Dados['dados_cor'] = $verCor->vercor($this->DadosId);
 
             $botao = ['list_cor' => ['menu_controller' => 'cor', 'menu_metodo' => 'listar'],
                 'edit_cor' => ['menu_controller' => 'editar-cor', 'menu_metodo' => 'edit-cor'],
                 'del_cor' => ['menu_controller' => 'apagar-cor', 'menu_metodo' => 'apagar-cor']];
-            $listarBotao = new \App\adms\Models\AdmsBotao();
+            $listarBotao = new AdmsBotao();
             $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-            $listarMenu = new \App\adms\Models\AdmsMenu();
+            $listarMenu = new AdmsMenu();
             $this->Dados['menu'] = $listarMenu->itemMenu();
 
-            $carregarView = new \Core\ConfigView("adms/Views/cor/verCor", $this->Dados);
+            $carregarView = new ConfigView("adms/Views/cor/verCor", $this->Dados);
             $carregarView->renderizar();
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Cor não encontrada!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Cor não encontrada!","danger");
             $UrlDestino = URLADM . 'cor/listar';
             header("Location: $UrlDestino");
         }

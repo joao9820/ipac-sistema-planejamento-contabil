@@ -23,7 +23,7 @@ $pg = $this->Dados['pg'];
                             echo "<a href='" . URLADM . "gerenciar-atendimento/listar/$pg' class='btn btn-outline-info btn-sm'><i class='fas fa-list'></i> Listar Atendimentos</a> ";
                         }
                         if ($this->Dados['botao']['edit_atendimento'] AND $cancelado_p_user !=1) {
-                            echo "<a href='" . URLADM . "atendimento-gerente/editar/$id?pg=$pg' class='btn btn-outline-warning btn-sm'><i class='far fa-edit'></i> Editar</a> ";
+                            echo "<a href='" . URLADM . "atendimento-gerente/editar/$id?pg=$pg&demanda={$_GET["demanda"]}' class='btn btn-outline-warning btn-sm'><i class='far fa-edit'></i> Editar</a> ";
                         }
                         if (($this->Dados['botao']['arqui_atendimento']) AND ($arquivado_gerente != 1)) {
                             echo "<a href='" . URLADM . "atendimento-gerente/arquivar/$id' class='btn btn-outline-secondary btn-sm' 
@@ -90,19 +90,19 @@ $pg = $this->Dados['pg'];
                 <dd class="col-sm-9"><span class="badge badge-<?php echo $cor; ?>"><?php echo $nome_situacao; ?></span></dd>
 
 
-                <dt class="col-sm-3">Descrição</dt>
+                <dt class="col-sm-3">Descrição do atendimento</dt>
                 <dd class="col-sm-9"><?php echo $descricao; ?></dd>
 
-                <dt class="col-sm-3">Nome do cliente</dt>
+                <dt class="col-sm-3">Solicitante do atendimento</dt>
                 <dd class="col-sm-9"><?php echo $cliente; ?></dd>
 
                 <dt class="col-sm-3">Nome da empresa</dt>
                 <dd class="col-sm-9"><?php echo $emp_nome; ?></dd>
 
-                <dt class="col-sm-3">Solicitado em: </dt>
-                <dd class="col-sm-9"><?php echo date('d/m/Y H:i:s', strtotime($created));?></dd>
+                <dt class="col-sm-3">Data da solicitação </dt>
+                <dd class="col-sm-9"><?php echo date('d/m/Y  \a\s H\hi', strtotime($created));?></dd>
 
-                <dt class="col-sm-3">Tempo previsto para o Atendimento: </dt>
+                <dt class="col-sm-3">Tempo previsto para o atendimento: </dt>
                 <dd class="col-sm-9">
                     <span class="text-secondary" tabindex="0" data-placement="top" data-toggle="tooltip" title="Essa previsão é feita com base no tempo de execução da demanda selecionada.">
                     <i class="fas fa-question-circle"></i>
@@ -182,14 +182,8 @@ $pg = $this->Dados['pg'];
                     ?>
                 </dd>
 
-                <dt class="col-sm-3">Funcionário(s) Responsável</dt>
-                <dd class="col-sm-9">(implementar join para listar os funcionários)</dd>
-
-                <dt class="col-sm-3">Prioridade de atendimento? </dt>
-                <dd class="col-sm-9"><?php if ($prioridade == 1){ echo "Sim";} else {echo "Não";} ?></dd>
-
-                <dt class="col-sm-3">Atendimento iniciado em</dt>
-                <dd class="col-sm-9"><?php if (!empty($inicio_atendimento)) {echo date('d/m/Y H:i:s', strtotime($inicio_atendimento));} else {echo "Não iniciado.";} ?></dd>
+                <dt class="col-sm-3">Data de iniciado do atendimento</dt>
+                <dd class="col-sm-9"><?php if (!empty($inicio_atendimento)) {echo date('d/m/Y \a\s H\hi', strtotime($inicio_atendimento));} else {echo "Não iniciado.";} ?></dd>
 
 
 
@@ -198,7 +192,7 @@ $pg = $this->Dados['pg'];
                         ?>
                         <dt class="col-sm-3">Atendimento finalizado em</dt>
                         <dd class="col-sm-9"><?php if (!empty($fim_atendimento)) {
-                                echo date('d/m/Y H:i:s', strtotime($fim_atendimento));
+                                echo date('d/m/Y \a\s H\hi', strtotime($fim_atendimento));
                             } ?></dd>
 
 
@@ -235,13 +229,54 @@ $pg = $this->Dados['pg'];
             </dl>
 
             <div>
-                <?php
-                    if ($this->Dados['botao']['list_logs']) {
-                        echo "<a href='" . URLADM . "logs-atendimento/listar/$id?pg=$pg' class='btn btn-outline-info btn-sm'><i class='fas fa-history'></i> Histórico do atendimento</a> ";
-                    }
-                ?>
+                <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Clique para acessar a página de atribuição dos funcionário(s) responsável para este atendimento'>
+                    <a href="<?php echo URLADM . 'atendimento-funcionarios/listar/' . $_GET['demanda'] .'?aten='.$id.'&pg='.$this->Dados['pg']; ?>" class="btn btn-outline-secondary btn-sm mb-2 btnOpcoes"  >
+                        <i class="fas fa-pen-square"></i> Planejamento
+                    </a>
+                </span>
             </div>
 
+            <div>
+                <small>Funcionário(s)/Atividade(s):</small>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Funcionário</th>
+                            <th>Atividade definida</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                    if(!empty($this->Dados['listarAtenFunc'])) {
+                        foreach ($this->Dados['listarAtenFunc'] as $value) {
+                            ?>
+                            <tr>
+                                <td>
+                                    <?php echo $value['nome'] ?>
+                                </td>
+                                <td>
+                                    <?php echo $value['atividade'] ?>
+                                </td>
+                                <td>
+                                    <span class="badge badge-<?php echo $value['cor'] ?>">
+                                        <?php echo $value['status'] ?>
+                                    </span>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                    }
+                     ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <?php
+                if(empty($this->Dados['listarAtenFunc'])){
+                    echo "<p class='text-secondary'>Vá para página de planejamento para definir os funcionários responsávies por este atendimento.</p>";
+                }
+            ?>
 
         </div>
     </div>

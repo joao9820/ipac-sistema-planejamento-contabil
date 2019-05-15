@@ -8,6 +8,11 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsMenu;
+use App\adms\Models\AdmsVerLogsAtendimento;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -26,22 +31,22 @@ class LogsAtendimento
 
         if (!empty($this->DadosId))
         {
-            $verLogsAtend = new \App\adms\Models\AdmsVerLogsAtendimento();
+            $verLogsAtend = new AdmsVerLogsAtendimento();
             $this->Dados['logsAtendimento'] = $verLogsAtend->verLogsAtendimento($this->DadosId);
 
 
             $botao = ['vis_atendimento' => ['menu_controller' => 'atendimento-gerente', 'menu_metodo' => 'ver']];
-            $listarBotao = new \App\adms\Models\AdmsBotao();
+            $listarBotao = new AdmsBotao();
             $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-            $listarMenu = new \App\adms\Models\AdmsMenu();
+            $listarMenu = new AdmsMenu();
             $this->Dados['menu'] = $listarMenu->itemMenu();
 
             $this->Dados['pg'] = $this->PageId;
 
             $this->Dados['id_atendimento'] = $this->DadosId;
 
-            $carregarView = new \Core\ConfigView("adms/Views/gerenciar/verLogsAtendimentos", $this->Dados);
+            $carregarView = new ConfigView("adms/Views/gerenciar/verLogsAtendimentos", $this->Dados);
             $carregarView->renderizar();
 
         } else {

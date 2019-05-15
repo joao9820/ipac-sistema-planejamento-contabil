@@ -30,14 +30,16 @@ class AdmsEditarAtenGerente
     {
         $this->DadosId = (int) $DadosId;
         $verUsuario = new \App\adms\Models\helper\AdmsRead();
-        $verUsuario->fullRead("SELECT id, adms_demanda_id, adms_sits_atendimento_id, adms_funcionario_id, prioridade, adms_sits_atendimentos_funcionario_id situacao_funcionario, data_fatal 
+        $verUsuario->fullRead("SELECT id, adms_demanda_id, adms_sits_atendimento_id, prioridade, data_fatal 
                               FROM adms_atendimentos WHERE id =:id LIMIT :limit","id=" . $this->DadosId . "&limit=1");
         $this->Resultado = $verUsuario->getResultado();
         return $this->Resultado;
     }
 
-    public function listarCadastrar()
+    public function listarCadastrar($DadosId)
     {
+        $this->DadosId = (int) $DadosId;
+
         $listar = new \App\adms\Models\helper\AdmsRead();
         $listar->fullRead("SELECT id id_demanda, nome nome_demanda FROM adms_demandas ORDER BY nome ASC");
 
@@ -53,7 +55,16 @@ class AdmsEditarAtenGerente
                             ORDER BY nome ASC", "adms_niveis_acesso_id=4&adms_empresa_id=1");
         $registro['func'] = $listar->getResultado();
 
-        $this->Resultado = ['deman' => $registro['deman'], 'sitsat' => $registro['sitsat'], 'func' => $registro['func']];
+        $listar->fullRead("SELECT descricao descricao_atendimento FROM adms_atendimentos 
+                            WHERE id=:id_atendimento", "id_atendimento={$this->DadosId}");
+        $registro['descricao'] = $listar->getResultado();
+
+        $this->Resultado = [
+            'deman' => $registro['deman'],
+            'sitsat' => $registro['sitsat'],
+            'func' => $registro['func'],
+            'descri' => $registro['descricao'][0]
+        ];
 
         return $this->Resultado;
     }
@@ -65,14 +76,14 @@ class AdmsEditarAtenGerente
         $this->Dados = $Dados;
 
 
-        if ($this->Dados['prioridade'] != 1) {
-            $this->Dados['prioridade'] = 2;
+        if (empty($this->Dados['adms_sits_atendimento_id'])) {
+            unset($this->Dados['adms_sits_atendimento_id']);
         }
 
-
-        if (empty($this->Dados['data_fatal'])) {
-            unset($this->Dados['data_fatal']);
+        if (empty($this->Dados['descricao'])) {
+            unset($this->Dados['descricao']);
         }
+
 
         $valCampos = new \App\adms\Models\helper\AdmsCampoVazio();
         $valCampos->validarDados($this->Dados);
@@ -95,9 +106,6 @@ class AdmsEditarAtenGerente
     private function updateEditDemanda()
     {
 
-        if (!isset($this->Dados['adms_funcionario_id'])){
-            $this->Dados['adms_funcionario_id'] = null;
-        }
         $this->Dados['modified'] = date('Y-m-d H:i:s');
 
         $demandaId = $this->Dados['adms_demanda_id'];

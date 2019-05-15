@@ -33,7 +33,7 @@ extract($this->Dados['funcionarioPlan'][0])
                     ?>
                 </h4>
                 <span class="d-block mt-3">
-                    <a href="<?php echo URLADM . 'atendimento-funcionarios/listar/'.$_GET['demanda'].'?aten='.$_GET['aten']; ?>" class="btn btn-outline-primary btn-sm"><i class="fas fa-arrow-left"></i> Voltar</a>
+                    <a href="<?php echo URLADM . 'atendimento-funcionarios/listar/'.$_GET['demanda'].'?aten='.$_GET['aten'].'&pg='.$this->Dados['pg']; ?>" class="btn btn-outline-primary btn-sm"><i class="fas fa-arrow-left"></i> Voltar</a>
                 </span>
             </div>
         </div>

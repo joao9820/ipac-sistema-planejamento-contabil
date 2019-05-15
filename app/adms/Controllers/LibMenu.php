@@ -8,6 +8,8 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsLibMenu;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -25,7 +27,7 @@ class LibMenu
         $this->NivId = filter_input(INPUT_GET, "niv", FILTER_SANITIZE_NUMBER_INT);
         $this->PageId = filter_input(INPUT_GET, "pg", FILTER_SANITIZE_NUMBER_INT);
         if (!empty($this->DadosId) AND ! empty($this->NivId) AND ! empty($this->PageId)) {
-            $libMenu = new \App\adms\Models\AdmsLibMenu();
+            $libMenu = new AdmsLibMenu();
             $libMenu->libMenu($this->DadosId);
             $UrlDestino = URLADM . "permissoes/listar/{$this->PageId}?niv={$this->NivId}";
             header("Location: $UrlDestino");

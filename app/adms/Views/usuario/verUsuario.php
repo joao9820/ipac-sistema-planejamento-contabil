@@ -12,6 +12,7 @@ if(!empty($this->Dados['dados_usuario'][0]))
 {
 extract($this->Dados['dados_usuario'][0]);
 ?>
+
 <div class="content p-1">
     <div class="list-group-item">
         <div class="d-flex">
@@ -59,12 +60,6 @@ extract($this->Dados['dados_usuario'][0]);
             </div>
         </div>
 
-        <?php
-        if(isset($_SESSION['msg'])) {
-            echo $_SESSION['msg'];
-            unset($_SESSION['msg']);
-        }
-        ?>
 
         <hr>
 
@@ -132,8 +127,23 @@ extract($this->Dados['dados_usuario'][0]);
 </div>
     <?php
 } else {
-    $_SESSION['msg'] = "<div class='alert alert-danger'>Nenhum usuário encontrado!</div>";
+    $_SESSION['msg'] = "
+    <div id='mensagemCard' class='card border-danger bg-danger d-none'>
+        <div class='card-body text-light text-center' style='position: relative;'>
+            <div onclick='fecharAgora()' class='text-right' style='position: absolute; top: 5px; right: 10px'>
+                <i class='fas fa-times' style='cursor: pointer;'></i>
+            </div>
+            <i class='fas fa-times-circle fa-3x'></i>
+            <h5 class='card-title'>Erro</h5>
+            <p class='card-text'>Nenhum usuário encontrado!</p>
+        </div>
+    </div>
+    ";
     $UrlDestino = URLADM .'usuarios/listar';
     header("Location: $UrlDestino");
 }
 ?>
+
+
+
+

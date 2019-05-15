@@ -8,6 +8,9 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsApagarTipoPg;
+use App\adms\Models\helper\AdmsAlertMensagem;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -22,10 +25,11 @@ class ApagarTipoPg
     {
         $this->DadosId = (int) $DadosId;
         if (!empty($this->DadosId)) {
-            $apagarTipoPg = new \App\adms\Models\AdmsApagarTipoPg();
+            $apagarTipoPg = new AdmsApagarTipoPg();
             $apagarTipoPg->apagarTipoPg($this->DadosId);
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Necessário selecionar um tipo de página!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Necessário selecionar um tipo de página!","danger");
         }
         $UrlDestino = URLADM . 'tipo-pg/listar';
         header("Location: $UrlDestino");

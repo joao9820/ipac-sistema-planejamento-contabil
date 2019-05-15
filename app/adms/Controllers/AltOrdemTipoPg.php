@@ -8,6 +8,8 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -25,7 +27,8 @@ class AltOrdemTipoPg
             $altOrdemTipoPg = new \App\adms\Models\AdmsAltOrdemTipoPg();
             $altOrdemTipoPg->altOrdemTipoPg($this->DadosId);
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Necessário selecionar um tipo de página!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Necessário selecionar um tipo de página!","danger");
         }
         $UrlDestino = URLADM . 'tipo-pg/listar';
         header("Location: $UrlDestino");

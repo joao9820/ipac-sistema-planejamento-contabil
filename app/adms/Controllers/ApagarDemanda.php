@@ -8,6 +8,9 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsApagarDemanda;
+use App\adms\Models\helper\AdmsAlertMensagem;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -23,14 +26,14 @@ class ApagarDemanda
         if (!empty($this->DadosId))
         {
 
-            $apagarDemanda = new \App\adms\Models\AdmsApagarDemanda();
+            $apagarDemanda = new AdmsApagarDemanda();
             $apagarDemanda->apagarDemanda($this->DadosId);
 
         }
         else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Necessario selecionar uma demanda!</div>";
-            $this->Resultado = false;
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Necessario selecionar uma demanda!","danger");
 
         }
         $UrlDestino = URLADM .'demandas/listar';

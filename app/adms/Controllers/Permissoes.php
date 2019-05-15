@@ -8,6 +8,11 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsListarPermi;
+use App\adms\Models\AdmsMenu;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -36,19 +41,19 @@ class Permissoes
             'lib_dropdown' => ['menu_controller' => 'lib-dropdown', 'menu_metodo' => 'lib-dropdown'],
             'ordem_menu' => ['menu_controller' => 'alt-ordem-menu', 'menu_metodo' => 'alt-ordem-menu'],
             'edit_niv_ac_pg_menu' => ['menu_controller' => 'editar-niv-ac-pg-menu', 'menu_metodo' => 'edit-niv-ac-pg-menu']];
-        $listarBotao = new \App\adms\Models\AdmsBotao();
+        $listarBotao = new AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
 
-        $listarPermi = new \App\adms\Models\AdmsListarPermi();
+        $listarPermi = new AdmsListarPermi();
         $this->Dados['listPermi'] = $listarPermi->listarPermi($this->PageId, $this->NivId);
         $this->Dados['paginacao'] = $listarPermi->getResultadoPg();
 
         $this->Dados['dados_nivac'] = $listarPermi->verNivAc($this->NivId);
 
-        $carregarView = new \Core\ConfigView("adms/Views/permi/listarPermi", $this->Dados);
+        $carregarView = new ConfigView("adms/Views/permi/listarPermi", $this->Dados);
         $carregarView->renderizar();
     }
 

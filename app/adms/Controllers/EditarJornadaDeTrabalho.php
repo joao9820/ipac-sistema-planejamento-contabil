@@ -8,6 +8,12 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsEditarJorDeTrab;
+use App\adms\Models\AdmsMenu;
+use App\adms\Models\helper\AdmsAlertMensagem;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -31,7 +37,8 @@ class EditarJornadaDeTrabalho
             $this->editFuncPriv();
 
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Nenhum funcionário encontrado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Nenhum funcionário encontrado!","danger");
             $UrlDestino = URLADM .'jornada-de-trabalho/listar';
             header("Location: $UrlDestino");
         }
@@ -56,12 +63,13 @@ class EditarJornadaDeTrabalho
 
             if (empty($this->Dados['adms_departamento_id']) and empty($this->Dados['jornada_de_trabalho']))
             {
-                $_SESSION['msg'] = "<div class='alert alert-secondary'>Nenhum funcionário atualizado!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Nenhum funcionário atualizado!","info");
                 $UrlDestino = URLADM .'jornada-de-trabalho/listar';
                 header("Location: $UrlDestino");
             } else {
 
-                $editFunc = new \App\adms\Models\AdmsEditarJorDeTrab();
+                $editFunc = new AdmsEditarJorDeTrab();
                 $editFunc->updateEditFuncionario($this->Dados);
                 if ($editFunc->getResultado()) {
 
@@ -81,7 +89,7 @@ class EditarJornadaDeTrabalho
 
         } else {
 
-            $dadosFuncionario = new \App\adms\Models\AdmsEditarJorDeTrab();
+            $dadosFuncionario = new AdmsEditarJorDeTrab();
             $this->Dados['form'] = $dadosFuncionario->verFuncionario($this->DadosId);
 
             $this->editFuncionarioViewPriv();
@@ -96,24 +104,25 @@ class EditarJornadaDeTrabalho
         if ($this->Dados['form']) {
 
             $botao = ['listar' => ['menu_controller' => 'jornada-de-trabalho', 'menu_metodo' => 'listar']];
-            $listarBotao = new \App\adms\Models\AdmsBotao();
+            $listarBotao = new AdmsBotao();
             $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-            $select = new \App\adms\Models\AdmsEditarJorDeTrab();
+            $select = new AdmsEditarJorDeTrab();
             $this->Dados['select'] = $select->listarCadastrar();
 
-            $dFuncionario = new \App\adms\Models\AdmsEditarJorDeTrab();
+            $dFuncionario = new AdmsEditarJorDeTrab();
             $this->Dados['funcionarioInfo'] = $dFuncionario->verFuncionario($this->DadosId);
 
             //Carregar Menu
-            $listarMenu = new \App\adms\Models\AdmsMenu();
+            $listarMenu = new AdmsMenu();
             $this->Dados['menu'] = $listarMenu->itemMenu();
 
             //Carregar a view
-            $carregarView = new \Core\ConfigView("adms/Views/gerenciar/editarJornadaDeTrabalho", $this->Dados);
+            $carregarView = new ConfigView("adms/Views/gerenciar/editarJornadaDeTrabalho", $this->Dados);
             $carregarView->renderizar();
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Você não tem permissão de editar o funcionário selecionado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Você não tem permissão de editar o funcionário selecionado!","danger");
             $UrlDestino = URLADM .'jornada-de-trabalho/listar';
             header("Location: $UrlDestino");
         }

@@ -8,6 +8,10 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsAtualSenha;
+use App\adms\Models\helper\AdmsAlertMensagem;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -28,7 +32,7 @@ class AtualSenha
         if (!empty($this->Chave))
         {
 
-            $validaChave = new \App\adms\Models\AdmsAtualSenha();
+            $validaChave = new AdmsAtualSenha();
             $validaChave->valChave($this->Chave);
             if($validaChave->getResultado())
             {
@@ -44,7 +48,8 @@ class AtualSenha
         }
         else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Link inválido!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Link inválido!","danger");
             $UrlDestino = URLADM . 'login/acesso';
             header("Location: $UrlDestino");
 
@@ -59,7 +64,8 @@ class AtualSenha
         {
             unset($this->Dados['AtualSenha']);
             $this->Dados['recuperar_senha'] = $this->Chave;
-            $atualSenha = new \App\adms\Models\AdmsAtualSenha();
+
+            $atualSenha = new AdmsAtualSenha();
             $atualSenha->atualSenha($this->Dados);
             if($atualSenha->getResultado())
             {
@@ -71,7 +77,7 @@ class AtualSenha
             else {
 
                 //Carregar a view
-                $carregarView = new \Core\ConfigView("adms/Views/login/atualSenha", $this->Dados);
+                $carregarView = new ConfigView("adms/Views/login/atualSenha", $this->Dados);
                 $carregarView->renderizarLogin();
 
             }
@@ -79,7 +85,7 @@ class AtualSenha
         else {
 
             //Carregar a view
-            $carregarView = new \Core\ConfigView("adms/Views/login/atualSenha", $this->Dados);
+            $carregarView = new ConfigView("adms/Views/login/atualSenha", $this->Dados);
             $carregarView->renderizarLogin();
 
         }

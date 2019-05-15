@@ -12,6 +12,7 @@ use App\adms\Models\AdmsBotao;
 use App\adms\Models\AdmsCadastrarAtividade;
 use App\adms\Models\AdmsMenu;
 use App\adms\Models\helper\AdmsRead;
+use Core\ConfigView;
 
 if (!defined('URL')) {
     header("Location: /");
@@ -74,7 +75,7 @@ class CadastrarAtividade
         $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
         //Carregar a view
-        $carregarView = new \Core\ConfigView("adms/Views/gerenciar/cadAtividade", $this->Dados);
+        $carregarView = new ConfigView("adms/Views/gerenciar/cadAtividade", $this->Dados);
         $carregarView->renderizar();
 
     }

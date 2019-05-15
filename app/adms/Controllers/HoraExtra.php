@@ -8,6 +8,10 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsHoraExtra;
+use App\adms\Models\AdmsMenu;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -48,31 +52,31 @@ class HoraExtra
 
                 $this->PageId =  1;
 
-                $filtrarHora = new \App\adms\Models\AdmsHoraExtra();
+                $filtrarHora = new AdmsHoraExtra();
                 $this->Dados['horasExtraListar'] = $filtrarHora->filtrarHoraExtra($this->UserId, $this->DadosHora['dataInicial'], $this->DadosHora['dataFinal'], $this->PageId);
 
                 $this->Dados['paginacao'] = $filtrarHora->getResultadoPg();
                 $this->Dados['funcionario'] = $filtrarHora->verFuncionario($this->UserId);
 
-                $listarMenu = new \App\adms\Models\AdmsMenu();
+                $listarMenu = new AdmsMenu();
                 $this->Dados['menu'] = $listarMenu->itemMenu();
 
-                $carregarView = new \Core\ConfigView("adms/Views/horaExtra/horaExtra", $this->Dados);
+                $carregarView = new ConfigView("adms/Views/horaExtra/horaExtra", $this->Dados);
                 $carregarView->renderizar();
 
             }
 
         } else {
 
-            $verHoraExtra = new \App\adms\Models\AdmsHoraExtra();
+            $verHoraExtra = new AdmsHoraExtra();
             $this->Dados['horasExtraListar'] = $verHoraExtra->listar($this->UserId, $this->PageId);
             $this->Dados['paginacao'] = $verHoraExtra->getResultadoPg();
             $this->Dados['funcionario'] = $verHoraExtra->verFuncionario($this->UserId);
 
-            $listarMenu = new \App\adms\Models\AdmsMenu();
+            $listarMenu = new AdmsMenu();
             $this->Dados['menu'] = $listarMenu->itemMenu();
 
-            $carregarView = new \Core\ConfigView("adms/Views/horaExtra/horaExtra", $this->Dados);
+            $carregarView = new ConfigView("adms/Views/horaExtra/horaExtra", $this->Dados);
             $carregarView->renderizar();
         }
     }

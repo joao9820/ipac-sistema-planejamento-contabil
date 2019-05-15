@@ -8,6 +8,11 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsListarAtendimentoPendente;
+use App\adms\Models\AdmsMenu;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -30,14 +35,14 @@ class AtendimentoPendente
             'edit' => ['menu_controller' => 'funcionario-editar-atendimento', 'menu_metodo' => 'edit'],
             'conclu' => ['menu_controller' => 'func-concluir-atendimento', 'menu_metodo' => 'concluir']];
         //var_dump($botao);
-        $listarBotao = new \App\adms\Models\AdmsBotao();
+        $listarBotao = new AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
 
 
-        $listarAtendimento = new \App\adms\Models\AdmsListarAtendimentoPendente();
+        $listarAtendimento = new AdmsListarAtendimentoPendente();
         $this->Dados['jornadaDeTrabalho'] = $listarAtendimento->verCargaHoraria();
         $this->Dados['listAtendimentoPendente']= $listarAtendimento->listarAtendimento($this->PageId);
         $this->Dados['paginacao'] = $listarAtendimento->getResultadoPg();
@@ -46,7 +51,7 @@ class AtendimentoPendente
 
         $this->Dados['pg'] = $this->PageId;
 
-        $carregarView = new \Core\ConfigView("adms/Views/atendimento/funcionario/atendimentoPendente", $this->Dados);
+        $carregarView = new ConfigView("adms/Views/atendimento/funcionario/atendimentoPendente", $this->Dados);
         $carregarView->renderizar();
     }
 

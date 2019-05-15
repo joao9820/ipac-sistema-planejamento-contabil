@@ -8,6 +8,11 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsListarDepartamentos;
+use App\adms\Models\AdmsMenu;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -23,18 +28,18 @@ class Departamentos
         $botao = ['editar_dept' => ['menu_controller' => 'editar-departamento', 'menu_metodo' => 'editar'],
             'cad_usuario' => ['menu_controller' => 'cadastrar-usuario', 'menu_metodo' => 'cad-usuario']];
         //var_dump($botao);
-        $listarBotao = new \App\adms\Models\AdmsBotao();
+        $listarBotao = new AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
 
-        $listarDpt = new \App\adms\Models\AdmsListarDepartamentos();
+        $listarDpt = new AdmsListarDepartamentos();
         $this->Dados['listarDepartamentos'] = $listarDpt->listar();
 
 
-        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
 
-        $carregarView = new \Core\ConfigView("adms/Views/departamento/listarDepartamentos", $this->Dados);
+        $carregarView = new ConfigView("adms/Views/departamento/listarDepartamentos", $this->Dados);
         $carregarView->renderizar();
     }
 

@@ -8,6 +8,11 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsCadastrarCor;
+use App\adms\Models\AdmsMenu;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -23,7 +28,7 @@ class CadastrarCor
         $this->Dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         if (!empty($this->Dados['CadCor'])) {
             unset($this->Dados['CadCor']);
-            $cadCor = new \App\adms\Models\AdmsCadastrarCor();
+            $cadCor = new AdmsCadastrarCor();
             $cadCor->cadCor($this->Dados);
             if ($cadCor->getResultado()) {
                 $UrlDestino = URLADM . 'cor/listar';
@@ -40,12 +45,12 @@ class CadastrarCor
     private function cadCorViewPriv()
     {
         $botao = ['list_cor' => ['menu_controller' => 'cor', 'menu_metodo' => 'listar']];
-        $listarBotao = new \App\adms\Models\AdmsBotao();
+        $listarBotao = new AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
-        $carregarView = new \Core\ConfigView("adms/Views/cor/cadCor", $this->Dados);
+        $carregarView = new ConfigView("adms/Views/cor/cadCor", $this->Dados);
         $carregarView->renderizar();
     }
 

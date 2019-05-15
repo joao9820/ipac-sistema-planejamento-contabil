@@ -8,6 +8,9 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsApagarSit;
+use App\adms\Models\helper\AdmsAlertMensagem;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -22,10 +25,11 @@ class ApagarSit
     {
         $this->DadosId = (int) $DadosId;
         if (!empty($this->DadosId)) {
-            $apagarSit = new \App\adms\Models\AdmsApagarSit();
+            $apagarSit = new AdmsApagarSit();
             $apagarSit->apagarSit($this->DadosId);
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Necessário selecionar uma situação!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Necessário selecionar uma situação!","danger");
         }
         $UrlDestino = URLADM . 'situacao/listar';
         header("Location: $UrlDestino");

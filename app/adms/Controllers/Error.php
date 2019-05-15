@@ -8,6 +8,8 @@
 
 namespace App\adms\Controllers;
 
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -19,7 +21,7 @@ class Error
 
     public function erro404()
     {
-        $carregarView = new \Core\ConfigView("adms/Views/error/404", $this->Dados);
+        $carregarView = new ConfigView("adms/Views/error/404", $this->Dados);
         $carregarView->renderizarErro404();
     }
 

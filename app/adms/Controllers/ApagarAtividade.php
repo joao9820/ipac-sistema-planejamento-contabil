@@ -8,6 +8,10 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsApagarAtividade;
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -24,21 +28,21 @@ class ApagarAtividade
         $this->DadosId = (int) $DadosId;
 
         $this->Dados = (int) $DadosId;
-        $dadosAtividade = new \App\adms\Models\helper\AdmsRead();
+        $dadosAtividade = new AdmsRead();
         $dadosAtividade->fullRead("SELECT adms_demanda_id FROM adms_atividades WHERE id =:id LIMIT :limit","id={$this->Dados}&limit=1");
         $this->Dados = $dadosAtividade->getResultado();
 
         if (!empty($this->DadosId))
         {
 
-            $apagarAtividade = new \App\adms\Models\AdmsApagarAtividade();
+            $apagarAtividade = new AdmsApagarAtividade();
             $apagarAtividade->apagarAtividade($this->DadosId);
 
         }
         else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Necessario selecionar uma atividade!</div>";
-            $this->Resultado = false;
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Necessario selecionar uma demanda!","danger");
 
         }
 

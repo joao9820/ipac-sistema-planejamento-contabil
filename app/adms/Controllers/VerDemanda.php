@@ -8,6 +8,13 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsMenu;
+use App\adms\Models\AdmsVerAtividades;
+use App\adms\Models\AdmsVerDemanda;
+use App\adms\Models\helper\AdmsAlertMensagem;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -25,13 +32,13 @@ class VerDemanda
         //echo $this->DadosId;
         if (!empty($this->DadosId)) {
 
-            $verDemanda = new \App\adms\Models\AdmsVerDemanda();
+            $verDemanda = new AdmsVerDemanda();
             $this->Dados['dados_demanda'] = $verDemanda->verDemanda($this->DadosId);
 
             $botao = ['list_demanda' => ['menu_controller' => 'demandas', 'menu_metodo' => 'listar'],
                 'edit_demanda' => ['menu_controller' => 'editar-demanda', 'menu_metodo' => 'edit-demanda'],
                 'del_demanda' => ['menu_controller' => 'apagar-demanda', 'menu_metodo' => 'apagar-demanda']];
-            $listarBotao = new \App\adms\Models\AdmsBotao();
+            $listarBotao = new AdmsBotao();
             $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
 
@@ -40,25 +47,26 @@ class VerDemanda
                 'vis_atividade' => ['menu_controller' => 'ver-atividade', 'menu_metodo' => 'ver-atividade'],
                 'edit_atividade' => ['menu_controller' => 'editar-atividade', 'menu_metodo' => 'edit-atividade'],
                 'del_atividade' => ['menu_controller' => 'apagar-atividade', 'menu_metodo' => 'apagar-atividade']];
-            $botaoAtividadeListar = new \App\adms\Models\AdmsBotao();
+            $botaoAtividadeListar = new AdmsBotao();
             $this->Dados['botaoAtividade'] = $botaoAtividadeListar->valBotao($botaoAtividade);
 
 
-            $listarAtividade = new \App\adms\Models\AdmsVerAtividades();
+            $listarAtividade = new AdmsVerAtividades();
             $this->Dados['atividades'] = $listarAtividade->verAtividade($this->DadosId);
             $this->Dados['totalHorasAtividades'] = $listarAtividade->getResultHoras();
 
             //$this->Dados['botaoDemanda'] = $this->DadosId;
 
-            $listarMenu = new \App\adms\Models\AdmsMenu();
+            $listarMenu = new AdmsMenu();
             $this->Dados['menu'] = $listarMenu->itemMenu();
 
-            $carregarView = new \Core\ConfigView('adms/Views/gerenciar/verDemanda', $this->Dados);
+            $carregarView = new ConfigView('adms/Views/gerenciar/verDemanda', $this->Dados);
             $carregarView->renderizar();
 
         } else {
 
-            $_SESSION['msg'] = '<div class="alert alert-danger" role="alert">Erro: Nenhuma demanda encontrada!</div>';
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Nenhuma demanda encontrada!","danger");
             $UrlDestino = URLADM . 'demandas/listar';
             header("Location: $UrlDestino");
 

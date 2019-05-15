@@ -56,7 +56,8 @@ class AdmsUploadImg
 
         } else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A extensão da imagem é inválida! Selecione uma imagem JPEG ou PNG.</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("A extensão da imagem é inválida! Selecione uma imagem JPEG ou PNG.","danger");
             $this->Resultado = false;
 
         }
@@ -86,7 +87,8 @@ class AdmsUploadImg
 
         } else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Não foi possível realizar o upload da imagem.</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi possível realizar o upload da imagem.","danger");
             $this->Resultado = false;
 
         }

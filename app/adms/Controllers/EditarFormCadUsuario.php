@@ -8,6 +8,11 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsEditarFormCadUsuario;
+use App\adms\Models\AdmsMenu;
+use App\adms\Models\helper\AdmsAlertMensagem;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -22,7 +27,8 @@ class EditarFormCadUsuario
         $this->Dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         if (!empty($this->Dados['EditFormCad'])) {
             unset($this->Dados['EditFormCad']);
-            $editarFormCadUsuario = new \App\adms\Models\AdmsEditarFormCadUsuario();
+
+            $editarFormCadUsuario = new AdmsEditarFormCadUsuario();
             $editarFormCadUsuario->altFormCadUsuario($this->Dados);
             if ($editarFormCadUsuario->getResultado()) {
                 $UrlDestino = URLADM . 'editar-form-cad-usuario/edit-form-cad-usuario';
@@ -32,7 +38,7 @@ class EditarFormCadUsuario
                 $this->editMenuViewPriv();
             }
         } else {
-            $verFormCadUsuario = new \App\adms\Models\AdmsEditarFormCadUsuario();
+            $verFormCadUsuario = new AdmsEditarFormCadUsuario();
             $this->Dados['form'] = $verFormCadUsuario->verFormCadUsuario();
             $this->editMenuViewPriv();
         }
@@ -40,15 +46,16 @@ class EditarFormCadUsuario
 
     private function editMenuViewPriv() {
         if ($this->Dados['form']) {
-            $listarSelect = new \App\adms\Models\AdmsEditarFormCadUsuario();
+            $listarSelect = new AdmsEditarFormCadUsuario();
             $this->Dados['select'] = $listarSelect->listarCadastrar();
 
-            $listarMenu = new \App\adms\Models\AdmsMenu();
+            $listarMenu = new AdmsMenu();
             $this->Dados['menu'] = $listarMenu->itemMenu();
-            $carregarView = new \Core\ConfigView("adms/Views/usuario/editarFormCadUsuario", $this->Dados);
+            $carregarView = new ConfigView("adms/Views/usuario/editarFormCadUsuario", $this->Dados);
             $carregarView->renderizar();
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Formulário para editar o cadastro de usuário na página de login não encontrado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Formulário para editar o cadastro de usuário na página de login não encontrado!","danger");
             $UrlDestino = URLADM . 'editar-form-cad-usuario/edit-form-cad-usuario';
             header("Location: $UrlDestino");
         }

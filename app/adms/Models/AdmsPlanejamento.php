@@ -124,7 +124,11 @@ class AdmsPlanejamento
         $verPl->fullRead("SELECT hora_inicio, hora_termino, hora_inicio2, hora_termino2, adms_funcionario_id
                               FROM adms_planejamento WHERE adms_funcionario_id=:adms_funcionario_id LIMIT :limit","adms_funcionario_id={$_SESSION['usuario_id']}&limit=1");
         $this->Resultado = $verPl->getResultado();
-        return $this->Resultado[0];
+        if ($this->Resultado) {
+            return $this->Resultado[0];
+        } else {
+            return $this->Resultado[0] = "";
+        }
     }
 
 }

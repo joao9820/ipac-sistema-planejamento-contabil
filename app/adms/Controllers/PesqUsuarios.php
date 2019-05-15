@@ -8,6 +8,11 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsMenu;
+use App\adms\Models\CpAdmsPesqUsuario;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -28,10 +33,10 @@ class PesqUsuarios
             'vis_usuario' => ['menu_controller' => 'ver-usuario', 'menu_metodo' => 'ver-usuario'],
             'edit_usuario' => ['menu_controller' => 'editar-usuario', 'menu_metodo' => 'edit-usuario'],
             'del_usuario' => ['menu_controller' => 'apagar-usuario', 'menu_metodo' => 'apagar-usuario']];
-        $listarBotao = new \App\adms\Models\AdmsBotao();
+        $listarBotao = new AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
 
         $this->DadosForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
@@ -43,11 +48,11 @@ class PesqUsuarios
             $this->DadosForm['email'] = filter_input(INPUT_GET, 'email', FILTER_DEFAULT);
         }
 
-        $listarUsario = new \App\adms\Models\CpAdmsPesqUsuario();
+        $listarUsario = new CpAdmsPesqUsuario();
         $this->Dados['listUser'] = $listarUsario->pesquisarUsuarios($this->PageId, $this->DadosForm);
         $this->Dados['paginacao'] = $listarUsario->getResultadoPg();
 
-        $carregarView = new \Core\ConfigView("adms/Views/usuario/pesqUsuario", $this->Dados);
+        $carregarView = new ConfigView("adms/Views/usuario/pesqUsuario", $this->Dados);
         $carregarView->renderizar();
     }
 

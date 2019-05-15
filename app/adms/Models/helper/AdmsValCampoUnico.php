@@ -38,7 +38,7 @@ class AdmsValCampoUnico
         $this->EditarUnico = $EditarUnico;
         $this->DadoId = $DadoId;
 
-        $valCampo = new \App\adms\Models\helper\AdmsRead();
+        $valCampo = new AdmsRead();
         if (!empty($this->EditarUnico) AND ($this->EditarUnico == true)) {
 
             $valCampo->fullRead("SELECT id FROM {$this->Tabela} WHERE {$this->Coluna} =:dados AND id <>:id LIMIT :limit", "dados={$this->Dados}&limit=1&id={$this->DadoId}");
@@ -52,7 +52,8 @@ class AdmsValCampoUnico
         $this->Resultado = $valCampo->getResultado();
         if(!empty($this->Resultado)){
             //Se o $this->Resultado diferente de vazio significa que encontrou dados
-            $_SESSION['msg'] = '<div class="alert alert-danger" role="alert">Erro: Está demanda já foi cadastrada!</div>';
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Dados já cadastrado!","danger");
             $this->Resultado = false;
 
         } else {

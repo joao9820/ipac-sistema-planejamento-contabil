@@ -8,6 +8,9 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsApagarCor;
+use App\adms\Models\helper\AdmsAlertMensagem;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -22,10 +25,11 @@ class ApagarCor
     {
         $this->DadosId = (int) $DadosId;
         if (!empty($this->DadosId)) {
-            $apagarCor = new \App\adms\Models\AdmsApagarCor();
+            $apagarCor = new AdmsApagarCor();
             $apagarCor->apagarCor($this->DadosId);
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Necessário selecionar uma cor!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Necessário selecionar uma cor!","danger");
         }
         $UrlDestino = URLADM . 'cor/listar';
         header("Location: $UrlDestino");

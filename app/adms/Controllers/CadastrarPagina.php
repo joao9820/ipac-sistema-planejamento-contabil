@@ -2,6 +2,11 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsCadastrarPagina;
+use App\adms\Models\AdmsMenu;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -18,7 +23,7 @@ class CadastrarPagina
         $this->Dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         if (!empty($this->Dados['CadPagina'])) {
             unset($this->Dados['CadPagina']);
-            $cadPagina = new \App\adms\Models\AdmsCadastrarPagina();
+            $cadPagina = new AdmsCadastrarPagina();
             $cadPagina->cadPagina($this->Dados);
             if ($cadPagina->getResultado()) {
                 $UrlDestino = URLADM . 'pagina/listar';
@@ -34,16 +39,17 @@ class CadastrarPagina
 
     private function cadPaginaViewPriv()
     {
-        $listarSelect = new \App\adms\Models\AdmsCadastrarPagina();
+        $listarSelect = new AdmsCadastrarPagina();
         $this->Dados['select'] = $listarSelect->listarCadastrar();
        
         $botao = ['list_pagina' => ['menu_controller' => 'pagina', 'menu_metodo' => 'listar']];
-        $listarBotao = new \App\adms\Models\AdmsBotao();
+        $listarBotao = new AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
         
-        $listarMenu = new \App\adms\Models\AdmsMenu();
+        $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
-        $carregarView = new \Core\ConfigView("adms/Views/pagina/cadPagina", $this->Dados);
+
+        $carregarView = new ConfigView("adms/Views/pagina/cadPagina", $this->Dados);
         $carregarView->renderizar();
     }
 

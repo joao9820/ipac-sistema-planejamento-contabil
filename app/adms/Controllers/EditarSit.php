@@ -8,6 +8,12 @@
 
 namespace App\adms\Controllers;
 
+use App\adms\Models\AdmsBotao;
+use App\adms\Models\AdmsEditarSit;
+use App\adms\Models\AdmsMenu;
+use App\adms\Models\helper\AdmsAlertMensagem;
+use Core\ConfigView;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -25,7 +31,9 @@ class EditarSit
         if (!empty($this->DadosId)) {
             $this->editSitPriv();
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Situação não encontrada!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Situação não encontrada!","danger");
+            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: !</div>";
             $UrlDestino = URLADM . 'situacao/listar';
             header("Location: $UrlDestino");
         }
@@ -34,7 +42,8 @@ class EditarSit
     private function editSitPriv() {
         if (!empty($this->Dados['EditSit'])) {
             unset($this->Dados['EditSit']);
-            $editarSit = new \App\adms\Models\AdmsEditarSit();
+
+            $editarSit = new AdmsEditarSit();
             $editarSit->altSit($this->Dados);
             if ($editarSit->getResultado()) {
                 $UrlDestino = URLADM . 'ver-sit/ver-sit/' . $this->Dados['id'];
@@ -44,7 +53,7 @@ class EditarSit
                 $this->editSitViewPriv();
             }
         } else {
-            $verSit = new \App\adms\Models\AdmsEditarSit();
+            $verSit = new AdmsEditarSit();
             $this->Dados['form'] = $verSit->verSit($this->DadosId);
             $this->editSitViewPriv();
         }
@@ -52,19 +61,20 @@ class EditarSit
 
     private function editSitViewPriv() {
         if ($this->Dados['form']) {
-            $listarSelect = new \App\adms\Models\AdmsEditarSit();
+            $listarSelect = new AdmsEditarSit();
             $this->Dados['select'] = $listarSelect->listarCadastrar();
 
             $botao = ['vis_sit' => ['menu_controller' => 'ver-sit', 'menu_metodo' => 'ver-sit']];
-            $listarBotao = new \App\adms\Models\AdmsBotao();
+            $listarBotao = new AdmsBotao();
             $this->Dados['botao'] = $listarBotao->valBotao($botao);
 
-            $listarMenu = new \App\adms\Models\AdmsMenu();
+            $listarMenu = new AdmsMenu();
             $this->Dados['menu'] = $listarMenu->itemMenu();
-            $carregarView = new \Core\ConfigView("adms/Views/situacao/editarSit", $this->Dados);
+            $carregarView = new ConfigView("adms/Views/situacao/editarSit", $this->Dados);
             $carregarView->renderizar();
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Situação não encontrada!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Situação não encontrada!","danger");
             $UrlDestino = URLADM . 'situacao/listar';
             header("Location: $UrlDestino");
         }
