@@ -39,11 +39,7 @@ if (!empty($this->Dados['dadosAtendimento'])) {
                     <a href="<?php echo URLADM . 'gerenciar-atendimento/listar/'.$this->Dados['pg']; ?>" class="btn btn-outline-info btn-sm"><i class="fas fa-list"></i> Listar atendimentos</a>
                 </span>
                 <span class="d-block ml-2">
-<<<<<<< HEAD
-                    <a href="<?php echo URLADM . 'atendimento-gerente/ver/'.$_GET['aten'].'?pg='.$this->Dados['pg']; ?>"
-=======
                     <a href="<?php echo URLADM . 'atendimento-gerente/ver/'.$_GET['aten'].'?pg='.$this->Dados['pg'].'&demanda='.$demandaId; ?>"
->>>>>>> 97797d96ed1cc11004c4f41c9c644dabbd9f3805
                        class="btn btn-outline-warning btn-sm"><i class="fa fa-eye"></i> Ver atendimento</a>
                 </span>
             </div>
@@ -304,55 +300,11 @@ if (!empty($this->Dados['dadosAtendimento'])) {
                                         //var_dump($hora_maxima);
                                         ?>
 
-<<<<<<< HEAD
-                                    <div class="col-md-6">
-                                        <label for="inputFormAtividade">Atividade</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="basic-atividade">
-                                                    <i class="fas fa-tasks"></i>
-                                                </span>
-                                            </div>
-                                            <select onclick='mostrarDivs()' name="adms_atividade_id" class="custom-select mr-sm-2" id="inputFormAtividade" aria-describedby="basic-atividade" required>
-                                                <option value="">Selecionar</option>
-                                                <?php
-                                                foreach ($this->Dados['atividades'] as $ativi){
-                                                    extract($ativi);
-                                                    echo "<option onclick='mostrarDivs()' value=".$id.">$nome</option>";
-                                                }
-                                                ?>
-                                            </select>
-                                            <div class="valid-feedback">
-                                                Ok
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                Selecione uma atividade.
-                                            </div>
-                                        </div>
-                                    </div>
-=======
                                         <!--Se a duração mínima não for definida seu valor será 00 -->
->>>>>>> 97797d96ed1cc11004c4f41c9c644dabbd9f3805
 
                                         <?php
                                         ?>
 
-<<<<<<< HEAD
-                                    <div id="decisao" class="d-none col-md-12">
-                                        <p>Definir duração?</p>
-                                        <div class="d-flex w-100">
-                                            <div class="form-check mr-3">
-                                                <input onclick="definirSim()" class="form-check-input" name="simNao" type="radio"  id="sim" value="option1">
-                                                <label  class="form-check-label" for="sim">
-                                                    Sim
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input onclick="definirNao()" class="form-check-input" name="simNao" type="radio"  id="nao" value="option1" checked>
-                                                <label  class="form-check-label" for="nao">
-                                                    Não
-                                                </label>
-=======
                                         <div class="form-row">
                                             <div class="col-md-12">
                                                 <label for="inputForm">Funcionário</label>
@@ -378,7 +330,6 @@ if (!empty($this->Dados['dadosAtendimento'])) {
                                                         Selecione um funcionário
                                                     </div>
                                                 </div>
->>>>>>> 97797d96ed1cc11004c4f41c9c644dabbd9f3805
                                             </div>
 
                                             <div class="col-md-6">
