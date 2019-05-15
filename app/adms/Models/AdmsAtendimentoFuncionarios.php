@@ -431,13 +431,16 @@ class AdmsAtendimentoFuncionarios {
             $this->Dados['adms_funcionario_id'] = $Funcionario;
             $this->Dados['data_inicio_planejado'] = $Data;
         }
-
+        
         $dataHora = new AdmsRead();
-        $dataHora->fullRead("SELECT hora_fim_planejado, hora_inicio_planejado
+        $dataHora->fullRead("SELECT hora_fim_planejado, hora_inicio_planejado, data_inicio_planejado, ordem, id
         FROM adms_atendimento_funcionarios 
         WHERE adms_funcionario_id=:adms_funcionario_id
-        AND ordem = (SELECT MIN(ordem) FROM adms_atendimento_funcionarios WHERE adms_sits_atendimentos_funcionario_id = :adms_sits_atendimentos_funcionario_id AND adms_funcionario_id = :adms_funcionario_id)
-        LIMIT :limit", "adms_funcionario_id={$this->Dados['adms_funcionario_id']}&limit=1");
+        AND ordem = 
+            (SELECT MIN(ordem) FROM adms_atendimento_funcionarios 
+            WHERE adms_sits_atendimentos_funcionario_id <= :adms_sits_atendimentos_funcionario_id 
+            AND adms_funcionario_id = :adms_funcionario_id AND data_inicio_planejado >= :data_inicio_planejado)
+            LIMIT :limit", "adms_funcionario_id={$this->Dados['adms_funcionario_id']}&adms_sits_atendimentos_funcionario_id=2&data_inicio_planejado={$this->Dados['data_inicio_planejado']}&limit=1");
         
         if ($dataHora->getResultado()) {
             $this->UltimaAtividade = $dataHora->getResultado();

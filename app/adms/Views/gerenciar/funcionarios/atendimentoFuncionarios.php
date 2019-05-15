@@ -25,15 +25,15 @@ if (!defined('URL')) {
         <div class="d-flex">
             <div class="mr-auto p-2">
                 <span class="d-block">
-                    <a href="<?php echo URLADM . 'gerenciar-atendimento/listar/1'; ?>" class="btn btn-outline-primary btn-sm"><i class="fas fa-arrow-left"></i> Voltar</a>
+                    <a href="<?php echo URLADM . 'gerenciar-atendimento/listar/'.$this->Dados['pg']; ?>" class="btn btn-outline-primary btn-sm"><i class="fas fa-arrow-left"></i> Voltar</a>
                 </span>
             </div>
             <div class="d-flex p-2">
                 <span class="d-block">
-                    <a href="<?php echo URLADM . 'gerenciar-atendimento/listar/1'; ?>" class="btn btn-outline-info btn-sm"><i class="fas fa-list"></i> Listar atendimentos</a>
+                    <a href="<?php echo URLADM . 'gerenciar-atendimento/listar/'.$this->Dados['pg']; ?>" class="btn btn-outline-info btn-sm"><i class="fas fa-list"></i> Listar atendimentos</a>
                 </span>
                 <span class="d-block ml-2">
-                    <a href="<?php echo URLADM . 'atendimento-gerente/ver/'.$_GET['aten'].'?pg=1'; ?>"
+                    <a href="<?php echo URLADM . 'atendimento-gerente/ver/'.$_GET['aten'].'?pg='.$this->Dados['pg']; ?>"
                        class="btn btn-outline-warning btn-sm"><i class="fa fa-eye"></i> Ver atendimento</a>
                 </span>
             </div>
@@ -56,14 +56,6 @@ if (!defined('URL')) {
         </div>
 
         <div class="list-group-item">
-            <?php
-            if(isset($_SESSION['msg'])) {
-                echo $_SESSION['msg'];
-                unset($_SESSION['msg']);
-            }
-
-            ?>
-
             <?php
                 if(isset($_SESSION['msg_dia'])) {
                     echo $_SESSION['msg_dia'];
@@ -152,7 +144,7 @@ if (!defined('URL')) {
                                                     </button>
                                                 </span>
                                                 <span tabindex="0" data-toggle="tooltip" data-placement="right" data-html="true" title="Ver planejamento deste funcinoário para a data selecionada.">
-                                                    <a href="<?php echo URLADM . 'atendimento-funcionarios/ver-planejamento/' . $dema_id. '?aten='.$aten_id.'&func='.$func_id.'&data='.$data_inicio_planejado.'&demanda='.$dema_id; ?>" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i></a>
+                                                    <a href="<?php echo URLADM . 'atendimento-funcionarios/ver-planejamento/' . $dema_id. '?aten='.$aten_id.'&func='.$func_id.'&data='.$data_inicio_planejado.'&demanda='.$dema_id.'&pg='.$this->Dados['pg']; ?>" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i></a>
                                                 </span>
                                             </td>
                                             <td><?php echo $nome; ?></td>
@@ -200,7 +192,7 @@ if (!defined('URL')) {
                                                 <?php
                                                     if ($sit_func == 1){
                                                 ?>
-                                                    <a href="<?php echo URLADM . 'atendimento-funcionarios/excluir/'.$dema_id.'?aten_id='.$aten_id.'&func_id='.$func_id.'&ativ_id='.$ativ_id.'&id_aten_fun='.$id_aten_fun; ?>" class="btn btn-outline-danger mb-2"
+                                                    <a href="<?php echo URLADM . 'atendimento-funcionarios/excluir/'.$dema_id.'?aten_id='.$aten_id.'&func_id='.$func_id.'&ativ_id='.$ativ_id.'&id_aten_fun='.$id_aten_fun.'&pg='.$this->Dados['pg']; ?>" class="btn btn-outline-danger mb-2"
                                                        data-confirmDelet='Deletar?'>
                                                         <i class="fas fa-trash"></i>
                                                     </a>
@@ -297,12 +289,12 @@ if (!defined('URL')) {
                                                     <i class="fas fa-tasks"></i>
                                                 </span>
                                             </div>
-                                            <select name="adms_atividade_id" class="custom-select mr-sm-2" id="inputFormAtividade" aria-describedby="basic-atividade" required>
+                                            <select onclick='mostrarDivs()' name="adms_atividade_id" class="custom-select mr-sm-2" id="inputFormAtividade" aria-describedby="basic-atividade" required>
                                                 <option value="">Selecionar</option>
                                                 <?php
                                                 foreach ($this->Dados['atividades'] as $ativi){
                                                     extract($ativi);
-                                                    echo "<option onclick='mostrarDivs(this.value)' value=".$id.">$nome</option>";
+                                                    echo "<option onclick='mostrarDivs()' value=".$id.">$nome</option>";
                                                 }
                                                 ?>
                                             </select>
@@ -337,13 +329,13 @@ if (!defined('URL')) {
                                         <p>Definir duração?</p>
                                         <div class="d-flex w-100">
                                             <div class="form-check mr-3">
-                                                <input onclick="definirSim()" class="form-check-input" type="radio" name="simNao" id="sim" value="option1">
+                                                <input onclick="definirSim()" class="form-check-input" name="simNao" type="radio"  id="sim" value="option1">
                                                 <label  class="form-check-label" for="sim">
                                                     Sim
                                                 </label>
                                             </div>
                                             <div class="form-check">
-                                                <input onclick="definirNao()" class="form-check-input" type="radio" name="simNao" id="nao" value="option1" checked>
+                                                <input onclick="definirNao()" class="form-check-input" name="simNao" type="radio"  id="nao" value="option1" checked>
                                                 <label  class="form-check-label" for="nao">
                                                     Não
                                                 </label>
@@ -418,6 +410,16 @@ if (!defined('URL')) {
 </div>
 
 
+<?php
+if(isset($_SESSION['msg'])) {
+    echo $_SESSION['msg'];
+    unset($_SESSION['msg']);
+}
+
+?>
+
+
+
 
 <script>
 
@@ -489,9 +491,9 @@ if (!defined('URL')) {
 
 
     // Mostrar input radio sim / não
-    function mostrarDivs(hora) {
+    function mostrarDivs() {
+        console.log('ok');
         decisao.classList.remove('d-none');
-        console.log(hora);
         // renderizar horas
         renderHoras();
         // renderizar horas
@@ -563,7 +565,7 @@ if (!defined('URL')) {
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="post" action="<?php echo URLADM . 'atendimento-funcionarios/editar'; ?>">
+            <form method="post" action="<?php echo URLADM . 'atendimento-funcionarios/editar/'.$this->Dados['pg']; ?>">
                 <div class="modal-body">
 
                     <div class="row mb-4">

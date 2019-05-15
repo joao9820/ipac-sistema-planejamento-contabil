@@ -10,6 +10,7 @@
 namespace App\adms\Models;
 
 use App\adms\Models\AdmsReordenarData;
+use App\adms\Models\AdmsAtendimentoFuncionariosReordenarPriori;
 use App\adms\Models\AdmsAtendimentoFuncionarios;
 use App\adms\Models\helper\AdmsAlertMensagem;
 use App\adms\Models\funcoes\VerificarDataDisponivel;
@@ -42,6 +43,7 @@ class AdmsAtendimentoFuncionarioEditar {
     private $DadosAtivi;
     private $ultimaOrdem;
     private $ordemRetirada;
+    private $primeiraAtv;
 
     /**
      * @param mixed $Dados
@@ -70,41 +72,50 @@ class AdmsAtendimentoFuncionarioEditar {
          * Aqui realizo a chamada para a função que vai verificar se a atividade
          * vai ser definida para executar na data atual ou no dia seguinte.
          */
-        $this->DataAtual = date('Y-m-d');
+        $this->Dados['data_inicio_planejado'] = date('Y-m-d');
         $this->FuncionarioId = $this->Dados['adms_funcionario_id'];
         //$this->defineData();
 
-        $verificarDataDisponivel = new VerificarDataDisponivel($this->FuncionarioId);
-        $DataDefinida = $verificarDataDisponivel->getVertificarDataDisponivel();
+        $infoAtividades = new AdmsAtendimentoFuncionarios();
 
-        $this->Dados['data_inicio_planejado'] = $DataDefinida['data_inicio_nova_atividade'];
+        if ($this->Dados['prioridade'] == '2') { //Inserindo a ordem aqui
+            $verificarDataDisponivel = new VerificarDataDisponivel($this->FuncionarioId, $this->Dados['data_inicio_planejado']);
+            $DataDefinida = $verificarDataDisponivel->getVertificarDataDisponivel();
 
-        if ($DataDefinida['tempo_excedido_sc'] != false) {
-            $this->TempoExcedido = $DataDefinida['tempo_excedido_sc'];
-        } else {
-            $this->TempoExcedido = 0;
+            $this->Dados['data_inicio_planejado'] = $DataDefinida['data_inicio_nova_atividade'];
+
+            if ($DataDefinida['tempo_excedido_sc'] != false) {
+                $this->TempoExcedido = $DataDefinida['tempo_excedido_sc'];
+            } else {
+                $this->TempoExcedido = 0;
+            }
         }
 
-
         $this->Dados['modified'] = date('Y-m-d H:i:s');
+        //var_dump($this->Dados['prioridade']);
+        //die();
 
-        $infoAtividades = new AdmsAtendimentoFuncionarios();
-        $infoAtividades->verificarExisteAtividade($this->FuncionarioId, $this->Dados['data_inicio_planejado']);
-        $this->jaExiste = $infoAtividades->getVerificarExisteAtividade(); //verificar a forma de recebimento desses dados
-        
-        var_dump($this->Condicao['prioridade']);
-        die();
 
-        if ($this->jaExiste) {
+        if ($this->Dados['prioridade'] == '1') {
+
+            $infoAtividades->buscarPrimeiraAtv($this->FuncionarioId, $this->Dados['data_inicio_planejado']); //A partir do dia de hoje
             
-            if($this->Condicao['prioridade'] == 2){             
-                $infoAtividades->buscarUltimaAtiviFunc($this->FuncionarioId, $this->Dados['data_inicio_planejado']);
-                $this->UltimaAtividade = $infoAtividades->getBuscarUltimaAtiviFunc();
-            }else{               
-                $infoAtividades->buscarPrimeiraAtv($this->FuncionarioId, $this->Dados['data_inicio_planejado']);
-                $this->UltimaAtividade = $infoAtividades->getBuscarPrimeiraAtv();
-                die();
+            var_dump($infoAtividades->getBuscarPrimeiraAtv());
+            die();
+            
+            if($infoAtividades->getBuscarPrimeiraAtv() != NULL){
+                $this->defineHoraDataPrioridade($infoAtividades->getBuscarPrimeiraAtv());
             }
+                            
+            $reordenarPriori = new AdmsAtendimentoFuncionariosReordenarPriori();
+            
+            $this->Condicao['ordemMax'] = $reordenar->buscarUltOrdemAtvFunc();
+            
+            
+        } else if ($this->jaExiste) {
+
+            $infoAtividades->buscarUltimaAtiviFunc($this->FuncionarioId, $this->Dados['data_inicio_planejado']);
+            $this->UltimaAtividade = $infoAtividades->getBuscarUltimaAtiviFunc();
 
             if ($this->UltimaAtividade[0]) {
                 // Pegando a hora de termino da atividade anterior e passando para o inicio da nova atividade cadastrada
@@ -113,7 +124,7 @@ class AdmsAtendimentoFuncionarioEditar {
                 $this->Atividade['status'] = false;
                 $this->Atividade['msg'] = "Não foi possível encontrar a última atividade do funcionário";
             }
-        } else {
+        } else { //Não existe atividade para aquela data e prioridade é 2
             $inicioAti = new AdmsRead();
             $inicioAti->fullRead("SELECT hora_inicio, hora_termino2 
                 FROM adms_planejamento 
@@ -143,6 +154,9 @@ class AdmsAtendimentoFuncionarioEditar {
                 $this->Dados['hora_inicio_planejado'] = gmdate("H:i:s", $resultado);
             }
         }
+
+        echo $this->Dados['hora_inicio_planejado'] . ', ' . $this->Dados['data_inicio_planejado'];
+        die();
         $this->buscarAtividade();
         $this->Dados['duracao_atividade'] = $this->DadosAtivi[0]['duracao'];
         $this->Dados['at_tempo_restante'] = $this->DadosAtivi[0]['duracao'];
@@ -154,7 +168,7 @@ class AdmsAtendimentoFuncionarioEditar {
         $verificaAlmoco = new AdmsReordenarData();
 
         if ($this->TempoExcedido > 0) {
-            $verificaAlmoco->buscarUltimaAtiviFuncAlmoco($this->Dados['hora_fim_planejado'], $this->Dados['data_inicio_planejado'], $this->Dados['duracao_atividade'], $this->Dados['hora_inicio_planejado'] ,$this->tempoExcedido);
+            $verificaAlmoco->buscarUltimaAtiviFuncAlmoco($this->Dados['hora_fim_planejado'], $this->Dados['data_inicio_planejado'], $this->Dados['duracao_atividade'], $this->Dados['hora_inicio_planejado'], $this->tempoExcedido);
         } else {
             $verificaAlmoco->buscarUltimaAtiviFuncAlmoco($this->Dados['hora_fim_planejado'], $this->Dados['data_inicio_planejado'], $this->Dados['duracao_atividade'], $this->Dados['hora_inicio_planejado']);
         }
@@ -169,13 +183,14 @@ class AdmsAtendimentoFuncionarioEditar {
         //echo "aqui";
         //var_dump($this->Condicao);
         //die;
-
+        
         $inserirOrdem = new \App\adms\Models\AdmsAtendimentoFuncionariosReordenar();
 
         $inserirOrdem->inserirOrdemAtvFunc($this->Dados['adms_funcionario_id']);
         $this->Dados['ordem'] = $inserirOrdem->getResultado(); //Busca a ultima ordem do funcionário e adiciona 1, necessario inserir primeiro pois o valor func_id a ser salvo na classe é outro
+        
 
-        $reordenar = new \App\adms\Models\AdmsAtendimentoFuncionariosReordenar();
+        $reordenar = new \App\adms\Models\AdmsAtendimentoFuncionariosReordenar(); //Independente da prioridade o planejamento do funcionário antigo sempre será reordenado o que muda é a inserção da ordem
 
         $reordenar->buscarUltOrdemAtvFunc($this->Condicao['adms_funcionario_id_ant']); //Retorna a ordem e atribui o id do funcinario na classe         
         $this->ultimaOrdem = (int) $reordenar->getResultado()[0]['ordem'];
@@ -183,17 +198,25 @@ class AdmsAtendimentoFuncionarioEditar {
         $reordenar->buscarOrdem($this->Condicao['id_aten_fun']); //Verificar se há necessidade de reordenar as atividades e o planejamento
         $this->ordemRetirada = $reordenar->getResultado();
 
+
+        $infoAtividades->verificarExisteAtividade($this->FuncionarioId, $this->Dados['data_inicio_planejado']);
+        $this->jaExiste = $infoAtividades->getVerificarExisteAtividade(); //verificar a forma de recebimento desses dados
+
         echo $this->ultimaOrdem . '<' . $this->ordemRetirada; //Buscando ordem do antigo funcionario antes de atualizar
         // Realizar a atualização da atividade
+        die();
         $update = new AdmsUpdate();
         $update->exeUpdate("adms_atendimento_funcionarios", $this->Dados, "WHERE id=:id_aten_fun AND adms_atendimento_id=:atendimento AND adms_atividade_id=:atividade", "id_aten_fun={$this->Condicao['id_aten_fun']}&atendimento={$this->Condicao['adms_atendimento_id']}&atividade={$this->Condicao['adms_atividade_id']}");
+
         if ($update->getResultado()) {
             // Passando para o atributo Atividade o status = true, registro realizado com sucesso
 
             if ($this->ordemRetirada < $this->ultimaOrdem) {
                 $reordenar->reordenarAtv();
             }
-
+            if($this->Dados['prioridade'] == '1'){
+                $reordenarPriori->reordenarAtvPriori($this->Condicao['ordem']);
+            }
             $this->Atividade['status'] = true;
             $this->Atividade['msg'] = "Atividade atualizada com sucesso";
         } else {
@@ -237,6 +260,7 @@ class AdmsAtendimentoFuncionarioEditar {
             }
         }
     }
+
     /*
      * Verificar se já existe atividade registrada para o funcionário na data especificado no registro
      */
@@ -337,6 +361,32 @@ class AdmsAtendimentoFuncionarioEditar {
                                         WHERE adms_usuario_id =:id
                                         AND data =:data_d", "id={$this->FuncionarioId}&data_d={$this->Data}");
         $this->HoraExtra = $verificar->getResultado();
+    }
+
+    private function defineHoraDataPrioridade($primeiraAtv) {
+
+        $this->primeiraAtv = $primeiraAtv;
+
+        if ($this->primeiraAtv[0]) { //Retornará algo se houver alguma atividade com o status >= 2 (atv válida) caso não tenha  a hora de inicio da atividade será a atual
+            if ($this->primeiraAtv[0]['data_inicio_planejado'] == $this->Dados['data_inicio_planejado']) {
+                $this->Dados['hora_inicio_planejado'] = date('H:i:s');
+            } else {
+                $this->Dados['data_inicio_planejado'] = $this->primeiraAtv[0]['data_inicio_planejado'];
+                $this->Dados['hora_inicio_planejado'] = $this->primeiraAtv[0]['hora_inicio_planejado'];
+            }
+            
+            $this->Condicao['ordem'] = $this->primeiraAtv[0]['ordem'];
+        } else {
+            $this->Dados['hora_inicio_planejado'] = date('H:i:s');
+            
+            $ordemPriori = new AdmsAtendimentoFuncionariosReordenarPriori();
+            $ordemPriori->inserirOrdemAtvFunc($this->FuncionarioId);
+            $this->Condicao['ordem'] = $ordemPriori->getResultado();
+        }
+        /*
+          echo $this->Dados['hora_inicio_planejado'] . ', ' . $this->Dados['data_inicio_planejado'];
+          var_dump($this->primeiraAtv);
+         */
     }
 
 }
