@@ -92,6 +92,9 @@ class AtendimentoFuncionarios {
         $atendFunc->listar($atendimento_id);
         $this->Dados['listarAtenFunc'] = $atendFunc->getResultado();
 
+        $atendFunc->buscarDuracaoMinAtv($atendimento_id);
+        $this->Dados['duracao_minAtv'] = $atendFunc->getResultado();
+
         $this->Dados['adms_demanda_id'] = $this->DadosId;
         $this->Dados['adms_atendimento_id'] = $atendimento_id;
 

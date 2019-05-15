@@ -277,147 +277,171 @@ if (!empty($this->Dados['dadosAtendimento'])) {
 
                             <form method="post" action="" class="needs-validation" novalidate>
 
-                                <input type="hidden" name="adms_demanda_id" value="<?php echo $this->Dados['adms_demanda_id']; ?>">
-                                <input type="hidden" name="adms_atendimento_id" value="<?php echo $this->Dados['adms_atendimento_id']; ?>">
+                                        <input type="hidden" name="adms_demanda_id" value="<?php echo $this->Dados['adms_demanda_id']; ?>">
+                                        <input type="hidden" name="adms_atendimento_id" value="<?php echo $this->Dados['adms_atendimento_id']; ?>">
 
+                                        <?php foreach ($this->Dados['duracao_minAtv'] as $duracao_minima)  {
 
-                                <div class="form-row">
-                                    <div class="col-md-12">
-                                        <label for="inputForm">Funcionário</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="basic-funcionario">
-                                                    <i class="fas fa-user-tie"></i>
-                                                </span>
-                                            </div>
-                                            <select name="adms_funcionario_id" class="custom-select mr-sm-2" id="inputForm" aria-describedby="basic-funcionario" required>
-                                                <option value="">Selecionar</option>
-                                                <?php
-                                                foreach ($this->Dados['funcionarios'] as $func){
-                                                    extract($func);
-                                                    echo "<option value=".$id.">$nome</option>";
-                                                }
-                                                ?>
-                                            </select>
-                                            <div class="valid-feedback">
-                                                Ok
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                Selecione um funcionário
-                                            </div>
-                                        </div>
-                                    </div>
+                                            extract($duracao_minima);
+                                            /*
+                                            if($duracao_min != NULL){
+                                                $dur_min = explode(':', $duracao_min);
+                                                $duracao_min = $dur_min[1];
+                                            }else{
+                                                $duracao_min = '00';
+                                            }
+                                            */
+                                            $dur_max = explode(':', $duracao);
+                                            $hora_maxima[] = $dur_max[0];
 
-                                    <div class="col-md-6">
-                                        <label for="inputFormAtividade">Atividade</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="basic-atividade">
-                                                    <i class="fas fa-tasks"></i>
-                                                </span>
-                                            </div>
-                                            <select onclick='mostrarDivs()' name="adms_atividade_id" class="custom-select mr-sm-2" id="inputFormAtividade" aria-describedby="basic-atividade" required>
-                                                <option value="">Selecionar</option>
-                                                <?php
-                                                foreach ($this->Dados['atividades'] as $ativi){
-                                                    extract($ativi);
-                                                    echo "<option onclick='mostrarDivs()' value=".$id.">$nome</option>";
-                                                }
-                                                ?>
-                                            </select>
-                                            <div class="valid-feedback">
-                                                Ok
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                Selecione uma atividade.
-                                            </div>
-                                        </div>
-                                    </div>
+                                        }
+                                        $maximo = max($hora_maxima);
+                                        //echo $maximo;
+                                        //var_dump($hora_maxima);
+                                        ?>
 
-                                    <div class="col-md-6">
-                                        <label for="inputFormFatal">Data Fatal</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="basic-fatal">
-                                                    <i class="fas fa-calendar-alt"></i>
-                                                </span>
-                                            </div>
-                                            <input type="date" name="data_fatal" pattern="[0-9]{2}\/[0-9]{2}\/[0-9]{4}$" min="<?php echo date('Y-m-d');?>" id="inputFormFatal" class="custom-select mr-sm-2" aria-describedby="basic-fatal" required>
-                                            <div class="valid-feedback">
-                                                Ok
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                Defina a data fatal da atividade
-                                            </div>
-                                        </div>
-                                    </div>
+                                        <!--Se a duração mínima não for definida seu valor será 00 -->
 
-                                    <div id="decisao" class="d-none col-md-12">
-                                        <p>Definir duração?</p>
-                                        <div class="d-flex w-100">
-                                            <div class="form-check mr-3">
-                                                <input onclick="definirSim()" class="form-check-input" name="simNao" type="radio"  id="sim" value="option1">
-                                                <label  class="form-check-label" for="sim">
-                                                    Sim
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input onclick="definirNao()" class="form-check-input" name="simNao" type="radio"  id="nao" value="option1" checked>
-                                                <label  class="form-check-label" for="nao">
-                                                    Não
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        <?php
+                                        ?>
 
-                                    <div id="conteudoHora" class="d-none row col-md-12 mt-3">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                <label for="inputForm">Funcionário</label>
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="basic-funcionario">
+                                                        <i class="fas fa-user-tie"></i>
+                                                    </span>
+                                                    </div>
+                                                    <select name="adms_funcionario_id" class="custom-select mr-sm-2" id="inputForm" aria-describedby="basic-funcionario" required>
+                                                        <option value="">Selecionar</option>
+                                                        <?php
+                                                        foreach ($this->Dados['funcionarios'] as $func){
+                                                            extract($func);
+                                                            echo "<option value=".$id.">$nome</option>";
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                    <div class="valid-feedback">
+                                                        Ok
+                                                    </div>
+                                                    <div class="invalid-feedback">
+                                                        Selecione um funcionário
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                            <p class="col-md-12">
-                                                Definir duração da atividade
-                                            </p>
-                                        <div class="col-md-6">
-                                            <label for="selecionaHora">Hora</label>
-                                            <div class="input-group mb-3">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="basic-hora">
+                                            <div class="col-md-6">
+                                                <label for="inputFormAtividade">Atividade</label>
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="basic-atividade">
+                                                        <i class="fas fa-tasks"></i>
+                                                    </span>
+                                                    </div>
+                                                    <select onclick='mostrarDivs()' name="adms_atividade_id" class="custom-select mr-sm-2" id="inputFormAtividade" aria-describedby="basic-atividade" required>
+                                                        <option value="">Selecionar</option>
+                                                        <?php
+                                                        foreach ($this->Dados['atividades'] as $ativi){
+                                                            extract($ativi);
+                                                            echo "<option onclick='mostrarDivs()' value=".$id.">$nome</option>";
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                    <div class="valid-feedback">
+                                                        Ok
+                                                    </div>
+                                                    <div class="invalid-feedback">
+                                                        Selecione uma atividade.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="inputFormFatal">Data Fatal</label>
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="basic-fatal">
                                                         <i class="fas fa-calendar-alt"></i>
                                                     </span>
+                                                    </div>
+                                                    <input type="date" name="data_fatal" pattern="[0-9]{2}\/[0-9]{2}\/[0-9]{4}$" min="<?php echo date('Y-m-d');?>" id="inputFormFatal" class="custom-select mr-sm-2" aria-describedby="basic-fatal" required>
+                                                    <div class="valid-feedback">
+                                                        Ok
+                                                    </div>
+                                                    <div class="invalid-feedback">
+                                                        Defina a data fatal da atividade
+                                                    </div>
                                                 </div>
-                                                <select name="hora" class="form-control" id="selecionaHora" aria-describedby="basic-hora">
-                                                    <!-- Lista de horas -->
-                                                </select>
                                             </div>
+
+                                            <div id="decisao" class="d-none col-md-12">
+                                                <p>Definir duração?</p>
+                                                <div class="d-flex w-100">
+                                                    <div class="form-check mr-3">
+                                                        <input onclick="definirSim()" class="form-check-input" name="simNao" type="radio"  id="sim" value="option1">
+                                                        <label  class="form-check-label" for="sim">
+                                                            Sim
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input onclick="definirNao()" class="form-check-input" name="simNao" type="radio"  id="nao" value="" checked>
+                                                        <label  class="form-check-label" for="nao">
+                                                            Não
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div id="conteudoHora" class="d-none row col-md-12 mt-3">
+
+                                                <p class="col-md-12">
+                                                    Definir duração da atividade
+                                                </p>
+                                                <div class="col-md-6">
+                                                    <label for="selecionaHora">Hora</label>
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id="basic-hora">
+                                                                            <i class="fas fa-calendar-alt"></i>
+                                                                        </span>
+                                                        </div>
+                                                        <select class="form-control" name="hora" id="selecionaHora" aria-describedby="basic-hora">
+                                                            <!-- Lista de horas -->
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label for="selecionaMinuto">Minuto</label>
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id="basic-minuto">
+                                                                            <i class="fas fa-calendar-alt"></i>
+                                                                        </span>
+                                                        </div>
+                                                        <select class="form-control" name="minuto" id="selecionaMinuto" aria-describedby="basic-minuto">
+                                                            <!-- Lista de minutos -->
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+
+
+
+                                            <div class="col-md-12 mt-3 d-flex align-items-end ">
+                                                <input type="hidden" name="Registrar" value="Registrar">
+                                                <button class="btn btn-success" type="submit">Registrar</button>
+                                            </div>
+
                                         </div>
 
-                                        <div class="col-md-6">
-                                            <label for="selecionaMinuto">Minuto</label>
-                                            <div class="input-group mb-3">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="basic-minuto">
-                                                        <i class="fas fa-calendar-alt"></i>
-                                                    </span>
-                                                </div>
-                                                <select name="minuto" class="form-control" id="selecionaMinuto" aria-describedby="basic-minuto">
-                                                    <!-- Lista de minutos -->
-                                                </select>
-                                            </div>
-                                        </div>
 
-                                    </div>
-
-
-
-
-
-                                    <div class="col-md-12 mt-3 d-flex align-items-end ">
-                                        <input type="hidden" name="Registrar" value="Registrar">
-                                        <button class="btn btn-success" type="submit">Registrar</button>
-                                    </div>
-
-                                </div>
-
-
-                            </form>
+                                    </form>
 
                             <?php
                             }
@@ -469,6 +493,9 @@ if(isset($_SESSION['msg'])) {
         '50'
     ];
 
+    var duracao_max = "<?php echo $maximo ?>";
+    //console.log(duracao_max);
+
     // select de hora
     var selecionaHora = document.querySelector('#selecionaHora');
     
@@ -480,13 +507,17 @@ if(isset($_SESSION['msg'])) {
         for (hora of horas){
 
             var horaElement = document.createElement('option');
-            horaElement.value = hora;
-            var horaTexto = document.createTextNode(hora);
-            
-            horaElement.appendChild(horaTexto);
 
-            // adicionar cada elemento dentro da div
-            selecionaHora.appendChild(horaElement);
+            if(hora <= duracao_max){
+                horaElement.value = hora;
+                var horaTexto = document.createTextNode(hora);
+
+                horaElement.appendChild(horaTexto);
+
+                // adicionar cada elemento dentro da div
+                selecionaHora.appendChild(horaElement);
+
+            }
         }
     }
 

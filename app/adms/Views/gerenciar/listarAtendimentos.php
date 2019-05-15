@@ -53,9 +53,11 @@
                     <a href="#" class="btn btn-outline-info btn-sm"><i class="fas fa-circle"></i> Em andamento</a>
                     <a href="#" class="btn btn-outline-primary btn-sm"><i class="fas fa-check"></i> Concluído</a>
                     <a href="#" class="btn btn-outline-danger btn-sm"><i class="fas fa-ban"></i> Cancelado</a>
+                    <!--
                     <?php if ($this->Dados['botao']['arqui_atendimento']) { ?>
                         <a href="<?php echo URLADM . 'gerenciar-atendimento/arquivado'; ?>" class="btn btn-outline-dark btn-sm"><i class="fas fa-archive"></i> Arquivados</a>
                     <?php } ?>
+                    -->
                 </div>
                 </div>
             </div>
@@ -304,6 +306,7 @@
                                     <?php
                                 }
                                 ?>
+                                <!--
                                 <?php
                                 if ($this->Dados['botao']['arquivar_atendimento']) { ?>
                                     <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Arquivar">
@@ -315,6 +318,7 @@
                                     <?php
                                 }
                                 ?>
+                                -->
                             </span>
                             <div class="dropdown d-block d-md-none">
                                 <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="acoesListar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -331,12 +335,14 @@
                                             <i class="far fa-edit"></i> Editar
                                         </a>
                                     <?php } ?>
+                                    <!--
                                     <?php if ($this->Dados['botao']['arquivar_atendimento']) { ?>
                                         <a class="dropdown-item" href="<?php echo URLADM . 'atendimento-gerente/arquivar/'.$id . '?pg='.$this->Dados['pg']; ?>"
                                            data-arquivo='Tem certeza que deseja arquivar o atendimento selecionado?'>
                                             <i class="fas fa-folder-open"></i> Arquivar
                                         </a>
                                     <?php } ?>
+                                    -->
                                 </div>
                             </div>
                         </td>

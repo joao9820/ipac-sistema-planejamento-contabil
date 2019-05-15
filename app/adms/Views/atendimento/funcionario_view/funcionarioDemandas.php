@@ -249,7 +249,7 @@ function getFeriados($ano){
                             <th class="">
                                 <span class="d-block text-center border-bottom pb-1 mb-1">Planejamento</span>
                                 <div class="d-flex justify-content-between">
-                                    <span>Inicio</span>
+                                    <span>Inicio </span>
                                     <span>Términio</span>
                                 </div>
                             </th>
@@ -722,10 +722,8 @@ function getFeriados($ano){
 
                             </td>
                             <td>
-                                 <span tabindex="0" data-toggle="tooltip" data-placement="right" data-html="true" title="<?php echo "Esse é o status que o cliente visualiza nesse momento. Quando houver alterações ele será informado.";?>">
-                                    <span class="badge badge-<?php echo $cor_sit_aten_func ?>">
-                                        <?php echo $nome_sits_aten_func; ?>
-                                    </span>
+                                <span class="badge badge-<?php echo $cor_sit_aten_func ?>">
+                                    <?php echo $nome_sits_aten_func; ?>
                                 </span>
                             </td>
                             <td>
