@@ -287,7 +287,7 @@
                                 <?php
                                 if ($this->Dados['botao']['vis_atendimento']) { ?>
                                      <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Visualizar">
-                                        <a href="<?php echo URLADM . 'atendimento-gerente/ver/' . $id. '?pg='.$this->Dados['pg']; ?>" class="btn btn-outline-primary btn-sm my-md-1">
+                                        <a href="<?php echo URLADM . 'atendimento-gerente/ver/' . $id. '?pg='.$this->Dados['pg'].'&demanda='.$adms_demanda_id; ?>" class="btn btn-outline-primary btn-sm my-md-1">
                                             <i class="far fa-eye"></i>
                                         </a>
                                      </span>
@@ -297,7 +297,7 @@
                                 <?php
                                 if (($this->Dados['botao']['edit_atendimento']) AND (($nome_situacao != "Cancelado") AND ($id_situacao != 4))) { ?>
                                     <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Editar">
-                                        <a href="<?php echo URLADM . 'atendimento-gerente/editar/'.$id. '?pg='.$this->Dados['pg']; ?>" class="btn btn-outline-warning btn-sm my-md-1">
+                                        <a href="<?php echo URLADM . 'atendimento-gerente/editar/'.$id. '?pg='.$this->Dados['pg'].'&demanda='.$adms_demanda_id; ?>" class="btn btn-outline-warning btn-sm my-md-1">
                                             <i class="far fa-edit"></i>
                                         </a>
                                     </span>
@@ -322,12 +322,12 @@
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="acoesListar">
                                     <?php if ($this->Dados['botao']['vis_atendimento']) { ?>
-                                        <a class="dropdown-item" href="<?php echo URLADM . 'atendimento-gerente/ver/' . $id. '?pg='.$this->Dados['pg']; ?>">
+                                        <a class="dropdown-item" href="<?php echo URLADM . 'atendimento-gerente/ver/' . $id. '?pg='.$this->Dados['pg'].'&demanda='.$adms_demanda_id; ?>">
                                             <i class="far fa-eye"></i> Visualizar
                                         </a>
                                     <?php } ?>
                                     <?php if ($this->Dados['botao']['edit_atendimento']) { ?>
-                                        <a class="dropdown-item" href="<?php echo URLADM . 'atendimento-gerente/editar/'.$id. '?pg='.$this->Dados['pg']; ?>">
+                                        <a class="dropdown-item" href="<?php echo URLADM . 'atendimento-gerente/editar/'.$id. '?pg='.$this->Dados['pg'].'&demanda='.$adms_demanda_id; ?>">
                                             <i class="far fa-edit"></i> Editar
                                         </a>
                                     <?php } ?>

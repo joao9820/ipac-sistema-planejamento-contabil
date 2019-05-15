@@ -14,6 +14,7 @@ use App\adms\Models\AdmsEditarAtenGerente;
 use App\adms\Models\AdmsMenu;
 use App\adms\Models\AdmsVerAtendGerente;
 use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\AdmsAtendimentoFuncionarios;
 use Core\ConfigView;
 
 if (!defined('URL')) {
@@ -52,6 +53,9 @@ class AtendimentoGerente
                 $this->Dados['pg'] = 1;
             }
 
+            $atendFunc = new AdmsAtendimentoFuncionarios();
+            $atendFunc->listar($this->DadosId);
+            $this->Dados['listarAtenFunc'] = $atendFunc->getResultado();
 
             //Carregar Menu
             $listarMenu = new AdmsMenu();
@@ -127,11 +131,12 @@ class AtendimentoGerente
 
         $this->Dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         $this->PageId = filter_input(INPUT_GET, "pg",FILTER_SANITIZE_NUMBER_INT);
+        $demandaId = filter_input(INPUT_GET, "demanda",FILTER_SANITIZE_NUMBER_INT);
         $this->DadosId = (int) $DadosId;
 
         if (!empty($this->DadosId) AND !empty($this->PageId))
         {
-            $this->editAtendimentoPrev();
+            $this->editAtendimentoPrev($demandaId);
 
         } else {
             $alert = new AdmsAlertMensagem();
@@ -141,7 +146,7 @@ class AtendimentoGerente
         }
     }
 
-    private function editAtendimentoPrev()
+    private function editAtendimentoPrev($DemandaId = null)
     {
 
         if (!empty($this->Dados['EditAtendimento']))
@@ -157,7 +162,7 @@ class AtendimentoGerente
 
                 $alert = new AdmsAlertMensagem();
                 $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atendimento atualizado!","success");
-                $UrlDestino = URLADM .'atendimento-gerente/ver/'.$this->Dados['id'].'?pg='.$this->PageId;
+                $UrlDestino = URLADM .'atendimento-gerente/ver/'.$this->Dados['id'].'?pg='.$this->PageId.'&demanda='.$DemandaId;
                 //echo $UrlDestino;
                 header("Location: $UrlDestino");
 

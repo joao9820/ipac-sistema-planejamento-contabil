@@ -10,19 +10,16 @@ if (!defined('URL')) {
     exit();
 }
 
-//var_dump($this->Dados);
+//var_dump($this->Dados['form']);
 //var_dump($this->Dados['form'][0]);
 
 if (isset($this->Dados['dadosAtendimento'][0])) {
     $dadosAtendimento = $this->Dados['dadosAtendimento'][0];
 }
 
-if (isset($this->Dados['form'])) {
-    $valorForm = $this->Dados['form'];
-}
-
 if (isset($this->Dados['form'][0])) {
     $valorForm = $this->Dados['form'][0];
+    $condicaoEdicao = (int) $this->Dados['form'][0]['adms_sits_atendimento_id'];
 }
 
 ?>
@@ -37,7 +34,7 @@ if (isset($this->Dados['form'][0])) {
                    <?php
                    if ($this->Dados['botao']['vis_atendimento']) {
                        ?>
-                       <a href="<?php echo URLADM . 'atendimento-gerente/ver/'.$valorForm['id']; ?>" class="btn btn-outline-primary btn-sm"><i class="far fa-eye"></i> Visualizar</a>
+                       <a href="<?php echo URLADM . 'atendimento-gerente/ver/'.$valorForm['id'].'?pg='.$this->Dados['pg'].'&demanda='.$_GET['demanda']; ?>" class="btn btn-outline-primary btn-sm"><i class="far fa-eye"></i> Visualizar</a>
                    <?php
                    }
                    if ($this->Dados['botao']['list_atendimento']) {
@@ -91,7 +88,7 @@ if (isset($this->Dados['form'][0])) {
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label><span class="text-danger">* </span>Demanda</label>
-                    <select name="adms_demanda_id" id="adms_demanda_id" class="form-control">
+                    <select name="adms_demanda_id" id="adms_demanda_id" class="form-control" <?php echo $condicaoEdicao == 2 ? "disabled" : ''; ?>>
                         <option value="">Selecione</option>
                         <?php
                         foreach ($this->Dados['select']['deman'] as $demanda) {
@@ -108,12 +105,9 @@ if (isset($this->Dados['form'][0])) {
                 </div>
                 <div class="form-group col-md-12">
                     <label><span class="text-danger">* </span>Situação do Atendimento</label>
-                    <select name="adms_sits_atendimento_id" id="adms_sits_atendimento_id" class="form-control" <?php
-                        if ($dadosAtendimento['situacao_funcionario'] != 2) {
-                            echo "disabled";
-                        }
-                        ?>>
+                    <select name="adms_sits_atendimento_id" id="adms_sits_atendimento_id" class="form-control" <?php echo $condicaoEdicao == 2 ? "disabled" : ''; ?>>
                         <option value="">Selecione</option>
+                        <?php echo $condicaoEdicao == 2 ? "<option value='' selected>Em andamento</option>" : ''; ?>
                         <?php
                         foreach ($this->Dados['select']['sitsat'] as $sitAtendimento) {
                             extract($sitAtendimento);
@@ -136,9 +130,8 @@ if (isset($this->Dados['form'][0])) {
                     </label>
                     <textarea name="descricao" id="descricao" class="form-control"><?php
                         echo $descricao_atendimento ? $descricao_atendimento : "";
-                        ?></textarea>
+                    ?></textarea>
                 </div>
-
 
 
             </div>

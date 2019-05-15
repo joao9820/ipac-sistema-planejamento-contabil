@@ -10,6 +10,12 @@ if (!defined('URL')) {
     exit();
 }
 //var_dump($this->Dados['listarAtenFunc']);
+if (!empty($this->Dados['dadosAtendimento'])) {
+    $demandaId = $this->Dados['dadosAtendimento']['adms_demanda_id'];
+} else {
+    header("Location: /");
+    exit();
+}
 ?>
 <style>
     .table thead th {
@@ -33,7 +39,7 @@ if (!defined('URL')) {
                     <a href="<?php echo URLADM . 'gerenciar-atendimento/listar/'.$this->Dados['pg']; ?>" class="btn btn-outline-info btn-sm"><i class="fas fa-list"></i> Listar atendimentos</a>
                 </span>
                 <span class="d-block ml-2">
-                    <a href="<?php echo URLADM . 'atendimento-gerente/ver/'.$_GET['aten'].'?pg='.$this->Dados['pg']; ?>"
+                    <a href="<?php echo URLADM . 'atendimento-gerente/ver/'.$_GET['aten'].'?pg='.$this->Dados['pg'].'&demanda='.$demandaId; ?>"
                        class="btn btn-outline-warning btn-sm"><i class="fa fa-eye"></i> Ver atendimento</a>
                 </span>
             </div>

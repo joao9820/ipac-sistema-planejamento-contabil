@@ -352,8 +352,16 @@ function getFeriados($ano){
                                     <?php echo $nome_demanda ?>
                                 </span>
                             </td>
-                            <td>
-                                <?php echo $descricao_atendimento ?>
+                            <td class="text-center">
+                                <?php
+                                    if (!empty($descricao_atendimento)){
+                                        ?>
+                                        <span tabindex="0" data-placement="top" data-toggle="tooltip" title="<?php echo $descricao_atendimento; ?>">
+                                            <i class="far fa-file-alt"></i>
+                                        </span>
+                                        <?php
+                                    }
+                                ?>
                             </td>
                             <td>
                                 <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Descrição: <?php echo $descricao_atividade; ?>'>
