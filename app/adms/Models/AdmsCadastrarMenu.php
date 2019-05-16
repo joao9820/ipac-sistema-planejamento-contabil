@@ -8,6 +8,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsCreate;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -29,7 +34,7 @@ class AdmsCadastrarMenu
     {
         $this->Dados = $Dados;
 
-        $valCampoVazio = new \App\adms\Models\helper\AdmsCampoVazio;
+        $valCampoVazio = new AdmsCampoVazio;
         $valCampoVazio->validarDados($this->Dados);
 
         if ($valCampoVazio->getResultado()) {
@@ -44,20 +49,22 @@ class AdmsCadastrarMenu
         $this->Dados['created'] = date("Y-m-d H:i:s");
         $this->verUltimoMenu();
         $this->Dados['ordem'] = $this->UltimoMenu[0]['ordem'] + 1;
-        $cadNivAc = new \App\adms\Models\helper\AdmsCreate;
+        $cadNivAc = new AdmsCreate;
         $cadNivAc->exeCreate("adms_menus", $this->Dados);
         if ($cadNivAc->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Item de menu cadastrado com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Item de menu cadastrado!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: O item de menu não foi cadastrado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("O item de menu não foi cadastrado.","danger");
             $this->Resultado = false;
         }
     }
 
     private function verUltimoMenu()
     {
-        $verMenu = new \App\adms\Models\helper\AdmsRead();
+        $verMenu = new AdmsRead();
         $verMenu->fullRead("SELECT ordem FROM adms_menus ORDER BY ordem DESC LIMIT :limit", "limit=1");
         $this->UltimoMenu = $verMenu->getResultado();
     }
@@ -67,7 +74,7 @@ class AdmsCadastrarMenu
      */
     public function listarCadastrar()
     {
-        $listar = new \App\adms\Models\helper\AdmsRead();
+        $listar = new AdmsRead();
 
         $listar->fullRead("SELECT id id_sit, nome nome_sit FROM adms_sits ORDER BY nome ASC");
         $registro['sit'] = $listar->getResultado();

@@ -8,6 +8,10 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsCreate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -28,7 +32,7 @@ class AdmsCadastrarCor
     {
         $this->Dados = $Dados;
 
-        $valCampoVazio = new \App\adms\Models\helper\AdmsCampoVazio;
+        $valCampoVazio = new AdmsCampoVazio;
         $valCampoVazio->validarDados($this->Dados);
 
         if ($valCampoVazio->getResultado()) {
@@ -41,13 +45,15 @@ class AdmsCadastrarCor
     private function inserirCor()
     {
         $this->Dados['created'] = date("Y-m-d H:i:s");
-        $cadCor = new \App\adms\Models\helper\AdmsCreate;
+        $cadCor = new AdmsCreate;
         $cadCor->exeCreate("adms_cors", $this->Dados);
         if ($cadCor->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Cor cadastrada com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Cor cadastrada!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A cor não foi cadastrada!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("A cor não foi cadastrada.","danger");
             $this->Resultado = false;
         }
     }

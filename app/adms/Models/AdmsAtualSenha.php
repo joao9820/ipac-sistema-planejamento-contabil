@@ -8,6 +8,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+use App\adms\Models\helper\AdmsValSenha;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -29,7 +34,7 @@ class AdmsAtualSenha
     public function valChave($Chave)
     {
         $this->Chave = (string) $Chave;
-        $validaChave = new \App\adms\Models\helper\AdmsRead();
+        $validaChave = new AdmsRead();
         $validaChave->fullRead("SELECT id FROM adms_usuarios WHERE recuperar_senha =:recuperar_senha LIMIT :limit", "recuperar_senha={$this->Chave}&limit=1");
         $this->DadosUsuario = $validaChave->getResultado();
         if (!empty($this->DadosUsuario))
@@ -38,8 +43,8 @@ class AdmsAtualSenha
         }
         else {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe!","Link inválido", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Link inválido!","danger");
             $this->Resultado = false;
 
         }
@@ -51,7 +56,7 @@ class AdmsAtualSenha
         $this->validarDados();
         if ($this->Resultado)
         {
-            $valSenha = new \App\adms\Models\helper\AdmsValSenha();
+            $valSenha = new AdmsValSenha();
             $valSenha->valSenha($this->Dados['senha']);
             if ($valSenha->getResultado())
             {
@@ -71,8 +76,8 @@ class AdmsAtualSenha
         $this->Dados = array_map('trim', $this->Dados);
         if(in_array('', $this->Dados)){
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Oops!","Necessário preencher todos os campos", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Necessário preencher todos os campos!","warning");
             $this->Resultado = false;
 
         }
@@ -93,26 +98,26 @@ class AdmsAtualSenha
             $this->Dados['recuperar_senha'] = NULL;
             $this->Dados['senha'] = password_hash($this->Dados['senha'], PASSWORD_DEFAULT);
             $this->Dados['modified'] = date('Y-m-d H:i:s');
-            $upAtualSenha = new \App\adms\Models\helper\AdmsUpdate();
+            $upAtualSenha = new AdmsUpdate();
             $upAtualSenha->exeUpdate("adms_usuarios", $this->Dados, "WHERE id =:id", "id={$this->DadosUsuario[0]['id']}");
             if ($upAtualSenha->getResultado()) {
 
-                $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-                $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Senha atualizada com sucesso", "success");
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Senha atualizada!","success");
                 $this->Resultado = true;
 
             } else {
 
-                $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-                $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","A senha não foi atualizada", "danger");
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("A senha não foi atualizada.","danger");
                 $this->Resultado = false;
             }
 
         }
         else {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","A senha não foi atualizada", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Algo deu errado. A senha não foi atualizada. Tente novamente mais tarde!","danger");
             $this->Resultado = false;
 
         }

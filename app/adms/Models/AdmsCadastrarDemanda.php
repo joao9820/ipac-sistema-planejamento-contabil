@@ -59,8 +59,8 @@ class AdmsCadastrarDemanda
         }
         else {
 
-            $alertMensagem = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Oops!","Está demanda já foi cadastrada", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Está demanda já foi cadastrada!","danger");
             $this->Resultado = false;
 
         }
@@ -80,15 +80,15 @@ class AdmsCadastrarDemanda
         {
 
             $this->UltimoIdInserido = $cadDemanda->getResultado();
-            $alertMensagem = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Demanda cadastrada com sucesso", "success");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Demanda cadastrada!","success");
             $this->Resultado = true;
 
         }
         else {
 
-            $alertMensagem = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","A demanda não foi cadastrada", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("A demanda não foi cadastrada. Tente novamente mais tarde!","danger");
             $this->Resultado = false;
 
         }

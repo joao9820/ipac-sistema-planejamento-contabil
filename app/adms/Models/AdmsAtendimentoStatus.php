@@ -44,9 +44,7 @@ class AdmsAtendimentoStatus
         if (isset($this->ResultadoStsIniciado) AND !empty($this->ResultadoStsIniciado))
         {
             $alert = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atendimento desarquivado!","success");
-            $alertMensagem = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Já existe um atendimento em andamento!", "Para iniciar um novo, pause ou finalise o atendimento iniciado", "danger");
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Você só pode executar um atendimento por vez. Para iniciar um novo, pause ou finalise o atendimento que está em andamento.","warning");
             $this->Resultado = false;
         }
         else {
@@ -58,8 +56,8 @@ class AdmsAtendimentoStatus
                     $this->alterar();
                 } else {
 
-                    $alertMensagem = new AdmsAlertMensagem();
-                    $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe!", "Não foi possível iniciar o atendimento", "danger");
+                    $alert = new AdmsAlertMensagem();
+                    $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi possível iniciar o atendimento.","danger");
                     $this->Resultado = false;
                 }
 
@@ -69,8 +67,8 @@ class AdmsAtendimentoStatus
                 if ($this->Log) {
                     $this->alterar();
                 } else {
-                    $alertMensagem = new AdmsAlertMensagem();
-                    $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe!", "Não foi possível pausar o atendimento", "danger");
+                    $alert = new AdmsAlertMensagem();
+                    $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi possível pausar o atendimento.","danger");
                     $this->Resultado = false;
                 }
             } elseif ($this->Status == 3) {
@@ -79,8 +77,8 @@ class AdmsAtendimentoStatus
                 if ($this->Log) {
                     $this->alterar();
                 } else {
-                    $alertMensagem = new AdmsAlertMensagem();
-                    $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe!", "Não foi possível iniciar o atendimento", "danger");
+                    $alert = new AdmsAlertMensagem();
+                    $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi possível iniciar o atendimento.","danger");
                     $this->Resultado = false;
                 }
             } elseif ($this->Status == 4) {
@@ -102,13 +100,13 @@ class AdmsAtendimentoStatus
 
         if ($upInterr->getResultado()) {
 
-            $alertMensagem = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Atendimento", "interrompido.", "warning");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atendimento interrompido!","warning");
             $this->Resultado = true;
 
         } else {
-            $alertMensagem = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe!", "Não foi possível atualizar o atendimento", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi possível atualizar o atendimento.","danger");
             $this->Resultado = false;
         }
     }
@@ -129,15 +127,15 @@ class AdmsAtendimentoStatus
             //$this->Dados['adms_sits_atendimento_id'] = 2;
             $this->Dados['inicio_atendimento'] = date("Y-m-d H:i:s");
             $this->Dados['at_iniciado'] = date("Y-m-d H:i:s");
-            $alertMensagem = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Atendimento", "iniciado", "success");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atendimento iniciado!","primary");
             $this->Dados['at_tempo_excedido'] = null;
 
         } elseif ($this->Status == 2) {
 
             $this->Dados['adms_sits_atendimentos_funcionario_id'] = 3;
             $this->Dados['at_pausado'] = date("Y-m-d H:i:s");
-//$this->Dados['adms_sits_atendimento_id'] = 2;
+            //$this->Dados['adms_sits_atendimento_id'] = 2;
 
             $this->buscarTempoRestante();
             if (empty($this->ResultadoTempo[0]['at_tempo_excedido'])) {
@@ -195,17 +193,17 @@ class AdmsAtendimentoStatus
 
             }
 
-            $alertMensagem = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Atendimento", "pausado", "warning");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atendimento pausado!","warning");
 
 
         } elseif ( $this->Status == 3) {
             $this->Dados['adms_sits_atendimentos_funcionario_id'] = 2;
             $this->Dados['at_iniciado'] = date("Y-m-d H:i:s");
-//$this->Dados['adms_sits_atendimento_id'] = 2;
+            //$this->Dados['adms_sits_atendimento_id'] = 2;
 
-            $alertMensagem = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Atendimento", "retomado");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atendimento retomado!","info");
 
         }
 
@@ -223,8 +221,8 @@ class AdmsAtendimentoStatus
             $this->Resultado = true;
 
         } else {
-            $alertMensagem = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe!", "Não foi possível atualizar o atendimento", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi possível atualizar o status!","danger");
             $this->Resultado = false;
         }
     }
@@ -349,13 +347,13 @@ class AdmsAtendimentoStatus
 
         if ($upAtendimento->getResultado()) {
 
-            $alertMensagem = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Atendimento", "finalizado com sucesso.", "success");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atendimento finalizado!","success");
             $this->Resultado = true;
 
         } else {
-            $alertMensagem = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe!", "Não foi possível atualizar o atendimento", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi possível atualizar o atendimento.","danger");
             $this->Resultado = false;
         }
     }

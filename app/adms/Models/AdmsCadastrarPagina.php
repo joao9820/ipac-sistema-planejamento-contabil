@@ -2,6 +2,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsCreate;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -33,7 +38,7 @@ class AdmsCadastrarPagina
         $this->VazioIcone = $this->Dados['icone'];
         unset($this->Dados['icone']);
 
-        $valCampoVazio = new \App\adms\Models\helper\AdmsCampoVazio;
+        $valCampoVazio = new AdmsCampoVazio;
         $valCampoVazio->validarDados($this->Dados);
 
         if ($valCampoVazio->getResultado()) {
@@ -48,13 +53,14 @@ class AdmsCadastrarPagina
     {
         $this->Dados['icone'] = $this->VazioIcone;
         $this->Dados['created'] = date("Y-m-d H:i:s");
-        $cadNivAc = new \App\adms\Models\helper\AdmsCreate;
+        $cadNivAc = new AdmsCreate;
         $cadNivAc->exeCreate("adms_paginas", $this->Dados);
         if ($cadNivAc->getResultado()) {
             $this->UltimoIdInserido = $cadNivAc->getResultado();
             $this->inserirPerNivAc();
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A página não foi cadastrada!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("A página não foi cadastrada.","danger");
             $this->Resultado = false;
         }
     }
@@ -62,7 +68,7 @@ class AdmsCadastrarPagina
 
     public function listarCadastrar()
     {
-        $listar = new \App\adms\Models\helper\AdmsRead();
+        $listar = new AdmsRead();
         $listar->fullRead("SELECT id id_grpg, nome nome_grpg FROM adms_grps_pgs ORDER BY nome ASC");
 
         $registro['grpg'] = $listar->getResultado();
@@ -80,7 +86,7 @@ class AdmsCadastrarPagina
 
     private function listarNivAc()
     {
-        $listarNivAc = new \App\adms\Models\helper\AdmsRead();
+        $listarNivAc = new AdmsRead();
         $listarNivAc->fullRead("SELECT id FROM adms_niveis_acessos");
         $this->ListaNivAc = $listarNivAc->getResultado();
         //var_dump($listarNivAc->getResultado());
@@ -96,6 +102,7 @@ class AdmsCadastrarPagina
             //var_dump($nivAc);
 
             extract($nivAc);
+            /** @var TYPE_NAME $id */
             $this->NivAcId = $id;
             $this->pesqUltimaOrdem();
             $this->DadosNivAcPg['permissao'] = ($id == 1 ? 1 : 2);
@@ -104,14 +111,16 @@ class AdmsCadastrarPagina
             $this->DadosNivAcPg['adms_pagina_id'] = $this->UltimoIdInserido;
             $this->DadosNivAcPg['created'] = date("Y-m-d H:i:s");
 
-            $cadNivAcPg = new \App\adms\Models\helper\AdmsCreate;
+            $cadNivAcPg = new AdmsCreate;
             $cadNivAcPg->exeCreate("adms_nivacs_pgs", $this->DadosNivAcPg);
 
             if ($cadNivAcPg->getResultado()) {
-                $_SESSION['msg'] = "<div class='alert alert-success'>Página cadastrada com sucesso!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Página cadastrada!","success");
                 $this->Resultado = true;
             } else {
-                $_SESSION['msg'] = "<div class='alert alert-warning'>Página cadastrada com sucesso. Erro ao liberar a permissão de acesso ao nível de acesso!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Página cadastrada com sucesso. Erro ao liberar a permissão de acesso ao nível de acesso.","info");
                 $this->Resultado = false;
             }
         }
@@ -123,7 +132,7 @@ class AdmsCadastrarPagina
 
     private function pesqUltimaOrdem()
     {
-        $listarNivAcPg = new \App\adms\Models\helper\AdmsRead();
+        $listarNivAcPg = new AdmsRead();
         $listarNivAcPg->fullRead("SELECT ordem, adms_niveis_acesso_id
                 FROM adms_nivacs_pgs 
                 WHERE adms_niveis_acesso_id =:adms_niveis_acesso_id ORDER BY ordem DESC LIMIT :limit", "adms_niveis_acesso_id={$this->NivAcId}&limit=1");

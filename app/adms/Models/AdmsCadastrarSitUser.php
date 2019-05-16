@@ -8,6 +8,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsCreate;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -28,7 +33,7 @@ class AdmsCadastrarSitUser
     {
         $this->Dados = $Dados;
 
-        $valCampoVazio = new \App\adms\Models\helper\AdmsCampoVazio;
+        $valCampoVazio = new AdmsCampoVazio;
         $valCampoVazio->validarDados($this->Dados);
 
         if ($valCampoVazio->getResultado()) {
@@ -41,13 +46,15 @@ class AdmsCadastrarSitUser
     private function inserirSitUser()
     {
         $this->Dados['created'] = date("Y-m-d H:i:s");
-        $cadSitUser = new \App\adms\Models\helper\AdmsCreate;
+        $cadSitUser = new AdmsCreate;
         $cadSitUser->exeCreate("adms_sits_usuarios", $this->Dados);
         if ($cadSitUser->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Situação de usuário cadastrado com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Situação de usuário cadastrado!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A situação de usuário não foi cadastrado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("A situação de usuário não foi cadastrado.","danger");
             $this->Resultado = false;
         }
     }
@@ -57,7 +64,7 @@ class AdmsCadastrarSitUser
      */
     public function listarCadastrar()
     {
-        $listar = new \App\adms\Models\helper\AdmsRead();
+        $listar = new AdmsRead();
 
         $listar->fullRead("SELECT id id_cor, nome nome_cor FROM adms_cors ORDER BY nome ASC");
         $registro['cor'] = $listar->getResultado();

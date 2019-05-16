@@ -8,6 +8,18 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsCreate;
+use App\adms\Models\helper\AdmsEmail;
+use App\adms\Models\helper\AdmsEmailUnico;
+use App\adms\Models\helper\AdmsPhpMailer;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsSlug;
+use App\adms\Models\helper\AdmsUploadImgRed;
+use App\adms\Models\helper\AdmsValSenha;
+use App\adms\Models\helper\AdmsValUsuario;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -31,7 +43,7 @@ class AdmsCadastrarUsuario
     public function verUsuario($DadosId)
     {
         $this->DadosId = (int) $DadosId;
-        $verUsuario = new \App\adms\Models\helper\AdmsRead();
+        $verUsuario = new AdmsRead();
         $verUsuario->fullRead("SELECT * FROM adms_usuarios WHERE id =:id LIMIT :limit",
             "id={$this->DadosId}&limit=1");
         $this->Resultado = $verUsuario->getResultado();
@@ -45,7 +57,7 @@ class AdmsCadastrarUsuario
         $this->Foto = $this->Dados['imagem_nova'];
         unset($this->Dados['imagem_nova']);
 
-        $valCampos = new \App\adms\Models\helper\AdmsCampoVazio();
+        $valCampos = new AdmsCampoVazio();
         $valCampos->validarDados($this->Dados);
 
         if ($valCampos->getResultado()) {
@@ -63,16 +75,16 @@ class AdmsCadastrarUsuario
     private function valCampos()
     {
 
-        $valEmail = new \App\adms\Models\helper\AdmsEmail();
+        $valEmail = new AdmsEmail();
         $valEmail->valEmail($this->Dados['email']);
 
-        $valEmailUnico = new \App\adms\Models\helper\AdmsEmailUnico();
+        $valEmailUnico = new AdmsEmailUnico();
         $valEmailUnico->valEmailUnico($this->Dados['email']);
 
-        $valUsuarioUnico = new \App\adms\Models\helper\AdmsValUsuario();
+        $valUsuarioUnico = new AdmsValUsuario();
         $valUsuarioUnico->valUsuario($this->Dados['usuario']);
 
-        $valSenha = new \App\adms\Models\helper\AdmsValSenha();
+        $valSenha = new AdmsValSenha();
         $valSenha->valSenha($this->Dados['senha']);
 
         if (($valEmail->getResultado()) AND ($valEmailUnico->getResultado()) AND ($valUsuarioUnico->getResultado()) AND ($valSenha->getResultado())){
@@ -101,12 +113,12 @@ class AdmsCadastrarUsuario
         }
 
 
-        $slugImg = new \App\adms\Models\helper\AdmsSlug();
+        $slugImg = new AdmsSlug();
         $this->Dados['imagem'] = $slugImg->nomeSlug($this->Foto['name']);
 
         //var_dump($this->Dados);
 
-        $cadUsuario = new \App\adms\Models\helper\AdmsCreate();
+        $cadUsuario = new AdmsCreate();
         $cadUsuario->exeCreate("adms_usuarios", $this->Dados);
         if ($cadUsuario->getResultado())
         {
@@ -122,7 +134,8 @@ class AdmsCadastrarUsuario
 
                 } else {
 
-                    $_SESSION['msg'] = "<div class='alert alert-success'>Usuário cadastrado com sucesso!</div>";
+                    $alert = new AdmsAlertMensagem();
+                    $_SESSION['msg'] = $alert->alertMensagemJavaScript("Usuário cadastrado!","success");
                     $this->Resultado = true;
 
                 }
@@ -137,7 +150,8 @@ class AdmsCadastrarUsuario
 
         } else {
 
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: O Usuário não foi cadastrado!!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("O Usuário não foi cadastrado.","danger");
             $this->Resultado = false;
 
         }
@@ -148,7 +162,7 @@ class AdmsCadastrarUsuario
     {
 
 
-        $uploadImg = new \App\adms\Models\helper\AdmsUploadImgRed();
+        $uploadImg = new AdmsUploadImgRed();
         $uploadImg->uploadImagem($this->Foto, 'assets/imagens/usuario/'.$this->Dados['id'].'/', $this->Dados['imagem'], 150, 150);
         if ($uploadImg->getResultado())
         {
@@ -164,13 +178,15 @@ class AdmsCadastrarUsuario
 
             } else {
 
-                $_SESSION['msg'] = "<div class='alert alert-success'>Usuário cadastrado com sucesso!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Usuário cadastrado.","danger");
                 $this->Resultado = true;
 
             }
 
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: O Usuário não foi cadastrado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("O Usuário não foi cadastrado.","danger");
             $this->Resultado = false;
         }
 
@@ -179,7 +195,7 @@ class AdmsCadastrarUsuario
 
     public function listarCadastrar()
     {
-        $listar = new \App\adms\Models\helper\AdmsRead();
+        $listar = new AdmsRead();
         $listar->fullRead("SELECT id id_nivac, nome nome_nivac FROM adms_niveis_acessos 
                                   WHERE ordem >:ordem ORDER BY nome ASC ", "ordem=".$_SESSION['ordem_nivac']);
         $registro['nivac'] = $listar->getResultado();
@@ -200,7 +216,7 @@ class AdmsCadastrarUsuario
     private function ifoCadUser()
     {
         //Buscando valores atribuidos para os dados fixo no banco de dados
-        $infoCadUser = new \App\adms\Models\helper\AdmsRead();
+        $infoCadUser = new AdmsRead();
         $infoCadUser->fullRead("SELECT env_email_conf FROM adms_cads_usuarios WHERE id =:id LIMIT :limit", "id=1&limit=1");
         $this->IfoCadUser = $infoCadUser->getResultado();
 
@@ -227,16 +243,18 @@ class AdmsCadastrarUsuario
         $this->DadosEmail['cont_text_email'] .= "Obrigado";
 
 
-        $emailPHPMailer = new \App\adms\Models\helper\AdmsPhpMailer();
+        $emailPHPMailer = new AdmsPhpMailer();
         $emailPHPMailer->emailPhpMailer($this->DadosEmail);
         if($emailPHPMailer->getResultado()){
 
-            $_SESSION['msg'] = "<div class='alert alert-success'>Usuário cadastrado com sucesso. Um e-mail com um link de confirmação foi enviado para o e-mail do usuário!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Usuário cadastrado! Um e-mail com um link de confirmação foi enviado para o e-mail do usuário.","success");
             $this->Resultado = true;
 
         } else {
 
-            $_SESSION['msg'] = "<div class='alert alert-primary'>Usuário cadastrado com sucesso. Erro não foi possível enviar o link no seu e-mail para confirmar o e-mail!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Usuário cadastrado! Erro não foi possível enviar o link no seu e-mail para confirmar o e-mail.","info");
             $this->Resultado = false;
 
         }
