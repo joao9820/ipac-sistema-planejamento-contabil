@@ -8,6 +8,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -28,7 +33,7 @@ class AdmsEditarSitPg
     public function verSitPg($DadosId)
     {
         $this->DadosId = (int) $DadosId;
-        $verSitPg = new \App\adms\Models\helper\AdmsRead();
+        $verSitPg = new AdmsRead();
         $verSitPg->fullRead("SELECT * FROM adms_sits_pgs
                 WHERE id =:id LIMIT :limit", "id=" . $this->DadosId . "&limit=1");
         $this->Resultado = $verSitPg->getResultado();
@@ -39,7 +44,7 @@ class AdmsEditarSitPg
     {
         $this->Dados = $Dados;
 
-        $valCampoVazio = new \App\adms\Models\helper\AdmsCampoVazio;
+        $valCampoVazio = new AdmsCampoVazio;
         $valCampoVazio->validarDados($this->Dados);
 
         if ($valCampoVazio->getResultado()) {
@@ -52,13 +57,15 @@ class AdmsEditarSitPg
     private function updateEditSitPg()
     {
         $this->Dados['modified'] = date("Y-m-d H:i:s");
-        $upAltSitPg = new \App\adms\Models\helper\AdmsUpdate();
+        $upAltSitPg = new AdmsUpdate();
         $upAltSitPg->exeUpdate("adms_sits_pgs", $this->Dados, "WHERE id =:id", "id=" . $this->Dados['id']);
         if ($upAltSitPg->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Situação de página atualizado com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Situação de página atualizada!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A situação de página não foi atualizado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("A situação de página não foi atualizada.","danger");
             $this->Resultado = false;
         }
     }

@@ -8,6 +8,12 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+use App\adms\Models\helper\AdmsValSenha;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -30,7 +36,7 @@ class AdmsEditarSenha
     {
 
         $this->DadosId = (int) $DadosId;
-        $validaUsuario = new \App\adms\Models\helper\AdmsRead();
+        $validaUsuario = new AdmsRead();
         $validaUsuario->fullRead("SELECT user.id  
                         FROM adms_usuarios user 
                         INNER JOIN adms_niveis_acessos nivel_aces ON nivel_aces.id=user.adms_niveis_acesso_id 
@@ -45,8 +51,8 @@ class AdmsEditarSenha
         }
         else {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","Usuário não encontrado", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Usuário não encontrado.","danger");
             $this->Resultado = false;
 
         }
@@ -56,11 +62,11 @@ class AdmsEditarSenha
     public function editSenha(array $Dados)
     {
         $this->Dados = $Dados;
-        $valCampoVazio = new \App\adms\Models\helper\AdmsCampoVazio();
+        $valCampoVazio = new AdmsCampoVazio();
         $valCampoVazio->validarDados($this->Dados);
         if ($valCampoVazio->getResultado()){
 
-            $valSenha = new \App\adms\Models\helper\AdmsValSenha();
+            $valSenha = new AdmsValSenha();
             $valSenha->valSenha($this->Dados['senha']);
 
             if ($valSenha->getResultado()) {
@@ -89,19 +95,19 @@ class AdmsEditarSenha
 
             $this->Dados['senha'] = password_hash($this->Dados['senha'], PASSWORD_DEFAULT);
             $this->Dados['modified'] = date('Y-m-d H:i:s');
-            $upAtualSenha = new \App\adms\Models\helper\AdmsUpdate();
+            $upAtualSenha = new AdmsUpdate();
             $upAtualSenha->exeUpdate("adms_usuarios", $this->Dados, "WHERE id =:id", "id={$this->Dados['id']}");
             if ($upAtualSenha->getResultado()) {
 
-                $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-                $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Senha atualizada com sucesso", "success");
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Senha atualizada!","success");
                 $this->Resultado = true;
 
             }
             else {
 
-                $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-                $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","A senha não foi atualizada", "danger");
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("A senha não foi atualizada.","danger");
                 $this->Resultado = false;
 
             }
@@ -109,8 +115,8 @@ class AdmsEditarSenha
         }
         else {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","A senha não foi atualizada", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("A senha não foi atualizada. Tente novamente!","danger");
             $this->Resultado = false;
 
         }

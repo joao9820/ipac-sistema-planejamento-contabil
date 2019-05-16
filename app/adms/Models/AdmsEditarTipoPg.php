@@ -8,6 +8,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -28,7 +33,7 @@ class AdmsEditarTipoPg
     public function verTipoPg($DadosId)
     {
         $this->DadosId = (int) $DadosId;
-        $verTipoPg = new \App\adms\Models\helper\AdmsRead();
+        $verTipoPg = new AdmsRead();
         $verTipoPg->fullRead("SELECT * FROM adms_tps_pgs
                 WHERE id =:id LIMIT :limit", "id=" . $this->DadosId . "&limit=1");
         $this->Resultado = $verTipoPg->getResultado();
@@ -39,7 +44,7 @@ class AdmsEditarTipoPg
     {
         $this->Dados = $Dados;
 
-        $valCampoVazio = new \App\adms\Models\helper\AdmsCampoVazio;
+        $valCampoVazio = new AdmsCampoVazio;
         $valCampoVazio->validarDados($this->Dados);
 
         if ($valCampoVazio->getResultado()) {
@@ -52,13 +57,15 @@ class AdmsEditarTipoPg
     private function updateEditTipoPg()
     {
         $this->Dados['modified'] = date("Y-m-d H:i:s");
-        $upAltTipoPg = new \App\adms\Models\helper\AdmsUpdate();
+        $upAltTipoPg = new AdmsUpdate();
         $upAltTipoPg->exeUpdate("adms_tps_pgs", $this->Dados, "WHERE id =:id", "id=" . $this->Dados['id']);
         if ($upAltTipoPg->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Tipo de página atualizado com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Tipo de página atualizado!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Tipo de página não foi atualizado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Tipo de página não foi atualizado.","danger");
             $this->Resultado = false;
         }
     }

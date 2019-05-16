@@ -8,6 +8,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -28,7 +33,7 @@ class AdmsEditarCor
     public function verCor($DadosId)
     {
         $this->DadosId = (int) $DadosId;
-        $verCor = new \App\adms\Models\helper\AdmsRead();
+        $verCor = new AdmsRead();
         $verCor->fullRead("SELECT * FROM adms_cors
                 WHERE id =:id LIMIT :limit", "id=" . $this->DadosId . "&limit=1");
         $this->Resultado = $verCor->getResultado();
@@ -39,7 +44,7 @@ class AdmsEditarCor
     {
         $this->Dados = $Dados;
 
-        $valCampoVazio = new \App\adms\Models\helper\AdmsCampoVazio;
+        $valCampoVazio = new AdmsCampoVazio;
         $valCampoVazio->validarDados($this->Dados);
 
         if ($valCampoVazio->getResultado()) {
@@ -52,13 +57,15 @@ class AdmsEditarCor
     private function updateEditCor()
     {
         $this->Dados['modified'] = date("Y-m-d H:i:s");
-        $upAltCor = new \App\adms\Models\helper\AdmsUpdate();
+        $upAltCor = new AdmsUpdate();
         $upAltCor->exeUpdate("adms_cors", $this->Dados, "WHERE id =:id", "id=" . $this->Dados['id']);
         if ($upAltCor->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Cor atualizada com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Cor atualizada!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A cor não foi atualizada!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("A cor não foi atualizada.","danger");
             $this->Resultado = false;
         }
     }

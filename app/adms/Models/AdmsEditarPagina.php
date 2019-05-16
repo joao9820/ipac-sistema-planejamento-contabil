@@ -2,6 +2,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -10,7 +15,6 @@ if (!defined('URL')) {
 /**
  * Description of AdmsEditarPagina: 
  * Classe para editar as informações da página no banco de dados
- * @copyright (c) year, Cesar Szpak - Celke
  */
 class AdmsEditarPagina
 {
@@ -31,11 +35,12 @@ class AdmsEditarPagina
     /**
      * <b>Ver Página:</b> Receber o id da página para buscar informações do registro no banco de dados
      * @param int $DadosId
+     * @return
      */
     public function verPagina($DadosId)
     {
         $this->DadosId = (int) $DadosId;
-        $verPagina = new \App\adms\Models\helper\AdmsRead();
+        $verPagina = new AdmsRead();
         $verPagina->fullRead("SELECT * FROM adms_paginas
                 WHERE id =:id LIMIT :limit", "id=" . $this->DadosId . "&limit=1");
         $this->Resultado = $verPagina->getResultado();
@@ -52,7 +57,7 @@ class AdmsEditarPagina
         $this->VazioIcone = $this->Dados['icone'];
         unset($this->Dados['icone']);
 
-        $valCampoVazio = new \App\adms\Models\helper\AdmsCampoVazio;
+        $valCampoVazio = new AdmsCampoVazio;
         $valCampoVazio->validarDados($this->Dados);
 
         if ($valCampoVazio->getResultado()) {
@@ -70,13 +75,15 @@ class AdmsEditarPagina
     {
         $this->Dados['icone'] = $this->VazioIcone;
         $this->Dados['modified'] = date("Y-m-d H:i:s");
-        $upAltPagina = new \App\adms\Models\helper\AdmsUpdate();
+        $upAltPagina = new AdmsUpdate();
         $upAltPagina->exeUpdate("adms_paginas", $this->Dados, "WHERE id =:id", "id=" . $this->Dados['id']);
         if ($upAltPagina->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Página atualizada com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Página atualizada!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A página não foi atualizada!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("A página não foi atualizada.","danger");
             $this->Resultado = false;
         }
     }
@@ -86,7 +93,7 @@ class AdmsEditarPagina
      */
     public function listarCadastrar()
     {
-        $listar = new \App\adms\Models\helper\AdmsRead();
+        $listar = new AdmsRead();
         $listar->fullRead("SELECT id id_grpg, nome nome_grpg FROM adms_grps_pgs ORDER BY nome ASC");
 
         $registro['grpg'] = $listar->getResultado();

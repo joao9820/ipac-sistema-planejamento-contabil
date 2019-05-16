@@ -123,15 +123,15 @@ class AdmsFuncConcluirAtendimento
 
             $this->verificarAtividadesConcluidas();
 
-            $alertMensagem = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Atendimento finalizado com sucesso", "success");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atendimento finalizado!","success");
             $this->Resultado = true;
 
         }
         else {
 
-            $alertMensagem = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Desculpe! Erro ao finalizar atendimento.", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Erro ao finalizar atendimento.","danger");
             $this->Resultado = false;
 
         }
@@ -141,7 +141,7 @@ class AdmsFuncConcluirAtendimento
 
     private function buscarTempoRestante()
     {
-        $tempoRestante = new \App\adms\Models\helper\AdmsRead();
+        $tempoRestante = new AdmsRead();
         $tempoRestante->fullRead("SELECT at_tempo_restante, at_iniciado, at_tempo_excedido FROM adms_atendimento_funcionarios 
                 WHERE id=:id AND adms_funcionario_id =:adms_funcionario_id", "id={$this->DadosId}&adms_funcionario_id={$_SESSION['usuario_id']}");
         $this->ResultadoTempo = $tempoRestante->getResultado();

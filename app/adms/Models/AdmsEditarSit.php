@@ -8,6 +8,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -28,7 +33,7 @@ class AdmsEditarSit
     public function verSit($DadosId)
     {
         $this->DadosId = (int) $DadosId;
-        $verSit = new \App\adms\Models\helper\AdmsRead();
+        $verSit = new AdmsRead();
         $verSit->fullRead("SELECT * FROM adms_sits
                 WHERE id =:id LIMIT :limit", "id=" . $this->DadosId . "&limit=1");
         $this->Resultado = $verSit->getResultado();
@@ -39,7 +44,7 @@ class AdmsEditarSit
     {
         $this->Dados = $Dados;
 
-        $valCampoVazio = new \App\adms\Models\helper\AdmsCampoVazio;
+        $valCampoVazio = new AdmsCampoVazio;
         $valCampoVazio->validarDados($this->Dados);
 
         if ($valCampoVazio->getResultado()) {
@@ -52,13 +57,15 @@ class AdmsEditarSit
     private function updateEditSit()
     {
         $this->Dados['modified'] = date("Y-m-d H:i:s");
-        $upAltSit = new \App\adms\Models\helper\AdmsUpdate();
+        $upAltSit = new AdmsUpdate();
         $upAltSit->exeUpdate("adms_sits", $this->Dados, "WHERE id =:id", "id=" . $this->Dados['id']);
         if ($upAltSit->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Situação atualizada com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Situação atualizada!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A situação não foi atualizada!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("A situação não foi atualizada.","danger");
             $this->Resultado = false;
         }
     }
@@ -68,7 +75,7 @@ class AdmsEditarSit
      */
     public function listarCadastrar()
     {
-        $listar = new \App\adms\Models\helper\AdmsRead();
+        $listar = new AdmsRead();
 
         $listar->fullRead("SELECT id id_cor, nome nome_cor FROM adms_cors ORDER BY nome ASC");
         $registro['cor'] = $listar->getResultado();

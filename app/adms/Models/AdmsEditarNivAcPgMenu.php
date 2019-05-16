@@ -8,6 +8,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -28,7 +33,7 @@ class AdmsEditarNivAcPgMenu
     public function verNivAcPg($DadosId)
     {
         $this->DadosId = (int) $DadosId;
-        $verNivAcPg = new \App\adms\Models\helper\AdmsRead();
+        $verNivAcPg = new AdmsRead();
         $verNivAcPg->fullRead("SELECT * FROM adms_nivacs_pgs
                 WHERE id =:id LIMIT :limit", "id=" . $this->DadosId . "&limit=1");
         $this->Resultado = $verNivAcPg->getResultado();
@@ -39,7 +44,7 @@ class AdmsEditarNivAcPgMenu
     {
         $this->Dados = $Dados;
 
-        $valCampoVazio = new \App\adms\Models\helper\AdmsCampoVazio;
+        $valCampoVazio = new AdmsCampoVazio;
         $valCampoVazio->validarDados($this->Dados);
 
         if ($valCampoVazio->getResultado()) {
@@ -52,13 +57,15 @@ class AdmsEditarNivAcPgMenu
     private function updateEditMenu()
     {
         $this->Dados['modified'] = date("Y-m-d H:i:s");
-        $upAltNivAc = new \App\adms\Models\helper\AdmsUpdate();
+        $upAltNivAc = new AdmsUpdate();
         $upAltNivAc->exeUpdate("adms_nivacs_pgs", $this->Dados, "WHERE id =:id", "id=" . $this->Dados['id']);
         if ($upAltNivAc->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Item de menu da página atualizado com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Item de menu da página atualizado!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: O item de menu da página não foi atualizado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("O item de menu da página não foi atualizado.","danger");
             $this->Resultado = false;
         }
     }
@@ -68,7 +75,7 @@ class AdmsEditarNivAcPgMenu
      */
     public function listarCadastrar()
     {
-        $listar = new \App\adms\Models\helper\AdmsRead();
+        $listar = new AdmsRead();
 
         $listar->fullRead("SELECT id id_menu, nome nome_menu FROM adms_menus ORDER BY nome ASC");
         $registro['menu'] = $listar->getResultado();

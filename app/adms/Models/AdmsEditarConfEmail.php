@@ -8,6 +8,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -26,7 +31,7 @@ class AdmsEditarConfEmail
 
     public function verConfEmail()
     {
-        $verConfEmail = new \App\adms\Models\helper\AdmsRead();
+        $verConfEmail = new AdmsRead();
         $verConfEmail->fullRead("SELECT * FROM adms_confs_emails
                 WHERE id =:id LIMIT :limit", "id=1&limit=1");
         $this->Resultado = $verConfEmail->getResultado();
@@ -37,7 +42,7 @@ class AdmsEditarConfEmail
     {
         $this->Dados = $Dados;
 
-        $valCampoVazio = new \App\adms\Models\helper\AdmsCampoVazio;
+        $valCampoVazio = new AdmsCampoVazio;
         $valCampoVazio->validarDados($this->Dados);
 
         if ($valCampoVazio->getResultado()) {
@@ -50,13 +55,15 @@ class AdmsEditarConfEmail
     private function updateConfEmail()
     {
         $this->Dados['modified'] = date("Y-m-d H:i:s");
-        $upConfEmail = new \App\adms\Models\helper\AdmsUpdate();
+        $upConfEmail = new AdmsUpdate();
         $upConfEmail->exeUpdate("adms_confs_emails", $this->Dados, "WHERE id =:id", "id=1");
         if ($upConfEmail->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Formulário para editar os dados do servidor de e-mail atualizado com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Formulário para editar os dados do servidor de e-mail atualizado!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Formulário para editar os dados do servidor de e-mail não foi atualizado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Formulário para editar os dados do servidor de e-mail não foi atualizado.","danger");
             $this->Resultado = false;
         }
     }

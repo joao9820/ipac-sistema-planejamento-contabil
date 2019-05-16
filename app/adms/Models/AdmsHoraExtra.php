@@ -8,6 +8,12 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCreate;
+use App\adms\Models\helper\AdmsDelete;
+use App\adms\Models\helper\AdmsPaginacao;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -44,7 +50,7 @@ class AdmsHoraExtra
         $this->UserId = (int) $UserId;
         $dataInicial = date('Y-m-d');
 
-        $paginacao = new \App\adms\Models\helper\AdmsPaginacao(URLADM . 'hora-extra/listar/', "?func=" . $this->UserId);
+        $paginacao = new AdmsPaginacao(URLADM . 'hora-extra/listar/', "?func=" . $this->UserId);
         $paginacao->condicao($this->PageId, $this->LimiteResultado);
         $paginacao->paginacao("SELECT COUNT(id) AS num_result FROM adms_hora_extra 
                               WHERE adms_usuario_id=:adms_usuario_id 
@@ -52,7 +58,7 @@ class AdmsHoraExtra
         $this->ResultadoPg = $paginacao->getResultado();
 
 
-        $listar = new \App\adms\Models\helper\AdmsRead();
+        $listar = new AdmsRead();
         $listar->fullRead("SELECT id id_hora_extra, total, data 
                           FROM adms_hora_extra 
                           WHERE adms_usuario_id=:adms_usuario_id
@@ -70,7 +76,7 @@ class AdmsHoraExtra
 
 
 
-        $listar = new \App\adms\Models\helper\AdmsRead();
+        $listar = new AdmsRead();
         $listar->fullRead("SELECT id id_hora_extra, total, data 
                           FROM adms_hora_extra 
                           WHERE adms_usuario_id=:adms_usuario_id
@@ -85,7 +91,7 @@ class AdmsHoraExtra
     {
         $this->UserId = (int) $UserId;
 
-        $listar = new \App\adms\Models\helper\AdmsRead();
+        $listar = new AdmsRead();
         $listar->fullRead("SELECT id id_funcionario, nome nome_funcionario
                           FROM adms_usuarios 
                           WHERE id=:id LIMIT :limit", "id={$this->UserId}&limit=1");
@@ -100,22 +106,22 @@ class AdmsHoraExtra
         $this->Dados['created'] = date("Y-m-d H:i:s");
 
 
-        $cadHoraExtra = new \App\adms\Models\helper\AdmsCreate();
+        $cadHoraExtra = new AdmsCreate();
         $cadHoraExtra->exeCreate("adms_hora_extra", $this->Dados);
 
 
         if ($cadHoraExtra->getResultado())
         {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Hora extra agendada com sucesso!", "success");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Hora extra agendada!","success");
             $this->Resultado = true;
 
         }
         else {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","A hora extra não foi agendada.", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("A hora extra não foi agendada.","danger");
             $this->Resultado = false;
 
         }
@@ -126,18 +132,18 @@ class AdmsHoraExtra
         $this->HoraExtraId = (int) $HoraExtraId;
 
 
-        $deletarHoraExtra = new \App\adms\Models\helper\AdmsDelete();
+        $deletarHoraExtra = new AdmsDelete();
         $deletarHoraExtra->exeDelete("adms_hora_extra", "id=:id", "id={$this->HoraExtraId}");
         if ($deletarHoraExtra->getResultado()) {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Agendamento de hora extra excluído com sucesso!", "info");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Agendamento de hora extra excluído!","success");
             $this->Resultado = true;
 
         } else {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","A hora extra não foi deletada.", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("A hora extra não foi deletada.","danger");
             $this->Resultado = false;
 
         }

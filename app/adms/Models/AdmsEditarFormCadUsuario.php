@@ -8,6 +8,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -26,7 +31,7 @@ class AdmsEditarFormCadUsuario
 
     public function verFormCadUsuario()
     {
-        $verFormCadUsuario = new \App\adms\Models\helper\AdmsRead();
+        $verFormCadUsuario = new AdmsRead();
         $verFormCadUsuario->fullRead("SELECT * FROM adms_cads_usuarios
                 WHERE id =:id LIMIT :limit", "id=1&limit=1");
         $this->Resultado = $verFormCadUsuario->getResultado();
@@ -37,7 +42,7 @@ class AdmsEditarFormCadUsuario
     {
         $this->Dados = $Dados;
 
-        $valCampoVazio = new \App\adms\Models\helper\AdmsCampoVazio;
+        $valCampoVazio = new AdmsCampoVazio;
         $valCampoVazio->validarDados($this->Dados);
 
         if ($valCampoVazio->getResultado()) {
@@ -50,13 +55,15 @@ class AdmsEditarFormCadUsuario
     private function updateFormCadUsuario()
     {
         $this->Dados['modified'] = date("Y-m-d H:i:s");
-        $upFormCadUsuario = new \App\adms\Models\helper\AdmsUpdate();
+        $upFormCadUsuario = new AdmsUpdate();
         $upFormCadUsuario->exeUpdate("adms_cads_usuarios", $this->Dados, "WHERE id =:id", "id=1");
         if ($upFormCadUsuario->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Formulário para editar o cadastro de usuário na página de login atualizado com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Formulário para editar o cadastro de usuário na página de login atualizado!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Formulário para editar o cadastro de usuário na página de login não foi atualizado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Formulário para editar o cadastro de usuário na página de login não foi atualizado!","danger");
             $this->Resultado = false;
         }
     }
@@ -66,7 +73,7 @@ class AdmsEditarFormCadUsuario
      */
     public function listarCadastrar()
     {
-        $listar = new \App\adms\Models\helper\AdmsRead();
+        $listar = new AdmsRead();
         $listar->fullRead("SELECT id id_sit, nome nome_sit FROM adms_sits_usuarios ORDER BY nome ASC");
         $registro['sit'] = $listar->getResultado();
 
