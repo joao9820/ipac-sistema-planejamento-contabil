@@ -21,7 +21,7 @@ if(isset($_SESSION['alert'])) {
         function fecharMensagem() {
             window.setTimeout(function () {
                 fadeOut(mensagemCard, 1);
-            }, 5000)
+            }, 9000)
         }
 
 
