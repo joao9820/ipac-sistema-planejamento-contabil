@@ -3,6 +3,8 @@
 namespace Core;
 
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+
 class ConfigController
 {
 
@@ -119,9 +121,11 @@ class ConfigController
                     }
                 } else {
                     if(!isset($_SESSION['adms_niveis_acesso_id'])) {
-                        $_SESSION['msg'] = '<div class="alert alert-info" role="alert">Faça login para acessar o sistema</div>';
+                        $alert = new AdmsAlertMensagem();
+                        $_SESSION['msg'] = $alert->alertMensagemJavaScript("Faça login para acessar o sistema!","info");
                     } else {
-                        $_SESSION['msg'] = '<div class="alert alert-danger" role="alert">Oops! Você não tem acesso a página. <a class="nav-link text-dark" href="javascript:history.back()">Voltar a página anterior</a></div>';
+                        $alert = new AdmsAlertMensagem();
+                        $_SESSION['msg'] = $alert->alertMensagemJavaScript("Oops! Você não tem acesso a página. <a class='nav-link text-dark' href='javascript:history.back()'>Voltar a página anterior</a>","warning");
                     }
                     $this->UrlController = $this->slugController('Login');
                     $this->UrlMetodo = $this->slugMetodo('acesso');
