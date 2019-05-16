@@ -38,7 +38,7 @@ class AdmsLogin
                                           nivac.ordem ordem_nivac, nivac.nome nome_nivel
                                           FROM adms_usuarios user 
                                           INNER JOIN adms_niveis_acessos nivac ON nivac.id = user.adms_niveis_acesso_id 
-                                          WHERE usuario =:usuario LIMIT :limit", "usuario={$this->Dados['usuario']}&limit=1");
+                                          WHERE user.usuario =:usuario or user.email =:email LIMIT :limit", "usuario={$this->Dados['usuario']}&email={$this->Dados['usuario']}&limit=1");
             $this->Resultado = $validaLogin->getResultado();
             //var_dump($this->Resultado);
             if(!empty($this->Resultado))
