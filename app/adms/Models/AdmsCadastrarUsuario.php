@@ -180,7 +180,7 @@ class AdmsCadastrarUsuario
             } else {
 
                 $alert = new AdmsAlertMensagem();
-                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Usuário cadastrado.","danger");
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Usuário cadastrado.","success");
                 $this->Resultado = true;
 
             }
