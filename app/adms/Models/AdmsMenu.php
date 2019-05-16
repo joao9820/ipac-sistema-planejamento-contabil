@@ -8,6 +8,8 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -26,7 +28,7 @@ class AdmsMenu
 
     public function itemMenu()
     {
-        $listItemMenu = new \App\adms\Models\helper\AdmsRead();
+        $listItemMenu = new AdmsRead();
         $listItemMenu->fullRead("SELECT nivpg.dropdown, 
                     men.id id_men, men.nome nome_men, men.icone icone_men, 
                     pg.id id_pg, pg.menu_controller, pg.menu_metodo, pg.nome_pagina, pg.icone icone_pg 

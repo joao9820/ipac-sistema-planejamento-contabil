@@ -7,6 +7,8 @@
  */
 
 namespace App\adms\Models;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -21,7 +23,7 @@ class AdmsVerLogsAtendimento
     public function verLogsAtendimento($DadosId = null)
     {
         $this->DadosId = (int) $DadosId;
-        $verLogs = new \App\adms\Models\helper\AdmsRead();
+        $verLogs = new AdmsRead();
         $verLogs->fullRead("SELECT * from 
                           adms_logs_atendimentos 
                           WHERE adms_atendimento_id =:adms_atendimento_id

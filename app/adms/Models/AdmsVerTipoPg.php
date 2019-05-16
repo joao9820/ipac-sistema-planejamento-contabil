@@ -8,6 +8,8 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -22,7 +24,7 @@ class AdmsVerTipoPg
     public function verTipoPg($DadosId)
     {
         $this->DadosId = (int) $DadosId;
-        $verTipoPg = new \App\adms\Models\helper\AdmsRead();
+        $verTipoPg = new AdmsRead();
         $verTipoPg->fullRead("SELECT * FROM adms_tps_pgs
                 WHERE id =:id LIMIT :limit", "id=".$this->DadosId."&limit=1");
         $this->Resultado= $verTipoPg->getResultado();

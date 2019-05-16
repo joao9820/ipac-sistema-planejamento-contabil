@@ -21,7 +21,7 @@ class AdmsListarAtendGerente
 
     private $Resultado;
     private $PageId;
-    private $LimiteResultado = 10; // Define a quantidade de usuarios por páginas
+    private $LimiteResultado = 15; // Define a quantidade de usuarios por páginas
     private $ResultadoPg;
 
     public function getResultadoPg()

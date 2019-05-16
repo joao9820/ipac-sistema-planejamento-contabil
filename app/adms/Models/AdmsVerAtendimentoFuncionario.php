@@ -8,6 +8,8 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -24,7 +26,7 @@ class AdmsVerAtendimentoFuncionario
     {
         $this->DadosId = (int) $DadosId;
 
-        $verAtendimento = new \App\adms\Models\helper\AdmsRead();
+        $verAtendimento = new AdmsRead();
         $verAtendimento->fullRead("SELECT aten.id, aten.adms_funcionario_id funcionario, aten.descricao, aten.created, 
                             aten.modified, aten.prioridade, aten.duracao_atendimento, aten.inicio_atendimento, 
                             aten.fim_atendimento, aten.arquivado_gerente, aten.cancelado_p_user, aten.at_tempo_restante,aten.at_iniciado, aten.at_pausado, aten.at_tempo_excedido,
@@ -54,7 +56,7 @@ class AdmsVerAtendimentoFuncionario
     {
         $this->DadosDemandaId = (int) $DadosDemandaId;
 
-        $qtdHoras = new \App\adms\Models\helper\AdmsRead();
+        $qtdHoras = new AdmsRead();
         $qtdHoras->fullRead("SELECT time_format( SEC_TO_TIME( SUM( TIME_TO_SEC( duracao ) ) ),'%H:%i:%s') 
                                     AS total_horas FROM adms_atividades where adms_demanda_id=:adms_demanda_id", "adms_demanda_id={$this->DadosDemandaId}");
         $this->Resultado = $qtdHoras->getResultado();

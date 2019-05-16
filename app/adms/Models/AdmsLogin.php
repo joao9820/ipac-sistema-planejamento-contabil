@@ -9,6 +9,7 @@
 namespace App\adms\Models;
 
 use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsRead;
 
 if (!defined('URL')) {
     header("Location: /");
@@ -19,7 +20,6 @@ class AdmsLogin
 {
     private $Dados;
     private $Resultado;
-    private $DadosHoraE;
 
     public function getResultado()
     {
@@ -33,7 +33,7 @@ class AdmsLogin
         //var_dump($this->Dados);
         $this->validarDados();
         if($this->Resultado){
-            $validaLogin = new \App\adms\Models\helper\AdmsRead();
+            $validaLogin = new AdmsRead();
             $validaLogin->fullRead("SELECT user.id, user.nome, user.email, user.senha, user.imagem, user.adms_niveis_acesso_id, user.adms_sits_usuario_id, user.adms_empresa_id, 
                                           nivac.ordem ordem_nivac, nivac.nome nome_nivel
                                           FROM adms_usuarios user 
@@ -46,13 +46,15 @@ class AdmsLogin
 
                 if ($this->Resultado[0]['adms_sits_usuario_id'] == 3)
                 {
-                    $_SESSION['msg'] = '<div class="alert alert-danger" role="alert">Erro: E-mail não confirmado!</div>';
+                    $alert = new AdmsAlertMensagem();
+                    $_SESSION['msg'] = $alert->alertMensagemJavaScript("E-mail não confirmado!","danger");
                     $this->Resultado = false;
 
                 }
                 elseif ($this->Resultado[0]['adms_sits_usuario_id'] == 5)
                 {
-                    $_SESSION['msg'] = '<div class="alert alert-danger" role="alert">Acesso bloqueado!</div>';
+                    $alert = new AdmsAlertMensagem();
+                    $_SESSION['msg'] = $alert->alertMensagemJavaScript("Acesso bloqueado!","danger");
                     $this->Resultado = false;
 
                 } else {
@@ -62,7 +64,8 @@ class AdmsLogin
 
             } else {
 
-                $_SESSION['msg'] = '<div class="alert alert-danger" role="alert">Erro: Usuário não encontrado!</div>';
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Usuário não encontrado!","danger");
                 $this->Resultado = false;
 
             }
@@ -74,7 +77,8 @@ class AdmsLogin
         $this->Dados = array_map('strip_tags', $this->Dados);
         $this->Dados = array_map('trim', $this->Dados);
         if(in_array('', $this->Dados)){
-            $_SESSION['msg'] = '<div class="alert alert-danger" role="alert">Erro: Necessário preencher todos os campos!</div>';
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Necessário preencher todos os campos!","warning");
             $this->Resultado = false;
         } else {
 
@@ -98,7 +102,7 @@ class AdmsLogin
             $this->Resultado = true;
         } else {
             $alert = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alert->alertMensagemJavaScript("senha incorreta!","danger");
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Senha incorreta!","danger");
             $this->Resultado = false;
         }
     }

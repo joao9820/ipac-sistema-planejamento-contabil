@@ -8,6 +8,9 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsPaginacao;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -34,7 +37,7 @@ class AdmsListarJorTrabFunc
     public function listarFuncionarios($PageId = null)
     {
         $this->PageId = (int) $PageId;
-        $paginacao = new \App\adms\Models\helper\AdmsPaginacao(URLADM . 'usuarios/listar');
+        $paginacao = new AdmsPaginacao(URLADM . 'usuarios/listar');
         $paginacao->condicao($this->PageId, $this->LimiteResultado);
         $paginacao->paginacao("SELECT COUNT(user.id) AS num_result
                      FROM adms_usuarios user 
@@ -44,7 +47,7 @@ class AdmsListarJorTrabFunc
         $offset = $paginacao->getOffset();
 
 
-        $listarFunc = new \App\adms\Models\helper\AdmsRead();
+        $listarFunc = new AdmsRead();
         $listarFunc->fullRead("SELECT user.id, user.nome, user.apelido, user.email, user.imagem, user.jornada_de_trabalho, 
                         depto.nome departamento,
                         plan.hora_inicio, plan.hora_termino, plan.hora_inicio2, plan.hora_termino2

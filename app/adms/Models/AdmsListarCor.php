@@ -8,6 +8,9 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsPaginacao;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -30,12 +33,12 @@ class AdmsListarCor
     public function listarCor($PageId = null)
     {
         $this->PageId = (int) $PageId;
-        $paginacao = new \App\adms\Models\helper\AdmsPaginacao(URLADM . 'cor/listar');
+        $paginacao = new AdmsPaginacao(URLADM . 'cor/listar');
         $paginacao->condicao($this->PageId, $this->LimiteResultado);
         $paginacao->paginacao("SELECT COUNT(id) AS num_result FROM adms_cors", "ordem=".$_SESSION['ordem_nivac']);
         $this->ResultadoPg = $paginacao->getResultado();
 
-        $listarCor = new \App\adms\Models\helper\AdmsRead();
+        $listarCor = new AdmsRead();
         $listarCor->fullRead("SELECT id, nome, cor FROM adms_cors ORDER BY id ASC LIMIT :limit OFFSET :offset", "limit={$this->LimiteResultado}&offset={$paginacao->getOffset()}");
         $this->Resultado = $listarCor->getResultado();
         return $this->Resultado;

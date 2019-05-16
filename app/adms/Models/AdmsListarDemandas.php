@@ -8,6 +8,9 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsPaginacao;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -31,7 +34,7 @@ class AdmsListarDemandas
     public function listarDemandas($PageId = null)
     {
         $this->PageId = (int) $PageId;
-        $paginacao = new \App\adms\Models\helper\AdmsPaginacao(URLADM . 'demandas/listar');
+        $paginacao = new AdmsPaginacao(URLADM . 'demandas/listar');
         $paginacao->condicao($this->PageId, $this->LimiteResultado);
         $paginacao->paginacao("SELECT COUNT(id) AS num_result
                      FROM adms_demandas");
@@ -39,7 +42,7 @@ class AdmsListarDemandas
         $offset = $paginacao->getOffset();
 
 
-        $listarDemandas = new \App\adms\Models\helper\AdmsRead();
+        $listarDemandas = new AdmsRead();
         $listarDemandas->fullRead("SELECT dem.id, dem.nome, dem.descricao, ativ.duracao_total_atividade
                     FROM adms_demandas dem
                     LEFT JOIN (SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(duracao))) as duracao_total_atividade, adms_demanda_id FROM adms_atividades GROUP BY adms_demanda_id) ativ ON ativ.adms_demanda_id = dem.id

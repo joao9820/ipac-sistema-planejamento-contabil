@@ -8,6 +8,8 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -22,7 +24,7 @@ class AdmsVerGrupoPg
     public function verGrupoPg($DadosId)
     {
         $this->DadosId = (int) $DadosId;
-        $verGrupoPg = new \App\adms\Models\helper\AdmsRead();
+        $verGrupoPg = new AdmsRead();
         $verGrupoPg->fullRead("SELECT * FROM adms_grps_pgs
                 WHERE id =:id LIMIT :limit", "id=".$this->DadosId."&limit=1");
         $this->Resultado= $verGrupoPg->getResultado();

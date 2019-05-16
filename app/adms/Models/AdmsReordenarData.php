@@ -26,7 +26,7 @@ class AdmsReordenarData {
     private $DuracaoTotalAtivi;
     private $Data;
     private $JornadaFunc;
-    private $HoraTermino2;
+    private $UltimaAtividadeLoop;
     private $Dados;
     private $TempoExcedido;
     private $horaFimAtvAnt;
@@ -48,7 +48,7 @@ class AdmsReordenarData {
         
         $this->horaFimAtvAnt = $horaFimAtvAnt;
 
-        $reordemDia = new \App\adms\Models\AdmsAtendimentoFuncionarios();
+        $reordemDia = new AdmsAtendimentoFuncionarios();
 
         //echo $cont ."\n";
         $reordemDia->atividadeDuracao($this->FuncionarioId, $novaData);

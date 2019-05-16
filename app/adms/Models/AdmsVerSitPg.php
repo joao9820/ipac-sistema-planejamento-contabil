@@ -8,6 +8,8 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -22,7 +24,7 @@ class AdmsVerSitPg
     public function verSitPg($DadosId)
     {
         $this->DadosId = (int) $DadosId;
-        $verSitPg = new \App\adms\Models\helper\AdmsRead();
+        $verSitPg = new AdmsRead();
         $verSitPg->fullRead("SELECT * FROM adms_sits_pgs WHERE id =:id LIMIT :limit", "id=".$this->DadosId."&limit=1");
         $this->Resultado= $verSitPg->getResultado();
         return $this->Resultado;

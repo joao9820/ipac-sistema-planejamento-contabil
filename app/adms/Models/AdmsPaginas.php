@@ -2,6 +2,8 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -25,7 +27,7 @@ class AdmsPaginas
         }
         $this->UrlController = (string) $UrlController;
         $this->UrlMetodo = (string) $UrlMetodo;
-        $listar = new \App\adms\Models\helper\AdmsRead();
+        $listar = new AdmsRead();
         $listar->fullRead("SELECT pg.id,
                 tpg.tipo tipo_tpg
                 FROM adms_paginas pg
@@ -45,7 +47,7 @@ class AdmsPaginas
         }
         $this->UrlControllerPb = (string) $UrlControllerPb;
         $this->UrlMetodoPb = (string) $UrlMetodoPb;
-        $listarPb = new \App\adms\Models\helper\AdmsRead();
+        $listarPb = new AdmsRead();
         $listarPb->fullRead("SELECT pg.id,
                 tpg.tipo tipo_tpg
                 FROM adms_paginas pg
@@ -62,7 +64,7 @@ class AdmsPaginas
     {
         $this->Controller = (string) $Controller;
         $this->Metodo = (string) $Metodo;
-        $listarPe = new \App\adms\Models\helper\AdmsRead();
+        $listarPe = new AdmsRead();
         $listarPe->fullRead("SELECT id
                 FROM adms_paginas 
                 WHERE controller =:controller AND metodo =:metodo

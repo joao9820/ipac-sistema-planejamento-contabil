@@ -8,6 +8,8 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -22,7 +24,7 @@ class AdmsVerUsuario
     public function verUsuario($DadosId)
     {
         $this->DadosId = (int) $DadosId;
-        $verUsuario = new \App\adms\Models\helper\AdmsRead();
+        $verUsuario = new AdmsRead();
         $verUsuario->fullRead("SELECT user.*, 
                         nivel_aces.nome nome_nivel_aces, 
                         situacao.nome nome_situacao, 

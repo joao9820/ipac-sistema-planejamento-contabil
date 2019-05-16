@@ -2,6 +2,9 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsPaginacao;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -10,7 +13,6 @@ if (!defined('URL')) {
 /**
  * Description of AdmsListarPagina
  *
- * @copyright (c) year, Cesar Szpak - Celke
  */
 class AdmsListarPagina
 {
@@ -29,13 +31,13 @@ class AdmsListarPagina
     public function listarPagina($PageId = null)
     {
         $this->PageId = (int) $PageId;
-        $paginacao = new \App\adms\Models\helper\AdmsPaginacao(URLADM . 'pagina/listar');
+        $paginacao = new AdmsPaginacao(URLADM . 'pagina/listar');
         $paginacao->condicao($this->PageId, $this->LimiteResultado);
         $paginacao->paginacao("SELECT COUNT(id) AS num_result 
                 FROM adms_paginas");
         $this->ResultadoPg = $paginacao->getResultado();
                
-        $listarUsuario = new \App\adms\Models\helper\AdmsRead();
+        $listarUsuario = new AdmsRead();
         $listarUsuario->fullRead("SELECT pg.id, pg.nome_pagina,
                 tpg.tipo tipo_tpg, tpg.nome nome_tpg,
                 sit.nome nome_sit, sit.cor cor_sit

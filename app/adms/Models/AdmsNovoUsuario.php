@@ -8,6 +8,15 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCreate;
+use App\adms\Models\helper\AdmsEmail;
+use App\adms\Models\helper\AdmsEmailUnico;
+use App\adms\Models\helper\AdmsPhpMailer;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsValSenha;
+use App\adms\Models\helper\AdmsValUsuario;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -31,16 +40,16 @@ class AdmsNovoUsuario
         $this->validarDados();
         if($this->Resultado){
 
-            $valEmail = new \App\adms\Models\helper\AdmsEmail();
+            $valEmail = new AdmsEmail();
             $valEmail->valEmail($this->Dados['email']);
 
-            $valEmailUnico = new \App\adms\Models\helper\AdmsEmailUnico();
+            $valEmailUnico = new AdmsEmailUnico();
             $valEmailUnico->valEmailUnico($this->Dados['email']);
 
-            $valUsuario = new \App\adms\Models\helper\AdmsValUsuario();
+            $valUsuario = new AdmsValUsuario();
             $valUsuario->valUsuario($this->Dados['usuario']);
 
-            $valSenha = new \App\adms\Models\helper\AdmsValSenha();
+            $valSenha = new AdmsValSenha();
             $valSenha->valSenha($this->Dados['senha']);
 
             if(($valEmail->getResultado()) AND ($valEmailUnico->getResultado() AND ($valUsuario->getResultado()) AND ($valSenha->getResultado()) )){
@@ -64,8 +73,8 @@ class AdmsNovoUsuario
         $this->Dados = array_map('trim', $this->Dados);
         if(in_array('', $this->Dados)){
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Necessário preencher todos os campos", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Necessário preencher todos os campos!","warning");
             $this->Resultado = false;
 
         }
@@ -87,7 +96,7 @@ class AdmsNovoUsuario
         $this->Dados['created'] = date('Y-m-d H:i:s');
         $this->Dados['adms_empresa_id'] = 1;  // Obs: apenas enquanto em teste, cadastrar todos usuarios sendo da empresa ipac
 
-        $cadUser = new \App\adms\Models\helper\AdmsCreate();
+        $cadUser = new AdmsCreate();
         $cadUser->exeCreate('adms_usuarios', $this->Dados);
         if($cadUser->getResultado()){
 
@@ -98,8 +107,8 @@ class AdmsNovoUsuario
             }
             else {
 
-                $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-                $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Usuário cadastrado com sucesso", "success");
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Usuário cadastrado!","success");
                 $this->Resultado = true;
 
             }
@@ -108,8 +117,8 @@ class AdmsNovoUsuario
         }
         else{
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","O usuário não foi cadastrado", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("O usuário não foi cadastrado.","danger");
             $this->Resultado = false;
 
         }
@@ -118,7 +127,7 @@ class AdmsNovoUsuario
     private function ifoCadUser()
     {
         //Buscando valores atribuidos para os dados fixo no banco de dados
-        $infoCadUser = new \App\adms\Models\helper\AdmsRead();
+        $infoCadUser = new AdmsRead();
         $infoCadUser->fullRead("SELECT env_email_conf, adms_niveis_acesso_id, adms_sits_usuario_id FROM adms_cads_usuarios WHERE id =:id LIMIT :limit", "id=1&limit=1");
         $this->IfoCadUser = $infoCadUser->getResultado();
 
@@ -145,19 +154,19 @@ class AdmsNovoUsuario
         $this->DadosEmail['cont_text_email'] .= "Obrigado";
 
 
-        $emailPHPMailer = new \App\adms\Models\helper\AdmsPhpMailer();
+        $emailPHPMailer = new AdmsPhpMailer();
         $emailPHPMailer->emailPhpMailer($this->DadosEmail);
         if($emailPHPMailer->getResultado()){
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Usuário cadastrado com sucesso. Enviado no seu e-mail o link para confirmar o e-mail", "success");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Usuário cadastrado! Enviado no seu e-mail o link para confirmar o e-mail","success");
             $this->Resultado = true;
 
         }
         else {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Usuário cadastrado com sucesso. Erro não foi possível enviar o link no seu e-mail para confirmar o e-mail", "primary");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Usuário cadastrado! Erro não foi possível enviar o link no seu e-mail para confirmar o e-mail","info");
             $this->Resultado = false;
 
         }

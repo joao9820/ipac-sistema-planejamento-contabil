@@ -8,28 +8,26 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsPaginacao;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
 }
+
 
 class AdmsListarAtendArquiGerente
 {
 
     private $Resultado;
     private $PageId;
-    private $LimiteResultado = 10; // Define a quantidade de usuarios por páginas
-    private $ResultadoPgAq;
-
-    public function getResultadoPgAq()
-    {
-        return $this->ResultadoPg;
-    }
+    private $LimiteResultado = 20; // Define a quantidade de usuarios por páginas
 
     public function listarAtendimentosArquivados($PageId = null)
     {
         $this->PageId = (int) $PageId;
-        $paginacao = new \App\adms\Models\helper\AdmsPaginacao(URLADM . 'gerenciar-atendimento/listar');
+        $paginacao = new AdmsPaginacao(URLADM . 'gerenciar-atendimento/listar');
         $paginacao->condicao($this->PageId, $this->LimiteResultado);
         $paginacao->paginacao("SELECT COUNT(id) AS num_result FROM adms_atendimentos WHERE arquivado_gerente=1");
         $this->ResultadoPg = $paginacao->getResultado();
@@ -37,7 +35,7 @@ class AdmsListarAtendArquiGerente
         $offset = $paginacao->getOffset();
 
 
-        $listarAtendimento = new \App\adms\Models\helper\AdmsRead();
+        $listarAtendimento = new AdmsRead();
         $listarAtendimento->fullRead("SELECT aten.id, aten.adms_funcionario_id funcionario, aten.created, 
                         demanda.nome nome_demanda, 
                         situacao.nome nome_situacao, situacao.id id_situacao, 
