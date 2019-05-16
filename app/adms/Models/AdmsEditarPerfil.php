@@ -15,6 +15,7 @@ use App\adms\Models\helper\AdmsEmail;
 use App\adms\Models\helper\AdmsEmailUnico;
 use App\adms\Models\helper\AdmsSlug;
 use App\adms\Models\helper\AdmsUpdate;
+use App\adms\Models\helper\AdmsUploadImg;
 use App\adms\Models\helper\AdmsUploadImgRed;
 use App\adms\Models\helper\AdmsValUsuario;
 
@@ -103,8 +104,8 @@ class AdmsEditarPerfil
             $slugImg = new AdmsSlug();
             $this->Dados['imagem'] = $slugImg->nomeSlug($this->Foto['name']);
 
-            $uploadImg = new AdmsUploadImgRed();
-            $uploadImg->uploadImagem($this->Foto, 'assets/imagens/usuario/'.$_SESSION['usuario_id'].'/', $this->Dados['imagem'], 150, 150);
+            $uploadImg = new AdmsUploadImg();
+            $uploadImg->uploadImagem($this->Foto, 'assets/imagens/usuario/'.$_SESSION['usuario_id'].'/', $this->Dados['imagem']);
             if ($uploadImg->getResultado())
             {
                 // Apagar a imagem antiga se existir

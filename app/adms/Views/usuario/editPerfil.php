@@ -41,70 +41,69 @@ if (!defined('URL')) {
 
         <form method="post" action="" enctype="multipart/form-data">
 
-            <div class="form-row">
-                <div class="form-group col-md-8">
-                    <label><span class="text-danger">* </span>Nome</label>
-                    <input name="nome" type="text" class="form-control" placeholder="Digite o nome completo"
-                           value="<?php if (isset($valorFom['nome'])) { echo $valorFom['nome']; } ?>">
-                </div>
-                <div class="form-group col-md-4">
-                    <label><span class="text-danger">* </span>Apelido</label>
-                    <input name="apelido" type="text" class="form-control" placeholder="Como gostaria de ser chamado"
-                           value="<?php if (isset($valorFom['nome'])) { echo $valorFom['apelido']; } ?>">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label><span class="text-danger">* </span>Usuário</label>
-                    <input name="usuario" type="text" class="form-control" placeholder="Digite o usuário"
-                           value="<?php if (isset($valorFom['nome'])) { echo $valorFom['usuario']; } ?>">
-                </div>
-                <div class="form-group col-md-6">
-                    <label><span class="text-danger">* </span>E-mail</label>
-                    <input name="email" type="email" class="form-control" placeholder="Seu e-mail"
-                           value="<?php if (isset($valorFom['nome'])) { echo $valorFom['email']; } ?>">
-                </div>
-            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-row">
+                        <label class="">Foto de Perfil</label>
+                        <div class="form-group col-md-12">
+                            <input type="hidden" name="imagem_antiga" value="<?php
+                            if (isset($valorFom['imagem_antiga'])) {
+                                echo $valorFom['imagem_antiga'];
+                            } elseif (isset($valorFom['imagem'])) {
+                                echo $valorFom['imagem'];
+                            }
+                            ?>">
+                            <div class="d-flex">
+                                <input type="file" name="imagem" id="arquivo" class="arquivo" onchange="previewImagem();">
+                                <input type="button" class="btnImg" value="Selecionar">
+                                <input type="text" id="file" class="file form-control" placeholder="Selecione uma imagem" readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12 text-center">
+                            <?php
+                            if (isset($valorFom['imagem']) AND !empty($valorFom['imagem'])) {
+                                $imagem_antiga = URLADM . 'assets/imagens/usuario/' . $_SESSION['usuario_id'] . '/' . $_SESSION['usuario_imagem'];
+                            } else {
 
+                                $imagem_antiga = URLADM . 'assets/imagens/usuario/icone_usuario.jpg';
+                            }
+                            ?>
+                            <img src="<?php echo $imagem_antiga; ?>" class="img-thumbnail  imgPerfil" alt="Imagem do Usuário" id="preview-user" >
+                        </div>
 
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label>Foto ( 150x150 )</label>
-
-                    <input type="hidden" name="imagem_antiga" value="<?php
-                    if (isset($valorFom['imagem_antiga'])) {
-                        echo $valorFom['imagem_antiga'];
-                    } elseif (isset($valorFom['imagem'])) {
-                        echo $valorFom['imagem'];
-                    }
-                    ?>">
-
-                    <div class="d-flex">
-                    <input type="file" name="imagem" id="arquivo" class="arquivo" onchange="previewImagem();">
-                        <input type="button" class="btnImg" value="Selecionar">
-                    <input type="text" id="file" class="file form-control" placeholder="Arquivo" readonly="readonly">
 
                     </div>
 
                 </div>
-                <div class="form-group col-md-6">
-                    <?php
-                        if (isset($valorFom['imagem']) AND !empty($valorFom['imagem'])) {
-                            $imagem_antiga = URLADM . 'assets/imagens/usuario/' . $_SESSION['usuario_id'] . '/' . $_SESSION['usuario_imagem'];
-                        } else {
-
-                            $imagem_antiga = URLADM . 'assets/imagens/usuario/icone_usuario.jpg';
-                        }
-                    ?>
-                    <img src="<?php echo $imagem_antiga; ?>" class="img-thumbnail" alt="Imagem do Usuário" id="preview-user" style="width: 150px; height: 150px" >
+                <div class="col-md-5">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label><span class="text-danger">* </span>Nome</label>
+                            <input name="nome" type="text" class="form-control" placeholder="Digite o nome completo"
+                                   value="<?php if (isset($valorFom['nome'])) { echo $valorFom['nome']; } ?>">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label><span class="text-danger">* </span>Usuário</label>
+                            <input name="usuario" type="text" class="form-control" placeholder="Digite o usuário"
+                                   value="<?php if (isset($valorFom['nome'])) { echo $valorFom['usuario']; } ?>">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label><span class="text-danger">* </span>E-mail</label>
+                            <input name="email" type="email" class="form-control" placeholder="Seu e-mail"
+                                   value="<?php if (isset($valorFom['nome'])) { echo $valorFom['email']; } ?>">
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <p class="mt-4">
+                            <span class="text-danger">* </span>Campo obrigatório
+                        </p>
+                        <input type="submit" name="EditPerfil" value="Salvar" class="btn btn-warning">
+                    </div>
                 </div>
             </div>
 
-
-            <p>
-                <span class="text-danger">* </span>Campo obrigatório
-            </p>
-            <input type="submit" name="EditPerfil" value="Salvar" class="btn btn-warning">
         </form>
     </div>
 </div>

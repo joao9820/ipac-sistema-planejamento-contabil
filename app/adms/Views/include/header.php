@@ -92,9 +92,9 @@ if (!defined('URL')) {
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle menu-header" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown">
                     <?php if(isset($_SESSION['usuario_imagem']) AND (!empty($_SESSION['usuario_imagem']))) { ?>
-                    <img class="rounded-circle" src="<?php echo URLADM . 'assets/imagens/usuario/'.$_SESSION['usuario_id'].'/'. $_SESSION['usuario_imagem'] ?>" width="20" height="20"> &nbsp;<span class="d-none d-sm-inline">
+                    <img class="rounded-circle imgPerfil" src="<?php echo URLADM . 'assets/imagens/usuario/'.$_SESSION['usuario_id'].'/'. $_SESSION['usuario_imagem'] ?>" width="20" height="20"> &nbsp;<span class="d-none d-sm-inline">
                     <?php } else { ?>
-                        <img class="rounded-circle" src="<?php echo URLADM . 'assets/imagens/usuario/icone_usuario.jpg'?>" width="20" height="20"> &nbsp;<span class="d-none d-sm-inline">
+                        <img class="rounded-circle  imgPerfil" src="<?php echo URLADM . 'assets/imagens/usuario/icone_usuario.jpg'?>" width="20" height="20"> &nbsp;<span class="d-none d-sm-inline">
                     <?php } ?>
                         <?php
                         $nome = explode(" ", $_SESSION['usuario_nome']);

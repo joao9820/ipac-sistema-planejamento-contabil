@@ -16,6 +16,7 @@ use App\adms\Models\helper\AdmsEmailUnico;
 use App\adms\Models\helper\AdmsPhpMailer;
 use App\adms\Models\helper\AdmsRead;
 use App\adms\Models\helper\AdmsSlug;
+use App\adms\Models\helper\AdmsUploadImg;
 use App\adms\Models\helper\AdmsUploadImgRed;
 use App\adms\Models\helper\AdmsValSenha;
 use App\adms\Models\helper\AdmsValUsuario;
@@ -162,8 +163,8 @@ class AdmsCadastrarUsuario
     {
 
 
-        $uploadImg = new AdmsUploadImgRed();
-        $uploadImg->uploadImagem($this->Foto, 'assets/imagens/usuario/'.$this->Dados['id'].'/', $this->Dados['imagem'], 150, 150);
+        $uploadImg = new AdmsUploadImg();
+        $uploadImg->uploadImagem($this->Foto, 'assets/imagens/usuario/'.$this->Dados['id'].'/', $this->Dados['imagem']);
         if ($uploadImg->getResultado())
         {
             /* Apagar a imagem antiga se existir

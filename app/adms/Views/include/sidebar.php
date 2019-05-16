@@ -17,7 +17,7 @@ if (!defined('URL')) {
                 <a class="d-flex flex-column" href="<?php echo URLADM . "ver-perfil/perfil"; ?>">
                     <div class="text-light">
                         <?php if(isset($_SESSION['usuario_imagem']) AND (!empty($_SESSION['usuario_imagem']))) { ?>
-                            <img class="rounded-circle border-light border" src="<?php echo URLADM . 'assets/imagens/usuario/'.$_SESSION['usuario_id'].'/'. $_SESSION['usuario_imagem'] ?>" width="60" height="60">
+                            <img class=" imgPerfil rounded-circle border-light border" src="<?php echo URLADM . 'assets/imagens/usuario/'.$_SESSION['usuario_id'].'/'. $_SESSION['usuario_imagem'] ?>" width="60" height="60">
                         <?php } else { ?>
                             <img class="rounded-circle border-light border" src="<?php echo URLADM . 'assets/imagens/usuario/icone_usuario.jpg'?>" width="60" height="60">
                         <?php } ?>
