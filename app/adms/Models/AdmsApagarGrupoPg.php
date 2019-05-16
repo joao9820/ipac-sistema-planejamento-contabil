@@ -8,6 +8,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsDelete;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -32,14 +37,16 @@ class AdmsApagarGrupoPg
         $this->verfPgCad();
         if ($this->Resultado) {
             $this->verfGrupoPgInferior();
-            $apagarGrupoPg = new \App\adms\Models\helper\AdmsDelete();
+            $apagarGrupoPg = new AdmsDelete();
             $apagarGrupoPg->exeDelete("adms_grps_pgs", "WHERE id =:id", "id={$this->DadosId}");
             if ($apagarGrupoPg->getResultado()) {
                 $this->atualizarOrdem();
-                $_SESSION['msg'] = "<div class='alert alert-success'>Grupo de página apagado com sucesso!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Grupo de página apagado!","success");
                 $this->Resultado = true;
             } else {
-                $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Grupo de página não foi apagado!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Grupo de página não foi apagado!","danger");
                 $this->Resultado = false;
             }
         }
@@ -47,11 +54,12 @@ class AdmsApagarGrupoPg
 
     private function verfPgCad()
     {
-        $verMenu = new \App\adms\Models\helper\AdmsRead();
+        $verMenu = new AdmsRead();
         $verMenu->fullRead("SELECT id FROM adms_paginas
                 WHERE adms_grps_pg_id =:adms_grps_pg_id LIMIT :limit", "adms_grps_pg_id=" . $this->DadosId . "&limit=2");
         if ($verMenu->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: O grupo de página não pode ser apagado, há páginas cadastradas neste grupo de página!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("O grupo de página não pode ser apagado, há páginas cadastradas neste grupo de página!","danger");
             $this->Resultado = false;
         } else {
             $this->Resultado = true;
@@ -60,7 +68,7 @@ class AdmsApagarGrupoPg
 
     private function verfGrupoPgInferior()
     {
-        $verGrupoPg = new \App\adms\Models\helper\AdmsRead();
+        $verGrupoPg = new AdmsRead();
         $verGrupoPg->fullRead("SELECT id, ordem AS ordem_result FROM adms_grps_pgs WHERE ordem > (SELECT ordem FROM adms_grps_pgs WHERE id =:id) ORDER BY ordem ASC", "id={$this->DadosId}");
         $this->DadosGrupoPgInferior = $verGrupoPg->getResultado();
     }
@@ -70,9 +78,11 @@ class AdmsApagarGrupoPg
         if ($this->DadosGrupoPgInferior) {
             foreach ($this->DadosGrupoPgInferior as $atualOrdem) {
                 extract($atualOrdem);
+                /** @var TYPE_NAME $ordem_result */
                 $this->Dados['ordem'] = $ordem_result - 1;
                 $this->Dados['modified'] = date("Y-m-d H:i:s");
-                $upAltGrupoPg = new \App\adms\Models\helper\AdmsUpdate();
+                $upAltGrupoPg = new AdmsUpdate();
+                /** @var TYPE_NAME $id */
                 $upAltGrupoPg->exeUpdate("adms_grps_pgs", $this->Dados, "WHERE id =:id", "id=" . $id);
             }
         }

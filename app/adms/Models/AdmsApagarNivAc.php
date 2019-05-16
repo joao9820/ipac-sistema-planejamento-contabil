@@ -2,6 +2,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsDelete;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -27,15 +32,17 @@ class AdmsApagarNivAc
         $this->verfUsuarioCad();
         if ($this->Resultado) {
             $this->verfNivAcInferior();
-            $apagarNivAc = new \App\adms\Models\helper\AdmsDelete();
+            $apagarNivAc = new AdmsDelete();
             $apagarNivAc->exeDelete("adms_niveis_acessos", "WHERE id =:id", "id={$this->DadosId}");
             if ($apagarNivAc->getResultado()) {
                 $this->atualizarOrdem();
                 $this->apagarNivAcPg();
-                $_SESSION['msg'] = "<div class='alert alert-success'>Nível de acesso apagado com sucesso!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Nível de acesso apagado!","success");
                 $this->Resultado = true;
             } else {
-                $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Nivel de acesso não foi apagado!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Nivel de acesso não foi apagado!","danger");
                 $this->Resultado = false;
             }
         }
@@ -43,11 +50,12 @@ class AdmsApagarNivAc
 
     private function verfUsuarioCad()
     {
-        $verUsuario = new \App\adms\Models\helper\AdmsRead();
+        $verUsuario = new AdmsRead();
         $verUsuario->fullRead("SELECT id FROM adms_usuarios
                 WHERE adms_niveis_acesso_id =:adms_niveis_acesso_id LIMIT :limit", "adms_niveis_acesso_id=" . $this->DadosId . "&limit=2");
         if ($verUsuario->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: O nível de acesso não pode ser apagado, há usuários cadastrados neste nível!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("O nível de acesso não pode ser apagado, há usuários cadastrados neste nível!","danger");
             $this->Resultado = false;
         } else {
             $this->Resultado = true;
@@ -56,7 +64,7 @@ class AdmsApagarNivAc
 
     private function verfNivAcInferior()
     {
-        $verNivAc = new \App\adms\Models\helper\AdmsRead();
+        $verNivAc = new AdmsRead();
         $verNivAc->fullRead("SELECT id, ordem AS ordem_result FROM adms_niveis_acessos WHERE ordem > (SELECT ordem FROM adms_niveis_acessos WHERE id =:id) ORDER BY ordem ASC", "id={$this->DadosId}");
         $this->DadosNivAvInferior = $verNivAc->getResultado();
     }
@@ -66,9 +74,11 @@ class AdmsApagarNivAc
         if ($this->DadosNivAvInferior) {
             foreach ($this->DadosNivAvInferior as $atualOrdem) {
                 extract($atualOrdem);
+                /** @var TYPE_NAME $ordem_result */
                 $this->Dados['ordem'] = $ordem_result - 1;
                 $this->Dados['modified'] = date("Y-m-d H:i:s");
-                $upAltNivAc = new \App\adms\Models\helper\AdmsUpdate();
+                $upAltNivAc = new AdmsUpdate();
+                /** @var TYPE_NAME $id */
                 $upAltNivAc->exeUpdate("adms_niveis_acessos", $this->Dados, "WHERE id =:id", "id=" . $id);
             }
         }

@@ -285,7 +285,7 @@ class AdmsAtendimentoFuncionarios {
 
             // Corrigir erro ao registrar uma atividade de 6h que ultrapasse o expediente e almoço do dia seguinte
             //Criar objeto de AdmsAtendimentoFuncionarioReordenar para Inserir a ordem
-            $inserirOrdem = new \App\adms\Models\AdmsAtendimentoFuncionariosReordenar();
+            $inserirOrdem = new AdmsAtendimentoFuncionariosReordenar();
 
             $inserirOrdem->inserirOrdemAtvFunc($this->Dados['adms_funcionario_id']);
             $this->Dados['ordem'] = $inserirOrdem->getResultado(); //se for a primeira será 1 senão será a ultima + 1
@@ -296,18 +296,24 @@ class AdmsAtendimentoFuncionarios {
             $regist = new AdmsCreateRow();
             $regist->exeCreate("adms_atendimento_funcionarios", $this->Dados);
             if ($regist->getResultado()) {
-                $alertaMensagem = new AdmsAlertMensagem();
-                $_SESSION['msg'] = $alertaMensagem->alertMensagemJavaScript("Atividade definida!", "success");
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atividade definida!","success");
                 return $this->Resultado = true;
             } else {
-                $alertaMensagem = new AdmsAlertMensagem();
-                $_SESSION['msg'] = $alertaMensagem->alertMensagemJavaScript("Ocorreu um erro ao registrar. Tente novamente", "danger");
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi possível concluir o registro. Tente novamente!","danger");
                 return $this->Resultado = false;
             }
         }
     }
 
     // Definiar a data em que a atividade será registrada
+
+    /**
+     * @param null $Funcionario
+     * @param null $Data
+     * @throws \Exception
+     */
     public function defineData($Funcionario = null, $Data = null) {
         if (!empty($Funcionario) and ! empty($Data)) {
             $this->FuncionarioId = $Funcionario;
@@ -386,8 +392,8 @@ class AdmsAtendimentoFuncionarios {
 
                 $this->Dados['data_inicio_planejado'] = $novaData;
             }
-            var_dump($this->TempoExcedido);
-            var_dump($this->Dados);
+            //var_dump($this->TempoExcedido);
+            //var_dump($this->Dados);
             $cont++;
         }
     }
@@ -410,10 +416,10 @@ class AdmsAtendimentoFuncionarios {
 
         $dataHora = new AdmsRead();
         $dataHora->fullRead("SELECT hora_fim_planejado, hora_inicio_planejado
-        FROM adms_atendimento_funcionarios 
-        WHERE data_inicio_planejado=:data_inicio_planejado
-        AND adms_funcionario_id=:adms_funcionario_id 
-        ORDER BY data_inicio_planejado DESC, hora_inicio_planejado DESC LIMIT :limit", "data_inicio_planejado={$this->Dados['data_inicio_planejado']}&adms_funcionario_id={$this->Dados['adms_funcionario_id']}&limit=1");
+                FROM adms_atendimento_funcionarios 
+                WHERE data_inicio_planejado=:data_inicio_planejado
+                AND adms_funcionario_id=:adms_funcionario_id 
+                ORDER BY data_inicio_planejado DESC, hora_inicio_planejado DESC LIMIT :limit", "data_inicio_planejado={$this->Dados['data_inicio_planejado']}&adms_funcionario_id={$this->Dados['adms_funcionario_id']}&limit=1");
         if ($dataHora->getResultado()) {
 
             $compara_hora_fim = $dataHora->getResultado()[0]['hora_fim_planejado'];
@@ -440,10 +446,10 @@ class AdmsAtendimentoFuncionarios {
 
         $dataHora = new AdmsRead();
         $dataHora->fullRead("SELECT hora_fim_planejado, hora_inicio_planejado
-        FROM adms_atendimento_funcionarios 
-        WHERE adms_funcionario_id=:adms_funcionario_id
-        AND ordem = (SELECT MIN(ordem) FROM adms_atendimento_funcionarios WHERE adms_sits_atendimentos_funcionario_id = :adms_sits_atendimentos_funcionario_id AND adms_funcionario_id = :adms_funcionario_id)
-        LIMIT :limit", "adms_funcionario_id={$this->Dados['adms_funcionario_id']}&limit=1");
+                    FROM adms_atendimento_funcionarios 
+                    WHERE adms_funcionario_id=:adms_funcionario_id
+                    AND ordem = (SELECT MIN(ordem) FROM adms_atendimento_funcionarios WHERE adms_sits_atendimentos_funcionario_id = :adms_sits_atendimentos_funcionario_id AND adms_funcionario_id = :adms_funcionario_id)
+                    LIMIT :limit", "adms_funcionario_id={$this->Dados['adms_funcionario_id']}&limit=1");
         
         if ($dataHora->getResultado()) {
             $this->UltimaAtividade = $dataHora->getResultado();
@@ -463,10 +469,10 @@ class AdmsAtendimentoFuncionarios {
         $this->DataLoop = $DataLoop;
         $dataHora = new AdmsRead();
         $dataHora->fullRead("SELECT hora_fim_planejado, hora_inicio_planejado
-        FROM adms_atendimento_funcionarios 
-        WHERE data_inicio_planejado=:data_inicio_planejado
-        AND adms_funcionario_id=:adms_funcionario_id 
-        ORDER BY data_inicio_planejado DESC, hora_inicio_planejado DESC LIMIT :limit", "data_inicio_planejado={$this->DataLoop}&adms_funcionario_id={$this->Dados['adms_funcionario_id']}&limit=1");
+                    FROM adms_atendimento_funcionarios 
+                    WHERE data_inicio_planejado=:data_inicio_planejado
+                    AND adms_funcionario_id=:adms_funcionario_id 
+                    ORDER BY data_inicio_planejado DESC, hora_inicio_planejado DESC LIMIT :limit", "data_inicio_planejado={$this->DataLoop}&adms_funcionario_id={$this->Dados['adms_funcionario_id']}&limit=1");
         if ($dataHora->getResultado()) {
             /*
              *  Caso a ultima atividade tenha inicio antes das 12 e finalizada depois das 12
@@ -516,9 +522,9 @@ class AdmsAtendimentoFuncionarios {
 
         $dataHora = new AdmsRead();
         $dataHora->fullRead("SELECT id 
-        FROM adms_atendimento_funcionarios 
-        WHERE data_inicio_planejado=:data_inicio_planejado
-        AND adms_funcionario_id=:adms_funcionario_id LIMIT :limit", "data_inicio_planejado={$this->Dados['data_inicio_planejado']}&adms_funcionario_id={$this->Dados['adms_funcionario_id']}&limit=1");
+                    FROM adms_atendimento_funcionarios 
+                    WHERE data_inicio_planejado=:data_inicio_planejado
+                    AND adms_funcionario_id=:adms_funcionario_id LIMIT :limit", "data_inicio_planejado={$this->Dados['data_inicio_planejado']}&adms_funcionario_id={$this->Dados['adms_funcionario_id']}&limit=1");
 
         if ($dataHora->getResultado()) {
             $this->jaExiste = $dataHora->getResultado();
@@ -536,10 +542,10 @@ class AdmsAtendimentoFuncionarios {
 
         $dataHora = new AdmsRead();
         $dataHora->fullRead("SELECT id 
-        FROM adms_atendimento_funcionarios 
-        WHERE data_inicio_planejado=:data_inicio_planejado 
-        AND hora_inicio_planejado=:hora_inicio_planejado
-        AND adms_funcionario_id=:adms_funcionario_id LIMIT :limit", "data_inicio_planejado={$this->Dados['data_inicio_planejado']}&hora_inicio_planejado={$this->Dados['hora_inicio_planejado']}&adms_funcionario_id={$this->Dados['adms_funcionario_id']}&limit=1");
+                    FROM adms_atendimento_funcionarios 
+                    WHERE data_inicio_planejado=:data_inicio_planejado 
+                    AND hora_inicio_planejado=:hora_inicio_planejado
+                    AND adms_funcionario_id=:adms_funcionario_id LIMIT :limit", "data_inicio_planejado={$this->Dados['data_inicio_planejado']}&hora_inicio_planejado={$this->Dados['hora_inicio_planejado']}&adms_funcionario_id={$this->Dados['adms_funcionario_id']}&limit=1");
 
         if ($dataHora->getResultado()) {
             $this->jaExiste = $dataHora->getResultado();
@@ -575,15 +581,15 @@ class AdmsAtendimentoFuncionarios {
 
         $funcionarios = new AdmsRead();
         $funcionarios->fullRead("SELECT aten_fun.id, aten_fun.duracao_atividade, aten_fun.data_inicio_planejado, aten_fun.hora_inicio_planejado, aten_fun.data_fatal,
-        demanda.nome nome_demanda,
-        atividade.nome nome_atividade,
-        atendimento.id id_atendimento, atendimento.descricao descricao_atendimento
-        FROM adms_atendimento_funcionarios aten_fun
-        INNER JOIN adms_demandas demanda ON demanda.id = aten_fun.adms_demanda_id
-        INNER JOIN adms_atividades atividade ON atividade.id = aten_fun.adms_atividade_id
-        INNER JOIN adms_atendimentos atendimento ON atendimento.id = aten_fun.adms_atendimento_id
-        WHERE aten_fun.data_inicio_planejado=:data_inicio_planejado
-        AND aten_fun.adms_funcionario_id=:funcionario", "data_inicio_planejado={$this->Data}&funcionario={$this->FuncionarioId}");
+                            demanda.nome nome_demanda,
+                            atividade.nome nome_atividade,
+                            atendimento.id id_atendimento, atendimento.descricao descricao_atendimento
+                            FROM adms_atendimento_funcionarios aten_fun
+                            INNER JOIN adms_demandas demanda ON demanda.id = aten_fun.adms_demanda_id
+                            INNER JOIN adms_atividades atividade ON atividade.id = aten_fun.adms_atividade_id
+                            INNER JOIN adms_atendimentos atendimento ON atendimento.id = aten_fun.adms_atendimento_id
+                            WHERE aten_fun.data_inicio_planejado=:data_inicio_planejado
+                            AND aten_fun.adms_funcionario_id=:funcionario", "data_inicio_planejado={$this->Data}&funcionario={$this->FuncionarioId}");
         $this->Resultado = $funcionarios->getResultado();
     }
 
@@ -591,8 +597,8 @@ class AdmsAtendimentoFuncionarios {
         $this->FuncionarioId = (int) $FuncionarioId;
         $func = new AdmsRead();
         $func->fullRead("SELECT nome nome_funcionario
-        FROM adms_usuarios
-        WHERE id=:id LIMIT :limit", "id={$this->FuncionarioId}&limit=1");
+                    FROM adms_usuarios
+                    WHERE id=:id LIMIT :limit", "id={$this->FuncionarioId}&limit=1");
         $this->Resultado = $func->getResultado();
     }
 
@@ -605,17 +611,17 @@ class AdmsAtendimentoFuncionarios {
 
             $jornada = new AdmsRead();
             $jornada->fullRead("SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(extra.total)) + (TIME_TO_SEC(plan.jornada_trabalho)))  AS jornada_trabalho
-            FROM adms_hora_extra extra
-            INNER JOIN adms_planejamento plan ON plan.adms_funcionario_id = extra.adms_usuario_id
-            WHERE extra.adms_usuario_id =:id
-            AND extra.data =:data_d", "id={$this->FuncionarioId}&data_d={$this->Data}");
+                        FROM adms_hora_extra extra
+                        INNER JOIN adms_planejamento plan ON plan.adms_funcionario_id = extra.adms_usuario_id
+                        WHERE extra.adms_usuario_id =:id
+                        AND extra.data =:data_d", "id={$this->FuncionarioId}&data_d={$this->Data}");
             $this->Resultado = $jornada->getResultado();
         } else {
             $jornada = new AdmsRead();
             $jornada->fullRead("SELECT jornada_trabalho
-            FROM adms_planejamento
-            WHERE adms_funcionario_id =:id 
-            LIMIT :limit", "id={$this->FuncionarioId}&limit=1");
+                    FROM adms_planejamento
+                    WHERE adms_funcionario_id =:id 
+                    LIMIT :limit", "id={$this->FuncionarioId}&limit=1");
             $this->Resultado = $jornada->getResultado();
         }
     }
@@ -623,9 +629,9 @@ class AdmsAtendimentoFuncionarios {
     private function verificarHoraExtra() {
         $verificar = new AdmsRead();
         $verificar->fullRead("SELECT *
-        FROM adms_hora_extra 
-        WHERE adms_usuario_id =:id
-        AND data =:data_d", "id={$this->FuncionarioId}&data_d={$this->Data}");
+                FROM adms_hora_extra 
+                WHERE adms_usuario_id =:id
+                AND data =:data_d", "id={$this->FuncionarioId}&data_d={$this->Data}");
         $this->HoraExtra = $verificar->getResultado();
     }
 
@@ -634,9 +640,9 @@ class AdmsAtendimentoFuncionarios {
         $this->Data = date('Y-m-d', strtotime($Data));
         $ativDura = new AdmsRead();
         $ativDura->fullRead("SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(duracao_atividade)))  AS duracao_atividade, SUM(TIME_TO_SEC(duracao_atividade))  AS duracao_atividade_sc
-        FROM adms_atendimento_funcionarios
-        WHERE adms_funcionario_id =:id
-        AND data_inicio_planejado =:data_p", "id={$this->FuncionarioId}&data_p={$this->Data}");
+                FROM adms_atendimento_funcionarios
+                WHERE adms_funcionario_id =:id
+                AND data_inicio_planejado =:data_p", "id={$this->FuncionarioId}&data_p={$this->Data}");
         $this->Resultado = $ativDura->getResultado();
         $this->DuracaoTotalAtivi = $ativDura->getResultado();
     }
@@ -648,9 +654,9 @@ class AdmsAtendimentoFuncionarios {
     private function buscarDuracaoAtv() { //Mostra a duração das atividades naquela data para tal funcionario
         $buscarDuracaoAtv = new AdmsRead();
         $buscarDuracaoAtv->fullRead("
-        SELECT SUM(TIME_TO_SEC(duracao_atividade)) AS duracao_atv
-        FROM adms_atendimento_funcionarios
-        WHERE data_inicio_planejado = :data_i_planejado and adms_funcionario_id = :adms_func_id LIMIT :limit", "data_i_planejado={$this->Dados['data_inicio_planejado']}&adms_func_id={$this->Dados['adms_funcionario_id']}&limit=1"
+                SELECT SUM(TIME_TO_SEC(duracao_atividade)) AS duracao_atv
+                FROM adms_atendimento_funcionarios
+                WHERE data_inicio_planejado = :data_i_planejado and adms_funcionario_id = :adms_func_id LIMIT :limit", "data_i_planejado={$this->Dados['data_inicio_planejado']}&adms_func_id={$this->Dados['adms_funcionario_id']}&limit=1"
         );
 
         $duracaoTotalAtv = $buscarDuracaoAtv->getResultado(); //Método comparaJornada recebe o resultado da consulta anterior e atribuir para duracaoTotalAtv
@@ -727,10 +733,10 @@ class AdmsAtendimentoFuncionarios {
 
         $validaRegistro = new AdmsRead();
         $validaRegistro->fullRead("SELECT id 
-        FROM adms_atendimento_funcionarios 
-        WHERE adms_atendimento_id = :atendimento 
-        AND adms_funcionario_id = :funcionario_id
-        AND adms_atividade_id = :atividade_id LIMIT :limit", "atendimento={$this->Dados['adms_atendimento_id']}&funcionario_id={$this->Dados['adms_funcionario_id']}&atividade_id={$this->Dados['adms_atividade_id']}&limit=1");
+                    FROM adms_atendimento_funcionarios 
+                    WHERE adms_atendimento_id = :atendimento 
+                    AND adms_funcionario_id = :funcionario_id
+                    AND adms_atividade_id = :atividade_id LIMIT :limit", "atendimento={$this->Dados['adms_atendimento_id']}&funcionario_id={$this->Dados['adms_funcionario_id']}&atividade_id={$this->Dados['adms_atividade_id']}&limit=1");
 
         $this->jaExisteAtv = $validaRegistro->getResultado();
     }

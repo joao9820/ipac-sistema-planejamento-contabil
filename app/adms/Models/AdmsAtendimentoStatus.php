@@ -43,6 +43,8 @@ class AdmsAtendimentoStatus
         $this->verificarAtenIniciado();
         if (isset($this->ResultadoStsIniciado) AND !empty($this->ResultadoStsIniciado))
         {
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atendimento desarquivado!","success");
             $alertMensagem = new AdmsAlertMensagem();
             $_SESSION['msg'] = $alertMensagem->alertMensagem("Já existe um atendimento em andamento!", "Para iniciar um novo, pause ou finalise o atendimento iniciado", "danger");
             $this->Resultado = false;

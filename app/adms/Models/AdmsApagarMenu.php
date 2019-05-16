@@ -8,6 +8,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsDelete;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -32,14 +37,16 @@ class AdmsApagarMenu
         $this->verfPgCad();
         if ($this->Resultado) {
             $this->verfMenuInferior();
-            $apagarMenu = new \App\adms\Models\helper\AdmsDelete();
+            $apagarMenu = new AdmsDelete();
             $apagarMenu->exeDelete("adms_menus", "WHERE id =:id", "id={$this->DadosId}");
             if ($apagarMenu->getResultado()) {
                 $this->atualizarOrdem();
-                $_SESSION['msg'] = "<div class='alert alert-success'>Item de menu apagado com sucesso!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Item de menu apagado!","success");
                 $this->Resultado = true;
             } else {
-                $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Item de menu não foi apagado!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Item de menu não foi apagado!","danger");
                 $this->Resultado = false;
             }
         }
@@ -47,11 +54,12 @@ class AdmsApagarMenu
 
     private function verfPgCad()
     {
-        $verMenu = new \App\adms\Models\helper\AdmsRead();
+        $verMenu = new AdmsRead();
         $verMenu->fullRead("SELECT id FROM adms_nivacs_pgs
                 WHERE adms_menu_id =:adms_menu_id LIMIT :limit", "adms_menu_id=" . $this->DadosId . "&limit=2");
         if ($verMenu->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: O item de menu não pode ser apagado, há permissões cadastradas neste item de menu!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("O item de menu não pode ser apagado, há permissões cadastradas neste item de menu!","danger");
             $this->Resultado = false;
         } else {
             $this->Resultado = true;
@@ -60,7 +68,7 @@ class AdmsApagarMenu
 
     private function verfMenuInferior()
     {
-        $verMenu = new \App\adms\Models\helper\AdmsRead();
+        $verMenu = new AdmsRead();
         $verMenu->fullRead("SELECT id, ordem AS ordem_result FROM adms_menus WHERE ordem > (SELECT ordem FROM adms_menus WHERE id =:id) ORDER BY ordem ASC", "id={$this->DadosId}");
         $this->DadosMenuInferior = $verMenu->getResultado();
     }
@@ -70,9 +78,11 @@ class AdmsApagarMenu
         if ($this->DadosMenuInferior) {
             foreach ($this->DadosMenuInferior as $atualOrdem) {
                 extract($atualOrdem);
+                /** @var TYPE_NAME $ordem_result */
                 $this->Dados['ordem'] = $ordem_result - 1;
                 $this->Dados['modified'] = date("Y-m-d H:i:s");
-                $upAltMenu = new \App\adms\Models\helper\AdmsUpdate();
+                $upAltMenu = new AdmsUpdate();
+                /** @var TYPE_NAME $id */
                 $upAltMenu->exeUpdate("adms_menus", $this->Dados, "WHERE id =:id", "id=" . $id);
             }
         }

@@ -2,6 +2,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsDelete;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -10,7 +15,6 @@ if (!defined('URL')) {
 /**
  * Description of AdmsApagarPagina: 
  * Classe para apagar página do administrativo
- * @copyright (c) year, Cesar Szpak - Celke
  */
 class AdmsApagarPagina
 {
@@ -39,13 +43,15 @@ class AdmsApagarPagina
     {
         $this->DadosId = (int) $DadosId;
         $this->pesqNivAc();
-        $apagarPagina = new \App\adms\Models\helper\AdmsDelete();
+        $apagarPagina = new AdmsDelete();
         $apagarPagina->exeDelete("adms_paginas", "WHERE id =:id", "id={$this->DadosId}");
         if ($apagarPagina->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Pagina apagada com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Pagina apagada!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Pagina não foi apagada!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Pagina não foi apagada!","danger");
             $this->Resultado = false;
         }
     }
@@ -56,7 +62,7 @@ class AdmsApagarPagina
      */
     private function pesqNivAc()
     {
-        $verNivAc = new \App\adms\Models\helper\AdmsRead();
+        $verNivAc = new AdmsRead();
         $verNivAc->fullRead("SELECT id id_nivac FROM adms_niveis_acessos ORDER BY id ASC");
         $this->DadosNivAc = $verNivAc->getResultado();
         $this->pesqNivAcPg();
@@ -71,14 +77,15 @@ class AdmsApagarPagina
         if ($this->DadosNivAc) {
             foreach ($this->DadosNivAc as $nivAc) {
                 extract($nivAc);
-                $verNivAcPg = new \App\adms\Models\helper\AdmsRead();
+                $verNivAcPg = new AdmsRead();
+                /** @var TYPE_NAME $id_nivac */
                 $verNivAcPg->fullRead("SELECT id id_nivacpg, ordem FROM adms_nivacs_pgs
                         WHERE adms_niveis_acesso_id =:Aadms_niveis_acesso_id AND 
                         ordem > (SELECT ordem FROM adms_nivacs_pgs WHERE adms_pagina_id =:adms_pagina_id AND adms_niveis_acesso_id =:Badms_niveis_acesso_id) 
                         ORDER BY id ASC", "Aadms_niveis_acesso_id={$id_nivac}&adms_pagina_id={$this->DadosId}&Badms_niveis_acesso_id={$id_nivac}");
                 $this->DadosNivAcPg = $verNivAcPg->getResultado();
                 $this->updateOrdemNivAcPg();
-                $apagarNivAcPg = new \App\adms\Models\helper\AdmsDelete();
+                $apagarNivAcPg = new AdmsDelete();
                 $apagarNivAcPg->exeDelete("adms_nivacs_pgs", "WHERE adms_pagina_id =:adms_pagina_id AND adms_niveis_acesso_id =:adms_niveis_acesso_id", "adms_pagina_id={$this->DadosId}&adms_niveis_acesso_id=$id_nivac");
             }
         }
@@ -93,9 +100,11 @@ class AdmsApagarPagina
         if ($this->DadosNivAcPg) {
             foreach ($this->DadosNivAcPg as $nivAcPg) {
                 extract($nivAcPg);
+                /** @var TYPE_NAME $ordem */
                 $this->DadosUpNivAcPg['ordem'] = $ordem - 1;
                 $this->DadosUpNivAcPg['modified'] = date("Y-m-d H:i:s");
-                $upAltNivAc = new \App\adms\Models\helper\AdmsUpdate();
+                $upAltNivAc = new AdmsUpdate();
+                /** @var TYPE_NAME $id_nivacpg */
                 $upAltNivAc->exeUpdate("adms_nivacs_pgs", $this->DadosUpNivAcPg, "WHERE id =:id", "id=" . $id_nivacpg);
             }
         }

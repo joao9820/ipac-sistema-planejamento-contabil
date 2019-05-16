@@ -55,8 +55,8 @@ class AdmsApagarUsuario
             }
             else {
 
-                $alertMensagem = new AdmsAlertMensagem();
-                $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","O usuário não foi apagado", "danger");
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Ocorreu um erro. O usuário não foi apagado!","danger");
                 $this->Resultado = false;
 
             }
@@ -64,8 +64,8 @@ class AdmsApagarUsuario
         }
         else {
 
-            $alertMensagem = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","Você não tem permissão para apagar o usuário selecionado", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Ocorreu um erro. Você não tem permissão para apagar o usuário selecionado!","danger");
             $this->Resultado = false;
 
         }

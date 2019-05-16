@@ -2,6 +2,10 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -10,7 +14,6 @@ if (!defined('URL')) {
 /**
  * Description of AdmsApagarNivAc
  *
- * @copyright (c) year, Cesar Szpak - Celke
  */
 class AdmsAltOrdemNivAc
 {
@@ -39,7 +42,7 @@ class AdmsAltOrdemNivAc
     private function verNivAc($DadosId)
     {
         $this->DadosId = (int) $DadosId;
-        $verNivAc = new \App\adms\Models\helper\AdmsRead();
+        $verNivAc = new AdmsRead();
         $verNivAc->fullRead("SELECT * FROM adms_niveis_acessos
                 WHERE id =:id AND ordem >:ordem LIMIT :limit", "id=" . $this->DadosId . "&ordem=" . $_SESSION['ordem_nivac'] . "&limit=1");
         $this->DadosNivAc = $verNivAc->getResultado();
@@ -48,7 +51,7 @@ class AdmsAltOrdemNivAc
     private function verfNivAcInferior()
     {
         $ordem_super = $this->DadosNivAc[0]['ordem'] - 1;
-        $verNivAc = new \App\adms\Models\helper\AdmsRead();
+        $verNivAc = new AdmsRead();
         $verNivAc->fullRead("SELECT id, ordem FROM adms_niveis_acessos WHERE ordem =:ordem", "ordem={$ordem_super}");
         $this->DadosNivAvInferior = $verNivAc->getResultado();
     }
@@ -57,18 +60,20 @@ class AdmsAltOrdemNivAc
     {
         $this->Dados['ordem'] = $this->DadosNivAc[0]['ordem'];
         $this->Dados['modified'] = date("Y-m-d H:i:s");
-        $upMvBaixo = new \App\adms\Models\helper\AdmsUpdate();
+        $upMvBaixo = new AdmsUpdate();
         $upMvBaixo->exeUpdate("adms_niveis_acessos", $this->Dados, "WHERE id =:id", "id={$this->DadosNivAvInferior[0]['id']}");
 
         $this->Dados['ordem'] = $this->DadosNivAc[0]['ordem'] - 1;
-        $upMvCima = new \App\adms\Models\helper\AdmsUpdate();
+        $upMvCima = new AdmsUpdate();
         $upMvCima->exeUpdate("adms_niveis_acessos", $this->Dados, "WHERE id =:id", "id={$this->DadosNivAc[0]['id']}");
 
         if ($upMvCima->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Ordem do nível de acesso editado com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Ordem do nível de acesso editado!","success");
                 $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Não foi alterado a ordem do nível de acesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi alterado a ordem do nível de acesso!","danger");
                 $this->Resultado = false;
         }
     }

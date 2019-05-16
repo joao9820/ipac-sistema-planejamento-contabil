@@ -32,7 +32,7 @@ class AdmsAtendimentoFuncionariosApagar {
         $this->AtivId = $ativ_id;
         $this->atenFuncId = $id_aten_fun;
         
-        $buscarOrdem = new \App\adms\Models\AdmsAtendimentoFuncionariosReordenar();
+        $buscarOrdem = new AdmsAtendimentoFuncionariosReordenar();
             
         $buscarOrdem->buscarUltOrdemAtvFunc($this->FuncId);          
         $ultimaOrdem = (int) $buscarOrdem->getResultado()[0]['ordem']; 

@@ -8,6 +8,8 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -95,7 +97,8 @@ class AdmsLogin
             $_SESSION['adms_empresa_id'] = $this->Resultado[0]['adms_empresa_id'];
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = '<div class="alert alert-danger" role="alert">Erro: senha incorreta!</div>';
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("senha incorreta!","danger");
             $this->Resultado = false;
         }
     }

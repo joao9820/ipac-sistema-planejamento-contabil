@@ -8,6 +8,9 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -25,19 +28,19 @@ class AdmsArquivarAtendimento
 
         $this->Dados['arquivado'] = 1;
         $this->Dados['modified'] = date("Y-m-d H:i:s");
-        $upAtendi = new \App\adms\Models\helper\AdmsUpdate();
+        $upAtendi = new AdmsUpdate();
         $upAtendi->exeUpdate("adms_atendimentos", $this->Dados, "WHERE id =:id", "id={$this->DadosId}");
         if ($upAtendi->getResultado()) {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Atendimento arquivado com sucesso", "info");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atendimento arquivado!","success");
             $this->Resultado = true;
 
         }
         else {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","Não foi possível arquivar o atendimento selecionado", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi possível arquivar o atendimento selecionado","danger");
             $this->Resultado = false;
 
         }

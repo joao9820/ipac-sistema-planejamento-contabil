@@ -8,6 +8,9 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsDelete;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -25,13 +28,15 @@ class AdmsApagarCor
 
     public function apagarCor($DadosId = null) {
         $this->DadosId = (int) $DadosId;
-        $apagarCor = new \App\adms\Models\helper\AdmsDelete();
+        $apagarCor = new AdmsDelete();
         $apagarCor->exeDelete("adms_cors", "WHERE id =:id", "id={$this->DadosId}");
         if ($apagarCor->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Cor apagada com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Cor apagada!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A cor não foi apagada!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("A cor não foi apagada!","danger");
             $this->Resultado = false;
         }
     }

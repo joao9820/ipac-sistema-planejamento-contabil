@@ -8,6 +8,10 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsDelete;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -32,14 +36,16 @@ class AdmsApagarTipoPg
         $this->verfPgCad();
         if ($this->Resultado) {
             $this->verfTipoPgInferior();
-            $apagarTipoPg = new \App\adms\Models\helper\AdmsDelete();
+            $apagarTipoPg = new AdmsDelete();
             $apagarTipoPg->exeDelete("adms_tps_pgs", "WHERE id =:id", "id={$this->DadosId}");
             if ($apagarTipoPg->getResultado()) {
                 $this->atualizarOrdem();
-                $_SESSION['msg'] = "<div class='alert alert-success'>Tipo de página apagado com sucesso!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Tipo de página apagado!","success");
                 $this->Resultado = true;
             } else {
-                $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Tipo de página não foi apagado!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Tipo de página não foi apagado!","danger");
                 $this->Resultado = false;
             }
         }
@@ -47,11 +53,12 @@ class AdmsApagarTipoPg
 
     private function verfPgCad()
     {
-        $verMenu = new \App\adms\Models\helper\AdmsRead();
+        $verMenu = new AdmsRead();
         $verMenu->fullRead("SELECT id FROM adms_paginas
                 WHERE adms_tps_pg_id =:adms_tps_pg_id LIMIT :limit", "adms_tps_pg_id=" . $this->DadosId . "&limit=2");
         if ($verMenu->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: O tipo de página não pode ser apagado, há páginas cadastradas neste tipo de página!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("O tipo de página não pode ser apagado, há páginas cadastradas neste tipo de página!","danger");
             $this->Resultado = false;
         } else {
             $this->Resultado = true;
@@ -60,7 +67,7 @@ class AdmsApagarTipoPg
 
     private function verfTipoPgInferior()
     {
-        $verTipoPg = new \App\adms\Models\helper\AdmsRead();
+        $verTipoPg = new AdmsRead();
         $verTipoPg->fullRead("SELECT id, ordem AS ordem_result FROM adms_tps_pgs WHERE ordem > (SELECT ordem FROM adms_tps_pgs WHERE id =:id) ORDER BY ordem ASC", "id={$this->DadosId}");
         $this->DadosTipoPgInferior = $verTipoPg->getResultado();
     }
@@ -70,9 +77,11 @@ class AdmsApagarTipoPg
         if ($this->DadosTipoPgInferior) {
             foreach ($this->DadosTipoPgInferior as $atualOrdem) {
                 extract($atualOrdem);
+                /** @var TYPE_NAME $ordem_result */
                 $this->Dados['ordem'] = $ordem_result - 1;
                 $this->Dados['modified'] = date("Y-m-d H:i:s");
                 $upAltTipoPg = new \App\adms\Models\helper\AdmsUpdate();
+                /** @var TYPE_NAME $id */
                 $upAltTipoPg->exeUpdate("adms_tps_pgs", $this->Dados, "WHERE id =:id", "id=" . $id);
             }
         }

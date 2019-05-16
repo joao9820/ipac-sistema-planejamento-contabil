@@ -8,6 +8,10 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -28,20 +32,21 @@ class AdmsAltOrdemTipoPg
 
     public function altOrdemTipoPg($DadosId = null) {
         $this->DadosId = (int) $DadosId;
-        $this->verTipoPg($this->DadosId);
+        $this->verTipoPg();
         if ($this->DadosTipoPg) {
             $this->verfTipoPgInferior();
             if ($this->DadosTipoPgInferior) {
                 $this->exeAltOrdemTipoPg();
             } else {
-                $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Não foi alterado a ordem do tipo de página!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi alterado a ordem do tipo de página!","danger");
                 $this->Resultado = false;
             }
         }
     }
 
     private function verTipoPg() {
-        $verTipoPg = new \App\adms\Models\helper\AdmsRead();
+        $verTipoPg = new AdmsRead();
         $verTipoPg->fullRead("SELECT * FROM adms_tps_pgs
                 WHERE id =:id LIMIT :limit", "id=" . $this->DadosId . "&limit=1");
         $this->DadosTipoPg = $verTipoPg->getResultado();
@@ -49,7 +54,7 @@ class AdmsAltOrdemTipoPg
 
     private function verfTipoPgInferior() {
         $ordem_super = $this->DadosTipoPg[0]['ordem'] - 1;
-        $verTipoPg = new \App\adms\Models\helper\AdmsRead();
+        $verTipoPg = new AdmsRead();
         $verTipoPg->fullRead("SELECT id, ordem FROM adms_tps_pgs WHERE ordem =:ordem", "ordem={$ordem_super}");
         $this->DadosTipoPgInferior = $verTipoPg->getResultado();
     }
@@ -57,18 +62,20 @@ class AdmsAltOrdemTipoPg
     private function exeAltOrdemTipoPg() {
         $this->Dados['ordem'] = $this->DadosTipoPg[0]['ordem'];
         $this->Dados['modified'] = date("Y-m-d H:i:s");
-        $upMvBaixo = new \App\adms\Models\helper\AdmsUpdate();
+        $upMvBaixo = new AdmsUpdate();
         $upMvBaixo->exeUpdate("adms_tps_pgs", $this->Dados, "WHERE id =:id", "id={$this->DadosTipoPgInferior[0]['id']}");
 
         $this->Dados['ordem'] = $this->DadosTipoPg[0]['ordem'] - 1;
-        $upMvCima = new \App\adms\Models\helper\AdmsUpdate();
+        $upMvCima = new AdmsUpdate();
         $upMvCima->exeUpdate("adms_tps_pgs", $this->Dados, "WHERE id =:id", "id={$this->DadosTipoPg[0]['id']}");
 
         if ($upMvCima->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Ordem do tipo de página editado com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Ordem do tipo de página editado!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Não foi alterado a ordem do tipo de página!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi alterado a ordem do tipo de página!","danger");
             $this->Resultado = false;
         }
     }

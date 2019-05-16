@@ -8,6 +8,10 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsDelete;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -34,18 +38,18 @@ class AdmsApagarAtividade
 
         if ($this->DadosUsuario) {
 
-            $apagarDemanda = new \App\adms\Models\helper\AdmsDelete();
+            $apagarDemanda = new AdmsDelete();
             $apagarDemanda->exeDelete("adms_atividades", "WHERE id=:id", "id={$this->DadosId}");
             if ($apagarDemanda->getResultado())
             {
-                $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-                $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Atividade apagada com sucesso", "success");
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atividade apagada!","success");
                 $this->Resultado = true;
 
             } else {
 
-                $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-                $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro no sistema.","Atividade não foi apagada", "danger");
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Ocorreu um erro no sistema. Atividade não foi apagada!","danger");
                 $this->Resultado = false;
 
             }
@@ -53,8 +57,8 @@ class AdmsApagarAtividade
         }
         else {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe!","Você não tem permissão para apagar a atividade selecionada", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Você não tem permissão para apagar a atividade selecionada!","danger");
             $this->Resultado = false;
 
         }
@@ -65,7 +69,7 @@ class AdmsApagarAtividade
     public function verUsuario()
     {
 
-        $verUsuario = new \App\adms\Models\helper\AdmsRead();
+        $verUsuario = new AdmsRead();
         $verUsuario->fullRead("SELECT user.id   
                         FROM adms_usuarios user 
                         INNER JOIN adms_niveis_acessos nivel_aces ON nivel_aces.id=user.adms_niveis_acesso_id 

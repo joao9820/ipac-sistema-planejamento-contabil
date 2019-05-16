@@ -8,6 +8,9 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsDelete;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -25,13 +28,15 @@ class AdmsApagarSit
 
     public function apagarSit($DadosId = null) {
         $this->DadosId = (int) $DadosId;
-        $apagarSit = new \App\adms\Models\helper\AdmsDelete();
+        $apagarSit = new AdmsDelete();
         $apagarSit->exeDelete("adms_sits", "WHERE id =:id", "id={$this->DadosId}");
         if ($apagarSit->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Situação apagada com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Situação apagada!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A situação não foi apagada!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("A situação não foi apagada!","danger");
             $this->Resultado = false;
         }
     }

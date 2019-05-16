@@ -8,6 +8,10 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsDelete;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -39,8 +43,8 @@ class AdmsApagarDemanda
         }
         else {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe!","Você não tem permissão para apagar a demanda selecionada", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Você não tem permissão para apagar a demanda selecionada.","danger");
             $this->Resultado = false;
 
         }
@@ -51,7 +55,7 @@ class AdmsApagarDemanda
     private function verUsuario()
     {
 
-        $verUsuario = new \App\adms\Models\helper\AdmsRead();
+        $verUsuario = new AdmsRead();
         $verUsuario->fullRead("SELECT user.id   
                         FROM adms_usuarios user 
                         INNER JOIN adms_niveis_acessos nivel_aces ON nivel_aces.id=user.adms_niveis_acesso_id 
@@ -62,13 +66,13 @@ class AdmsApagarDemanda
 
     private function verificarAtendDemanda()
     {
-        $verAtendDemanda = new \App\adms\Models\helper\AdmsRead();
+        $verAtendDemanda = new AdmsRead();
         $verAtendDemanda->fullRead("SELECT id FROM adms_atendimentos WHERE adms_demanda_id=:adms_demanda_id LIMIT :limit", "adms_demanda_id={$this->DadosId}&limit=1");
         if ($verAtendDemanda->getResultado())
         {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! A demanda selecionada não pode ser apagada.","Já tem atendimento registrado com essa demanda", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("A demanda selecionada não pode ser apagada. Já tem atendimento registrado com essa demanda","danger");
             $this->Resultado = false;
 
         }
@@ -81,21 +85,21 @@ class AdmsApagarDemanda
 
     private function exeApagarDemanda()
     {
-        $apagarDemanda = new \App\adms\Models\helper\AdmsDelete();
+        $apagarDemanda = new AdmsDelete();
         $apagarDemanda->exeDelete("adms_demandas", "WHERE id=:id", "id={$this->DadosId}");
         if ($apagarDemanda->getResultado())
         {
-            $apagarAtividades = new \App\adms\Models\helper\AdmsDelete();
+            $apagarAtividades = new AdmsDelete();
             $apagarAtividades->exeDelete("adms_atividades", "WHERE adms_demanda_id=:id", "id={$this->DadosId}");
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Demanda apagada com sucesso", "success");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Demanda apagada!","success");
             $this->Resultado = true;
 
         } else {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","A demanda não foi apagada", "success");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Ocorreu um erro. A demanda não foi apagada!","danger");
             $this->Resultado = false;
 
         }
