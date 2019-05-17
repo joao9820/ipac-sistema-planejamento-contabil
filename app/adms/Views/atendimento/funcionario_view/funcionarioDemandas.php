@@ -113,7 +113,7 @@ function getFeriados($ano){
     </span>
     <div class="list-group-item border mx-4 mb-4 p-0 rounded">
         <div id="headerDescricaoPg" class="bg-primary">
-            <h3 class="">Lista de Atividades Pendente</h3>
+            <h3 class="">Lista de Atividades Pendentes</h3>
         </div>
 
         <div class="list-group-item">
@@ -243,13 +243,13 @@ function getFeriados($ano){
                             <th class="">Opções</th>
                             <th class="">Demanda</th>
                             <th class="">Descricao</th>
-                            <th class="">Atividades</th>
+                            <th class="">Atividade</th>
                             <th class="">Duração</th>
                             <th class="">Data de início</th>
                             <th class="">
                                 <span class="d-block text-center border-bottom pb-1 mb-1">Planejamento</span>
                                 <div class="d-flex justify-content-between">
-                                    <span>Inicio </span>
+                                    <span>Inicio </span> -
                                     <span>Términio</span>
                                 </div>
                             </th>
@@ -280,13 +280,13 @@ function getFeriados($ano){
                                 $contLuz++;
                                     if ( !empty($data_fatal) and (date('Y-m-d', strtotime($data_fatal)) == date('Y-m-d'))){
                                 ?>
-                                <span class="text-warning" tabindex='0' data-placement='top' data-toggle='tooltip' title='Aviso! A data limite para concluir o atendimento é hoje.'>
+                                <span class="text-warning" tabindex='0' data-placement='top' data-toggle='tooltip' title='Aviso! A data limite para concluir a atividade é hoje.'>
                                     <i class="fas fa-lightbulb faIpac mr-2"></i>
                                 </span>
                                 <?php
                                     } elseif ( !empty($data_fatal) and (date('Y-m-d', strtotime($data_fatal)) < date('Y-m-d'))){
                                 ?>
-                                <span class="text-danger" tabindex='0' data-placement='top' data-toggle='tooltip' title='Atenção! Atendimento ultrapassou a data limite de entrega.'>
+                                <span class="text-danger" tabindex='0' data-placement='top' data-toggle='tooltip' title='Atenção! A atividade ultrapassou a data limite de entrega.'>
                                     <i class="fas fa-lightbulb faIpac mr-2"></i>
                                 </span>
                                 <?php
@@ -300,8 +300,8 @@ function getFeriados($ano){
                                 if ($id_sits_aten_func == 1) {
                                     // Não iniciado
                                     ?>
-                                    <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Clique para iniciar atendimento.'>
-                                        <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id_aten_func . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']. '&aten='.$id_atendimento; ?>" class="btn btn-outline-success btn-sm mb-2 btnOpcoes"  data-sitAtenIniciar='Tem certeza que deseja iniciar o atendimento?'>
+                                    <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Clique para iniciar a atividade.'>
+                                        <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id_aten_func . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']. '&aten='.$id_atendimento; ?>" class="btn btn-outline-success btn-sm mb-2 btnOpcoes"  data-sitAtenIniciar='Tem certeza que deseja iniciar está atividade?'>
                                             Iniciar
                                         </a>
                                     </span>
@@ -314,8 +314,8 @@ function getFeriados($ano){
                                     <a href="#" class="btn btn-secondary btn-sm mb-2 btnOpcoesDisabled disabled">
                                         Em andamento
                                     </a>
-                                    <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Clique para pausar o atendimento.'>
-                                        <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id_aten_func . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']. '&aten='.$id_atendimento; ?>" class="btn btn-outline-warning btn-sm mb-2" data-sitAtenPausar='Tem certeza que deseja pausar o atendimento?'>
+                                    <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Clique para pausar a atividade.'>
+                                        <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id_aten_func . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']. '&aten='.$id_atendimento; ?>" class="btn btn-outline-warning btn-sm mb-2" data-sitAtenPausar='Tem certeza que deseja pausar está atividade?'>
                                             Pausar
                                         </a>
                                     </span>
@@ -325,9 +325,9 @@ function getFeriados($ano){
                                 } elseif ($id_sits_aten_func == 3) {
                                     // Pausado
                                     ?>
-                                    <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Clique para continuar o atendimento.'>
+                                    <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Clique para continuar a atividade.'>
                                         <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id_aten_func . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']. '&aten='.$id_atendimento; ?>" class="btn btn-outline-info btn-sm mb-2 btnOpcoes"
-                                           data-sitAtenContinuar='Tem certeza que deseja da continuidade ao atendimento agora?'>
+                                           data-sitAtenContinuar='Tem certeza que deseja da continuidade está atividade agora?'>
                                             Continuar
                                         </a>
                                     </span>
@@ -338,7 +338,7 @@ function getFeriados($ano){
                                 } else {
                                     // Finalizado
                                     ?>
-                                    <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Atendimento finalizado.'>
+                                    <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Atividade finalizada.'>
                                         <a href="#" class="btn btn-dark btn-sm mb-2 btnOpcoes btnOpcoesDisabled disabled">
                                             Finalizado
                                         </a>
@@ -352,17 +352,17 @@ function getFeriados($ano){
                                     <?php echo $nome_demanda ?>
                                 </span>
                             </td>
-                            <td class="text-center">
+                            <?php
+                            if (!empty($descricao_atendimento)){
+                            ?>
+                                <td class="text-center" tabindex="0" data-placement="right" data-toggle="tooltip" title="<?php echo $descricao_atendimento; ?>" style="cursor: pointer;">
+                                    <i class="far fa-file-alt fa-2x text-secondary"></i>
+                                </td>
                                 <?php
-                                    if (!empty($descricao_atendimento)){
-                                        ?>
-                                        <span tabindex="0" data-placement="top" data-toggle="tooltip" title="<?php echo $descricao_atendimento; ?>">
-                                            <i class="far fa-file-alt"></i>
-                                        </span>
-                                        <?php
-                                    }
-                                ?>
-                            </td>
+                            } else {
+                                echo "<td></td>";
+                            }
+                            ?>
                             <td>
                                 <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Descrição: <?php echo $descricao_atividade; ?>'>
                                     <?php echo $nome_atividade; ?>
@@ -638,7 +638,7 @@ function getFeriados($ano){
                                 <!-- Calculo para exibir o tempo restante -->
                                 <?php
                                     if ($id_sits_aten_func == 1) {
-                                        echo '<span tabindex="0" data-placement="top" data-toggle="tooltip" title="Esse atendimento ainda não foi iniciado">--:--</span>';
+                                        echo '<span tabindex="0" data-placement="top" data-toggle="tooltip" title="Essa atividade ainda não foi iniciado">--:--</span>';
                                         //echo "--:--";
                                     } elseif ($id_sits_aten_func == 3){
 
@@ -690,7 +690,7 @@ function getFeriados($ano){
 
                                         } elseif (!empty($at_tempo_excedido)){
 
-                                            echo '<span tabindex="0" data-placement="top" data-toggle="tooltip" title="Atendimento atrasado!">';
+                                            echo '<span tabindex="0" data-placement="top" data-toggle="tooltip" title="Atividade atrasada!">';
 
                                             // Pegando a hora restante do atendimento no banco e transformando em segundos
                                             $at_iniciado = date('Y-m-d H:i:s', strtotime($at_iniciado));

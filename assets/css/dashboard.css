@@ -11,7 +11,7 @@ span[data-toggle="tooltip"]{
 #mensagemCard {
     position: absolute;
     z-index: 3333;
-    right: 15px;
+    right: 0px;
     top: 40px;
     opacity: 0;
     transition: all .3s ease-in-out;
@@ -35,6 +35,7 @@ span[data-toggle="tooltip"]{
     font-weight: 300;
 }
 body {
+    position: relative;
     background-color: #eaeef3;
 }
 .navbar {

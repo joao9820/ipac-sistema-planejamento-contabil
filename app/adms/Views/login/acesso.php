@@ -127,7 +127,7 @@ if(isset($_SESSION['alert'])) {
                         opc += increment;
                         element.style.opacity = opc / 100;
                         element.style.filter = "alpha(opacity=" + opc + ")";
-                        element.style.right = (opc - 40) + "px";
+                        element.style.right = (opc) + "px";
                     }
                 }
             },time * 10);

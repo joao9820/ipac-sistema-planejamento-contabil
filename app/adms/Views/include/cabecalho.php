@@ -25,6 +25,7 @@ if (!defined('URL')) {
         body {
             max-height: 100vh;
             background: #eff1f4;
+            position: relative;
         }
         #login.row {
             min-height: 100vh;
@@ -61,7 +62,7 @@ if (!defined('URL')) {
         #mensagemCard {
             position: absolute;
             z-index: 3333;
-            right: 15px;
+            right: 0px;
             top: 40px;
             opacity: 0;
             transition: all .3s ease-in-out;
