@@ -8,76 +8,76 @@ if (!defined('URL')) {
 ?>
 <div class="content p-1">
     <div class="list-group-item">
-        <div class="d-flex">
-            <div class="mr-auto p-2">
-                <h2 class="display-4 titulo">Perfil</h2>
+
+        <div class="card border-0">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Perfil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo URLADM . 'editar-perfil/alt-perfil'; ?>">Editar Perfil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo URLADM . 'alterar-senha/alt-senha'; ?>">Atualizar Senha</a>
+                    </li>
+                </ul>
             </div>
-            <div class="p-2">
-                            <span class="d-none d-md-block">
-                                <a href="<?php echo URLADM . 'editar-perfil/alt-perfil'; ?>" class="btn btn-outline-warning btn-sm">Editar</a>
-                                <a href="<?php echo URLADM . 'alterar-senha/alt-senha'; ?>" class="btn btn-outline-danger btn-sm" >Editar a Senha</a>
-                            </span>
-                <div class="dropdown d-block d-md-none">
-                    <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="acoesListar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Ações
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="acoesListar">
-                        <a class="dropdown-item" href="<?php echo URLADM . 'editar-perfil/alt-perfil'; ?>">Editar</a>
-                        <a class="dropdown-item" href="<?php echo URLADM . 'alterar-senha/alt-senha'; ?>" >Editar a Senha</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+            <div class="card-body">
+                <?php
+                    if(isset($_SESSION['msg'])) {
+                        echo $_SESSION['msg'];
+                        unset($_SESSION['msg']);
+                    }
+                ?>
+                <!-- Conteudo -->
+                <div class="row">
 
-        <?php
-        if(isset($_SESSION['msg'])) {
-            echo $_SESSION['msg'];
-            unset($_SESSION['msg']);
-        }
-        ?>
-
-        <hr>
-        <dl class="row">
-
-            <?php
-                //var_dump($this->Dados['dados_perfil'][0]);
-                if(!empty($this->Dados['dados_perfil'][0]))
-                {
-                    extract($this->Dados['dados_perfil'][0]);
-                    ?>
-                    <dt class="col-sm-3">Foto</dt>
-                    <dd class="col-sm-9">
-                        <?php
+                    <?php
+                    //var_dump($this->Dados['dados_perfil'][0]);
+                    if(!empty($this->Dados['dados_perfil'][0]))
+                    {
+                        extract($this->Dados['dados_perfil'][0]);
+                        ?>
+                        <div class="col-md-2">
+                            <?php
                             if (!empty($_SESSION['usuario_imagem']))
                             {
-                                echo "<img src='".URLADM."assets/imagens/usuario/".$_SESSION['usuario_id']."/".$_SESSION['usuario_imagem']."' class='img-fluid'  width='150' height='150'  alt='".$_SESSION['usuario_imagem']."'> ";
+                                echo "<img src='".URLADM."assets/imagens/usuario/".$_SESSION['usuario_id']."/".$_SESSION['usuario_imagem']."' class='img-fluid'    alt='".$_SESSION['usuario_imagem']."'> ";
                             } else {
                                 echo "<img src='".URLADM."assets/imagens/usuario/icone_usuario.jpg' class='img-fluid'  width='150' height='150'  alt='".$_SESSION['usuario_imagem']."'> ";
                             }
-                        ?>
-                    </dd>
+                            ?>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="form-group row">
+                                <label for="nome" class="col-md-3 pb-0 col-form-label"><strong>Nome: </strong></label>
+                                <div class="col-md-12">
+                                    <input type="text" readonly class="form-control-plaintext pt-0" id="nome" value="<?php echo $nome ?>" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="usuario" class="col-md-3 pb-0 col-form-label"><strong>Usuário: </strong></label>
+                                <div class="col-md-12">
+                                    <input type="text" readonly class="form-control-plaintext pt-0" id="usuario" value="<?php echo $usuario ?>" disabled>
+                                </div>
+                            </div>
 
-                    <dt class="col-sm-3">ID</dt>
-                    <dd class="col-sm-9"><?php echo $id ?></dd>
+                            <div class="form-group row">
+                                <label for="email" class="col-sm-3 pb-0 col-form-label"><strong>E-mail: </strong></label>
+                                <div class="col-md-12">
+                                    <input type="text" readonly class="form-control-plaintext pt-0" id="email" value="<?php echo $email ?>" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                    ?>
 
-                    <dt class="col-sm-3">Nome</dt>
-                    <dd class="col-sm-9"><?php echo $nome ?></dd>
+                </div>
 
-                    <dt class="col-sm-3">Apelido</dt>
-                    <dd class="col-sm-9"><?php echo $apelido ?></dd>
-
-                    <dt class="col-sm-3">Usuário</dt>
-                    <dd class="col-sm-9"><?php echo $usuario ?></dd>
-
-                    <dt class="col-sm-3">E-mail</dt>
-                    <dd class="col-sm-9"><?php echo $email ?></dd>
-
-                    <dt class="col-sm-3 text-truncate">Data do Cadastro</dt>
-                    <dd class="col-sm-9"><?php echo $created ?></dd>
-            <?php
-                }
-            ?>
-
-        </dl>
+                <!-- Conteudo -->
+            </div>
+        </div>
     </div>
 </div>
