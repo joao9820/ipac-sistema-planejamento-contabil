@@ -30,7 +30,7 @@
     }
     .progress {
         font-size: .7em;
-        font-weight: 800;
+        font-weight: 700;
     }
     .totalAlert {
         color: red !important;
