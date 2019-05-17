@@ -57,7 +57,7 @@ class AdmsAtendimentoStatus
                 } else {
 
                     $alert = new AdmsAlertMensagem();
-                    $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi possível iniciar o atendimento.","danger");
+                    $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi possível iniciar a atividade.","danger");
                     $this->Resultado = false;
                 }
 
@@ -68,7 +68,7 @@ class AdmsAtendimentoStatus
                     $this->alterar();
                 } else {
                     $alert = new AdmsAlertMensagem();
-                    $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi possível pausar o atendimento.","danger");
+                    $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi possível pausar a atividade.","danger");
                     $this->Resultado = false;
                 }
             } elseif ($this->Status == 3) {
@@ -78,7 +78,7 @@ class AdmsAtendimentoStatus
                     $this->alterar();
                 } else {
                     $alert = new AdmsAlertMensagem();
-                    $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi possível iniciar o atendimento.","danger");
+                    $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi possível iniciar a atividade.","danger");
                     $this->Resultado = false;
                 }
             } elseif ($this->Status == 4) {
@@ -101,12 +101,12 @@ class AdmsAtendimentoStatus
         if ($upInterr->getResultado()) {
 
             $alert = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atendimento interrompido!","warning");
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atividade interrompida!","warning");
             $this->Resultado = true;
 
         } else {
             $alert = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi possível atualizar o atendimento.","danger");
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi possível atualizar a atividade.","danger");
             $this->Resultado = false;
         }
     }
@@ -128,7 +128,7 @@ class AdmsAtendimentoStatus
             $this->Dados['inicio_atendimento'] = date("Y-m-d H:i:s");
             $this->Dados['at_iniciado'] = date("Y-m-d H:i:s");
             $alert = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atendimento iniciado!","primary");
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atividade iniciada!","primary");
             $this->Dados['at_tempo_excedido'] = null;
 
         } elseif ($this->Status == 2) {
@@ -194,7 +194,7 @@ class AdmsAtendimentoStatus
             }
 
             $alert = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atendimento pausado!","warning");
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atividade pausada!","warning");
 
 
         } elseif ( $this->Status == 3) {
@@ -203,7 +203,7 @@ class AdmsAtendimentoStatus
             //$this->Dados['adms_sits_atendimento_id'] = 2;
 
             $alert = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atendimento retomado!","info");
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atividade retomada!","info");
 
         }
 
@@ -348,12 +348,12 @@ class AdmsAtendimentoStatus
         if ($upAtendimento->getResultado()) {
 
             $alert = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atendimento finalizado!","success");
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atividade finalizada!","success");
             $this->Resultado = true;
 
         } else {
             $alert = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi possível atualizar o atendimento.","danger");
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi possível atualizar a atividade.","danger");
             $this->Resultado = false;
         }
     }

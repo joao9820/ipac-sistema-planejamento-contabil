@@ -75,7 +75,7 @@ function getFeriados($ano){
     <div class="list-group-item">
         <div class="d-flex">
             <div class="mr-auto p-2">
-                <h2 class="display-4 titulo">Atendimentos</h2>
+                <h2 class="display-4 titulo">Atividades</h2>
             </div>
         </div>
     </div>
@@ -113,7 +113,7 @@ function getFeriados($ano){
     </span>
     <div class="list-group-item border mx-4 mb-4 p-0 rounded">
         <div id="headerDescricaoPg" class="bg-primary">
-            <h3 class="">Atendimentos Pendente</h3>
+            <h3 class="">Lista de Atividades Pendente</h3>
         </div>
 
         <div class="list-group-item">

@@ -105,8 +105,8 @@ class AdmsFuncConcluirAtendimento
             $this->Dados['at_iniciado'] = date("Y-m-d H:i:s");
 //$this->Dados['adms_sits_atendimento_id'] = 2;
 
-            $alertMensagem = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Atendimento", "retomado");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atividade retomada!","primary");
 
         }
 
@@ -124,14 +124,14 @@ class AdmsFuncConcluirAtendimento
             $this->verificarAtividadesConcluidas();
 
             $alert = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atendimento finalizado!","success");
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atividade finalizada!","success");
             $this->Resultado = true;
 
         }
         else {
 
             $alert = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Erro ao finalizar atendimento.","danger");
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Erro ao finalizar atividade.","danger");
             $this->Resultado = false;
 
         }
