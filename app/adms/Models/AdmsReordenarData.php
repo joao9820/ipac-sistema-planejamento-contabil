@@ -101,7 +101,7 @@ class AdmsReordenarData {
             $this->Dados['data_inicio_planejado'] = $novaDataDisp;
             //$this->horaFimAtvAnt = $this->UltimaAtividadeLoop[0]['hora_fim_planejado']; //Se somar um dia buscará a hora da ultima atividade para esse dia
         }
-        var_dump($this->Dados);
+        //var_dump($this->Dados);
     }
 
     public function getDefineData() {

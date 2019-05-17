@@ -12,27 +12,6 @@ if (!defined('URL')) {
 //var_dump($this->Dados['listarAtenFunc']);
 ?>
 
-<div id="mensagemCard" class="card border-success bg-success d-none">
-    <div class="card-body text-light text-center" style="position: relative;">
-        <div onclick="fecharAgora()" class="text-right" style="position: absolute; top: 5px; right: 10px">
-            <i class="fas fa-times" style="cursor: pointer;"></i>
-        </div>
-        <i class="fas fa-check-circle fa-3x"></i>
-        <h5 class="card-title">Alerta de Sucesso</h5>
-        <p class="card-text">Funcionário encontrado com sucesso!</p>
-    </div>
-</div>
-
-<div id="mensagemCardDanger" class="card border-danger bg-danger d-none">
-    <div class="card-body text-light text-center" style="position: relative;">
-        <div onclick="fecharAgora()" class="text-right" style="position: absolute; top: 5px; right: 10px">
-            <i class="fas fa-times" style="cursor: pointer;"></i>
-        </div>
-        <i class="fas fa-times-circle fa-3x"></i>
-        <h5 class="card-title">Alerta de erro</h5>
-        <p class="card-text">Funcionário não encontrado!</p>
-    </div>
-</div>
 
 <div class="content p-1">
     <div class="list-group-item">

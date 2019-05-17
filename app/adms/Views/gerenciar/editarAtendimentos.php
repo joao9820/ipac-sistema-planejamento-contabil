@@ -111,7 +111,7 @@ if (isset($this->Dados['form'][0])) {
                         <?php
                         foreach ($this->Dados['select']['sitsat'] as $sitAtendimento) {
                             extract($sitAtendimento);
-                            if ($id_sits_aten != 2) {
+                            if (($id_sits_aten != 2) AND ($id_sits_aten != 3)) {
                                 if ($valorForm['adms_sits_atendimento_id'] == $id_sits_aten) {
                                     echo "<option value='$id_sits_aten' selected class='text-" . $cores_sits_aten . "'>$nome_sits_aten</option>";
                                 } else {

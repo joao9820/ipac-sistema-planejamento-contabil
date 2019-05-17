@@ -485,7 +485,9 @@ if(isset($_SESSION['msg'])) {
         '03',
         '04',
         '05',
-        '06'
+        '06',
+        '07',
+        '08'
     ];
     var minutos = [
         '00',
@@ -511,7 +513,7 @@ if(isset($_SESSION['msg'])) {
 
             var horaElement = document.createElement('option');
 
-            if(hora <= duracao_max){
+
                 horaElement.value = hora;
                 var horaTexto = document.createTextNode(hora);
 
@@ -520,7 +522,7 @@ if(isset($_SESSION['msg'])) {
                 // adicionar cada elemento dentro da div
                 selecionaHora.appendChild(horaElement);
 
-            }
+
         }
     }
 
