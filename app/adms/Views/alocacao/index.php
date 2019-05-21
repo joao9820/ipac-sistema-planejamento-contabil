@@ -73,10 +73,10 @@ if (!defined('URL')) {
 
         <div class="row mt-3">
             <div class="col-md-4">
-                <div onclick="window.location.href='<?php echo URLADM . 'alocacao/gerente/2'; ?>'" style="cursor: pointer;" class="card cardBorder text-center border-secondary">
+                <div onclick="window.location.href='<?php echo URLADM . 'alocacao/gerente/3'; ?>'" style="cursor: pointer;" class="card cardBorder text-center border-secondary">
                     <div class="row no-gutters">
                         <div class="col-md-8">
-                            <div class="card-header"><strong>Nome do Gerente</strong></div>
+                            <div class="card-header"><strong>Leila</strong></div>
                             <div class="card-body">
                                 <p class="card-text">Percentual da Alocação</p>
                                 <p class="card-text"><small class="text-muted">Clique no link abaixo</small></p>

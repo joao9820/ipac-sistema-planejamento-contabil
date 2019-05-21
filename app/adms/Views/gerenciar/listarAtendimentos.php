@@ -148,32 +148,48 @@
                     ?>
 
                     <tr class="">
-                        <td class="d-none d-lg-table-cell <?php if (($data_fatal_atividade < date('Y-m-d'))and (!empty($data_fatal_atividade))) {
-                            echo "text-danger";
+                        <?php
+                        if(($nome_situacao == "Concluído") AND ($id_situacao == 3)){
+                            echo '<td class="d-none d-lg-table-cell">';
+                            echo '<i class="fas fa-lightbulb text-light faIpac"></i>';
+                            if ($id < 10){
+                                echo "000".$id;
+                            } elseif ($id < 100){
+                                echo "00".$id;
+                            } elseif ($id < 100){
+                                echo "0".$id;
+                            } else {
+                                echo $id;
+                            }
                         } else {
-                            echo "text-dark";
-                        } ?>">
-                            <?php
-                                if (($data_fatal_atividade < date('Y-m-d'))and (!empty($data_fatal_atividade))){
-                                    echo "<span class='luzAlert' tabindex='0' data-placement='right' data-toggle='tooltip' title='Este atendimento está com uma (ou mais) atividade(s) com entrega atrasada(s).'>";
-                                    echo '<a href="' . URLADM . 'atendimento-funcionarios/listar/' . $adms_demanda_id .'?aten='.$id.'" class="text-danger" >';
-                                        echo '<i class="fas fa-lightbulb faIpac"></i>';
-                                    echo '</a>';
-                                    echo "</span>";
-                                } else {
-                                    echo '<i class="fas fa-lightbulb text-light faIpac"></i>';
-                                }
                             ?>
-                            <?php
-                                if ($id < 10){
-                                    echo "000".$id;
-                                } elseif ($id < 100){
-                                    echo "00".$id;
-                                } elseif ($id < 100){
-                                    echo "0".$id;
-                                } else {
-                                    echo $id;
-                                }
+                            <td class="d-none d-lg-table-cell <?php if (($data_fatal_atividade < date('Y-m-d'))and (!empty($data_fatal_atividade))) {
+                                echo "text-danger";
+                            } else {
+                                echo "text-dark";
+                            } ?>">
+                                <?php
+                                    if (($data_fatal_atividade < date('Y-m-d'))and (!empty($data_fatal_atividade))){
+                                        echo "<span class='luzAlert' tabindex='0' data-placement='right' data-toggle='tooltip' title='Este atendimento está com uma (ou mais) atividade(s) com entrega atrasada(s).'>";
+                                        echo '<a href="' . URLADM . 'atendimento-funcionarios/listar/' . $adms_demanda_id .'?aten='.$id.'" class="text-danger" >';
+                                            echo '<i class="fas fa-lightbulb faIpac"></i>';
+                                        echo '</a>';
+                                        echo "</span>";
+                                    } else {
+                                        echo '<i class="fas fa-lightbulb text-light faIpac"></i>';
+                                    }
+                                ?>
+                                <?php
+                                    if ($id < 10){
+                                        echo "000".$id;
+                                    } elseif ($id < 100){
+                                        echo "00".$id;
+                                    } elseif ($id < 100){
+                                        echo "0".$id;
+                                    } else {
+                                        echo $id;
+                                    }
+                            } // fim do if para exibir luz ou não
                             ?>
                         </td>
                         <td>
