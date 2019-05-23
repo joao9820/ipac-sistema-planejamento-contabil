@@ -27,8 +27,8 @@ if (!defined('URL')) {
 
             </div>
             <div class="d-flex p-2">
-                <span class="d-block">
-                    <a href="<?php echo URLADM . 'jornada-de-trabalho/listar'; ?>" class="btn btn-outline-info btn-sm"><i class="fas fa-list"></i> Listar Funcionários</a>
+               <span class="d-block">
+                    <a href="<?php echo URLADM . 'gerenciar-atendimento/listar/1'; ?>" class="btn btn-outline-info btn-sm"><i class="fas fa-list"></i> Listar atendimentos</a>
                 </span>
             </div>
         </div>
