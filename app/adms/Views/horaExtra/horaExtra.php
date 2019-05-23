@@ -179,8 +179,10 @@ if (!empty($this->Dados['funcionario'])) {
                 </table>
 
                 <?php
-
-                echo $this->Dados['paginacao'];
+                if(!empty($this->Dados['paginacao'])){
+                   echo $this->Dados['paginacao']; 
+                }
+                
 
                 ?>
 
