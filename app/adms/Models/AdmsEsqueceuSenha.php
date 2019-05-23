@@ -8,6 +8,12 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsEmail;
+use App\adms\Models\helper\AdmsPhpMailer;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -36,7 +42,7 @@ class AdmsEsqueceuSenha
         if($this->Resultado)
         {
 
-            $esqSenha = new \App\adms\Models\helper\AdmsRead();
+            $esqSenha = new AdmsRead();
             $esqSenha->fullRead("SELECT id, nome, usuario, recuperar_senha FROM adms_usuarios WHERE email =:email LIMIT :limit", "email={$this->Dados['email']}&limit=1");
             $this->DadosUsuario = $esqSenha->getResultado();
             if (!empty($this->DadosUsuario)) {
@@ -46,8 +52,8 @@ class AdmsEsqueceuSenha
             }
             else {
 
-                $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-                $_SESSION['msg'] = $alertMensagem->alertMensagem("Oops!","E-mail não cadastrado", "danger");
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("E-mail não cadastrado!","danger");
                 $this->Resultado = false;
 
             }
@@ -63,14 +69,14 @@ class AdmsEsqueceuSenha
         if(in_array('', $this->Dados))
         {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Oops!","Necessário preencher todos os campos", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Necessário preencher todos os campos!","warning");
             $this->Resultado = false;
 
         }
         else {
 
-            $valEmail = new \App\adms\Models\helper\AdmsEmail();
+            $valEmail = new AdmsEmail();
             $valEmail->valEmail($this->Dados['email']);
             if($valEmail->getResultado()){
 
@@ -100,7 +106,7 @@ class AdmsEsqueceuSenha
             $this->DadosUdate['recuperar_senha'] = md5($this->DadosUsuario[0]['id'] . date('Y-m-d H:i'));
             $this->DadosUdate['modified'] = date('Y-m-d H:i');
 
-            $updateRecSenha = new \App\adms\Models\helper\AdmsUpdate();
+            $updateRecSenha = new AdmsUpdate();
             $updateRecSenha->exeUpdate("adms_usuarios", $this->DadosUdate, "WHERE id =:id", "id={$this->DadosUsuario[0]['id']}");
             if ($updateRecSenha->getResultado())
             {
@@ -111,8 +117,8 @@ class AdmsEsqueceuSenha
             }
             else {
 
-                $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-                $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe!","Ocorreu um erro ao recuperar a senha", "danger");
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Ocorreu um erro ao recuperar a senha.","danger");
                 $this->Resultado = false;
 
             }
@@ -143,21 +149,21 @@ class AdmsEsqueceuSenha
         $this->DadosEmail['cont_text_email'] .= "Sua senha permanecerá a mesma até que você ative este código.";
 
 
-        $emailPHPMailer = new \App\adms\Models\helper\AdmsPhpMailer();
+        $emailPHPMailer = new AdmsPhpMailer();
         $emailPHPMailer->emailPhpMailer($this->DadosEmail);
 
         if($emailPHPMailer->getResultado())
         {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("E-mail enviado com sucesso, verifique sua caixa de entrada", "success");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("E-mail enviado! Verifique sua caixa de entrada.","success");
             $this->Resultado = true;
 
         }
         else {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe!","Erro ao recuperar a senha", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Erro ao recuperar a senha.","danger");
             $this->Resultado = false;
 
         }

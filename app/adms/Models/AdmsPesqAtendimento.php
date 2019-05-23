@@ -8,6 +8,8 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -34,7 +36,7 @@ class AdmsPesqAtendimento
 
         $this->ResultadoPg = null;
 
-        $listarAtendimento = new \App\adms\Models\helper\AdmsRead();
+        $listarAtendimento = new AdmsRead();
         $listarAtendimento->fullRead("SELECT aten.id, aten.adms_funcionario_id funcionario, aten.created, 
                         demanda.nome nome_demanda, 
                         situacao.nome nome_situacao, situacao.id id_situacao, 

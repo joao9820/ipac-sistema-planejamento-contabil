@@ -8,6 +8,8 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -18,7 +20,6 @@ class AdmsPesqUsuario
 {
 
     private $Resultado;
-    private $PageId;
     private $LimiteResultado = 40;
     private $ResultadoPg;
     private $PesqUsuario;
@@ -34,7 +35,7 @@ class AdmsPesqUsuario
 
         $this->ResultadoPg = null;
 
-        $listarUsuario = new \App\adms\Models\helper\AdmsRead();
+        $listarUsuario = new AdmsRead();
         $listarUsuario->fullRead("SELECT user.id, user.nome, user.email,
                 sit.nome nome_situacao,
                 cr.cor 

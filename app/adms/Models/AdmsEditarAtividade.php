@@ -96,8 +96,8 @@ class AdmsEditarAtividade
 
         if ($valCampoUnico->getResultado()){
 
-            $alertMensagem = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","Atividade já cadastrada para a demanda selecionada", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atividade já cadastrada para a demanda selecionada.","danger");
             $this->Resultado = false;
 
 
@@ -133,15 +133,15 @@ class AdmsEditarAtividade
         if ($upEditAtividade->getResultado())
         {
 
-            $alertMensagem = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Atividade atualizada com sucesso", "success");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atividade atualizada!","success");
             $this->Resultado = true;
 
         }
         else {
 
-            $alertMensagem = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","A atividade não foi atualizada", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("A atividade não foi atualizada.","danger");
             $this->Resultado = false;
 
         }
@@ -157,11 +157,5 @@ class AdmsEditarAtividade
             "id={$this->Dados['atividade_sucessora_id']}&atividade_editar={$this->Dados['id']}&limit=1");
         $this->Sucessora =$verif->getResultado();
     }
-
-
-
-
-
-
 
 }

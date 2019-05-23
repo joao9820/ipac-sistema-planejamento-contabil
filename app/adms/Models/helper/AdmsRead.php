@@ -46,6 +46,15 @@ class AdmsRead extends AdmsConn
         $this->exeInstrucao();
     }
 
+    public function fullReadRowCount($Query, $ParseString = null)
+    {
+        $this->Select = (string) $Query;
+        if (!empty($ParseString)) {
+            parse_str($ParseString, $this->Values);
+        }
+        $this->exeInstrucaoRow();
+    }
+
     private function exeInstrucao()
     {
         $this->conexao();
@@ -53,6 +62,18 @@ class AdmsRead extends AdmsConn
             $this->getIntrucao();
             $this->Query->execute();
             $this->Resultado = $this->Query->fetchAll();
+        } catch (\Exception $ex) {
+            $this->Resultado = null;
+        }
+    }
+
+    private function exeInstrucaoRow()
+    {
+        $this->conexao();
+        try {
+            $this->getIntrucao();
+            $this->Query->execute();
+            $this->Resultado = $this->Query->rowCount();
         } catch (\Exception $ex) {
             $this->Resultado = null;
         }

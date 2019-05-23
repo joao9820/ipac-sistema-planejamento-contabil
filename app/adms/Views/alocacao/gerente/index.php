@@ -10,29 +10,15 @@ if (!defined('URL')) {
     exit();
 }
 //var_dump($this->Dados['listarAtenFunc']);
+if (isset($this->Dados['gerente'])){
+    $idGerente = isset($this->Dados['gerente']['id']) ? $this->Dados['gerente']['id'] : 0;
+    $NomeGerente = isset($this->Dados['gerente']['nome']) ? $this->Dados['gerente']['nome'] : "Nome gerente";
+}
+// pega a data de inicio e fim
+$DataInicio = isset($this->Dados['DataInicio']) ? $this->Dados['DataInicio'] : date('Y-m-d');
+$DataFim = isset($this->Dados['DataFim']) ? $this->Dados['DataFim'] : date('Y-m-d');
 ?>
 
-<div id="mensagemCard" class="card border-success bg-success d-none">
-    <div class="card-body text-light text-center" style="position: relative;">
-        <div onclick="fecharAgora()" class="text-right" style="position: absolute; top: 5px; right: 10px">
-            <i class="fas fa-times" style="cursor: pointer;"></i>
-        </div>
-        <i class="fas fa-check-circle fa-3x"></i>
-        <h5 class="card-title">Alerta de Sucesso</h5>
-        <p class="card-text">Funcionário encontrado com sucesso!</p>
-    </div>
-</div>
-
-<div id="mensagemCardDanger" class="card border-danger bg-danger d-none">
-    <div class="card-body text-light text-center" style="position: relative;">
-        <div onclick="fecharAgora()" class="text-right" style="position: absolute; top: 5px; right: 10px">
-            <i class="fas fa-times" style="cursor: pointer;"></i>
-        </div>
-        <i class="fas fa-times-circle fa-3x"></i>
-        <h5 class="card-title">Alerta de erro</h5>
-        <p class="card-text">Funcionário não encontrado!</p>
-    </div>
-</div>
 
 <div class="content p-1">
     <div class="list-group-item">
@@ -46,7 +32,7 @@ if (!defined('URL')) {
             </div>
 
             <div class="col-md-6">
-                <h3>Nome do Gerente</h3>
+                <h3>Gerente: <?php echo $NomeGerente; ?></h3>
             </div>
             <div class="col-md-6 d-flex justify-content-end">
                 <form method="post" action="" class="form-inline my-1">
@@ -80,15 +66,22 @@ if (!defined('URL')) {
         </div>
 
         <div class="row mt-3">
+            <div class="col-md-6">
+                <span class="badge bg-light my-3">
+                Filtro Aplicado:
+                <?php
+                    echo date("d/m/Y", strtotime($DataInicio));
+                    echo " - ";
+                    echo date("d/m/Y", strtotime($DataFim));
+                ?>
+                </span>
+            </div>
             <div class="col-md-12">
                 <div class="table-responsive">
                     <table class="table table-striped table-hover border-0">
                         <?php
-                            $dados = [
-                                ['nome'=>'Marcelo', 'funcao'=>'Contador', 'alocacao'=>'90'],
-                                ['nome'=>'Virginia', 'funcao'=>'Contador', 'alocacao'=>'110'],
-                                ['nome'=>'Odilene', 'funcao'=>'Analista', 'alocacao'=>'95']
-                            ];
+                            //var_dump($this->Dados['alocacao']);
+                            $dados = $this->Dados['alocacao'];
                         ?>
                         <thead class="border-0">
                             <tr>
@@ -100,8 +93,20 @@ if (!defined('URL')) {
                         </thead>
                         <tbody>
                             <?php
-                                foreach ($dados as $key => $dado){
+                                foreach ($dados as $key => $value){
+
+                                    $DurAti = (int)  $value['duracao_atividade_sc'];
+                                    $JorTra = (int) $value['duracao_total_jornada'];
+                                    // Calcular porcentagem de alocação
+                                    $AlocacaoT = $DurAti > 0 ? ($DurAti * 100) / $JorTra : 0;
+                                    $textoCor = $AlocacaoT > 100 ? "text-danger" : "text-secondary";
+
                                     echo '<tr>';
+                                        echo "<td>{$value['nome']}</td>";
+                                        echo "<td>{$value['cargo']}</td>";
+                                        echo "<td class='".$textoCor."'><strong>". number_format($AlocacaoT, 1, ',', ' ') ."%</strong></td>";
+
+                                    /*
                                     foreach ($dado as $coluna => $item){
                                         if ($coluna == "alocacao"){ // quando a coluna é alocação exibir o simbolo de %
                                             if ($item > 100){ // quando a alocação for maior que 100% exibir em vermelhor
@@ -113,7 +118,14 @@ if (!defined('URL')) {
                                             echo "<td>" . $item . "</td>"; // exibir os demais itens
                                         }
                                     }
-                                    echo '<td><button class="btn btn-outline-secondary"><i class="fas fa-external-link-square-alt"></i></button></td>';
+                                    */
+                                    ?>
+                                    <td>
+                                        <button onclick="window.location.href='<?php echo URLADM . 'alocacao/funcionario/'.$value['id'].'?gerente='.$idGerente.'&data_inicio='.$DataInicio.'&data_fim='.$DataFim; ?>'" class="btn btn-outline-secondary">
+                                            <i class="fas fa-external-link-square-alt"></i>
+                                        </button>
+                                    </td>
+                            <?php
                                     echo '</tr>';
                                 }
                             ?>

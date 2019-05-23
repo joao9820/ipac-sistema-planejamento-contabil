@@ -8,6 +8,8 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -22,7 +24,7 @@ class AdmsVerCor
     public function verCor($DadosId)
     {
         $this->DadosId = (int) $DadosId;
-        $verCor = new \App\adms\Models\helper\AdmsRead();
+        $verCor = new AdmsRead();
         $verCor->fullRead("SELECT * FROM adms_cors 
                 WHERE id =:id LIMIT :limit", "id=".$this->DadosId."&limit=1");
         $this->Resultado= $verCor->getResultado();

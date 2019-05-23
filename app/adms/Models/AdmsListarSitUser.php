@@ -8,6 +8,9 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsPaginacao;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -30,12 +33,12 @@ class AdmsListarSitUser
     public function listarSitUser($PageId = null)
     {
         $this->PageId = (int) $PageId;
-        $paginacao = new \App\adms\Models\helper\AdmsPaginacao(URLADM . 'situacao-user/listar');
+        $paginacao = new AdmsPaginacao(URLADM . 'situacao-user/listar');
         $paginacao->condicao($this->PageId, $this->LimiteResultado);
         $paginacao->paginacao("SELECT COUNT(id) AS num_result FROM adms_sits_usuarios");
         $this->ResultadoPg = $paginacao->getResultado();
 
-        $listarSitUser = new \App\adms\Models\helper\AdmsRead();
+        $listarSitUser = new AdmsRead();
         $listarSitUser->fullRead("SELECT sit.*,
                 cr.cor cor_cr
                 FROM adms_sits_usuarios sit 

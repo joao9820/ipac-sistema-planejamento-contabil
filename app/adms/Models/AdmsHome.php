@@ -9,6 +9,8 @@
 namespace App\adms\Models;
 
 
+use App\adms\Models\helper\AdmsRead;
+
 class AdmsHome
 {
     private $Resultado;
@@ -21,7 +23,7 @@ class AdmsHome
 
     public function verAtendimentos()
     {
-        $ver = new \App\adms\Models\helper\AdmsRead();
+        $ver = new AdmsRead();
         $ver->fullRead("SELECT atendi.adms_sits_atendimento_id id_status_aten, situacao.nome, count(atendi.id) as total 
                         FROM adms_atendimentos atendi
                         INNER JOIN adms_sits_atendimentos situacao ON situacao.id=atendi.adms_sits_atendimento_id 
@@ -35,7 +37,7 @@ class AdmsHome
     {
         $this->EmpId = (int) $EmpId;
 
-        $verTotUsuario = new \App\adms\Models\helper\AdmsRead();
+        $verTotUsuario = new AdmsRead();
         $verTotUsuario->fullRead("SELECT COUNT(id) AS num_result_user FROM adms_usuarios WHERE adms_empresa_id =:adms_empresa_id",
             "adms_empresa_id=".$this->EmpId);
         $this->Resultado = $verTotUsuario->getResultado();
@@ -44,7 +46,7 @@ class AdmsHome
 
     public function verTotDemandas()
     {
-        $verTotDemandas = new \App\adms\Models\helper\AdmsRead();
+        $verTotDemandas = new AdmsRead();
         $verTotDemandas->fullRead("SELECT COUNT(id) AS num_result_demanda FROM adms_demandas");
         $this->Resultado = $verTotDemandas->getResultado();
         return $this->Resultado;

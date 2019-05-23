@@ -8,6 +8,12 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+use App\adms\Models\helper\AdmsValCampoUnico;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -28,7 +34,7 @@ class AdmsEditarDemanda
     public function verDemanda($DadosId)
     {
         $this->DadosId = (int) $DadosId;
-        $verUsuario = new \App\adms\Models\helper\AdmsRead();
+        $verUsuario = new AdmsRead();
         $verUsuario->fullRead("SELECT dmd.* 
                         FROM adms_demandas dmd 
                         WHERE dmd.id =:id LIMIT :limit",
@@ -42,7 +48,7 @@ class AdmsEditarDemanda
         $this->Dados = $Dados;
         //var_dump($this->Dados);
 
-        $valCampos = new \App\adms\Models\helper\AdmsCampoVazio();
+        $valCampos = new AdmsCampoVazio();
         $valCampos->validarDados($this->Dados);
 
         if ($valCampos->getResultado()) {
@@ -62,7 +68,7 @@ class AdmsEditarDemanda
     {
         $EditarUnico = true;
 
-        $valCampoUnico = new \App\adms\Models\helper\AdmsValCampoUnico();
+        $valCampoUnico = new AdmsValCampoUnico();
         $valCampoUnico->valCampo("adms_demandas", "nome",$this->Dados['nome'], $EditarUnico, $this->Dados['id']);
 
         if ($valCampoUnico->getResultado()){
@@ -84,31 +90,25 @@ class AdmsEditarDemanda
         $this->Dados['modified'] = date('Y-m-d H:i:s');
 
 
-        $upEditDemanda = new \App\adms\Models\helper\AdmsUpdate();
+        $upEditDemanda = new AdmsUpdate();
         //var_dump($this->Dados);
         $upEditDemanda->exeUpdate("adms_demandas", $this->Dados, "WHERE id =:id", "id={$this->Dados['id']}");
         if ($upEditDemanda->getResultado())
         {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Demanda atualizada com sucesso", "success");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Demanda atualizada!","success");
             $this->Resultado = true;
 
         }
         else {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","A demanda não foi atualizada", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("A demanda não foi atualizada.","danger");
             $this->Resultado = false;
 
         }
 
     }
-
-
-
-
-
-
 
 }

@@ -2,6 +2,8 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -10,21 +12,21 @@ if (!defined('URL')) {
 /**
  * Description of AdmsVerPagina
  *
- * @copyright (c) year, Cesar Szpak - Celke
  */
 class AdmsVerPagina
 {
     private $Resultado;
     private $DadosId;
-    
+
     /**
      * <b>Ver Página:</b> Receber o id da página para buscar informações do registro no banco de dados
      * @param int $DadosId
+     * @return
      */
     public function verPagina($DadosId)
     {
         $this->DadosId = (int) $DadosId;
-        $verPagina = new \App\adms\Models\helper\AdmsRead();
+        $verPagina = new AdmsRead();
         $verPagina->fullRead("SELECT pg.*,
                 grpg.nome nome_grpg,
                 tpgs.tipo tipo_tpgs, tpgs.nome nome_tpgs,

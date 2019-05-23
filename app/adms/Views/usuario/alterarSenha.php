@@ -13,34 +13,47 @@ if (!defined('URL')) {
 ?>
 <div class="content p-1">
     <div class="list-group-item">
-        <div class="d-flex">
-            <div class="mr-auto p-2">
-                <h2 class="display-4 titulo">Alterar Senha</h2>
-            </div>
-            <div class="p-2">
-                <span class="d-block">
-                    <a href="<?php echo URLADM . 'ver-perfil/perfil'; ?>" class="btn btn-outline-primary btn-sm">Visualizar</a>
-                </span>
-            </div>
-        </div><hr>
 
-        <?php
-            if(isset($_SESSION['msg'])) {
-                echo $_SESSION['msg'];
-                unset($_SESSION['msg']);
-            }
-        ?>
 
-        <form method="post" action="">
 
-            <div class="form-group">
-                <label><span class="text-danger">* </span>Senha</label>
-                <input name="senha" type="password" class="form-control" placeholder="Senha com mínimo 6 caracteres">
+        <div class="card border-0">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo URLADM . 'ver-perfil/perfil'; ?>">Perfil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo URLADM . 'editar-perfil/alt-perfil'; ?>">Editar Perfil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Atualizar Senha</a>
+                    </li>
+                </ul>
             </div>
-            <p>
-                <span class="text-danger">* </span>Campo obrigatório
-            </p>
-            <input type="submit" name="AltSenha" value="Salvar" class="btn btn-warning">
-        </form>
+            <div class="card-body">
+                <?php
+                if(isset($_SESSION['msg'])) {
+                    echo $_SESSION['msg'];
+                    unset($_SESSION['msg']);
+                }
+                ?>
+                <!-- Conteudo -->
+                <form method="post" action="" class="col-md-4 pl-0">
+                    <small class="text-right d-block ml-auto">
+                        <span class="text-danger">* </span>Campos obrigatório
+                    </small>
+                    <div class="form-group">
+                        <label><span class="text-danger">* </span>Senha</label>
+                        <input name="senha" type="password" class="form-control" placeholder="Senha com no mínimo 6 caracteres">
+                    </div>
+                    <p>
+                        <span class="text-danger">* </span>Campo obrigatório
+                    </p>
+                    <input type="submit" name="AltSenha" value="Salvar" class="btn btn-success btn-block">
+                </form>
+                <!-- Conteudo -->
+            </div>
+        </div>
+
     </div>
 </div>

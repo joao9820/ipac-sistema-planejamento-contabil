@@ -8,6 +8,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -29,7 +34,7 @@ class AdmsEditarAtenGerente
     public function verAtendimento($DadosId)
     {
         $this->DadosId = (int) $DadosId;
-        $verUsuario = new \App\adms\Models\helper\AdmsRead();
+        $verUsuario = new AdmsRead();
         $verUsuario->fullRead("SELECT id, adms_demanda_id, adms_sits_atendimento_id, prioridade, data_fatal 
                               FROM adms_atendimentos WHERE id =:id LIMIT :limit","id=" . $this->DadosId . "&limit=1");
         $this->Resultado = $verUsuario->getResultado();
@@ -40,7 +45,7 @@ class AdmsEditarAtenGerente
     {
         $this->DadosId = (int) $DadosId;
 
-        $listar = new \App\adms\Models\helper\AdmsRead();
+        $listar = new AdmsRead();
         $listar->fullRead("SELECT id id_demanda, nome nome_demanda FROM adms_demandas ORDER BY nome ASC");
 
         $registro['deman'] = $listar->getResultado();
@@ -85,7 +90,7 @@ class AdmsEditarAtenGerente
         }
 
 
-        $valCampos = new \App\adms\Models\helper\AdmsCampoVazio();
+        $valCampos = new AdmsCampoVazio();
         $valCampos->validarDados($this->Dados);
 
         if ($valCampos->getResultado()) {
@@ -114,19 +119,19 @@ class AdmsEditarAtenGerente
         $this->Dados['duracao_atendimento'] = $this->Resultado[0]['total_horas'];
 
 
-        $upEditDemanda = new \App\adms\Models\helper\AdmsUpdate();
+        $upEditDemanda = new AdmsUpdate();
         $upEditDemanda->exeUpdate("adms_atendimentos", $this->Dados, "WHERE id =:id", "id={$this->Dados['id']}");
         if ($upEditDemanda->getResultado())
         {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Atendimento editado com sucesso", "success");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atendimento editado!","success");
             $this->Resultado = true;
 
         } else {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","O atendimento não foi atualizado", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("O atendimento não foi atualizado.","danger");
             $this->Resultado = false;
 
         }
@@ -143,11 +148,5 @@ class AdmsEditarAtenGerente
         $this->Resultado = $qtdHoras->getResultado();
         return $this->Resultado;
     }
-
-
-
-
-
-
 
 }

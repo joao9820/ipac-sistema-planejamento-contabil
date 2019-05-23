@@ -2,6 +2,8 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -10,7 +12,6 @@ if (!defined('URL')) {
 /**
  * Description of AdmsVerNivAc
  *
- * @copyright (c) year, Cesar Szpak - Celke
  */
 class AdmsVerNivAc
 {
@@ -20,7 +21,7 @@ class AdmsVerNivAc
     public function verNivAc($DadosId)
     {
         $this->DadosId = (int) $DadosId;
-        $verNivAc = new \App\adms\Models\helper\AdmsRead();
+        $verNivAc = new AdmsRead();
         $verNivAc->fullRead("SELECT * FROM adms_niveis_acessos user
                 WHERE id =:id AND ordem >=:ordem LIMIT :limit", "id=".$this->DadosId."&ordem=".$_SESSION['ordem_nivac']."&limit=1");
         $this->Resultado= $verNivAc->getResultado();

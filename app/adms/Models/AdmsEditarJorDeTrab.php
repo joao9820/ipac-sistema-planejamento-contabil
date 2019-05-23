@@ -8,6 +8,10 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -29,7 +33,7 @@ class AdmsEditarJorDeTrab
     {
         $this->DadosId = (int) $DadosId;
 
-        $verFuncionario = new \App\adms\Models\helper\AdmsRead();
+        $verFuncionario = new AdmsRead();
         $verFuncionario->fullRead("SELECT user.id, user.nome, user.email, user.imagem, user.adms_departamento_id, 
                         user.adms_cargo_id, user.jornada_de_trabalho 
                         FROM adms_usuarios user  
@@ -44,7 +48,7 @@ class AdmsEditarJorDeTrab
 
     public function listarCadastrar()
     {
-        $listar = new \App\adms\Models\helper\AdmsRead();
+        $listar = new AdmsRead();
         $listar->fullRead("SELECT id id_departamento, nome nome_departamento FROM adms_departamentos ORDER BY nome ASC");
         $registro['departamento'] = $listar->getResultado();
 
@@ -63,20 +67,20 @@ class AdmsEditarJorDeTrab
         $this->Dados['modified'] = date('Y-m-d H:i:s');
 
 
-        $upEditFunc = new \App\adms\Models\helper\AdmsUpdate();
+        $upEditFunc = new AdmsUpdate();
         //var_dump($this->Dados);
         $upEditFunc->exeUpdate("adms_usuarios", $this->Dados, "WHERE id =:id", "id={$this->Dados['id']}");
         if ($upEditFunc->getResultado())
         {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Funcionário atualizado com sucesso", "success");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Funcionário atualizado!","success");
             $this->Resultado = true;
 
         } else {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","A atualização do funcionário não foi concluída", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("A atualização do funcionário não foi concluída.","danger");
             $this->Resultado = false;
 
         }

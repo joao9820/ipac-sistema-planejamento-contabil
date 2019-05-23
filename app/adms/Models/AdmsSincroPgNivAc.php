@@ -8,6 +8,9 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -47,11 +50,13 @@ class AdmsSincroPgNivAc
             if ($this->ListarPg) {
                 $this->lerNivAc();
             } else {
-                $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Nenhum página encontrada!</div>";
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Nenhum página encontrada!","danger");
                 $this->Resultado = false;
             }
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Nenhum nível de acesso encontrado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Nenhum nível de acesso encontrado!","danger");
             $this->Resultado = false;
         }
     }
@@ -61,7 +66,7 @@ class AdmsSincroPgNivAc
      */
     private function listarNivAc()
     {
-        $listarNivAc = new \App\adms\Models\helper\AdmsRead();
+        $listarNivAc = new AdmsRead();
         $listarNivAc->fullRead("SELECT id FROM adms_niveis_acessos");
         $this->ListaNivAc = $listarNivAc->getResultado();
     }
@@ -71,7 +76,7 @@ class AdmsSincroPgNivAc
      */
     private function listarPg()
     {
-        $listarPg = new \App\adms\Models\helper\AdmsRead();
+        $listarPg = new AdmsRead();
         $listarPg->fullRead("SELECT id, lib_pub FROM adms_paginas");
         $this->ListarPg = $listarPg->getResultado();
     }
@@ -83,6 +88,7 @@ class AdmsSincroPgNivAc
     {
         foreach ($this->ListaNivAc as $nivAc) {
             extract($nivAc);
+            /** @var TYPE_NAME $id */
             $this->NivAcId = $id;
             $this->lerPg();
         }
@@ -110,7 +116,7 @@ class AdmsSincroPgNivAc
      */
     private function pesqCadNivAcPer()
     {
-        $listarNivAcPg = new \App\adms\Models\helper\AdmsRead();
+        $listarNivAcPg = new AdmsRead();
         $listarNivAcPg->fullRead("SELECT id FROM adms_nivacs_pgs WHERE adms_niveis_acesso_id =:adms_niveis_acesso_id AND adms_pagina_id =:adms_pagina_id", "adms_niveis_acesso_id={$this->NivAcId}&adms_pagina_id={$this->PgId}");
         $this->ListarNivAcPg = $listarNivAcPg->getResultado();
     }
@@ -132,10 +138,12 @@ class AdmsSincroPgNivAc
         $cadNivAcPg->exeCreate("adms_nivacs_pgs", $this->DadosNivAcPg);
 
         if ($cadNivAcPg->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Permissão cadastrado com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Permissão cadastrada!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-warning'>Erro ao inserir a permissão de acesso ao nível de acesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Erro ao inserir a permissão de acesso ao nível de acesso.","danger");
             $this->Resultado = false;
         }
     }
@@ -145,7 +153,7 @@ class AdmsSincroPgNivAc
      */
     private function pesqUltimaOrdem()
     {
-        $listarNivAcPgOrd = new \App\adms\Models\helper\AdmsRead();
+        $listarNivAcPgOrd = new AdmsRead();
         $listarNivAcPgOrd->fullRead("SELECT ordem, adms_niveis_acesso_id
                 FROM adms_nivacs_pgs 
                 WHERE adms_niveis_acesso_id =:adms_niveis_acesso_id ORDER BY ordem DESC LIMIT :limit", "adms_niveis_acesso_id={$this->NivAcId}&limit=1");

@@ -8,6 +8,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsCreate;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -29,7 +34,7 @@ class AdmsCadastrarTipoPg
     {
         $this->Dados = $Dados;
 
-        $valCampoVazio = new \App\adms\Models\helper\AdmsCampoVazio;
+        $valCampoVazio = new AdmsCampoVazio;
         $valCampoVazio->validarDados($this->Dados);
 
         if ($valCampoVazio->getResultado()) {
@@ -44,20 +49,22 @@ class AdmsCadastrarTipoPg
         $this->Dados['created'] = date("Y-m-d H:i:s");
         $this->verUltimoTipoPg();
         $this->Dados['ordem'] = $this->UltimoTipoPg[0]['ordem'] + 1;
-        $cadTipoPg = new \App\adms\Models\helper\AdmsCreate;
+        $cadTipoPg = new AdmsCreate;
         $cadTipoPg->exeCreate("adms_tps_pgs", $this->Dados);
         if ($cadTipoPg->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Tipo de página cadastrado com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Tipo de página cadastrado!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Tipo de página não foi cadastrado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Tipo de página não foi cadastrado.","danger");
             $this->Resultado = false;
         }
     }
 
     private function verUltimoTipoPg()
     {
-        $verTipoPg = new \App\adms\Models\helper\AdmsRead();
+        $verTipoPg = new AdmsRead();
         $verTipoPg->fullRead("SELECT ordem FROM adms_tps_pgs ORDER BY ordem DESC LIMIT :limit", "limit=1");
         $this->UltimoTipoPg = $verTipoPg->getResultado();
     }

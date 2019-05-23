@@ -8,6 +8,8 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -21,7 +23,7 @@ class AdmsListarDepartamentos
 
     public function listar()
     {
-        $listarDept = new \App\adms\Models\helper\AdmsRead();
+        $listarDept = new AdmsRead();
         $listarDept->fullRead("SELECT id, nome, icon, descricao FROM adms_departamentos ");
         $this->Resultado = $listarDept->getResultado();
         return $this->Resultado;

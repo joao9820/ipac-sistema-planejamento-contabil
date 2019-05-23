@@ -2,6 +2,10 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -23,7 +27,7 @@ class AdmsConfirmarEmail
     public function confirmarEmail($Chave)
     {
         $this->DadosChave = (string) $Chave;
-        $validaChave = new \App\adms\Models\helper\AdmsRead();
+        $validaChave = new AdmsRead();
         $validaChave->fullRead("SELECT id FROM adms_usuarios WHERE conf_email =:conf_email LIMIT :limit", "conf_email={$this->DadosChave}&limit=1");
         $this->DadosUsuario = $validaChave->getResultado();
         if(!empty($this->DadosUsuario)){
@@ -33,8 +37,8 @@ class AdmsConfirmarEmail
         }
         else{
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe!","Link de confirmação inválido", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Link de confirmação inválido.","danger");
             $this->Resultado = false;
 
         }
@@ -46,12 +50,12 @@ class AdmsConfirmarEmail
         $this->Dados['conf_email'] = NULL;
         $this->Dados['adms_sits_usuario_id'] = 1;
         $this->Dados['modified'] = date("Y-m-d H:i:s");
-        $updateConfEmail = new \App\adms\Models\helper\AdmsUpdate();
+        $updateConfEmail = new AdmsUpdate();
         $updateConfEmail->exeUpdate("adms_usuarios", $this->Dados, "WHERE id =:id", "id={$this->DadosUsuario[0]['id']}");
         if($updateConfEmail->getResultado()){
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("E-mail confirmado com sucesso", "success");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("E-mail confirmado!","success");
             $this->Resultado = true;
 
         }

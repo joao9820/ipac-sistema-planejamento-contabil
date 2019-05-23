@@ -8,6 +8,9 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsPaginacao;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -52,7 +55,7 @@ class CpAdmsPesqUsuario
 
     private function pesquisarUsuariosComp()
     {
-        $paginacao = new \App\adms\Models\helper\AdmsPaginacao(URLADM . 'pesq-usuarios/listar', '?nome='.$this->Dados['nome'] . '&email='.$this->Dados['email']);
+        $paginacao = new AdmsPaginacao(URLADM . 'pesq-usuarios/listar', '?nome='.$this->Dados['nome'] . '&email='.$this->Dados['email']);
         $paginacao->condicao($this->PageId, $this->LimiteResultado);
         $paginacao->paginacao("SELECT COUNT(user.id) AS num_result 
                 FROM adms_usuarios user
@@ -62,7 +65,7 @@ class CpAdmsPesqUsuario
             "ordem=".$_SESSION['ordem_nivac']."&nome={$this->Dados['nome']}&email={$this->Dados['email']}");
         $this->ResultadoPg = $paginacao->getResultado();
 
-        $listarUsuario = new \App\adms\Models\helper\AdmsRead();
+        $listarUsuario = new AdmsRead();
         $listarUsuario->fullRead("SELECT user.id, user.nome, user.email,
                 sit.nome nome_sit,
                 cr.cor cor_cr
@@ -79,7 +82,7 @@ class CpAdmsPesqUsuario
 
     private function pesquisarUsuariosName()
     {
-        $paginacao = new \App\adms\Models\helper\AdmsPaginacao(URLADM . 'pesq-usuarios/listar', '?nome='.$this->Dados['nome']);
+        $paginacao = new AdmsPaginacao(URLADM . 'pesq-usuarios/listar', '?nome='.$this->Dados['nome']);
         $paginacao->condicao($this->PageId, $this->LimiteResultado);
         $paginacao->paginacao("SELECT COUNT(user.id) AS num_result 
                 FROM adms_usuarios user
@@ -87,7 +90,7 @@ class CpAdmsPesqUsuario
                 WHERE nivac.ordem >=:ordem AND user.nome LIKE '%' :nome '%' ", "ordem=".$_SESSION['ordem_nivac']."&nome={$this->Dados['nome']}");
         $this->ResultadoPg = $paginacao->getResultado();
 
-        $listarUsuario = new \App\adms\Models\helper\AdmsRead();
+        $listarUsuario = new AdmsRead();
         $listarUsuario->fullRead("SELECT user.id, user.nome, user.email,
                 sit.nome nome_sit,
                 cr.cor cor_cr
@@ -102,7 +105,7 @@ class CpAdmsPesqUsuario
 
     private function pesquisarUsuariosEmail()
     {
-        $paginacao = new \App\adms\Models\helper\AdmsPaginacao(URLADM . 'pesq-usuarios/listar', '?email='.$this->Dados['email']);
+        $paginacao = new AdmsPaginacao(URLADM . 'pesq-usuarios/listar', '?email='.$this->Dados['email']);
         $paginacao->condicao($this->PageId, $this->LimiteResultado);
         $paginacao->paginacao("SELECT COUNT(user.id) AS num_result 
                 FROM adms_usuarios user
@@ -110,7 +113,7 @@ class CpAdmsPesqUsuario
                 WHERE nivac.ordem >=:ordem AND user.email LIKE '%' :email '%' ", "ordem=".$_SESSION['ordem_nivac']."&email={$this->Dados['email']}");
         $this->ResultadoPg = $paginacao->getResultado();
 
-        $listarUsuario = new \App\adms\Models\helper\AdmsRead();
+        $listarUsuario = new AdmsRead();
         $listarUsuario->fullRead("SELECT user.id, user.nome, user.email,
                 sit.nome nome_sit,
                 cr.cor cor_cr

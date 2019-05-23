@@ -8,6 +8,8 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -31,7 +33,9 @@ class AdmsBotao
         $this->Botao = $Botao;
         foreach ($this->Botao as $key => $botao_unico) {
             extract($botao_unico);
-            $verBotao = new \App\adms\Models\helper\AdmsRead();
+            $verBotao = new AdmsRead();
+            /** @var TYPE_NAME $menu_controller */
+            /** @var TYPE_NAME $menu_metodo */
             $verBotao->fullRead("SELECT pg.id id_pg
                                         FROM adms_paginas pg 
                                         LEFT JOIN adms_nivacs_pgs nivpg ON nivpg.adms_pagina_id=pg.id 

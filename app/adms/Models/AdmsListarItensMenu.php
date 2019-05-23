@@ -8,6 +8,9 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsPaginacao;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -31,12 +34,12 @@ class AdmsListarItensMenu
     public function listarItensMenu($PageId = null)
     {
         $this->PageId = (int) $PageId;
-        $paginacao = new \App\adms\Models\helper\AdmsPaginacao(URLADM . 'menu/listar');
+        $paginacao = new AdmsPaginacao(URLADM . 'menu/listar');
         $paginacao->condicao($this->PageId, $this->LimiteResultado);
         $paginacao->paginacao("SELECT COUNT(id) AS num_result FROM adms_menus");
         $this->ResultadoPg = $paginacao->getResultado();
 
-        $listarMenu = new \App\adms\Models\helper\AdmsRead();
+        $listarMenu = new AdmsRead();
         $listarMenu->fullRead("SELECT men.*,
                 sit.nome nome_sit,
                 cr.cor cor_cr

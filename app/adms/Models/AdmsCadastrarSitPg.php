@@ -8,6 +8,10 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsCreate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -28,7 +32,7 @@ class AdmsCadastrarSitPg
     {
         $this->Dados = $Dados;
 
-        $valCampoVazio = new \App\adms\Models\helper\AdmsCampoVazio;
+        $valCampoVazio = new AdmsCampoVazio;
         $valCampoVazio->validarDados($this->Dados);
 
         if ($valCampoVazio->getResultado()) {
@@ -41,13 +45,15 @@ class AdmsCadastrarSitPg
     private function inserirSitPg()
     {
         $this->Dados['created'] = date("Y-m-d H:i:s");
-        $cadSitPg = new \App\adms\Models\helper\AdmsCreate;
+        $cadSitPg = new AdmsCreate;
         $cadSitPg->exeCreate("adms_sits_pgs", $this->Dados);
         if ($cadSitPg->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Situação de página cadastrado com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Situação de página cadastrada!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A situação de página não foi cadastrado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("A situação de página não foi cadastrado.","danger");
             $this->Resultado = false;
         }
     }

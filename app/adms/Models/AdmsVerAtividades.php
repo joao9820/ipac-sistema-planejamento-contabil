@@ -8,6 +8,8 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -29,13 +31,13 @@ class AdmsVerAtividades
     {
         $this->DadosId = (int) $DadosId;
 
-        $qtdHoras = new \App\adms\Models\helper\AdmsRead();
+        $qtdHoras = new AdmsRead();
         $qtdHoras->fullRead("SELECT time_format( SEC_TO_TIME( SUM( TIME_TO_SEC( duracao ) ) ),'%H:%i:%s') 
                                     AS total_horas FROM adms_atividades where adms_demanda_id=:adms_demanda_id", "adms_demanda_id={$this->DadosId}");
         $this->ResultHoras = $qtdHoras->getResultado();
 
 
-        $verAtividade = new \App\adms\Models\helper\AdmsRead();
+        $verAtividade = new AdmsRead();
         $verAtividade->fullRead("SELECT id, nome, duracao, ordem, descricao , atividade_sucessora_id
                         FROM adms_atividades 
                         WHERE adms_demanda_id =:adms_demanda_id 

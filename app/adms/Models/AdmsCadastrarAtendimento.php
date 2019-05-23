@@ -8,6 +8,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsCreate;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -28,7 +33,7 @@ class AdmsCadastrarAtendimento
 
     public function listarDemandas()
     {
-        $listarDemandas = new \App\adms\Models\helper\AdmsRead();
+        $listarDemandas = new AdmsRead();
         $listarDemandas->fullRead("SELECT id, nome  
                         FROM adms_demandas 
                         ORDER BY nome ASC");
@@ -39,7 +44,7 @@ class AdmsCadastrarAtendimento
 
     public function listarEmpresas()
     {
-        $listarEmp = new \App\adms\Models\helper\AdmsRead();
+        $listarEmp = new AdmsRead();
         $listarEmp->fullRead("SELECT id id_empresa, nome nome_empresa
                                     FROM adms_empresas ORDER BY nome_empresa ASC ");
         $this->Resultado = $listarEmp->getResultado();
@@ -54,7 +59,7 @@ class AdmsCadastrarAtendimento
         $this->Dados = $Dados;
 
 
-        $valCampoVazio = new \App\adms\Models\helper\AdmsCampoVazio();
+        $valCampoVazio = new AdmsCampoVazio();
         $valCampoVazio->validarDados($this->Dados);
 
         if ($valCampoVazio->getResultado()) {
@@ -82,22 +87,22 @@ class AdmsCadastrarAtendimento
 
         //var_dump($this->Dados);
 
-        $cadDemanda = new \App\adms\Models\helper\AdmsCreate();
+        $cadDemanda = new AdmsCreate();
         $cadDemanda->exeCreate("adms_atendimentos", $this->Dados);
 
         if ($cadDemanda->getResultado())
         {
 
             $this->UltimoIdInserido = $cadDemanda->getResultado();
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Atendimento solicitado com sucesso", "success");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atendimento solicitado!","success");
             $this->Resultado = true;
 
         }
         else {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","O atendiemento não foi registrado", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("O atendiemento não foi registrado.","danger");
             $this->Resultado = false;
 
         }

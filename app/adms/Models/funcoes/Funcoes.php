@@ -134,6 +134,23 @@ class Funcoes
     }
 
     /*
+     * Verificar se é dia útil
+     */
+    function isDiaUtil($Data)
+    {
+        $data = getdate(strtotime($Data));
+        if (($data['wday'] == 6) or ($data['wday'] == 0)) {
+            return false; // é fim de semana, não é dia útil
+        } else {
+            if($this->isFeriado($Data)){
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
+    /*
      * Verficicar se é feriado
      */
     function isFeriado($Data)

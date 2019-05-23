@@ -2,6 +2,10 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -28,14 +32,15 @@ class AdmsLibPermi
         if ($this->DadosNivAcPg) {
             $this->altPermi();
         }else{
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Não foi alterado a permissão de acesso a página!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi alterado a permissão de acesso a página.","danger");
             $this->Resultado = false;
         }
     }
 
     private function verNivAcPg()
     {
-        $verNivAcPg = new \App\adms\Models\helper\AdmsRead();
+        $verNivAcPg = new AdmsRead();
         $verNivAcPg->fullRead("SELECT nivpg.id, nivpg.permissao 
                 FROM adms_nivacs_pgs nivpg
                 INNER JOIN adms_niveis_acessos nivac ON nivac.id=nivpg.adms_niveis_acesso_id
@@ -51,14 +56,16 @@ class AdmsLibPermi
             $this->Dados['permissao'] = 1;
         }
         $this->Dados['modified'] = date("Y-m-d H:i:s");
-        $upPerm = new \App\adms\Models\helper\AdmsUpdate();
+        $upPerm = new AdmsUpdate();
         $upPerm->exeUpdate("adms_nivacs_pgs", $this->Dados, "WHERE id =:id", "id={$this->DadosId}");
 
         if ($upPerm->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Alterado a permissão de acesso a página com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Alterado a permissão de acesso a página!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Não foi alterado a permissão de acesso a página!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Não foi alterado a permissão de acesso a página!","danger");
             $this->Resultado = false;
         }
     }

@@ -8,6 +8,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -28,7 +33,7 @@ class AdmsEditarGrupoPg
     public function verGrupoPg($DadosId)
     {
         $this->DadosId = (int) $DadosId;
-        $verGrupoPg = new \App\adms\Models\helper\AdmsRead();
+        $verGrupoPg = new AdmsRead();
         $verGrupoPg->fullRead("SELECT * FROM adms_grps_pgs
                 WHERE id =:id LIMIT :limit", "id=" . $this->DadosId . "&limit=1");
         $this->Resultado = $verGrupoPg->getResultado();
@@ -39,7 +44,7 @@ class AdmsEditarGrupoPg
     {
         $this->Dados = $Dados;
 
-        $valCampoVazio = new \App\adms\Models\helper\AdmsCampoVazio;
+        $valCampoVazio = new AdmsCampoVazio;
         $valCampoVazio->validarDados($this->Dados);
 
         if ($valCampoVazio->getResultado()) {
@@ -52,13 +57,15 @@ class AdmsEditarGrupoPg
     private function updateEditGrupoPg()
     {
         $this->Dados['modified'] = date("Y-m-d H:i:s");
-        $upAltGrupoPg = new \App\adms\Models\helper\AdmsUpdate();
+        $upAltGrupoPg = new AdmsUpdate();
         $upAltGrupoPg->exeUpdate("adms_grps_pgs", $this->Dados, "WHERE id =:id", "id=" . $this->Dados['id']);
         if ($upAltGrupoPg->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Grupo de página atualizado com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Grupo de página atualizado!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Grupo de página não foi atualizado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Grupo de página não foi atualizado.","danger");
             $this->Resultado = false;
         }
     }

@@ -9,6 +9,7 @@
 namespace App\adms\Controllers;
 
 use App\adms\Models\AdmsLogin;
+use App\adms\Models\helper\AdmsAlertMensagem;
 use Core\ConfigView;
 
 if (!defined('URL')) {
@@ -67,7 +68,8 @@ class Login
     public function logout()
     {
         unset($_SESSION['usuario_id'], $_SESSION['usuario_nome'], $_SESSION['usuario_email'], $_SESSION['usuario_imagem'], $_SESSION['adms_niveis_acesso_id'], $_SESSION['ordem_nivac']);
-        $_SESSION['msg'] = "<div class='alert alert-success'>Deslogado com sucesso</div>";
+        $alert = new AdmsAlertMensagem();
+        $_SESSION['msg'] = $alert->alertMensagemJavaScript("Deslogado! Sessão incerrada.","success");
         $UrlDestino = URLADM .'login/acesso';
         header("Location: $UrlDestino");
     }

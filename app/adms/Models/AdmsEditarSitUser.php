@@ -8,6 +8,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsUpdate;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -28,7 +33,7 @@ class AdmsEditarSitUser
     public function verSitUser($DadosId)
     {
         $this->DadosId = (int) $DadosId;
-        $verSitUser = new \App\adms\Models\helper\AdmsRead();
+        $verSitUser = new AdmsRead();
         $verSitUser->fullRead("SELECT * FROM adms_sits_usuarios
                 WHERE id =:id LIMIT :limit", "id=" . $this->DadosId . "&limit=1");
         $this->Resultado = $verSitUser->getResultado();
@@ -39,7 +44,7 @@ class AdmsEditarSitUser
     {
         $this->Dados = $Dados;
 
-        $valCampoVazio = new \App\adms\Models\helper\AdmsCampoVazio;
+        $valCampoVazio = new AdmsCampoVazio;
         $valCampoVazio->validarDados($this->Dados);
 
         if ($valCampoVazio->getResultado()) {
@@ -52,13 +57,15 @@ class AdmsEditarSitUser
     private function updateEditSitUser()
     {
         $this->Dados['modified'] = date("Y-m-d H:i:s");
-        $upAltSitUser = new \App\adms\Models\helper\AdmsUpdate();
+        $upAltSitUser = new AdmsUpdate();
         $upAltSitUser->exeUpdate("adms_sits_usuarios", $this->Dados, "WHERE id =:id", "id=" . $this->Dados['id']);
         if ($upAltSitUser->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Situação de usuário atualizado com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Situação de usuário atualizada!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: A situação de usuário não foi atualizado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("A situação de usuário não foi atualizada.","danger");
             $this->Resultado = false;
         }
     }
@@ -68,7 +75,7 @@ class AdmsEditarSitUser
      */
     public function listarCadastrar()
     {
-        $listar = new \App\adms\Models\helper\AdmsRead();
+        $listar = new AdmsRead();
 
         $listar->fullRead("SELECT id id_cor, nome nome_cor FROM adms_cors ORDER BY nome ASC");
         $registro['cor'] = $listar->getResultado();

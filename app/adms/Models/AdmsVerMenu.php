@@ -8,6 +8,8 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -22,7 +24,7 @@ class AdmsVerMenu
     public function verMenu($DadosId)
     {
         $this->DadosId = (int) $DadosId;
-        $verMenu = new \App\adms\Models\helper\AdmsRead();
+        $verMenu = new AdmsRead();
         $verMenu->fullRead("SELECT men.*,
                 sit.nome nome_sit,
                 cr.cor cor_cr

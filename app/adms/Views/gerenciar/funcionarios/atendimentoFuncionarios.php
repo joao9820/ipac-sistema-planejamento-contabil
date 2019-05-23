@@ -24,6 +24,9 @@ if (!empty($this->Dados['dadosAtendimento'])) {
     .table td, .table th {
         border-top: none;
     }
+    h4 {
+        margin-left: 1rem;
+    }
 
 </style>
 <div class="content p-1">
@@ -87,7 +90,7 @@ if (!empty($this->Dados['dadosAtendimento'])) {
                             <h4><?php echo $fantasia ? $fantasia : ""; ?></h4>
                         </div>
                         <div>
-                            <span class="text-dark"><i class="fas fa-calendar-alt text-secondary"></i> Data de Solicitação: </span>
+                            <span class="text-dark"><i class="fas fa-calendar-alt text-secondary"></i> Data da Solicitação: </span>
                             <h4><?php echo $created ? date('d/m/Y \a\s H\hi\m', strtotime($created)) : ""; ?></h4>
                         </div>
 
@@ -482,7 +485,9 @@ if(isset($_SESSION['msg'])) {
         '03',
         '04',
         '05',
-        '06'
+        '06',
+        '07',
+        '08'
     ];
     var minutos = [
         '00',
@@ -508,7 +513,7 @@ if(isset($_SESSION['msg'])) {
 
             var horaElement = document.createElement('option');
 
-            if(hora <= duracao_max){
+
                 horaElement.value = hora;
                 var horaTexto = document.createTextNode(hora);
 
@@ -517,7 +522,7 @@ if(isset($_SESSION['msg'])) {
                 // adicionar cada elemento dentro da div
                 selecionaHora.appendChild(horaElement);
 
-            }
+
         }
     }
 

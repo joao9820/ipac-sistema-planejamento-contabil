@@ -8,6 +8,18 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsApagarImg;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsEmail;
+use App\adms\Models\helper\AdmsEmailUnico;
+use App\adms\Models\helper\AdmsRead;
+use App\adms\Models\helper\AdmsSlug;
+use App\adms\Models\helper\AdmsUpdate;
+use App\adms\Models\helper\AdmsUploadImg;
+use App\adms\Models\helper\AdmsUploadImgRed;
+use App\adms\Models\helper\AdmsValUsuario;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -30,7 +42,7 @@ class AdmsEditarUsuario
     public function verUsuario($DadosId)
     {
         $this->DadosId = (int) $DadosId;
-        $verUsuario = new \App\adms\Models\helper\AdmsRead();
+        $verUsuario = new AdmsRead();
         $verUsuario->fullRead("SELECT user.* 
                         FROM adms_usuarios user  
                         INNER JOIN adms_niveis_acessos nivel_aces ON nivel_aces.id=user.adms_niveis_acesso_id 
@@ -48,7 +60,7 @@ class AdmsEditarUsuario
         $this->ImgAntiga = $this->Dados['imagem_antiga'];
         unset($this->Dados['imagem_nova'], $this->Dados['imagem_antiga']);
 
-        $valCampos = new \App\adms\Models\helper\AdmsCampoVazio();
+        $valCampos = new AdmsCampoVazio();
         $valCampos->validarDados($this->Dados);
 
         if ($valCampos->getResultado()) {
@@ -66,14 +78,14 @@ class AdmsEditarUsuario
     private function valCampos()
     {
 
-        $valEmail = new \App\adms\Models\helper\AdmsEmail();
+        $valEmail = new AdmsEmail();
         $valEmail->valEmail($this->Dados['email']);
 
         $EditarUnico = true;
-        $valEmailUnico = new \App\adms\Models\helper\AdmsEmailUnico();
+        $valEmailUnico = new AdmsEmailUnico();
         $valEmailUnico->valEmailUnico($this->Dados['email'], $EditarUnico, $this->Dados['id']);
 
-        $valUsuarioUnico = new \App\adms\Models\helper\AdmsValUsuario();
+        $valUsuarioUnico = new AdmsValUsuario();
         $valUsuarioUnico->valUsuario($this->Dados['usuario'], $EditarUnico, $this->Dados['id']);
 
         if (($valEmail->getResultado()) AND ($valEmailUnico->getResultado()) AND ($valUsuarioUnico->getResultado())){
@@ -98,15 +110,15 @@ class AdmsEditarUsuario
 
         } else {
 
-            $slugImg = new \App\adms\Models\helper\AdmsSlug();
+            $slugImg = new AdmsSlug();
             $this->Dados['imagem'] = $slugImg->nomeSlug($this->Foto['name']);
 
-            $uploadImg = new \App\adms\Models\helper\AdmsUploadImgRed();
-            $uploadImg->uploadImagem($this->Foto, 'assets/imagens/usuario/'.$this->Dados['id'].'/', $this->Dados['imagem'], 150, 150);
+            $uploadImg = new AdmsUploadImg();
+            $uploadImg->uploadImagem($this->Foto, 'assets/imagens/usuario/'.$this->Dados['id'].'/', $this->Dados['imagem']);
             if ($uploadImg->getResultado())
             {
                 // Apagar a imagem antiga se existir
-                $apagar = new \App\adms\Models\helper\AdmsApagarImg();
+                $apagar = new AdmsApagarImg();
                 $apagar->apagarImg('assets/imagens/usuario/'.$this->Dados['id'].'/'.$this->ImgAntiga);
 
                 $this->updateEditUsuario();
@@ -125,21 +137,20 @@ class AdmsEditarUsuario
         $this->Dados['modified'] = date('Y-m-d H:i:s');
 
 
-        $upEditPerfil = new \App\adms\Models\helper\AdmsUpdate();
+        $upEditPerfil = new AdmsUpdate();
         //var_dump($this->Dados);
         $upEditPerfil->exeUpdate("adms_usuarios", $this->Dados, "WHERE id =:id", "id={$this->Dados['id']}");
         if ($upEditPerfil->getResultado())
         {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            //$_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Usuário atualizado com sucesso", "success");
-            $_SESSION['msg'] = $alertMensagem->alertMensagemJavaScript("Usuário atualizado com sucesso", "success");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Usuário atualizado!","success");
             $this->Resultado = true;
 
         } else {
 
-            $alertMensagem = new \App\adms\Models\helper\AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","O Usuário não foi atualizado", "danger");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("O Usuário não foi atualizado.","danger");
             $this->Resultado = false;
 
         }
@@ -149,7 +160,7 @@ class AdmsEditarUsuario
 
     public function listarCadastrar()
     {
-        $listar = new \App\adms\Models\helper\AdmsRead();
+        $listar = new AdmsRead();
         $listar->fullRead("SELECT id id_nivac, nome nome_nivac FROM adms_niveis_acessos 
                                   WHERE ordem >:ordem ORDER BY nome ASC ", "ordem=".$_SESSION['ordem_nivac']);
         $registro['nivac'] = $listar->getResultado();

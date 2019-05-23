@@ -50,8 +50,8 @@ class AdmsPlanejamento
         $upPlanejamento = new AdmsUpdate();
         $upPlanejamento->exeUpdate("adms_planejamento", $this->Dados, "WHERE id =:id", "id=".$this->idPlan[0]['id']);
         if ($upPlanejamento->getResultado()) {
-            $alertMensagem = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Planejamento atualizado com sucesso!", "success");
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Planejamento atualizado!","success");
             $this->Resultado = true;
 
         } else {
@@ -80,12 +80,12 @@ class AdmsPlanejamento
             $regist = new AdmsCreate();
             $regist->exeCreate("adms_planejamento", $this->Dados);
             if ($regist->getResultado()) {
-                $alertMensagem = new AdmsAlertMensagem();
-                $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Planejamento registrado com sucesso!", "success");
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Planejamento registrado!","success");
                 $this->Resultado = true;
             } else {
-                $alertMensagem = new AdmsAlertMensagem();
-                $_SESSION['msg'] = $alertMensagem->alertMensagem("Desculpe! Ocorreu um erro.","O planejamento não foi registrado.", "danger");
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("O planejamento não foi registrado.","danger");
                 $this->Resultado = true;
             }
         }

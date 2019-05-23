@@ -2,6 +2,11 @@
 
 namespace App\adms\Models;
 
+use App\adms\Models\helper\AdmsAlertMensagem;
+use App\adms\Models\helper\AdmsCampoVazio;
+use App\adms\Models\helper\AdmsCreate;
+use App\adms\Models\helper\AdmsRead;
+
 if (!defined('URL')) {
     header("Location: /");
     exit();
@@ -10,7 +15,6 @@ if (!defined('URL')) {
 /**
  * Description of AdmsCadastrarNivAc
  *
- * @copyright (c) year, Cesar Szpak - Celke
  */
 class AdmsCadastrarNivAc
 {
@@ -28,7 +32,7 @@ class AdmsCadastrarNivAc
     {
         $this->Dados = $Dados;
 
-        $valCampoVazio = new \App\adms\Models\helper\AdmsCampoVazio;
+        $valCampoVazio = new AdmsCampoVazio;
         $valCampoVazio->validarDados($this->Dados);
 
         if ($valCampoVazio->getResultado()) {
@@ -43,20 +47,22 @@ class AdmsCadastrarNivAc
         $this->Dados['created'] = date("Y-m-d H:i:s");
         $this->verUltimoNivAc();
         $this->Dados['ordem'] = $this->UltimoNivAc[0]['ordem'] + 1;
-        $cadNivAc = new \App\adms\Models\helper\AdmsCreate;
+        $cadNivAc = new AdmsCreate;
         $cadNivAc->exeCreate("adms_niveis_acessos", $this->Dados);
         if ($cadNivAc->getResultado()) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Nível de acesso cadastrado com sucesso!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Nível de acesso cadastrado!","success");
             $this->Resultado = true;
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: O nível de acesso não foi cadastrado!</div>";
+            $alert = new AdmsAlertMensagem();
+            $_SESSION['msg'] = $alert->alertMensagemJavaScript("O nível de acesso não foi cadastrado.","danger");
             $this->Resultado = false;
         }
     }
     
     private function verUltimoNivAc()
     {
-        $verNivAc = new \App\adms\Models\helper\AdmsRead();
+        $verNivAc = new AdmsRead();
         $verNivAc->fullRead("SELECT ordem FROM adms_niveis_acessos ORDER BY ordem DESC LIMIT :limit", "limit=1");
         $this->UltimoNivAc = $verNivAc->getResultado();
     }

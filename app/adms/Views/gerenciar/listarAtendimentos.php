@@ -30,7 +30,7 @@
     }
     .progress {
         font-size: .7em;
-        font-weight: 800;
+        font-weight: 700;
     }
     .totalAlert {
         color: red !important;
@@ -132,7 +132,7 @@
                     <th class="">
                         <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Descrição do atendimento.'>Descrição</span>
                     </th>
-                    <th class="">Status do Atendimento</th>
+                    <th class="">Atendimento</th>
                     <th class="">Empresa Cliente</th>
                     <th class="">Data da Solicitação</th>
                     <th class="text-right">Ações</th>
@@ -148,32 +148,48 @@
                     ?>
 
                     <tr class="">
-                        <td class="d-none d-lg-table-cell <?php if (($data_fatal_atividade < date('Y-m-d'))and (!empty($data_fatal_atividade))) {
-                            echo "text-danger";
+                        <?php
+                        if(($nome_situacao == "Concluído") AND ($id_situacao == 3)){
+                            echo '<td class="d-none d-lg-table-cell">';
+                            echo '<i class="fas fa-lightbulb text-light faIpac"></i>';
+                            if ($id < 10){
+                                echo "000".$id;
+                            } elseif ($id < 100){
+                                echo "00".$id;
+                            } elseif ($id < 100){
+                                echo "0".$id;
+                            } else {
+                                echo $id;
+                            }
                         } else {
-                            echo "text-dark";
-                        } ?>">
-                            <?php
-                                if (($data_fatal_atividade < date('Y-m-d'))and (!empty($data_fatal_atividade))){
-                                    echo "<span class='luzAlert' tabindex='0' data-placement='right' data-toggle='tooltip' title='Este atendimento está com uma (ou mais) atividade(s) com entrega atrasada(s).'>";
-                                    echo '<a href="' . URLADM . 'atendimento-funcionarios/listar/' . $adms_demanda_id .'?aten='.$id.'" class="text-danger" >';
-                                        echo '<i class="fas fa-lightbulb faIpac"></i>';
-                                    echo '</a>';
-                                    echo "</span>";
-                                } else {
-                                    echo '<i class="fas fa-lightbulb text-light faIpac"></i>';
-                                }
                             ?>
-                            <?php
-                                if ($id < 10){
-                                    echo "000".$id;
-                                } elseif ($id < 100){
-                                    echo "00".$id;
-                                } elseif ($id < 100){
-                                    echo "0".$id;
-                                } else {
-                                    echo $id;
-                                }
+                            <td class="d-none d-lg-table-cell <?php if (($data_fatal_atividade < date('Y-m-d'))and (!empty($data_fatal_atividade))) {
+                                echo "text-danger";
+                            } else {
+                                echo "text-dark";
+                            } ?>">
+                                <?php
+                                    if (($data_fatal_atividade < date('Y-m-d'))and (!empty($data_fatal_atividade))){
+                                        echo "<span class='luzAlert' tabindex='0' data-placement='right' data-toggle='tooltip' title='Este atendimento está com uma (ou mais) atividade(s) com entrega atrasada(s).'>";
+                                        echo '<a href="' . URLADM . 'atendimento-funcionarios/listar/' . $adms_demanda_id .'?aten='.$id.'" class="text-danger" >';
+                                            echo '<i class="fas fa-lightbulb faIpac"></i>';
+                                        echo '</a>';
+                                        echo "</span>";
+                                    } else {
+                                        echo '<i class="fas fa-lightbulb text-light faIpac"></i>';
+                                    }
+                                ?>
+                                <?php
+                                    if ($id < 10){
+                                        echo "000".$id;
+                                    } elseif ($id < 100){
+                                        echo "00".$id;
+                                    } elseif ($id < 100){
+                                        echo "0".$id;
+                                    } else {
+                                        echo $id;
+                                    }
+                            } // fim do if para exibir luz ou não
                             ?>
                         </td>
                         <td>
@@ -193,31 +209,35 @@
                             }
                             ?>
                         </td>
-                        <td>
+                        <td class="text-center">
                             <?php
                             if(($nome_situacao == "Cancelado") AND ($id_situacao == 4)) {
                                 echo "";
                             } else {
                                 ?>
-                                <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Concluídas/Total atividades definidas">
-                                <span class="badge badge-secondary">
+                                <span tabindex="0" data-toggle="tooltip" data-placement="right" data-html="true" title="Concluídas | Total atividades definidas">
+
                                 <?php
                                 if ($total_atividade != null) {
                                     if ($total_atividade_concluida == null) {
                                         $total_atividade_concluida = 0;
                                     }
-                                    echo $total_atividade_concluida . "/" . $total_atividade;
+                                    echo '<span class="badge badge-secondary">';
+                                    echo $total_atividade_concluida;
+                                    echo '</span> | ';
+                                    echo '<span class="badge badge-secondary">';
+                                    echo $total_atividade;
+                                    echo '</span>';
                                 } else {
                                     echo "--";
                                 }
                                 ?>
                                 </span>
-                            </span>
                                 <?php
                             }
                             ?>
                         </td>
-                        <td>
+                        <td class="text-center">
                             <?php
                             if(($nome_situacao == "Cancelado") AND ($id_situacao == 4)) {
                                 echo "";
@@ -262,20 +282,20 @@
                             <?php
                                 if (!empty($descricao_atendimento)){
                             ?>
-                                <span tabindex="0" data-placement="top" data-toggle="tooltip" title="<?php echo $descricao_atendimento; ?>">
-                                    <i class="far fa-file-alt"></i>
+                                <span tabindex="0" data-placement="right" data-toggle="tooltip" title="<?php echo $descricao_atendimento; ?>">
+                                    <i class="far fa-file-alt fa-2x text-secondary"></i>
                                 </span>
                             <?php
                             }
                             ?>
                         </td>
-                        <td class="">
+                        <td class="text-center">
                             <span class="badge badge-<?php echo $cor; ?>">
                                 <?php echo $nome_situacao; ?>
                             </span>
                         </td>
                         <td class="d-none d-sm-table-cell">
-                            <span tabindex="0" data-placement="top" data-toggle="tooltip" title="<?php echo $emp_nome; ?>">
+                            <span tabindex="0" data-placement="right" data-toggle="tooltip" title="<?php echo $emp_nome; ?>">
                                 <?php echo $fantasia; ?>
                             </span>
                         </td>
