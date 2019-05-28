@@ -69,7 +69,7 @@ class Login
     {
         unset($_SESSION['usuario_id'], $_SESSION['usuario_nome'], $_SESSION['usuario_email'], $_SESSION['usuario_imagem'], $_SESSION['adms_niveis_acesso_id'], $_SESSION['ordem_nivac']);
         $alert = new AdmsAlertMensagem();
-        $_SESSION['msg'] = $alert->alertMensagemJavaScript("Deslogado! Sessão incerrada.","success");
+        $_SESSION['msg'] = $alert->alertMensagemJavaScript("Deslogado! Sessão Encerrada.","success");
         $UrlDestino = URLADM .'login/acesso';
         header("Location: $UrlDestino");
     }

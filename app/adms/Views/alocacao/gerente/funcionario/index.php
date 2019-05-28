@@ -28,6 +28,7 @@ if (isset($this->Dados['funcionario'])){
 
             <div class="col-md-6">
                 <h3><?php echo $NomeFuncionario; ?></h3>
+
             </div>
             <div class="col-md-6 d-flex justify-content-end">
                 <form method="post" action="" class="form-inline my-1">
@@ -89,7 +90,7 @@ if (isset($this->Dados['funcionario'])){
                                         </strong>
                                     </td>
                                     <td>
-                                        <i onclick="window.location.href='#" class="fas fa-external-link-square-alt fa-2x" style="cursor: pointer"></i>
+                                        <i onclick="window.location.href='<?php echo URLADM . 'alocacao/funcionarioData/'.$idFuncionario.'?data='.$Data.'&data_inicio='.$_GET['data_inicio'].'&data_fim='.$_GET['data_fim'].'&gerente='.$_GET['gerente'] ?>'" class="fas fa-external-link-square-alt fa-2x" style="cursor: pointer"></i>
                                     </td>
                                 </tr>
                                 <?php

@@ -9,7 +9,9 @@
 namespace App\adms\Controllers;
 
 use App\adms\Models\AdmsAlocacaoFuncionario;
+use App\adms\Models\AdmsAlocacaoFuncionarioData;
 use App\adms\Models\AdmsAlocacaoFuncionariosGerente;
+use App\adms\Models\AdmsAlocacaoGerentes;
 use App\adms\Models\AdmsMenu;
 use App\adms\Models\funcoes\Funcoes;
 use App\adms\Models\funcoes\ValidarTipoDeUsuario;
@@ -31,6 +33,16 @@ class Alocacao
     // Index da alocação, mostrar todos os gerentes
     public function listar()
     {
+
+        $alocacaoGerentes = new AdmsAlocacaoGerentes();
+        $dadosGerentes = $alocacaoGerentes->getGerentes();
+
+        if($dadosGerentes){
+            $this->Dados['gerentes'] = $dadosGerentes;
+        } else {
+            $this->Dados['gerentes'] = "";
+        }
+
         $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
 
@@ -118,6 +130,41 @@ class Alocacao
             $carregarView = new ConfigView("adms/Views/alocacao/gerente/funcionario/index", $this->Dados);
             $carregarView->renderizar();
         }
+    }
+
+    public function funcionarioData($FuncionarioId = null)
+    {
+
+        $Funcionario = $FuncionarioId;
+        $GerenteId = filter_input(INPUT_GET, 'gerente', FILTER_DEFAULT);
+        $DataInicio = filter_input(INPUT_GET, "data_inicio", FILTER_DEFAULT);
+        $Data = filter_input(INPUT_GET, "data", FILTER_DEFAULT);
+        $DataFim = filter_input(INPUT_GET, "data_fim", FILTER_DEFAULT);
+
+        $this->Dados['url']['gerente'] = $GerenteId;
+        $this->Dados['url']['data_inicio'] = $DataInicio;
+        $this->Dados['url']['data_fim'] = $DataFim;
+        $this->Dados['url']['funcionario'] = $FuncionarioId;
+
+        $DataAlocacao = isset($DataAlocacao) ? $DataAlocacao : date('Y-m-d');
+
+        $alocacaoFuncionarioData = new AdmsAlocacaoFuncionarioData($FuncionarioId, $Data);
+        $this->Dados['alocacao'] = $alocacaoFuncionarioData->getDadosAlocacao();
+        $this->Dados['funcionarioNome'] = $alocacaoFuncionarioData->getNomeFuncionario();
+        $this->Dados['percentual_alocacao'] = $alocacaoFuncionarioData->getAlocacaoAtividades();
+
+        //$alocacaoFuncionario = new AdmsAlocacaoFuncionario($FuncionarioId, $this->DataInicio, $this->DataFim);
+        //$this->Dados['alocacao'] = $alocacaoFuncionario->getDadosAlocacao();
+
+        $this->Dados['dataFiltro'] = $Data;
+
+        $listarMenu = new AdmsMenu();
+        $this->Dados['menu'] = $listarMenu->itemMenu();
+
+
+        $carregarView = new ConfigView("adms/Views/alocacao/gerente/funcionario/listarAtividadesData", $this->Dados);
+        $carregarView->renderizar();
+
     }
 
 }

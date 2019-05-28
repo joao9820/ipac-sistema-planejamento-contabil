@@ -49,7 +49,7 @@ class AdmsApagarUsuario
                 $apagar->apagarImg('assets/imagens/usuario/' . $this->DadosId . '/' . $this->DadosUsuario[0]['imagem'], 'assets/imagens/usuario/' . $this->DadosId);
 
                 $alertMensagem = new AdmsAlertMensagem();
-                $_SESSION['msg'] = $alertMensagem->alertMensagemSimples("Usuário apagado com sucesso", "success");
+                $_SESSION['msg'] = $alertMensagem->alertMensagemJavaScript("Usuário apagado com sucesso", "success");
                 $this->Resultado = true;
 
             }

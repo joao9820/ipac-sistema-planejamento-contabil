@@ -68,6 +68,9 @@ function getFeriados($ano){
         border: transparent;
     }
 </style>
+
+
+
 <div class="content p-1">
 
 
@@ -124,6 +127,8 @@ function getFeriados($ano){
             }
 
             ?>
+
+
 
             <div class="container-fluid">
                 <div class="row">
@@ -893,6 +898,7 @@ function getFeriados($ano){
 </div>
 
 
+
 <!-- Calculo tempo restante -->
 <script src="<?php echo URLADM.'assets/js/temporizador/jquery-1.9.1.min.js'; ?>"></script>
 <?php
@@ -1005,6 +1011,96 @@ if (!empty($tempo_restanteUrgente)) {
 
         // Chama a função ao carregar a tela
         startCountdownU();
+
+        // chamar função que será executada a cada 10 minutos
+
+        myFunction();
+
+
+        function myFunction() {
+            setInterval(function(){
+                console.log("teste");
+                exibirAviso();
+            }, 600000); // 1 minuto
+        }
+    </script>
+
+    <script>
+        var mensagemCardAviso = document.getElementById('mensagemCardAviso');
+
+        // chando a função ao carregar pagina
+        function exibirAviso() {
+            setTimeout(function () {
+                fadeIn(mensagemCardAviso, 0.5);
+                //fecharMensagem();
+            }, 0);
+        }
+
+        function fecharMensagem() {
+            window.setTimeout(function () {
+                fadeOut(mensagemCardAviso, 1);
+            }, 540000)
+        }
+
+
+        function fecharAgoraAviso() {
+            mensagemCardAviso.classList.add('d-none');
+            mensagemCardAviso.style.opacity = 0;
+            mensagemCardAviso.style.right = 0 + "px";
+            //fadeOut(mensagemCardAviso,0.5)
+        }
+
+
+        // fadeIn
+        function fadeIn(element,time){
+            processa(element,time,0,100);
+        }
+
+        // fadeOut
+        function fadeOut(element,time){
+            processa(element,time,100,0);
+        }
+
+        // realizar efeito
+        function processa(element,time,initial,end){
+            var increment;
+            var intervalo;
+            var opc;
+
+            if(initial == 0){
+                increment = 2;
+                element.classList.remove('d-none');
+            }else {
+                increment = -3;
+            }
+
+            opc = initial;
+
+            intervalo = setInterval(function(){
+                if((opc == end)){
+                    if(end == 0){
+                        element.classList.add('d-none');
+                    }
+                    clearInterval(intervalo);
+                }else {
+                    if (end == 0) {
+                        opc += increment;
+                        if (element.style.opacity >= 0) {
+                            element.style.opacity = opc / 100;
+                        } else {
+                            element.classList.add('d-none');
+                        }
+                        element.style.filter = "alpha(opacity=" + opc + ")";
+                        element.style.right =  -0.1 + "px";
+                    } else {
+                        opc += increment;
+                        element.style.opacity = opc / 100;
+                        element.style.filter = "alpha(opacity=" + opc + ")";
+                        element.style.right = (opc) + "px";
+                    }
+                }
+            },time * 10);
+        }
 
     </script>
 

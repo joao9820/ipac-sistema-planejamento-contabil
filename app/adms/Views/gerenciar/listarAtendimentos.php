@@ -326,9 +326,9 @@
                                     <?php
                                 }
                                 ?>
-                                <!--
+
                                 <?php
-                                if ($this->Dados['botao']['arquivar_atendimento']) { ?>
+                                if (($this->Dados['botao']['arquivar_atendimento']) AND (($nome_situacao == "Concluído")  AND ($id_situacao == 3))) { ?>
                                     <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Arquivar">
                                         <a href="<?php echo URLADM . 'atendimento-gerente/arquivar/'.$id . '?pg='.$this->Dados['pg']; ?>" class="btn btn-outline-secondary btn-sm my-md-1"
                                         data-arquivo='Tem certeza que deseja arquivar o atendimento selecionado?'>
@@ -338,7 +338,7 @@
                                     <?php
                                 }
                                 ?>
-                                -->
+
                             </span>
                             <div class="dropdown d-block d-md-none">
                                 <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="acoesListar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

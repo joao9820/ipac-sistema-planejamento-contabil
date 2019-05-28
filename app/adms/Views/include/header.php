@@ -11,6 +11,18 @@ if (!defined('URL')) {
         $_SESSION['alert'] = "ok";
     }
 ?>
+<!-- Mensagem de alerta atividade em andamento -->
+<div id='mensagemCardAviso' class='card border-warning bg-warning d-none'>
+    <div class='card-body text-light text-center' style='position: relative; min-width: 300px !important;'>
+        <div onclick='fecharAgoraAviso()' class='text-right' style='position: absolute; top: 5px; right: 10px'>
+            <i class='fas fa-times' style='cursor: pointer;'></i>
+        </div>
+        <i class='fas fa-exclamation-triangle fa-2x'></i>
+        <h5 class='card-title' >Atividade em execução</h5>
+        <p class='card-text'>Não esqueça de finalizar sua atividade quando a mesma for concluída.</p>
+    </div>
+</div>
+
 <nav class="navbar navbar-expand navbar-dark">
     <a class="sidebar-toggle mr-3 text-danger cursor">
         <span class="navbar-toggler-icon "></span>

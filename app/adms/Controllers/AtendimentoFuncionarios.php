@@ -46,6 +46,10 @@ class AtendimentoFuncionarios {
             if (!empty($this->DadosForm['Registrar'])) {
                 unset($this->DadosForm['Registrar']);
 
+                if (empty($this->DadosForm['hora_fatal'])) {
+                    $this->DadosForm['hora_fatal'] = "18:00:00";
+                }
+
                 $registrar = new AdmsAtendimentoFuncionarios();
                 $registrar->registrar($this->DadosForm);
                 //$this->data = date('d-m-Y', strtotime($this->DadosForm['data_inicio_planejado'])); //Necessário para inserir na sessão (convertendo o formato de exibição)

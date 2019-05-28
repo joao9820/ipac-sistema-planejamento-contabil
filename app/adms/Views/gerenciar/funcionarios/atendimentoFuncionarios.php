@@ -144,6 +144,7 @@ if (!empty($this->Dados['dadosAtendimento'])) {
                                             <th class="">Atividade</th>
                                             <th class="">Duração</th>
                                             <th class="">Data Fatal</th>
+                                            <th class="">Hora Fatal</th>
                                             <th>Status</th>
                                             <th>Data Início Real</th>
                                             <th>Data Término</th>
@@ -155,27 +156,46 @@ if (!empty($this->Dados['dadosAtendimento'])) {
                                         <?php
                                             }
                                          $contFor++;
+
+                                         if (($data_fatal < $data_inicio_planejado) AND ($status != 'Finalizado')) {
+                                             $cor = "danger";
+                                         }
                                         ?>
 
-                                        <tr>
+                                        <tr class="text-<?php echo $cor ?>">
                                             <td>
-                                                <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Editar atividade">
-                                                    <button type="button" onclick="
-                                                            Parametros('<?php echo $ativ_id; ?>' ,
-                                                            '<?php echo $atividade; ?>',
-                                                            '<?php echo $aten_id; ?>',
-                                                            '<?php echo $dema_id; ?>',
-                                                            '<?php echo $func_id; ?>',
-                                                            '<?php echo $id_aten_fun; ?>',
-                                                            '<?php echo $nome; ?>')
-                                                            "
-                                                            class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editarFuncionarioModal">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-                                                </span>
-                                                <span tabindex="0" data-toggle="tooltip" data-placement="right" data-html="true" title="Ver planejamento deste funcinoário para a data selecionada.">
-                                                    <a href="<?php echo URLADM . 'atendimento-funcionarios/ver-planejamento/' . $dema_id. '?aten='.$aten_id.'&func='.$func_id.'&data='.$data_inicio_planejado.'&demanda='.$dema_id.'&pg='.$this->Dados['pg']; ?>" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i></a>
-                                                </span>
+                                                <div class="d-flex flex-row ">
+                                                    <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Editar atividade">
+                                                        <button type="button" onclick="
+                                                                Parametros('<?php echo $ativ_id; ?>' ,
+                                                                '<?php echo $atividade; ?>',
+                                                                '<?php echo $aten_id; ?>',
+                                                                '<?php echo $dema_id; ?>',
+                                                                '<?php echo $func_id; ?>',
+                                                                '<?php echo $id_aten_fun; ?>',
+                                                                '<?php echo $nome; ?>')
+                                                                "
+                                                                class="btn btn-warning btn-sm mr-2" data-toggle="modal" data-target="#editarFuncionarioModal">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                    </span>
+                                                    <span tabindex="0" data-toggle="tooltip" data-placement="right" data-html="true" title="Ver planejamento deste funcinoário para a data selecionada.">
+                                                        <a href="<?php echo URLADM . 'atendimento-funcionarios/ver-planejamento/' . $dema_id. '?aten='.$aten_id.'&func='.$func_id.'&data='.$data_inicio_planejado.'&demanda='.$dema_id.'&pg='.$this->Dados['pg']; ?>" class="btn btn-primary btn-sm  mr-2"><i class="fas fa-eye"></i></a>
+                                                    </span>
+
+                                                    <?php
+                                                    if (($data_fatal < $data_inicio_planejado) AND ($status != 'Finalizado')) {
+                                                    ?>
+                                                        <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Alerta! Clique aqui.">
+                                                            <button type="button" onclick="alertaDataFatalParams('<?php echo $atividade; ?>','<?php echo $nome; ?>')" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#alertaDataFatalModal">
+                                                                <i class="fas fa-exclamation-triangle"></i>
+                                                            </button>
+                                                        </span>
+                                                    <?php
+                                                    }
+                                                    ?>
+
+                                                </div>
                                             </td>
                                             <td><?php echo $nome; ?></td>
                                             <td>
@@ -189,8 +209,9 @@ if (!empty($this->Dados['dadosAtendimento'])) {
                                             </td>
                                             <td><?php echo $departamento; ?></td>
                                             <td><?php echo $atividade; ?></td>
-                                            <td><?php echo date('H:i', strtotime($duracao_atividade)); ?></td>
+                                            <td><?php echo date('H\hi', strtotime($duracao_atividade)); ?></td>
                                             <td><?php echo date('d/m/Y', strtotime($data_fatal)); ?></td>
+                                            <td><?php echo !empty($hora_fatal) ? date('H\hi', strtotime($hora_fatal)) : ""; ?></td>
                                             <td>
                                                 <span class="badge badge-<?php echo $cor; ?>">
                                                     <?php echo $status; ?>
@@ -265,17 +286,16 @@ if (!empty($this->Dados['dadosAtendimento'])) {
                     ?>
                 </div>
 
+                <?php
+                if (empty($this->Dados['atividades'])){
+                    echo '<h5 class="card-title text-secondary bg-light p-4 rounded text-center"><i class="fas fa-exclamation-circle fa-3x" style="color: #dedede;"></i>
+                                            <br>Nenhuma atividade disponível. Já foram todas selecionadas</h5>';
+                } else {
+                ?>
                 <div class="col-md-5">
                     <div class="card border-light shadow mb-3" style="">
                         <div class="card-header text-primary"><i class="fas fa-user-plus"></i> Adicionar funcionário ao atendimento</div>
                         <div class="card-body">
-                            <?php
-                                if (empty($this->Dados['atividades'])){
-                                    echo '<h5 class="card-title text-secondary bg-light p-4 rounded text-center"><i class="fas fa-exclamation-circle fa-3x" style="color: #cecece;"></i>
-                                            <br>Nenhuma atividade disponível. Já foram todas selecionadas</h5>';
-                                } else {
-                            ?>
-
                             <p class="card-text">
 
                             <form method="post" action="" class="needs-validation" novalidate>
@@ -335,7 +355,7 @@ if (!empty($this->Dados['dadosAtendimento'])) {
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6">
+                                            <div class="col-md-12">
                                                 <label for="inputFormAtividade">Atividade</label>
                                                 <div class="input-group mb-3">
                                                     <div class="input-group-prepend">
@@ -376,6 +396,18 @@ if (!empty($this->Dados['dadosAtendimento'])) {
                                                     <div class="invalid-feedback">
                                                         Defina a data fatal da atividade
                                                     </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="inputFormhFatal">Hora Fatal</label>
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="basic-hfatal">
+                                                        <i class="far fa-clock"></i>
+                                                    </span>
+                                                    </div>
+                                                    <input type="time" name="hora_fatal" id="inputFormhFatal" class="custom-select mr-sm-2" aria-describedby="basic-hfatal" >
                                                 </div>
                                             </div>
 
@@ -446,13 +478,16 @@ if (!empty($this->Dados['dadosAtendimento'])) {
 
                                     </form>
 
-                            <?php
-                            }
-                            ?>
+
 
                             </p>
                         </div>
+                    <?php
+                }
+                ?>
                     </div>
+
+
                 </div>
 
             </div>
@@ -711,6 +746,34 @@ if(isset($_SESSION['msg'])) {
                     <button type="submit" class="btn btn-outline-success">Atualizar</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    function alertaDataFatalParams(nomeDaAtividade, nomeDoFuncionario) {
+        document.getElementById('nomeDaAtividade').innerHTML = nomeDaAtividade;
+        document.getElementById('nomeDoFuncionario').innerHTML = nomeDoFuncionario;
+    }
+</script>
+<!-- Modal alerta data fatal -->
+<div class="modal fade" id="alertaDataFatalModal" tabindex="-1" role="dialog" aria-labelledby="alertaDataFatalModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content border-danger">
+            <div class="modal-header bg-danger text-light">
+                <h5 class="modal-title" id="alertaDataFatalModalTitle"><i class="fas fa-exclamation-triangle"></i> Atenção</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="font-size: 1.2em;">
+                <p class="text-justify">A atividade <strong><span id="nomeDaAtividade"></span></strong> atribuida para o(a) funcionário(a) <strong><span id="nomeDoFuncionario"></span></strong> possuí data de início maior que a data fatal.</p>
+                <p class="text-justify">Escolha outra data fatal ou defina a atividade como prioritária para que seja executada o quanto antes, ou atribua para outro funcionário.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>
