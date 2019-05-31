@@ -431,11 +431,11 @@ class AdmsAtendimentoFuncionarios {
         return $this->UltimaAtividade;
     }
     
-    public function buscarPrimeiraAtv($Funcionario = null, $Data = null){
+    public function buscarPrimeiraAtv($Funcionario = null, $Data = null){ //Traz os dados da menor ordem disponivel
         
+        echo $Data;
         if (!empty($Funcionario) and !empty($Data)) {
             $this->Dados['adms_funcionario_id'] = $Funcionario;
-            $this->Dados['data_inicio_planejado'] = $Data;
         }
         
         $dataHora = new AdmsRead();
@@ -445,16 +445,31 @@ class AdmsAtendimentoFuncionarios {
         AND ordem = 
             (SELECT MIN(ordem) FROM adms_atendimento_funcionarios 
             WHERE adms_sits_atendimentos_funcionario_id <= :adms_sits_atendimentos_funcionario_id 
-            AND adms_funcionario_id = :adms_funcionario_id AND data_inicio_planejado >= :data_inicio_planejado)
-            LIMIT :limit", "adms_funcionario_id={$this->Dados['adms_funcionario_id']}&adms_sits_atendimentos_funcionario_id=2&data_inicio_planejado={$this->Dados['data_inicio_planejado']}&limit=1");
-        
+            AND adms_funcionario_id = :adms_funcionario_id AND data_inicio_planejado >= :data_inicio_planejado)  
+            LIMIT :limit", "adms_funcionario_id={$this->Dados['adms_funcionario_id']}&data_inicio_planejado={$Data}&adms_sits_atendimentos_funcionario_id=3&limit=1");
+            
         if ($dataHora->getResultado()) {
-            $this->UltimaAtividade = $dataHora->getResultado();
-            //var_dump($this->UltimaAtividade);
-            //echo $this->UltimaAtividade[0]['hora_fim_planejado'];
+            
+            $buscarJornada = new BuscarDuracaoJornadaT($this->Dados['adms_funcionario_id'], $Data);
+            $hora_termino2 = $buscarJornada->getDuracaoJornada()['hora_termino2'];
+            
+            //echo $dataHora->getResultado()[0]['hora_fim_planejado'];
+            //echo $hora_termino2;
+            if($dataHora->getResultado()[0]['hora_fim_planejado'] > $hora_termino2){
+                
+                $somaDia = new Funcoes();
+                //$somaDia->dia_in_data($Data, 1, "+");
+                //echo 'entrou' . $Data;
+                $Data = $somaDia->dia_in_data($Data, 1, "+");
+                $this->buscarPrimeiraAtv($this->Dados['adms_funcionario_id'], $Data); //Função recursiva
+            }else{
+               
+                $this->UltimaAtividade = $dataHora->getResultado();
+                //var_dump($this->UltimaAtividade);
+            }
+       
             //die;
         }
-        
     }
     
     public function getBuscarPrimeiraAtv(){

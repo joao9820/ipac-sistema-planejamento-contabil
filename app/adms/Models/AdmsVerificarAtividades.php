@@ -38,7 +38,7 @@ class AdmsVerificarAtividades {
         //Incrementar a lógica da paginação do outro método neste
         $this->pageId = (int) $pageId;
 
-        $this->data_inicial = isset($data_inicial) ? $data_inicial : date('Y-m-d'); //no caso de a pagina esta sendo carregada sem o envio dos inputs
+        $this->data_inicial = !empty($data_inicial) ? $data_inicial : date('Y-m-d'); //no caso de a pagina esta sendo carregada sem o envio dos inputs
         //echo $this->data_inicial;
         //$dataInicial = date('Y-m-d');
 
@@ -102,6 +102,11 @@ class AdmsVerificarAtividades {
           var_dump($this->resultado);
           die();
          */
+        
+        if ($this->resultado == NULL) {
+            $_SESSION['erro_filtro'] = 1;
+        }
+        
         return $this->resultado;
     }
 
@@ -236,6 +241,33 @@ class AdmsVerificarAtividades {
                    WHERE aten_func.data_inicio_planejado >= :data_inicial AND aten_func.data_inicio_planejado <= :data_final $this->queryDemEmp", "data_inicial={$this->data_inicial}&data_final={$this->data_final}&$this->parseString");
         $this->paginacao = $paginacao->getOffset();
         $this->resultadoPg = $paginacao->getResultado();
+    }
+    
+    public function listarDemandasAtivas(){
+        
+        $listaDemandas = new AdmsRead();
+        
+        $listaDemandas->fullRead("SELECT dem.id, dem.nome, MIN(aten_func.data_inicio_planejado) as min_data, MAX(aten_func.data_inicio_planejado) as max_data 
+                                  FROM adms_demandas dem 
+                                  INNER JOIN adms_atendimento_funcionarios aten_func ON aten_func.adms_demanda_id = dem.id 
+                                  GROUP BY dem.id ORDER BY nome ASC");
+        $this->resultado = $listaDemandas->getResultado();
+        
+        return $this->resultado;
+        
+    }
+    
+    public function listarEmpresasDemAtivas(){
+        
+        $listarEmp = new AdmsRead();
+        $listarEmp->fullRead("SELECT emp.id id_empresa, emp.nome nome_empresa, MIN(aten_func.data_inicio_planejado) as min_data_emp, MAX(aten_func.data_inicio_planejado) as max_data_emp  
+                              FROM adms_empresas emp
+                              INNER JOIN adms_atendimentos ON emp.id = adms_atendimentos.adms_empresa_id 
+                              INNER JOIN adms_atendimento_funcionarios aten_func ON aten_func.adms_atendimento_id = adms_atendimentos.id 
+                              GROUP BY emp.id ORDER BY nome_empresa ASC");
+        $this->Resultado = $listarEmp->getResultado();
+        return $this->Resultado;
+        
     }
 
 }

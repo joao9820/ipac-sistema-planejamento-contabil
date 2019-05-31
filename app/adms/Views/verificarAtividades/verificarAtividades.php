@@ -57,7 +57,7 @@ if (!defined('URL')) {
                                     <i class="fas fa-calendar-day"></i>
                                 </div>
                             </div>
-                            <input name="data_inicio" type="date" value="<?php $data_inicio = isset($this->Dados['dataInicial']) ? $this->Dados['dataInicial'] : date('Y-m-d');
+                            <input name="data_inicio" type="date" value="<?php $data_inicio = !empty($this->Dados['dataInicial']) ? $this->Dados['dataInicial'] : date('Y-m-d');
             echo $data_inicio
             ?>" class="form-control" id="inlineFormInputGroupUsername2">
                         </div>
@@ -105,6 +105,7 @@ if (!defined('URL')) {
                         </select>
                     </div>         
                     <?php
+                    
                     if (isset($this->Dados['empresas'])) {
                         ?>
                         <!-- Apenas o gerente pode visualizar essa parte de selecionar empresa -->
@@ -128,7 +129,7 @@ if (!defined('URL')) {
                                     }
                                 }
                                 ?>
-                            </select>
+                            </select>    
                         </div>
 
                         <?php
@@ -140,22 +141,44 @@ if (!defined('URL')) {
 
 
             </form>
-
+            <?php
+           
+            ?>
             <?php
             if (empty($this->Dados['listaAtividades']) && isset($_SESSION['erro_filtro'])) {
+                
+                if(!empty(filter_input(INPUT_GET, "emp", FILTER_DEFAULT))){ //Prioridade para a informação da empresa, filtro mais avançado
+                    foreach($this->Dados['empresas'] as $empresa){    //Se o filtro tiver como data de inicio qualquer data antes de min_data aparecerá o resultado e não entrará nessa condição                       
+                        if(filter_input(INPUT_GET, "emp", FILTER_DEFAULT) == $empresa['id_empresa']){
+                            $empresa['min_data_emp']= date('d/m/Y', strtotime($empresa['min_data_emp']));
+                            $empresa['max_data_emp']= date('d/m/Y', strtotime($empresa['max_data_emp']));
+                            echo '<div class="alert alert-info" role="alert">';
+                            echo "<span>Há atividades relacionadas a essa empresa a partir do dia {$empresa['min_data_emp']} até o dia {$empresa['max_data_emp']}. Selecione uma data válida neste período para listá-las.</span>";
+                            echo '</div>';
+                             
+                        }
+                    } 
+                }               
+                else if(!empty(filter_input(INPUT_GET, "dem", FILTER_DEFAULT))){
+                    foreach($this->Dados['demandas'] as $demanda){    //Se o filtro tiver como data de inicio qualquer data antes de min_data aparecerá o resultado e não entrará nessa condição                       
+                        if(filter_input(INPUT_GET, "dem", FILTER_DEFAULT) == $demanda['id']){
+                            $demanda['min_data'] = date('d/m/Y', strtotime($demanda['min_data']));
+                            $demanda['max_data'] = date('d/m/Y', strtotime($demanda['max_data']));
+                             echo '<div class="alert alert-info" role="alert">';
+                               echo "<span>Há atividades para essa demanda a partir do dia {$demanda['min_data']} até o dia {$demanda['max_data']}. Selecione uma data válida neste período para listá-las.</span>";  
+                            echo '</div>';  
+                        }
+                    } 
+                }
+                 
+                
                 ?>
-                <div class="alert alert-secondary alert-dismissible text-center py-5 fade show" role="alert">
-                    Nenhuma Atividade foi encontrada, limpe o filtro e tente novamente
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
                 <?php
-            } else if (empty($this->Dados['listaAtividades'])) {
+            } else if(empty($this->Dados['listaAtividades'])) {
                 ?>
 
                 <div class="alert alert-secondary alert-dismissible text-center py-5 fade show" role="alert">
-                    Nenhuma Atividade foi encontrada
+                    Nenhuma Atividade foi encontrada 
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -190,6 +213,7 @@ if (!defined('URL')) {
                                 foreach ($this->Dados['listaAtividades'] as $atividades) {
                                     extract($atividades);
                                     ?>
+                            
                                     <tr class="">
                                         <td class="d-none d-lg-table-cell text-center <?php if (($data_fatal < date('Y-m-d'))and (!empty($data_fatal)) and $aten_sit != 4) {
                                             echo "text-danger";
@@ -199,7 +223,7 @@ if (!defined('URL')) {
                                             <?php
                                             
                                             if (($data_fatal < date('Y-m-d'))and (!empty($data_fatal)) and $aten_sit != 4){
-                                                echo "<span class='luzAlert' tabindex='0' data-placement='right' data-toggle='tooltip' title='Atividade Atrasada.'>";
+                                                echo "<span class='luzAlert' tabindex='0' data-placement='right' data-toggle='tooltip' title='Atividade não será atendida no prazo.'>";
                                                 echo '<span class="text-danger">';
                                                     echo '<i class="fas fa-lightbulb faIpac"></i>';
                                                 echo '</span>';

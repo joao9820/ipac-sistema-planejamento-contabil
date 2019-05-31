@@ -89,7 +89,7 @@ class AdmsListarAtendimentoPendente
             AND at.prioridade <>:prioridade 
             AND aten.adms_sits_atendimentos_funcionario_id <>:adms_s_atend_func_id 
             AND aten.adms_sits_atendimentos_funcionario_id <>:interrompido
-            ORDER BY created ASC LIMIT :limit OFFSET :offset", "usuario=".$_SESSION['usuario_id']."&adms_sits_atendimento_id=4&adms_sits_atendimento_conclu=3&prioridade=1&adms_s_atend_func_id=4&interrompido=5&limit={$this->LimiteResultado}&offset={$offset}");
+            ORDER BY aten.data_inicio_planejado ASC, aten.hora_inicio_planejado ASC LIMIT :limit OFFSET :offset", "usuario=".$_SESSION['usuario_id']."&adms_sits_atendimento_id=4&adms_sits_atendimento_conclu=3&prioridade=1&adms_s_atend_func_id=4&interrompido=5&limit={$this->LimiteResultado}&offset={$offset}");
         $this->Resultado = $listarAtendimento->getResultado();
         //var_dump($this->Resultado);
         return $this->Resultado;

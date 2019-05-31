@@ -57,8 +57,8 @@ class VerificarAtividades {
         $listarAtividades = new AdmsVerificarAtividades();
         $listarEmpresasDemandas = new AdmsCadastrarAtendimento();
 
-        $this->Dados['empresas'] = $listarEmpresasDemandas->listarEmpresas();
-        $this->Dados['demandas'] = $listarEmpresasDemandas->listarDemandas();
+        $this->Dados['empresas'] = $listarAtividades->listarEmpresasDemAtivas();
+        $this->Dados['demandas'] = $listarAtividades->listarDemandasAtivas();
 
         if (!empty($this->DataAtvIntervalo['dataFinal'])) {
             
