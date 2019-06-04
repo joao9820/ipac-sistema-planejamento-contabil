@@ -47,6 +47,8 @@ class AdmsReordenarData {
         $novaData = $this->verificarData($Data);  
         
         $this->horaFimAtvAnt = $horaFimAtvAnt;
+        echo 'Horafim atv ant: ' . $this->horaFimAtvAnt;
+        //die();
 
         $reordemDia = new AdmsAtendimentoFuncionarios();
 
@@ -60,14 +62,16 @@ class AdmsReordenarData {
         $reordemDia->buscarUltimaAtividadeDefineData($novaData);
         $this->UltimaAtividadeLoop = $reordemDia->getBuscarUltimaAtividadeDefineData();
         
-        if (($this->JornadaFunc['jornadaFunc'] > $this->DuracaoTotalAtivi[0]['duracao_atividade_sc']) and ( $this->JornadaFunc['hora_termino2'] > $this->horaFimAtvAnt)) {
-
+        //VERIFICAR SE É POSSIVEL RETIRAR A PRIMEIRA CONDIÇÃO, POIS A SEGUNDA CONDIÇÃO SO VAI SER VERDADE SE A PRIMEIRA TAMBÉM FOR, E VISE E VERSA
+        if (($this->horaFimAtvAnt > $this->JornadaFunc['hora_inicio']) && ($this->JornadaFunc['hora_termino2'] > $this->horaFimAtvAnt)) {
+            //die();
             $this->Dados['data_inicio_planejado'] = $novaData;
-            echo $this->Dados['data_inicio_planejado'];
+            echo 'Data ja na classe reordenar: '. $this->Dados['data_inicio_planejado'];
+            //die();
             //break;
         } else {
 
-            if ($this->JornadaFunc['hora_termino2'] < $this->horaFimAtvAnt) {
+            if ($this->JornadaFunc['hora_termino2'] < $this->horaFimAtvAnt || $this->JornadaFunc['hora_termino2'] > $this->horaFimAtvAnt ) { //MODIFICADO
 
                 /*
                  * calcular o tempo excedido quando a soma total das atividades não ultrapassa a jornada de trabalho
@@ -244,6 +248,11 @@ class AdmsReordenarData {
         
        return $novaData; 
         
+    }
+    
+    public function getHoraInicio(){
+        $this->Resultado = ["hora_inicio" => $this->JornadaFunc['hora_inicio'], "hora_termino2" => $this->JornadaFunc['hora_termino2']];
+        return $this->Resultado;
     }
 
 }

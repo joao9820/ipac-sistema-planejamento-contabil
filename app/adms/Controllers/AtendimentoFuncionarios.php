@@ -207,7 +207,7 @@ class AtendimentoFuncionarios {
         if (isset($this->Dados['EditAtividade'])) {
             unset($this->Dados['EditAtividade']);
 
-            if ($this->Dados['verificar_mesmo_funcionario'] == $this->Dados['adms_funcionario_id']) {
+            if ($this->Dados['verificar_mesmo_funcionario'] == $this->Dados['adms_funcionario_id'] && $this->Dados['prioridade'] == 2) { //Ou seja se tentar editar pro mesmo funcionário sem definir prioridade
 
                 // Caso o funcionário não seja substituido e a prioridade continue a mesma nada será atualizado
                 $_SESSION['msg'] = $alert->alertMensagemJavaScript("Nenhum dado atualizado", "warning");

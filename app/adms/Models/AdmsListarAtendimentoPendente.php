@@ -66,7 +66,7 @@ class AdmsListarAtendimentoPendente
 
 
         $listarAtendimento = new AdmsRead();
-        $listarAtendimento->fullRead("SELECT aten.id id_aten_func, aten.duracao_atividade, aten.created, aten.inicio_atendimento, aten.at_tempo_restante, aten.at_iniciado, aten.at_tempo_excedido, aten.data_fatal, aten.hora_inicio_planejado, aten.hora_fim_planejado, aten.data_inicio_planejado,
+        $listarAtendimento->fullRead("SELECT aten.id id_aten_func, aten.duracao_atividade, aten.created, aten.inicio_atendimento, aten.at_tempo_restante, aten.at_iniciado, aten.at_tempo_excedido, aten.data_fatal, aten.hora_inicio_planejado, aten.hora_fim_planejado, aten.data_inicio_planejado, aten.prioridade,
             ativi.nome nome_atividade, ativi.descricao descricao_atividade,
             demanda.nome nome_demanda, demanda.descricao descricao_demanda,
             at.id id_atendimento, at.created data_solicitacao, at.descricao descricao_atendimento,
