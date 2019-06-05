@@ -47,6 +47,7 @@ class AdmsAtendimentoFuncionarioEditar {
     private $primeiraAtv;
     private $booleanReordenar;
     private $status;
+    private $verificaPriori;
 
     /**
      * @param mixed $Dados
@@ -66,7 +67,7 @@ class AdmsAtendimentoFuncionarioEditar {
         if ($this->Dados['prioridade'] == '1') {
             //die();
             $this->status = $this->definirPrioridade();
-
+            //CHAMAR FUNÇÃO PARA VERIFICAR SE HÁ PRIORIDADE PRO MESMO FUNCIONÁRIO AQUI
             if ($this->status == 1) {
                 $this->Atividade['status'] = true;
                 $this->Atividade['msg'] = "Atividade atualizada com sucesso";
@@ -96,6 +97,18 @@ class AdmsAtendimentoFuncionarioEditar {
 
     public function getAtividade() {
         return $this->Atividade;
+    }
+    
+    private function verificarPrioridade(){
+        
+        $verificarPriori = new AdmsRead();
+        
+        $verificarPriori->fullRead("SELECT prioridade FROM adms_atendimento_funcionarios WHERE id = :id", "id={$this->Condicao['id_aten_fun']}");
+        $this->verificaPriori = $verificarPriori->getResultado()['prioridade'];
+        
+        var_dump($this->verificaPriori);
+        die();
+        
     }
 
     /*
@@ -382,7 +395,8 @@ class AdmsAtendimentoFuncionarioEditar {
     }
 
     private function definirPrioridade() {
-
+        
+        //Função para verificar se a atv já tem prioridade
 
         $novaData = new AdmsReordenarData();
         $this->Dados['data_inicio_planejado'] = $novaData->verificarData($this->Dados['data_inicio_planejado']); //Verificar se é fds ou feriado
@@ -507,7 +521,7 @@ class AdmsAtendimentoFuncionarioEditar {
             //die();
             // Passando para o atributo Atividade o status = true, registro realizado com sucesso
             //Permitir para prioridade 1 pois reordenará as atividades do antigo funcionario
-            if ($this->ordemRetirada < $this->ultimaOrdem) {
+            if ($this->FuncionarioId != $this->Condicao['adms_funcionario_id_ant'] && $this->ordemRetirada < $this->ultimaOrdem) {
                 //die();
                 $reordenar->reordenarAtv();
             }

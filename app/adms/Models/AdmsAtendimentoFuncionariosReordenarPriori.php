@@ -23,6 +23,8 @@ class AdmsAtendimentoFuncionariosReordenarPriori {
     private $FuncId;
     private $dataAtual;
     private $ordem;
+    private $ultimaOrdem;
+    private $ordemEditada;
     private $horaInicio;
     private $horaAtual;
     private $inicioReordem;
@@ -38,6 +40,7 @@ class AdmsAtendimentoFuncionariosReordenarPriori {
     private $duracaoAtv;
     private $aux;
     private $status;
+    private $query;
 
     function getResultado() {
         return $this->Resultado;
@@ -85,11 +88,32 @@ class AdmsAtendimentoFuncionariosReordenarPriori {
         //Adicionar este update após o foreach
         //$updateOrdem->exeUpdate("adms_atendimento_funcionarios", $this->ordem, "WHERE ordem = :ordem_ant AND adms_funcionario_id = :adms_funcionario_id ", "ordem_ant={$ordem_max}&adms_funcionario_id={$this->FuncId}");
         //die();
+        
+        $this->query .= "SELECT id ,ordem, data_inicio_planejado, hora_inicio_planejado FROM adms_atendimento_funcionarios 
+                WHERE adms_funcionario_id = :adms_funcionario_id
+                AND ordem >= :ordem ";
+        
+        if($this->FuncId == $this->FuncIdAnt){
+            //die();
+            $this->query .= "AND id <> :id ORDER BY ordem";
+            echo $this->query;
+            //die();
+            $reordenar->fullRead($this->query,"adms_funcionario_id={$this->FuncId}&ordem={$this->ordem}&id={$this->atenFuncId}"); //ORDEM QUE SERÁ ATUALIZADA
+  
+        $ordens = new \App\adms\Models\AdmsAtendimentoFuncionariosReordenar(); //Independente da prioridade o planejamento do funcionário antigo sempre será reordenado o que muda é a inserção da ordem
 
-        $reordenar->fullRead("SELECT id,ordem, data_inicio_planejado, hora_inicio_planejado FROM adms_atendimento_funcionarios 
-                WHERE adms_funcionario_id =:adms_funcionario_id
-                AND ordem >= :ordem
-                ORDER BY ordem", "adms_funcionario_id={$this->FuncId}&ordem={$this->ordem}");
+        $ordens->buscarUltOrdemAtvFunc($this->FuncId); //Retorna a ordem e atribui o id do funcinario na classe         
+        $this->ultimaOrdem = (int) $ordens->getResultado()[0]['ordem'];
+
+        $ordens->buscarOrdem($this->atenFuncId); //Verificar se há necessidade de reordenar as atividades e o planejamento
+        $this->ordemEditada = $ordens->getResultado();
+        
+        $this->ordemEditada = $this->ordemEditada + 1; 
+            
+        }else{
+             $this->query.= "ORDER BY ordem";
+             $reordenar->fullRead($this->query,"adms_funcionario_id={$this->FuncId}&ordem={$this->ordem}");
+        }
 
         $resultadoBD = $reordenar->getResultado();
 
@@ -124,10 +148,19 @@ class AdmsAtendimentoFuncionariosReordenarPriori {
             foreach ($resultadoBD as $novaOrdem) {
 
                 //while($novaOrdem['ordem'])
-
+                
+                        
+                if($this->FuncId == $this->FuncIdAnt && $this->ordemEditada < $this->ultimaOrdem && $novaOrdem['ordem'] >= $this->ordemEditada){
+                    $this->DadosOrd['ordem'] = (int) $novaOrdem['ordem'];
+                } else {
+                    $novaOrdem['ordem'] = (int) $novaOrdem['ordem'];
+                    $this->DadosOrd['ordem'] = $novaOrdem['ordem'] + 1; //Os valores que serão atualizados estão neste atributo
+                }
+          
+                /*
                 $novaOrdem['ordem'] = (int) $novaOrdem['ordem'];
                 $this->DadosOrd['ordem'] = $novaOrdem['ordem'] + 1; //Os valores que serão atualizados estão neste atributo
-
+*/
                 $this->ordemAtual = $novaOrdem['ordem'];
 
                 $this->idOrdem = $novaOrdem['id'];
@@ -140,82 +173,87 @@ class AdmsAtendimentoFuncionariosReordenarPriori {
                     if ($this->ordemAtual == $ordemHorainicio) { //4
                         $somarHoras = new Funcoes();
                         
-                          $this->horaInicio = $somarHoras->somar_time_in_hours($this->duracaoAtv, $reordemHoraInicio); //Hora definida para atividade antiga (VERIFICAR SE ESTE HORÁRIO NÃO EXTRAPOLA A JORNADA)
+                        //echo 'HORA INICIAL DA PROXIMA ATV' . $reordemHoraInicio;
                         
-                        //VERIFICAR SE TEVE HORARIO DE ALMOÇO ANTES TAMBÉM
+                        $this->horaInicio = $somarHoras->somar_time_in_hours($this->duracaoAtv, $reordemHoraInicio); //Hora definida para atividade antiga (VERIFICAR SE ESTE HORÁRIO NÃO EXTRAPOLA A JORNADA)
+                        
+                        //VERIFICAR SE TEVE HORARIO DE ALMOÇO ANTES TAMBÉM (08:22 - 18:22 - duracao 10:00:00)
                         $verificaAlmoco1 = new AdmsReordenarData(); //VERIFICA HORA DE ALMOÇO PARA A ATIVIDADE COM PRIORIDADE (SEMPRE IRÁ TRAZER A HORA DE INICIO PORTANTO NUNCA PASSARÁ DA HORA_FIM_2)
 
-                        $verificaAlmoco1->buscarUltimaAtiviFuncAlmoco($this->horaInicio, $this->dataInicio, $this->duracaoAtv, $reordemHoraInicio, NULL, $this->FuncId);
+                        $verificaAlmoco1->buscarUltimaAtiviFuncAlmoco($this->horaInicio, $this->dataInicio, $this->duracaoAtv, $reordemHoraInicio, NULL, $this->FuncId); //Hora de almoço no primeiro
                         
-                        
-                        echo '<br>Duração da Atv que vai ser atribuida: ' . $this->duracaoAtv . ' ' . $reordemHoraInicio;
+                        if($verificaAlmoco1->getBuscarUltimaAtiviFuncAlmoco()){ //Senão continua com o mesmo valor de antes em $somarHoras
+                            $this->horaInicio = $verificaAlmoco1->getBuscarUltimaAtiviFuncAlmoco()['hora_fim'];
+                        }
+                                               
+                        echo '<br>Duração da Atv que vai ser atribuida: ' . $this->duracaoAtv . ' ' . $this->horaInicio . '<br>';
 
-                      die();
+                      //die();
 
                         $verificarDia = new AdmsReordenarData();
 
                         $verificarDia->defineData($this->FuncId, $this->dataInicio, $this->horaInicio); //Para a atividade prioridade
                         
-                        $this->horaInicio = $verificaAlmoco->getBuscarUltimaAtiviFuncAlmoco()['hora_fim'];
+                        
+                        //$this->horaInicio = $verificaAlmoco->getBuscarUltimaAtiviFuncAlmoco()['hora_fim'];
                         
                         echo $this->horaInicio;
                         
                         if (!empty($verificarDia->getDefineData()['tempo_excedido'])) {
                             $this->tempoExcedido = $verificarDia->getDefineData()['tempo_excedido']; //VERIFICAR SE EXISTE TEMPO EXCEDIDO
-
+                            
+                            $this->tempoExcedido = $somarHoras->segundos_to_hora($this->tempoExcedido);
+                            echo 'Tempo excedido: ' . $this->tempoExcedido;
+                            //die();
+                            
                             $hora_inicio_priori2 = $verificarDia->getHoraInicio()['hora_inicio'];
                             
+                            /*
                             if($reordemHoraInicio < $hora_inicio_priori2){
                                 
                             }
-                            
+                            */
                             $hora_termino2 = $verificarDia->getHoraInicio()['hora_termino2'];
                             
                             //echo 'HORA DE INICIO: ' . $hora_termino2;
                             
-                            $this->atvTempoRealizado = $somarHoras->sbtrair_horas_in_hours($hora_termino2, $reordemHoraInicio);
-                            $this->atvTempoRealizado = $somarHoras->sbtrair_horas_in_hours($this->duracaoAtv, $this->atvTempoRealizado);
-
-                            $hora_fim_priori2 = $somarHoras->somar_time_in_hours($this->atvTempoRealizado, $hora_inicio_priori2);
+                            //$this->atvTempoRealizado = $somarHoras->sbtrair_horas_in_hours($hora_termino2, $reordemHoraInicio);
+                            //echo '<br>Atv tempo realizado ' . $this->atvTempoRealizado;
                             
-                            echo '<br>HORA_FIM_PRIORI_2: ' . $hora_fim_priori2;
+                            //$this->atvTempoRealizado = $somarHoras->sbtrair_horas_in_hours($this->duracaoAtv, $this->atvTempoRealizado);
 
+                            $hora_fim_priori2 = $somarHoras->somar_time_in_hours($hora_inicio_priori2, $this->tempoExcedido); //09:22
+                            
+                            //$hora_fim_priori2 = $somarHoras->somar_time_in_hours($hora_fim_priori2, $this->tempoExcedido);
+                           
+                            echo '<br>HORA_FIM_PRIORI_2: ' . $hora_fim_priori2;
+                            
+                            //die();
+                            
                             echo '<br>TEMPO EXCEDIDO DA ATIVIDADE COM PRIORIDADE: ' . $this->tempoExcedido;
 
                             //die();
 
                             $verificaAlmoco = new AdmsReordenarData(); //VERIFICA HORA DE ALMOÇO PARA A ATIVIDADE COM PRIORIDADE (SEMPRE IRÁ TRAZER A HORA DE INICIO PORTANTO NUNCA PASSARÁ DA HORA_FIM_2)
 
-                            $verificaAlmoco->buscarUltimaAtiviFuncAlmoco($hora_fim_priori2, $this->dataInicio, $this->atvTempoRealizado, $hora_inicio_priori2, NULL, $this->FuncId);
+                            $verificaAlmoco->buscarUltimaAtiviFuncAlmoco($hora_fim_priori2, $this->dataInicio, $this->tempoExcedido, $hora_inicio_priori2, NULL, $this->FuncId);
 
                             //$verificaAlmoco->getBuscarUltimaAtiviFuncAlmoco();
 
                             if ($verificaAlmoco->getBuscarUltimaAtiviFuncAlmoco() != FALSE) { //Se vier algum retorno significa que houve excedente no almoço, senão continuará com os valores obtidos nesta classe
+                                //die();
                                 $this->Dados['hora_inicio_planejado'] = $reordemHoraInicio;//$verificaAlmoco->getBuscarUltimaAtiviFuncAlmoco()['hora_inicio']
-                                $this->Dados['hora_fim_planejado'] = $verificaAlmoco->getBuscarUltimaAtiviFuncAlmoco()['hora_fim'];
+                                $this->Dados['hora_fim_planejado'] = $this->horaInicio;
                                 echo 'TESTE:' . $this->Dados['hora_fim_planejado'];
-                            } else { //Mantém os valores anteriores
+                            } else { //Mantém os valores anteriores (ENTRAVA AQUI)
                                 //die();
                                 $this->Dados['hora_inicio_planejado'] = $reordemHoraInicio;
                                 $this->Dados['hora_fim_planejado'] = $this->horaInicio;
                             }
                         } else { //SE NÃO TIVER EXCEDENTE SERÁ NO MESMO DIA, PORTANTO SÓ VERIFICAMOS O ALMOÇO
                             
-
-                            $verificaAlmoco = new AdmsReordenarData(); //VERIFICA HORA DE ALMOÇO PARA A ATIVIDADE COM PRIORIDADE (SEMPRE IRÁ TRAZER A HORA DE INICIO PORTANTO NUNCA PASSARÁ DA HORA_FIM)
-
-                            $verificaAlmoco->buscarUltimaAtiviFuncAlmoco($this->horaInicio, $this->dataInicio, $this->duracaoAtv, $reordemHoraInicio, NULL, $this->FuncId);
-
-                            //$verificaAlmoco->getBuscarUltimaAtiviFuncAlmoco();
-
-                            if ($verificaAlmoco->getBuscarUltimaAtiviFuncAlmoco() != FALSE) { //Se vier algum retorno significa que houve excedente no almoço, senão continuará com os valores obtidos nesta classe
-                                $this->Dados['hora_inicio_planejado'] = $verificaAlmoco->getBuscarUltimaAtiviFuncAlmoco()['hora_inicio'];
-                                $this->Dados['hora_fim_planejado'] = $verificaAlmoco->getBuscarUltimaAtiviFuncAlmoco()['hora_fim'];
-                                echo 'TESTE:' . $this->Dados['hora_fim_planejado'];
-                            } else { //Mantém os valores anteriores
                                 $this->Dados['hora_inicio_planejado'] = $reordemHoraInicio;
-                                $this->Dados['hora_fim_planejado'] = $this->horaInicio;
-                            }
+                                $this->Dados['hora_fim_planejado'] = $this->horaInicio;             
                         }
 
                         /*
@@ -229,8 +267,8 @@ class AdmsAtendimentoFuncionariosReordenarPriori {
                          */
                         
                         
-                        echo '<br>Hora inicio da prox ' . $this->horaInicio;
-                        $this->DadosOrd['hora_inicio_planejado'] = $this->Dados['hora_fim_planejado']; //13:53 
+                        echo '<br>Hora inicio da prox ' . $this->Dados['hora_fim_planejado'];
+                        $this->DadosOrd['hora_inicio_planejado'] = $this->Dados['hora_fim_planejado']; //13:53 focar aqui
 
                         $reordemHoraInicio = $this->DadosOrd['hora_inicio_planejado'];
                         echo '<br>Entrou agora: ' . $this->ordemAtual . ' ' . $this->DadosOrd['hora_inicio_planejado'] . '<br>';
@@ -249,7 +287,7 @@ class AdmsAtendimentoFuncionariosReordenarPriori {
                     $reordemDia = new \App\adms\Models\AdmsReordenarData();
 
                     echo '<br/>Data anterior: ' . $this->dataInicio . ' Reordem hora inicio : ' . $reordemHoraInicio;
-
+                    //die();
                     $reordemDia->defineData($this->FuncId, $this->dataInicio, $reordemHoraInicio); //30/04
 
                     $this->novaData = $reordemDia->getDefineData()['nova_data'];
@@ -339,7 +377,7 @@ class AdmsAtendimentoFuncionariosReordenarPriori {
                   } */
                 
                 
-                //$updateOrdem->exeUpdate("adms_atendimento_funcionarios", $this->DadosOrd, "WHERE adms_funcionario_id = :adms_funcionario_id AND ordem = :novaOrdem AND id = :ordemId", "adms_funcionario_id={$this->FuncId}&novaOrdem={$novaOrdem['ordem']}&ordemId={$novaOrdem['id']}");
+                $updateOrdem->exeUpdate("adms_atendimento_funcionarios", $this->DadosOrd, "WHERE adms_funcionario_id = :adms_funcionario_id AND ordem = :novaOrdem AND id = :ordemId", "adms_funcionario_id={$this->FuncId}&novaOrdem={$novaOrdem['ordem']}&ordemId={$novaOrdem['id']}");
                 /*
                   if($this->ordemAtual == 6){
                   die();
@@ -363,7 +401,7 @@ class AdmsAtendimentoFuncionariosReordenarPriori {
                 $updateOrdem->exeUpdate("adms_atendimento_funcionarios", $this->DadosOrd, "WHERE adms_funcionario_id = :adms_funcionario_id AND ordem = :novaOrdem AND id = :ordemId", "adms_funcionario_id={$this->FuncId}&novaOrdem={$novaOrdem['ordem']}&ordemId={$novaOrdem['id']}");
             }
         }
-        die();
+        //die();
         
         //return TRUE;
     }

@@ -38,6 +38,8 @@ function getFeriados($ano){
     );
     return $feriados;
 }
+
+//var_dump($this->Dados['listarAtendimentos']);
 ?>
 <style>
 
