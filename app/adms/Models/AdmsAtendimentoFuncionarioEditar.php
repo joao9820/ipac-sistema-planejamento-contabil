@@ -58,7 +58,7 @@ class AdmsAtendimentoFuncionarioEditar {
         $this->Dados = $Dados;
         $this->Condicao = $Condicao;
 
-        var_dump($this->Condicao);
+        //var_dump($this->Condicao);
         //die();
 
         $this->Dados['data_inicio_planejado'] = date('Y-m-d'); //Lembrar de colocar para a validação esta data quando tiver prioridade
@@ -66,18 +66,31 @@ class AdmsAtendimentoFuncionarioEditar {
 
         if ($this->Dados['prioridade'] == '1') {
             //die();
-            $this->status = $this->definirPrioridade();
-            //CHAMAR FUNÇÃO PARA VERIFICAR SE HÁ PRIORIDADE PRO MESMO FUNCIONÁRIO AQUI
-            if ($this->status == 1) {
-                $this->Atividade['status'] = true;
-                $this->Atividade['msg'] = "Atividade atualizada com sucesso";
-            } else if ($this->status == 2) {
-                $this->Atividade['status'] = true;
-                $this->Atividade['msg'] = "Atividade atualizada com sucesso, foi alterada apenas sua prioridade";
-            } else {
+            
+            //$this->verificarPrioridade();
+            
+            if (($this->FuncionarioId != $this->Condicao['adms_funcionario_id_ant']) || ($this->FuncionarioId == $this->Condicao['adms_funcionario_id_ant'] && $this->verificarPrioridade() != 1)) {
+                $this->status = $this->definirPrioridade();
+
+                if ($this->status == 1) {
+                    $this->Atividade['status'] = true;
+                    $this->Atividade['msg'] = "Atividade atualizada com sucesso";
+                } else if ($this->status == 2) {
+                    $this->Atividade['status'] = true;
+                    $this->Atividade['msg'] = "Atividade atualizada com sucesso, foi alterada apenas sua prioridade";
+                }else if ($this->status === -1){
+                   $this->Atividade['status'] = false;
+                   $this->Atividade['msg'] = "A atividade não foi atualizada<br>pois possui ordem menor<br>que as demais disponíveis"; 
+                } 
+                else {
+                    $this->Atividade['status'] = false;
+                    $this->Atividade['msg'] = "A atividade não foi atualizada";
+                }
+            }else{
                 $this->Atividade['status'] = false;
-                $this->Atividade['msg'] = "A atividade não foi atualizada";
+                $this->Atividade['msg'] = "A atividade não foi atualizada<br>porque já possui prioridade";
             }
+            //CHAMAR FUNÇÃO PARA VERIFICAR SE HÁ PRIORIDADE PRO MESMO FUNCIONÁRIO AQUI
         } else {
             $this->status = $this->updateAtividade();
 
@@ -98,17 +111,17 @@ class AdmsAtendimentoFuncionarioEditar {
     public function getAtividade() {
         return $this->Atividade;
     }
-    
-    private function verificarPrioridade(){
-        
+
+    private function verificarPrioridade() {
+
         $verificarPriori = new AdmsRead();
-        
+
         $verificarPriori->fullRead("SELECT prioridade FROM adms_atendimento_funcionarios WHERE id = :id", "id={$this->Condicao['id_aten_fun']}");
-        $this->verificaPriori = $verificarPriori->getResultado()['prioridade'];
-        
-        var_dump($this->verificaPriori);
-        die();
-        
+        $this->verificaPriori = $verificarPriori->getResultado()[0]['prioridade'];
+
+        //var_dump($this->verificaPriori);
+        //die();
+        return $this->verificaPriori;
     }
 
     /*
@@ -395,7 +408,7 @@ class AdmsAtendimentoFuncionarioEditar {
     }
 
     private function definirPrioridade() {
-        
+
         //Função para verificar se a atv já tem prioridade
 
         $novaData = new AdmsReordenarData();
@@ -445,10 +458,10 @@ class AdmsAtendimentoFuncionarioEditar {
             //die();
             $this->booleanReordenar = $reordenarPriori->reordenarAtvPriori($this->Condicao['ordem'], $this->FuncionarioId, $this->Dados['duracao_atividade'], $this->Dados['data_inicio_planejado'], $this->Condicao['hora_inicio_planejado'], $this->Condicao['adms_funcionario_id_ant'], $this->Condicao['id_aten_fun']);
             var_dump($this->booleanReordenar);
-
+            //$this->booleanReordenar = null;
             //die();
             // if(!empty($this->boleadnReordenar))
-            if (!is_null($this->booleanReordenar)) {
+            if (!is_null($this->booleanReordenar) && $this->booleanReordenar > 0) {
 
                 if ($this->booleanReordenar == 2) {
 
@@ -467,15 +480,17 @@ class AdmsAtendimentoFuncionarioEditar {
                         return 0;
                     }
                 }
+            }else if ($this->booleanReordenar === 0){
+                return -1;
             }
+            
             //die();
-        } /*else {
-            $inserirOrdem = new \App\adms\Models\AdmsAtendimentoFuncionariosReordenar();
+        } /* else {
+          $inserirOrdem = new \App\adms\Models\AdmsAtendimentoFuncionariosReordenar();
 
-            $inserirOrdem->inserirOrdemAtvFunc($this->Dados['adms_funcionario_id']);
-            $this->Dados['ordem'] = $inserirOrdem->getResultado(); //Busca a ultima ordem do funcionário e adiciona 1, necessario inserir primeiro pois o valor func_id a ser salvo na classe é outro
-        }*/
-
+          $inserirOrdem->inserirOrdemAtvFunc($this->Dados['adms_funcionario_id']);
+          $this->Dados['ordem'] = $inserirOrdem->getResultado(); //Busca a ultima ordem do funcionário e adiciona 1, necessario inserir primeiro pois o valor func_id a ser salvo na classe é outro
+          } */
         if ($reordenarPriori->getbuscarMinOrdemDataPriori()) { //PENSAR EM CRIAR UMA CLASSE SEPARADA
             $this->Dados['hora_inicio_planejado'] = $reordenarPriori->getDadosAtvPriori()['hora_inicio_planejado'];
             $calcularHoraFimPl = new Funcoes();

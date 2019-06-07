@@ -198,7 +198,10 @@ class AtendimentoFuncionarios {
          * prioridade <- 1 [Sim] , 2 [Não]
          */
         $this->Dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-
+        
+        var_dump($this->Dados);
+        //die();
+        
         $adms_demanda_id = $this->Dados['adms_demanda_id'];
         $adms_atendimento_id = $this->Dados['adms_atendimento_id'];
 

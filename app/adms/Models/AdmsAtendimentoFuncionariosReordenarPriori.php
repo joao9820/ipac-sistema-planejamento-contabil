@@ -41,6 +41,7 @@ class AdmsAtendimentoFuncionariosReordenarPriori {
     private $aux;
     private $status;
     private $query;
+    private $ini_reordem;
 
     function getResultado() {
         return $this->Resultado;
@@ -68,26 +69,22 @@ class AdmsAtendimentoFuncionariosReordenarPriori {
 
         var_dump($ordem);
 
-        $this->status = $this->buscarMinOrdemDataPriori();
+        $this->status = $this->buscarMinOrdemDataPriori();       
+        //var_dump($this->status);
         
-        
-        var_dump($this->inicioReordem);
-        //echo $this->status;
-        //die();
-        
-        
-        if (!empty($this->inicioReordem)) {
-            $this->ordem = $this->inicioReordem[0]['ordem']; //Ordem a partir do horário disponovel
+        if (!empty($this->inicioReordem)) { //valor retornado aqui TRUE = 1 porém se o inicioReordem estiver com valor ja entrará aqui e não passará pela próxima condição semelhante (retorno apenas para sair da recursividade)
+            $this->ordem = $this->inicioReordem[0]['ordem']; //Ordem a partir do horário disponivel
         }else if ($this->status == 1 || $this->status == 2){
-            //die();
+            //'entrou no status 1';          
             return $this->status;
         }
-
+        //die();
 
         //$this->buscarUltOrdemAtvFunc();
         //Adicionar este update após o foreach
         //$updateOrdem->exeUpdate("adms_atendimento_funcionarios", $this->ordem, "WHERE ordem = :ordem_ant AND adms_funcionario_id = :adms_funcionario_id ", "ordem_ant={$ordem_max}&adms_funcionario_id={$this->FuncId}");
         //die();
+        
         
         $this->query .= "SELECT id ,ordem, data_inicio_planejado, hora_inicio_planejado FROM adms_atendimento_funcionarios 
                 WHERE adms_funcionario_id = :adms_funcionario_id
@@ -100,16 +97,20 @@ class AdmsAtendimentoFuncionariosReordenarPriori {
             //die();
             $reordenar->fullRead($this->query,"adms_funcionario_id={$this->FuncId}&ordem={$this->ordem}&id={$this->atenFuncId}"); //ORDEM QUE SERÁ ATUALIZADA
   
-        $ordens = new \App\adms\Models\AdmsAtendimentoFuncionariosReordenar(); //Independente da prioridade o planejamento do funcionário antigo sempre será reordenado o que muda é a inserção da ordem
+            $ordens = new \App\adms\Models\AdmsAtendimentoFuncionariosReordenar(); //Independente da prioridade o planejamento do funcionário antigo sempre será reordenado o que muda é a inserção da ordem
 
-        $ordens->buscarUltOrdemAtvFunc($this->FuncId); //Retorna a ordem e atribui o id do funcinario na classe         
-        $this->ultimaOrdem = (int) $ordens->getResultado()[0]['ordem'];
+            $ordens->buscarUltOrdemAtvFunc($this->FuncId); //Retorna a ordem e atribui o id do funcinario na classe         
+            $this->ultimaOrdem = (int) $ordens->getResultado()[0]['ordem'];
 
-        $ordens->buscarOrdem($this->atenFuncId); //Verificar se há necessidade de reordenar as atividades e o planejamento
-        $this->ordemEditada = $ordens->getResultado();
-        
-        $this->ordemEditada = $this->ordemEditada + 1; 
+            $ordens->buscarOrdem($this->atenFuncId); //Verificar se há necessidade de reordenar as atividades e o planejamento
+            $this->ordemEditada = $ordens->getResultado();
             
+            if($this->ordem > $this->ordemEditada){
+                return 0;
+            }
+
+            //$this->ordemEditada = $this->ordemEditada; 
+           
         }else{
              $this->query.= "ORDER BY ordem";
              $reordenar->fullRead($this->query,"adms_funcionario_id={$this->FuncId}&ordem={$this->ordem}");
@@ -151,6 +152,7 @@ class AdmsAtendimentoFuncionariosReordenarPriori {
                 
                         
                 if($this->FuncId == $this->FuncIdAnt && $this->ordemEditada < $this->ultimaOrdem && $novaOrdem['ordem'] >= $this->ordemEditada){
+                    //die();
                     $this->DadosOrd['ordem'] = (int) $novaOrdem['ordem'];
                 } else {
                     $novaOrdem['ordem'] = (int) $novaOrdem['ordem'];
@@ -489,7 +491,8 @@ class AdmsAtendimentoFuncionariosReordenarPriori {
     private function buscarMinOrdemDataPriori($Data = null) { //Busca a menor ordem que possua a mesma data ou superior a data da atividade que está sendo editada com prioridade
         if (!empty($Data)) {
             $this->dataInicio = $Data;
-            //echo $this->dataInicio;
+            echo $this->dataInicio;
+            //echo $this->buscarMinOrdemDataPriori(); aqui ainda não há valor de retorno
         }
 
         $minOrdem = new AdmsRead();
@@ -504,8 +507,9 @@ class AdmsAtendimentoFuncionariosReordenarPriori {
                              AND adms_funcionario_id = :adms_funcionario_id", "adms_funcionario_id={$this->FuncId}&data_inicio_planejado={$this->dataInicio}&hora_inicio_planejado={$this->horaAtual}&ordem={$this->ordem['ordem']}&prioridade=1");
 
             if ($minOrdem->getResultado()) {
+                //echo 'parou aqui';
                 //die();
-                $inicio_reordem = $minOrdem->getResultado();
+                $this->ini_reordem = $minOrdem->getResultado();
             } else { //Se for nulo quer dizer que há atividades com o horario menor que o atual nesse mesmo dia por isso buscará no próximo
                 $somaDia = new Funcoes();
                 //$somaDia->dia_in_data($Data, 1, "+");
@@ -515,7 +519,14 @@ class AdmsAtendimentoFuncionariosReordenarPriori {
                 $novaData = new AdmsReordenarData();
                 $Data = $novaData->verificarData($this->dataInicio); //Verificar se é fds ou feriado
 
-                $this->buscarMinOrdemDataPriori($Data); //Função recursiva
+                $status = $this->buscarMinOrdemDataPriori($Data); //Função recursiva
+                
+                if($status == 1 || $status == 2){
+                    return $status; //sai da função principal
+                }else{
+                    return TRUE;
+                }
+                //echo $this->buscarMinOrdemDataPriori(); //Está voltando para cá o valor de retorno            
             }
         } else {
             //echo 'entrou aqui outro';
@@ -527,31 +538,48 @@ class AdmsAtendimentoFuncionariosReordenarPriori {
                              FROM adms_atendimento_funcionarios 
                              WHERE adms_funcionario_id = :adms_funcionario_id AND data_inicio_planejado >= :data_inicio_planejado AND ordem >= :ordem AND prioridade > :prioridade)
                              AND adms_funcionario_id = :adms_funcionario_id", "adms_funcionario_id={$this->FuncId}&data_inicio_planejado={$this->dataInicio}&ordem={$this->ordem['ordem']}&prioridade=1");
-            
-           $inicio_reordem = $minOrdem->getResultado();
+                             
+                             
+            $this->ini_reordem = $minOrdem->getResultado();
+           
+            //var_dump($inicio_reordem);
+           //die();
            
         }
-       
+        /*
+        if(($minOrdem->getResultado())){
+            var_dump($minOrdem->getResultado());             
+        }*/
         //die();
         
-        if (($minOrdem->getResultado() && $this->FuncId != $this->FuncIdAnt) || ($minOrdem->getResultado() && $this->FuncId == $this->FuncIdAnt && $minOrdem->getResultado()[0]['id'] != $this->atenFuncId)) {
-            //echo 'valor para inicio reordem';
-            $this->inicioReordem = $inicio_reordem; //Só reordena se entrar aqui
-        }else if ($minOrdem->getResultado() == FALSE && $this->FuncId != $this->FuncIdAnt){ //Quer dizer que não encontrou ordem para ser substituida pela prioridade, apenas deve inserir a atividade para o planejamento do novo funcionario na ultima ordem com prioridade 1
-            /*
+       //$inicio_reordem = $inicio_reordem;
+        var_dump($this->ini_reordem);
+             
+        if ((!empty($this->ini_reordem) && $this->FuncId != $this->FuncIdAnt) || (!empty($this->ini_reordem) && $this->FuncId == $this->FuncIdAnt && $this->ini_reordem[0]['id'] != $this->atenFuncId)) {
+            //echo 'valor para inicio reordem';      
+            $this->inicioReordem = $this->ini_reordem; //Só reordena se entrar aqui
+        }else if ((empty($this->ini_reordem) && $this->FuncId != $this->FuncIdAnt) || (empty($this->ini_reordem) && $this->FuncId == $this->FuncIdAnt)){ //Quer dizer que não encontrou ordem para ser substituida pela prioridade, apenas deve inserir a atividade para o planejamento do novo funcionario na ultima ordem com prioridade 1
+            echo 'entrou aqui no 1';
+            var_dump($this->ini_reordem);
+            //die();
+            
+            //die();
+            
             echo 'retorna 1';
-            die();
-             * 
-             */
+            //die();
+            
             return 1;
             
-        }else if(($minOrdem->getResultado() == FALSE && $this->FuncId == $this->FuncIdAnt) || ($minOrdem->getResultado() && $this->FuncId == $this->FuncIdAnt && $minOrdem->getResultado()[0]['id'] == $this->atenFuncId)){
+        }else if(!empty($this->ini_reordem) && $this->FuncId == $this->FuncIdAnt && $this->ini_reordem[0]['id'] == $this->atenFuncId){
             //Quando se tratar do mesmo funcionário nenhuma atv será inserida ou replanejada, apenas se alterará o campo prioridade de 2 para 1 se já não tiver desta forma
-            /*
-            echo 'retorna 2';
-            die();*/
-            return 2;
+            echo 'id da busca: ' . $minOrdem->getResultado()[0]['id'];
+            echo '<br>id do atendimento: ' . $this->atenFuncId;
+            
+            echo 'retorna 2<br>';
+            //die();
+            return 2; //Se retornar valor volta para a chamada da recursividade e passará por essas condições novamente
         }
+        echo 'foi até o final da função';
         //die();
     }
 
