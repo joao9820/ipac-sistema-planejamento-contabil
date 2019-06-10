@@ -12,12 +12,10 @@ if (!defined('URL')) {
 
 ?>
 <div class="content p-1">
-    <div class="list-group-item">
+    <div class="list-group-item pt-0 pl-0 pr-0">
 
-
-
-        <div class="card border-0">
-            <div class="card-header">
+        <div class="card border-0 shadow-none">
+            <div class="card-header bg-powercar">
                 <ul class="nav nav-tabs card-header-tabs">
                     <li class="nav-item">
                         <a class="nav-link" href="<?php echo URLADM . 'ver-perfil/perfil'; ?>">Perfil</a>

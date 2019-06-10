@@ -49,7 +49,6 @@ class AdmsAtendimentoFuncionarios {
     private $DataLoop;
     private $UltimaAtividadeLoop;
     private $HoraInicio2;
-    private $horaInicio1;
     private $HoraTermino;
 
     /**
@@ -85,7 +84,7 @@ class AdmsAtendimentoFuncionarios {
     public function listar($Atendimento = null) {
         $this->Atendimento = (int) $Atendimento;
         $listar = new AdmsRead();
-        $listar->fullRead("SELECT aten_fun.id id_aten_fun,aten_fun.duracao_atividade, aten_fun.data_fatal, aten_fun.hora_fatal, aten_fun.ordem_atividade, aten_fun.adms_sits_atendimentos_funcionario_id sit_func,
+        $listar->fullRead("SELECT aten_fun.id id_aten_fun,aten_fun.duracao_atividade, aten_fun.data_fatal, aten_fun.hora_fatal, aten_fun.ordem_atividade, aten_fun.adms_sits_atendimentos_funcionario_id sit_func, aten_fun.prioridade,
                                     aten_fun.adms_atendimento_id aten_id, aten_fun.adms_funcionario_id func_id, aten_fun.adms_atividade_id ativ_id, aten_fun.adms_demanda_id dema_id,aten_fun.inicio_atendimento, aten_fun.fim_atendimento,
                                     aten_fun.data_inicio_planejado, aten_fun.hora_inicio_planejado,
                                     sits_func.nome status, 
@@ -432,13 +431,12 @@ class AdmsAtendimentoFuncionarios {
         return $this->UltimaAtividade;
     }
     
-    public function buscarPrimeiraAtv($Funcionario = null, $Data = null){ //Traz os dados da menor ordem disponivel
-        
-        echo $Data;
+    public function buscarPrimeiraAtv($Funcionario = null, $Data = null){
+
         if (!empty($Funcionario) and !empty($Data)) {
             $this->Dados['adms_funcionario_id'] = $Funcionario;
         }
-        
+
         $dataHora = new AdmsRead();
         $dataHora->fullRead("SELECT hora_fim_planejado, hora_inicio_planejado, data_inicio_planejado, ordem, id
         FROM adms_atendimento_funcionarios 
@@ -448,30 +446,31 @@ class AdmsAtendimentoFuncionarios {
             WHERE adms_sits_atendimentos_funcionario_id <= :adms_sits_atendimentos_funcionario_id 
             AND adms_funcionario_id = :adms_funcionario_id AND data_inicio_planejado >= :data_inicio_planejado)  
             LIMIT :limit", "adms_funcionario_id={$this->Dados['adms_funcionario_id']}&data_inicio_planejado={$Data}&adms_sits_atendimentos_funcionario_id=3&limit=1");
-            
+
         if ($dataHora->getResultado()) {
-            
+
             $buscarJornada = new BuscarDuracaoJornadaT($this->Dados['adms_funcionario_id'], $Data);
             $hora_termino2 = $buscarJornada->getDuracaoJornada()['hora_termino2'];
-            
+
             //echo $dataHora->getResultado()[0]['hora_fim_planejado'];
             //echo $hora_termino2;
             /*
             if($dataHora->getResultado()[0]['hora_fim_planejado'] > $hora_termino2){
-                
+
                 $somaDia = new Funcoes();
                 //$somaDia->dia_in_data($Data, 1, "+");
                 //echo 'entrou' . $Data;
                 $Data = $somaDia->dia_in_data($Data, 1, "+");
                 $this->buscarPrimeiraAtv($this->Dados['adms_funcionario_id'], $Data); //Função recursiva
             }else{ */
-               
-                $this->UltimaAtividade = $dataHora->getResultado();
-                //var_dump($this->UltimaAtividade);
+
+            $this->UltimaAtividade = $dataHora->getResultado();
+            //var_dump($this->UltimaAtividade);
             //}
-       
+
             //die;
         }
+        
     }
     
     public function getBuscarPrimeiraAtv(){
@@ -597,11 +596,13 @@ class AdmsAtendimentoFuncionarios {
         $funcionarios->fullRead("SELECT aten_fun.id, aten_fun.duracao_atividade, aten_fun.data_inicio_planejado, aten_fun.hora_inicio_planejado, aten_fun.data_fatal,
         demanda.nome nome_demanda,
         atividade.nome nome_atividade,
-        atendimento.id id_atendimento, atendimento.descricao descricao_atendimento
+        atendimento.id id_atendimento, atendimento.descricao descricao_atendimento,
+        emp.nome as nome_empresa
         FROM adms_atendimento_funcionarios aten_fun
         INNER JOIN adms_demandas demanda ON demanda.id = aten_fun.adms_demanda_id
         INNER JOIN adms_atividades atividade ON atividade.id = aten_fun.adms_atividade_id
         INNER JOIN adms_atendimentos atendimento ON atendimento.id = aten_fun.adms_atendimento_id
+        INNER JOIN adms_empresas emp ON emp.id = atendimento.adms_empresa_id
         WHERE aten_fun.data_inicio_planejado=:data_inicio_planejado
         AND aten_fun.adms_funcionario_id=:funcionario", "data_inicio_planejado={$this->Data}&funcionario={$this->FuncionarioId}");
         $this->Resultado = $funcionarios->getResultado();
@@ -694,7 +695,7 @@ class AdmsAtendimentoFuncionarios {
         if ($this->HoraExtra) { //Soma as horas extras para aquele dia do funcionario e o resultado é somado com sua jornada normal
             $jornadaDia->fullRead("
                 SELECT TIME_TO_SEC(planejamento.jornada_trabalho) + SUM(TIME_TO_SEC(hora_extra.total)) as total, planejamento.hora_termino2, 
-                       planejamento.hora_inicio2, planejamento.hora_inicio, planejamento.hora_termino
+                       planejamento.hora_inicio2, planejamento.hora_termino
                 FROM adms_hora_extra hora_extra 
                 INNER JOIN adms_planejamento planejamento 
                 ON hora_extra.adms_usuario_id = planejamento.adms_funcionario_id
@@ -704,13 +705,12 @@ class AdmsAtendimentoFuncionarios {
         } else { //Traz apenas a jornada normal do funcionário cadastrado
             $jornadaDia->fullRead("
                 SELECT TIME_TO_SEC(planejamento.jornada_trabalho) as total, planejamento.hora_termino2 , 
-                       planejamento.hora_inicio2, planejamento.hora_inicio ,planejamento.hora_termino
+                       planejamento.hora_inicio2, planejamento.hora_termino
                 FROM adms_planejamento planejamento
                 WHERE adms_funcionario_id = :funcionario
                 GROUP BY planejamento.hora_termino2", "funcionario={$this->Dados['adms_funcionario_id']}"
             );
         }
-        $this->horaInicio1 =  $jornadaDia->getResultado()[0]['hora_inicio'];
         $this->JornadaFunc = $jornadaDia->getResultado();
         $this->HoraTermino2 = $jornadaDia->getResultado()[0]['hora_termino2'];
         $this->HoraInicio2 = $jornadaDia->getResultado()[0]['hora_inicio2'];
@@ -723,10 +723,7 @@ class AdmsAtendimentoFuncionarios {
 
     public function getBuscarJornada() {
 
-        $this->Resultado = ["hora_termino2" => $this->HoraTermino2, "jornadaFunc" => $this->JornadaFunc[0]['total'], "hora_termino" => $this->HoraTermino, "hora_inicio2" => $this->HoraInicio2, "hora_inicio" => $this->horaInicio1];
-        //var_dump($this->Resultado);
-        //die();
-        
+        $this->Resultado = ["hora_termino2" => $this->HoraTermino2, "jornadaFunc" => $this->JornadaFunc[0]['total'], "hora_termino" => $this->HoraTermino, "hora_inicio2" => $this->HoraInicio2];
         return $this->Resultado;
     }
 

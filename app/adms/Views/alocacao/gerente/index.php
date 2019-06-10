@@ -27,7 +27,7 @@ if (!empty($this->Dados['dadosForm'])){
 <div class="content p-1">
     <div class="list-group-item">
         <div class="row">
-            <div class="col-md-12 p-2 d-flex px-3">
+            <div class="col-md-12 p-2 d-flex flex-column flex-md-row px-3">
                 <h2 class="display-4 titulo">Alocação funcionários</h2>
 
                 <span class="d-block ml-auto">
@@ -35,14 +35,12 @@ if (!empty($this->Dados['dadosForm'])){
                 </span>
             </div>
 
-            <div class="col-md-6">
-                <h3>Gerente: <?php echo $NomeGerente; ?></h3>
-            </div>
-            <div class="col-md-6 d-flex justify-content-end">
-                <form method="post" action="" class="form-inline my-1">
+            
+            <div class="col-md-12 d-flex justify-content-center justify-content-md-end">
+                <form id="FiltroBusca" method="post" action="" class="d-flex flex-column flex-md-row my-1">
                     <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Data início">
                         <div class="input-group mb-2 mr-sm-2">
-                            <div class="input-group-prepend">
+                            <div class="input-group-prepend displayNone">
                                 <div class="input-group-text">
                                     <i class="fas fa-calendar-day"></i>
                                 </div>
@@ -51,11 +49,11 @@ if (!empty($this->Dados['dadosForm'])){
                         </div>
                     </span>
 
-                    <span class="mr-2">até</span>
+                    <span class="mx-2">até</span>
 
                     <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Data fim">
                         <div class="input-group mb-2 mr-sm-2">
-                            <div class="input-group-prepend">
+                            <div class="input-group-prepend displayNone">
                                 <div class="input-group-text">
                                     <i class="fas fa-calendar-day"></i>
                                 </div>
@@ -64,13 +62,20 @@ if (!empty($this->Dados['dadosForm'])){
                         </div>
                     </span>
 
-                    <button class="btn btn-outline-warning mb-2 mr-2"><i class="fas fa-search"></i></button>
+                    <span class="ml-0 ml-md-2">
+                        <button class="btn btn-outline-powercar mb-2 mr-2"><i class="fas fa-search"></i></button>
+                    </span>
                 </form>
             </div>
+
+            <div class="col-md-6 text-left my-2 my-md-0">
+                <h3><small>Gerente:</small> <strong class="d-block"><?php echo $NomeGerente; ?></strong></h3>
+            </div>
+
         </div>
 
         <div class="row mt-3">
-            <div class="col-md-6">
+            <div class="col-md-6 text-center text-md-left">
                 <span class="badge bg-light my-3">
                 Filtro Aplicado:
                 <?php

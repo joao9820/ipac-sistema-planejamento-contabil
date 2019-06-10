@@ -181,9 +181,7 @@ if (!empty($this->Dados['dadosAtendimento'])) {
                                                             <i class="fas fa-edit"></i>
                                                         </button>
                                                     </span>
-                                                    <span tabindex="0" data-toggle="tooltip" data-placement="right" data-html="true" title="Ver planejamento deste funcinoário para a data selecionada.">
-                                                        <a href="<?php echo URLADM . 'atendimento-funcionarios/ver-planejamento/' . $dema_id. '?aten='.$aten_id.'&func='.$func_id.'&data='.$data_inicio_planejado.'&demanda='.$dema_id.'&pg='.$this->Dados['pg']; ?>" class="btn btn-primary btn-sm  mr-2"><i class="fas fa-eye"></i></a>
-                                                    </span>
+
 
                                                     <?php
                                                     if (($data_fatal < $data_inicio_planejado) AND ($status != 'Finalizado')) {
@@ -199,7 +197,13 @@ if (!empty($this->Dados['dadosAtendimento'])) {
 
                                                 </div>
                                             </td>
-                                            <td><?php echo $nome; ?></td>
+                                            <td>
+                                                <a href="<?php echo URLADM . 'atendimento-funcionarios/ver-planejamento/' . $dema_id. '?aten='.$aten_id.'&func='.$func_id.'&data='.$data_inicio_planejado.'&demanda='.$dema_id.'&pg='.$this->Dados['pg']; ?>" class="btn btn-light btn-sm  mr-2" tabindex="0" data-toggle="tooltip" data-placement="right" data-html="true" title="Ver planejamento deste funcinoário para a data selecionada.">
+                                                    <i class="fas fa-eye"></i>
+
+                                                    <?php echo $nome; ?>
+                                                </a>
+                                            </td>
                                             <td>
                                                 <?php
                                                 if (!empty($data_inicio_planejado)) {
@@ -210,7 +214,18 @@ if (!empty($this->Dados['dadosAtendimento'])) {
                                                 ?>
                                             </td>
                                             <td><?php echo $departamento; ?></td>
-                                            <td><?php echo $atividade; ?></td>
+
+                                            <td>
+                                                <?php echo $atividade;
+                                                if($prioridade == 1)
+                                                { ?>
+
+                                                    <span class="text-danger" tabindex='0' data-placement='bottom' data-toggle='tooltip' title='Atividade definida com prioridade para este funcionário'>
+                                                        <i class="fas fa-exclamation-triangle"></i>
+                                                    </span>
+                                                    <?php
+                                                } ?>
+                                            </td>
                                             <td><?php echo date('H\hi', strtotime($duracao_atividade)); ?></td>
                                             <td><?php echo date('d/m/Y', strtotime($data_fatal)); ?></td>
                                             <td><?php echo !empty($hora_fatal) ? date('H\hi', strtotime($hora_fatal)) : ""; ?></td>
@@ -246,7 +261,7 @@ if (!empty($this->Dados['dadosAtendimento'])) {
                                                     if ($sit_func == 1){
                                                 ?>
                                                     <a href="<?php echo URLADM . 'atendimento-funcionarios/excluir/'.$dema_id.'?aten_id='.$aten_id.'&func_id='.$func_id.'&ativ_id='.$ativ_id.'&id_aten_fun='.$id_aten_fun.'&pg='.$this->Dados['pg']; ?>" class="btn btn-outline-danger mb-2"
-                                                       data-confirmDelet='Deletar?'>
+                                                       data-deletar='Deletar?'>
                                                         <i class="fas fa-trash"></i>
                                                     </a>
                                                 <?php
@@ -724,6 +739,7 @@ if(isset($_SESSION['msg'])) {
                             </div>
                             </div>
                         </div>
+                        <!--
                         <div class="col-md-6">
                             <label>Hora de início</label>
                             <div class="input-group">
@@ -735,7 +751,7 @@ if(isset($_SESSION['msg'])) {
                                 <input type="time" class="form-control" placeholder="14:00">
                             </div>
                         </div>
-
+                        -->
                     </div>
 
 

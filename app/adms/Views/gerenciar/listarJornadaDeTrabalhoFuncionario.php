@@ -80,6 +80,7 @@ if (!defined('URL')) {
             <table class="table table-striped table-hover">
                 <thead class="bg-info text-light">
                 <tr>
+                    <th>Planejamento</th>
                     <th scope="col" class="">Funcionário</th>
                     <th scope="col" class="d-none d-lg-table-cell">Departamento</th>
                     <th scope="col" class="d-none d-lg-table-cell">Jornada de Trabalho</th>
@@ -96,6 +97,11 @@ if (!defined('URL')) {
                     extract($funcionario);
                     ?>
                     <tr>
+                        <td>
+                            <a href="<?php echo URLADM . 'atendimentos/listar/1?func='. $id; ?>" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-eye"></i> Ver
+                            </a>
+                        </td>
                         <td scope="row"><?php echo $nome; ?></td>
                         <td class="d-none d-sm-table-cell"><?php echo $departamento; ?></td>
                         <td class="planejamento_i_t ">

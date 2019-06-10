@@ -25,6 +25,7 @@ class AdmsPlanejamento
     private $Dados;
     private $DadosId;
     private $idPlan;
+    private $FuncionarioId;
 
     function getResultado()
     {
@@ -118,11 +119,17 @@ class AdmsPlanejamento
     }
 
 
-    public function verPlanejamento()
+    public function verPlanejamento($FuncionarioId = null)
     {
+        if (($FuncionarioId == null) or (empty($FuncionarioId))){
+            $this->FuncionarioId = (int) $_SESSION['usuario_id'];
+        } else {
+            $this->FuncionarioId = (int) $FuncionarioId;
+        }
+
         $verPl = new AdmsRead();
         $verPl->fullRead("SELECT hora_inicio, hora_termino, hora_inicio2, hora_termino2, adms_funcionario_id
-                              FROM adms_planejamento WHERE adms_funcionario_id=:adms_funcionario_id LIMIT :limit","adms_funcionario_id={$_SESSION['usuario_id']}&limit=1");
+                              FROM adms_planejamento WHERE adms_funcionario_id=:adms_funcionario_id LIMIT :limit","adms_funcionario_id={$this->FuncionarioId}&limit=1");
         $this->Resultado = $verPl->getResultado();
         if ($this->Resultado) {
             return $this->Resultado[0];

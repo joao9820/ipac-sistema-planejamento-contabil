@@ -35,7 +35,9 @@ class Atendimentos
         $botao = ['em_andamento' => ['menu_controller' => 'atendimento-em-andamento', 'menu_metodo' => 'listar'],
             'vis' => ['menu_controller' => 'funcionario-ver-atendimento', 'menu_metodo' => 'ver'],
             'edit' => ['menu_controller' => 'funcionario-editar-atendimento', 'menu_metodo' => 'edit'],
-            'conclu' => ['menu_controller' => 'func-concluir-atendimento', 'menu_metodo' => 'concluir']];
+            'conclu' => ['menu_controller' => 'func-concluir-atendimento', 'menu_metodo' => 'concluir'],
+            'jornada' => ['menu_controller' => 'jornada-de-trabalho', 'menu_metodo' => 'listar']
+            ];
         //var_dump($botao);
         $listarBotao = new AdmsBotao();
         $this->Dados['botao'] = $listarBotao->valBotao($botao);
@@ -43,8 +45,9 @@ class Atendimentos
         $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
 
+        $FuncionarioId = filter_input(INPUT_GET, 'func', FILTER_DEFAULT);
 
-        $listarAtendimento = new AdmsListarAtendimentoPendente();
+        $listarAtendimento = new AdmsListarAtendimentoPendente($FuncionarioId);
         $this->Dados['jornadaDeTrabalho'] = $listarAtendimento->verCargaHoraria();
         $this->Dados['listarAtendimentos']= $listarAtendimento->listarAtendimento($this->PageId);
         $this->Dados['listarAtendimentosInterrompido'] = $listarAtendimento->atendimentoInterrompido();
@@ -55,7 +58,7 @@ class Atendimentos
 
 
         $verPlanejamento = new AdmsPlanejamento();
-        $this->Dados['planejamento'] = $verPlanejamento->verPlanejamento();
+        $this->Dados['planejamento'] = $verPlanejamento->verPlanejamento($FuncionarioId);
 
 
         $carregarView = new ConfigView("adms/Views/atendimento/funcionario_view/funcionarioDemandas", $this->Dados);

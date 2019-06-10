@@ -15,7 +15,7 @@ if (!defined('URL')) {
     exit();
 }
 
-class AdmsListarDepartamentos
+class AdmsDepartamentos
 {
 
     private $Dados;
@@ -28,5 +28,6 @@ class AdmsListarDepartamentos
         $this->Resultado = $listarDept->getResultado();
         return $this->Resultado;
     }
+
 
 }

@@ -64,64 +64,105 @@ extract($this->Dados['dados_usuario'][0]);
         <hr>
 
 
+        <div class="row">
+            <div class="col-md-3 text-center">
+                <div class="card bg-light mb-3 shadow">
+                    <?php
+                    if (!empty($imagem))
+                    {
+                        echo "<img src='".URLADM."assets/imagens/usuario/".$id."/".$imagem."' class='img-fluid mx-auto' alt='".$nome."'> ";
+                    } else {
+                        echo "<img src='".URLADM."assets/imagens/usuario/icone_usuario.jpg' class='img-fluid mx-auto'  alt='".$nome."'> ";
+                    }
 
-        <dl class="row">
-                    <dt class="col-sm-3">Foto</dt>
-                    <dd class="col-sm-9">
-                        <?php
-                            if (!empty($imagem))
-                            {
-                                echo "<img src='".URLADM."assets/imagens/usuario/".$id."/".$imagem."' class='img-fluid'  width='150' height='150'  alt='".$nome."'> ";
-                            } else {
-                                echo "<img src='".URLADM."assets/imagens/usuario/icone_usuario.jpg' class='img-fluid'  width='150' height='150'  alt='".$nome."'> ";
-                            }
+                    ?>
+                </div>
+                <p><?php echo $nome ?></p>
+            </div>
+            <div class="col-md-9">
+                <h5 class="font-slim">Dados pessoais</h5>
+                <div id="perfilDados" class="row">
+                    <div class="col-md-12 col-lg-6 col-xl-4">
+                        <label for="Apelido">Apelido</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-Apelido">
+                                    <i class="fas fa-user-alt"></i>
+                                </span>
+                            </div>
+                            <input type="text" id="Apelido" class="form-control" value="<?php echo $apelido ?>" aria-describedby="basic-Apelido" disabled>
+                        </div>
+                    </div>
 
-                        ?>
-                    </dd>
+                    <div class="col-md-6 col-lg-6 col-xl-4">
+                        <label for="usuario">Nome de Usuário</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-usuario">
+                                    <i class="fas fa-id-card-alt"></i>
+                                </span>
+                            </div>
+                            <input type="text" id="usuario" class="form-control" value="<?php echo $usuario ?>" aria-describedby="basic-usuario" disabled>
+                        </div>
+                    </div>
 
-                    <dt class="col-sm-3">ID</dt>
-                    <dd class="col-sm-9"><?php echo $id ?></dd>
+                    <div class="col-md-6 col-lg-6 col-xl-4">
+                        <label for="recuperarsenha">Recuperar Senha</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-recuperarsenha">
+                                    <i class="fas fa-key"></i>
+                                </span>
+                            </div>
+                            <input type="text" id="recuperarsenha" class="form-control" value="<?php
+                                    if (!empty($recuperar_senha)) {
+                                        echo URLADM . "atual-senha/atual-senha?chave=" . $recuperar_senha;
+                                    }
+                                    ?>" aria-describedby="basic-recuperarsenha" >
+                        </div>
+                    </div>
 
-                    <dt class="col-sm-3">Nome</dt>
-                    <dd class="col-sm-9"><?php echo $nome ?></dd>
+                    <div class="col-md-12 col-lg-6 col-xl-6">
+                        <label for="email">E-mail</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-email">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                            </div>
+                            <input type="text" id="email" class="form-control" value="<?php echo $email ?>" aria-describedby="basic-email" disabled>
+                        </div>
+                    </div>
 
-                    <dt class="col-sm-3">Apelido</dt>
-                    <dd class="col-sm-9"><?php echo $apelido ?></dd>
+                    <div class="col-md-3">
+                        <label for="nivelacesso">Papéis de Acesso</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-nivelacesso">
+                                    <i class="fas fa-user-shield"></i>
+                                </span>
+                            </div>
+                            <input type="text" id="nivelacesso" class="form-control" value="<?php echo $nome_nivel_aces ?>" aria-describedby="basic-nivelacesso" disabled>
+                        </div>
+                    </div>
 
-                    <dt class="col-sm-3">Usuário</dt>
-                    <dd class="col-sm-9"><?php echo $usuario ?></dd>
+                    <div class="col-md-3">
+                        <label for="situacao">Situação</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-situacao">
+                                    <i class="fas fa-flag"></i>
+                                </span>
+                            </div>
+                            <input type="text" id="situacao" class="form-control text-<?php echo $cor ?>" value="<?php echo $nome_situacao?>" aria-describedby="basic-situacao" disabled>
+                        </div>
+                    </div>
 
-                    <dt class="col-sm-3">Recuperar Senha</dt>
-                    <dd class="col-sm-9"><?php
-                        if (!empty($recuperar_senha)) {
-                            echo URLADM . "atual-senha/atual-senha?chave=" . $recuperar_senha;
-                        }
-                     ?></dd>
 
-                    <dt class="col-sm-3">E-mail</dt>
-                    <dd class="col-sm-9"><?php echo $email ?></dd>
+                </div>
+            </div>
+        </div>
 
-                    <dt class="col-sm-3">Nível de Acesso</dt>
-                    <dd class="col-sm-9"><?php echo $nome_nivel_aces ?></dd>
-
-                    <dt class="col-sm-3">Situação</dt>
-                    <dd class="col-sm-9">
-                        <span class="badge badge-<?php echo $cor ?>">
-                            <?php echo $nome_situacao?>
-                        </span>
-                    </dd>
-
-                    <dt class="col-sm-3">Inserido</dt>
-                    <dd class="col-sm-9"><?php echo date('d-m-Y H:i', strtotime($created)); ?></dd>
-
-                    <dt class="col-sm-3">Alterado</dt>
-                    <dd class="col-sm-9"><?php
-                        if (!empty($modified)) {
-                            echo date('d-m-Y H:i', strtotime($modified));
-                        }
-                        ?>
-                    </dd>
-        </dl>
 
     </div>
 </div>

@@ -1,3 +1,14 @@
+thead.bg-info tr {
+    background-color: #0053ff !important;
+    background-size: cover;
+}
+table thead tr th {
+    vertical-align:super !important;
+}
+.nav-tabs a {
+    color: #FFF;
+    transition: all .2s;
+}
 #tipoPerfil {
     font-size: .7em;
     color: #ACACAC;
@@ -6,6 +17,7 @@
     opacity: .5;
 }
 .cor-powercar {
+    background-color: #2b2c7c;
     background-image: linear-gradient(to right, #2b2c7c, #0053ff);
 }
   /*Menu Cabecalho*/
@@ -14,6 +26,7 @@
     min-height: 66px;
 }
 .logo-admin {
+    background-color: #2b2c7c;
     background-image: linear-gradient(to right, #2b2c7c, #0053ff);
     max-width: 250px;
     width: 250px;
@@ -86,6 +99,32 @@
     border-radius: .25rem;
     white-space: normal;
 }
+#cardConfig .dropdown-item {
+    transition: all 0.2s ease-in-out;
+    position: relative;
+}
+#cardConfig .dropdown-item:hover, .dropdown-item:focus {
+    color: #0053ff !important;
+}
+#cardConfig .dropdown-item::before {
+    content: "";
+    height: 100%;
+    width: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: all 0.3s ease-in-out;
+}
+#cardConfig .dropdown-item:hover::before {
+    content: "";
+    height: 100%;
+    width: 4px;
+    background: #0053ff;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 2px;
+}
 .nt-mensagem {
     font-size: .9em;
     display: block;
@@ -95,6 +134,29 @@
     font-size: .7em;
     color: #8d8e8e;
     display: block;
+}
+/*AJUSTAR FORM BUSCA*/
+@media (max-width: 480px) {
+    .displayNone {
+        display: none;
+    }
+    #FiltroBusca span {
+        font-size: .7em;
+        text-align: center;
+    }
+    #FiltroBusca span input {
+        border-radius: .25rem;
+        text-align: center;
+        border: 0;
+        border-bottom: 1px solid rgba(0,0,0,0.125);
+    }
+    #FiltroBusca span button, #FiltroBusca span a {
+        margin-left: 4px;
+    }
+    .display-4.titulo {
+        text-align: center !important;
+    }
+
 }
 
 /*-- Imagem de perfil no menu --*/
@@ -229,6 +291,7 @@
 #conteudoMain {
     padding-top: 20px;
     position: relative;
+    width: calc(100% - 360px);
 }
 footer {
     position: absolute;

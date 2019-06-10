@@ -78,13 +78,13 @@ if (!defined('URL')) {
 
         <div class="d-flex">
             <div class="mr-auto p-2">
-                <h2 class="display-4 titulo">Dashboard</h2>
+                <h2 class="display-4 titulo">Painel de Controle</h2>
             </div>
         </div>
 
         <div class="row mb-3 py-4">
 
-            <div class="col-md-5 col-lg-4 mb-3">
+            <div class="col-sm-6 col-md-5 col-lg-4 mb-3">
                 <div class="card" style="cursor: pointer;">
                     <div class="card-body d-flex">
                         <div class="card-left gradiente-azul">
@@ -100,7 +100,7 @@ if (!defined('URL')) {
                 </div>
             </div>
 
-            <div class="col-md-5 col-lg-4">
+            <div class="col-sm-6 col-md-5 col-lg-4">
                 <div class="card" style="cursor: pointer;">
                     <div class="card-body d-flex">
                         <div class="card-left gradiente-verde">
@@ -118,16 +118,13 @@ if (!defined('URL')) {
 
         </div>
 
-        <div class="row mb-3 py-4">
-
-            <h4 class="col-12">Alocação</h4>
-
-            <div class="col-md-5 col-lg-4">
+        <div class="row mb-3 pb-4">
+            <div class="col-sm-6 col-md-5 col-lg-4">
                 <div onclick="window.location.href='<?php echo URLADM . 'alocacao/listar'; ?>'" class="card" style="cursor: pointer;">
                     <div class="card-body d-flex">
                         <div class="card-left gradiente-vermelho">
                             <div class="card-fundo-title ">
-                                <span class="">Percentual de Alocação</span>
+                                <span class="">Alocação histórica</span>
                             </div>
                         </div>
                         <div class="card-right text-title">
