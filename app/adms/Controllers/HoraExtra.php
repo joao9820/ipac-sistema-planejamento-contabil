@@ -33,8 +33,9 @@ class HoraExtra
         $this->UserId = filter_input(INPUT_GET, "func", FILTER_DEFAULT);
         $this->DadosHora = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
-
-        //var_dump($this->DadosId);
+        
+        //var_dump($this->DadosHora);
+        
         if (!empty($this->DadosHora)) {
 
             if (!empty($this->DadosHora['data']) and !empty($this->DadosHora['total'])) {

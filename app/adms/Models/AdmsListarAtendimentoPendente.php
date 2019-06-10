@@ -66,7 +66,7 @@ class AdmsListarAtendimentoPendente
 
 
         $listarAtendimento = new AdmsRead();
-        $listarAtendimento->fullRead("SELECT aten.id id_aten_func, aten.duracao_atividade, aten.created, aten.inicio_atendimento, aten.at_tempo_restante, aten.at_iniciado, aten.at_tempo_excedido, aten.data_fatal, aten.hora_inicio_planejado, aten.hora_fim_planejado, aten.data_inicio_planejado,
+        $listarAtendimento->fullRead("SELECT aten.id id_aten_func, aten.duracao_atividade, aten.created, aten.inicio_atendimento, aten.at_tempo_restante, aten.at_iniciado, aten.at_tempo_excedido, aten.data_fatal, aten.hora_inicio_planejado, aten.hora_fim_planejado, aten.data_inicio_planejado, aten.prioridade,
             ativi.nome nome_atividade, ativi.descricao descricao_atividade,
             demanda.nome nome_demanda, demanda.descricao descricao_demanda,
             at.id id_atendimento, at.created data_solicitacao, at.descricao descricao_atendimento,
@@ -89,7 +89,7 @@ class AdmsListarAtendimentoPendente
             AND at.prioridade <>:prioridade 
             AND aten.adms_sits_atendimentos_funcionario_id <>:adms_s_atend_func_id 
             AND aten.adms_sits_atendimentos_funcionario_id <>:interrompido
-            ORDER BY created ASC LIMIT :limit OFFSET :offset", "usuario=".$_SESSION['usuario_id']."&adms_sits_atendimento_id=4&adms_sits_atendimento_conclu=3&prioridade=1&adms_s_atend_func_id=4&interrompido=5&limit={$this->LimiteResultado}&offset={$offset}");
+            ORDER BY aten.data_inicio_planejado ASC, aten.hora_inicio_planejado ASC LIMIT :limit OFFSET :offset", "usuario=".$_SESSION['usuario_id']."&adms_sits_atendimento_id=4&adms_sits_atendimento_conclu=3&prioridade=1&adms_s_atend_func_id=4&interrompido=5&limit={$this->LimiteResultado}&offset={$offset}");
         $this->Resultado = $listarAtendimento->getResultado();
         //var_dump($this->Resultado);
         return $this->Resultado;

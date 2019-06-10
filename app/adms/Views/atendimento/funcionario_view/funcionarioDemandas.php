@@ -38,6 +38,8 @@ function getFeriados($ano){
     );
     return $feriados;
 }
+
+//var_dump($this->Dados['listarAtendimentos']);
 ?>
 <style>
 
@@ -372,6 +374,14 @@ function getFeriados($ano){
                                 <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Descrição: <?php echo $descricao_atividade; ?>'>
                                     <?php echo $nome_atividade; ?>
                                 </span>
+                                <br/>
+                                    <?php  if($prioridade == 1) { ?>
+                                    
+                                        <span class="text-danger" tabindex='0' data-placement='bottom' data-toggle='tooltip' title='Atividade foi definida com prioridade sobre as próximas'>
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </span>
+                                    
+                                    <?php } ?>
                             </td>
                             <td>
                                 <?php
