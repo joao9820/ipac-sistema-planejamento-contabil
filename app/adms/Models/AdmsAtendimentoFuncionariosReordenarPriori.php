@@ -71,7 +71,7 @@ class AdmsAtendimentoFuncionariosReordenarPriori {
 
         $this->status = $this->buscarMinOrdemDataPriori();       
         //var_dump($this->status);
-        
+        //die();
         if (!empty($this->inicioReordem)) { //valor retornado aqui TRUE = 1 porém se o inicioReordem estiver com valor ja entrará aqui e não passará pela próxima condição semelhante (retorno apenas para sair da recursividade)
             $this->ordem = $this->inicioReordem[0]['ordem']; //Ordem a partir do horário disponivel
         }else if ($this->status == 1 || $this->status == 2){
@@ -105,6 +105,8 @@ class AdmsAtendimentoFuncionariosReordenarPriori {
             $ordens->buscarOrdem($this->atenFuncId); //Verificar se há necessidade de reordenar as atividades e o planejamento
             $this->ordemEditada = $ordens->getResultado();
             
+            //echo 'Ordem Trazida: ' . $this->ordem . ' & ordem editada: ' . $this->ordemEditada; 
+            //die();
             if($this->ordem > $this->ordemEditada){
                 return 0;
             }
@@ -349,7 +351,7 @@ class AdmsAtendimentoFuncionariosReordenarPriori {
                         $this->DadosOrd['hora_fim_planejado'] = $hora_fim->somar_time_in_hours($this->duracaoAtv, $this->DadosOrd['hora_inicio_planejado']);
 
                         $this->DadosOrd['data_inicio_planejado'] = $this->dataInicio;
-
+                        
                         $reordemDia->buscarUltimaAtiviFuncAlmoco($this->DadosOrd['hora_fim_planejado'], $this->DadosOrd['data_inicio_planejado'], $this->duracaoAtv); //Validação
 
                         if ($reordemDia->getBuscarUltimaAtiviFuncAlmoco() != FALSE) { //Se vier algum retorno significa que houve excedente no almoço, senão continuará com os valores obtidos nesta classe
@@ -558,7 +560,7 @@ class AdmsAtendimentoFuncionariosReordenarPriori {
         if ((!empty($this->ini_reordem) && $this->FuncId != $this->FuncIdAnt) || (!empty($this->ini_reordem) && $this->FuncId == $this->FuncIdAnt && $this->ini_reordem[0]['id'] != $this->atenFuncId)) {
             //echo 'valor para inicio reordem';      
             $this->inicioReordem = $this->ini_reordem; //Só reordena se entrar aqui
-        }else if ((empty($this->ini_reordem) && $this->FuncId != $this->FuncIdAnt) || (empty($this->ini_reordem) && $this->FuncId == $this->FuncIdAnt)){ //Quer dizer que não encontrou ordem para ser substituida pela prioridade, apenas deve inserir a atividade para o planejamento do novo funcionario na ultima ordem com prioridade 1
+        }else if (empty($this->ini_reordem) && $this->FuncId != $this->FuncIdAnt){ //Quer dizer que não encontrou ordem para ser substituida pela prioridade, apenas deve inserir a atividade para o planejamento do novo funcionario na ultima ordem com prioridade 1
             echo 'entrou aqui no 1';
             var_dump($this->ini_reordem);
             //die();
@@ -570,16 +572,16 @@ class AdmsAtendimentoFuncionariosReordenarPriori {
             
             return 1;
             
-        }else if(!empty($this->ini_reordem) && $this->FuncId == $this->FuncIdAnt && $this->ini_reordem[0]['id'] == $this->atenFuncId){
+        }else if((!empty($this->ini_reordem) && $this->FuncId == $this->FuncIdAnt && $this->ini_reordem[0]['id'] == $this->atenFuncId) || (empty($this->ini_reordem) && $this->FuncId == $this->FuncIdAnt)){
             //Quando se tratar do mesmo funcionário nenhuma atv será inserida ou replanejada, apenas se alterará o campo prioridade de 2 para 1 se já não tiver desta forma
-            echo 'id da busca: ' . $minOrdem->getResultado()[0]['id'];
-            echo '<br>id do atendimento: ' . $this->atenFuncId;
+            //echo 'id da busca: ' . $minOrdem->getResultado()[0]['id'];
+            //echo '<br>id do atendimento: ' . $this->atenFuncId;
             
-            echo 'retorna 2<br>';
+            //echo 'retorna 2<br>';
             //die();
             return 2; //Se retornar valor volta para a chamada da recursividade e passará por essas condições novamente
         }
-        echo 'foi até o final da função';
+        //echo 'foi até o final da função';
         //die();
     }
 

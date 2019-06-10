@@ -188,7 +188,14 @@ if (!empty($this->Dados['dadosAtendimento'])) {
                                                 ?>
                                             </td>
                                             <td><?php echo $departamento; ?></td>
-                                            <td><?php echo $atividade; ?></td>
+                                            <td>
+                                                <?php echo $atividade; if($prioridade == 1) { ?>  
+                                                
+                                                <span class="text-danger" tabindex='0' data-placement='bottom' data-toggle='tooltip' title='Atividade definida com prioridade para este funcionário'>
+                                                    <i class="fas fa-exclamation-triangle"></i>
+                                                </span>
+                                                <?php } ?>
+                                            </td>
                                             <td><?php echo date('H:i', strtotime($duracao_atividade)); ?></td>
                                             <td><?php echo date('d/m/Y', strtotime($data_fatal)); ?></td>
                                             <td>
