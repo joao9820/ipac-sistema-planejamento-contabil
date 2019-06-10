@@ -22,7 +22,25 @@ span[data-toggle="tooltip"]{
     margin-bottom: .75rem;
 }
 
+
+#mensagemCardAviso {
+    position: absolute;
+    z-index: 3333;
+    right: 0px;
+    top: 40px;
+    opacity: 0;
+    transition: all .3s ease-in-out;
+    box-shadow: 0 0 10px rgba(0,0,0,.5);
+}
+#mensagemCardAviso h5.card-title {
+    font-size: 1.3em;
+    margin-bottom: .75rem;
+}
+
 /*===================================*/
+.list-group-item {
+    margin-bottom: 40px !important;
+}
 .faIpac {
     font-size: 1.5em;
 }
@@ -108,14 +126,12 @@ body {
 }
 .content{
     width: 100%;
-    background: #FFF;
 }
 .list-group-item {
     border: none;
 }
 .titulo{
     font-size: 2.0rem !important;
-    margin-bottom: 48px !important;
 }
 
 

@@ -17,14 +17,24 @@ if (!defined('URL')) {
             }
         ?>
     </title>
-    <link rel="icon" href="<?php echo URLADM.'assets/imagens/icone/favicon.png'; ?>">
+    <link rel="shortcut icon" href="<?php echo URLADM . 'assets/imagens/favicon.ico'; ?>" />
 
-    <link rel="stylesheet" href="<?php echo URLADM.'assets/css/bootstrap.min.css'; ?>">
-    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">-->
-    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="<?php echo URLADM ?>assets/css/bootstrap.css">
+
+    <link rel="stylesheet" href="<?php echo URLADM ?>assets/css/admin.css">
+    <link rel="stylesheet" href="<?php echo URLADM ?>assets/css/personalizado.css">
+    <link rel="stylesheet" href="<?php echo URLADM ?>assets/css/media.admin.css">
+    <link rel="stylesheet" href="<?php echo URLADM ?>assets/css/menu.css">
+    
     <script defer src="<?php echo URLADM.'assets/js/fontawesome-all.min.js'; ?>"></script>
     <link rel="stylesheet" href="<?php echo URLADM.'assets/css/fontawesome.css'; ?>">
     <link rel="stylesheet" href="<?php echo URLADM.'assets/css/dashboard.css'; ?>">
 
 </head>
-<body>
+<body id="page-top">

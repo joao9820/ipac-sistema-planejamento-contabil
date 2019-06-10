@@ -9,7 +9,10 @@ if (!defined('URL')) {
     header("Location: /");
     exit();
 }
-//var_dump($this->Dados['listarAtenFunc']);
+//var_dump($this->Dados['dadosForm']);
+if (!empty($this->Dados['dadosForm'])){
+    extract($this->Dados['dadosForm']);
+}
 ?>
 <style>
 
@@ -19,6 +22,19 @@ if (!defined('URL')) {
         justify-content: center;
         align-items: center;
         font-size: 3em;
+        border-top-left-radius: 0;
+        border-top-right-radius: .25rem;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: .25rem;
+        background-image: linear-gradient(to right, #2b2c7c, #0053ff);
+    }
+    @media (max-width: 480px) {
+        .cardGerente {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            border-bottom-left-radius: .25rem;
+            border-bottom-right-radius: .25rem;
+        }
     }
     .cardBorder, .cardGerente {
         transition: all .3s ease-in-out;
@@ -27,7 +43,7 @@ if (!defined('URL')) {
         border-color: #2b2c7c !important;
     }
     .cardBorder:hover .cardGerente {
-        background: #2b2c7c !important;
+       opacity: .8;
     }
 
 </style>
@@ -36,100 +52,93 @@ if (!defined('URL')) {
     <div class="list-group-item">
         <div class="row">
             <div class="col-md-12 p-2">
-                <h2 class="display-4 titulo">Alocação em desenvolvimento</h2>
+                <h2 class="display-4 titulo">Alocação em Gerentes</h2>
 
             </div>
 
-            <div class="col-md-12 d-flex justify-content-end">
-                <form method="post" action="" class="form-inline my-1">
+            <div class="col-md-12 d-flex justify-content-center justify-content-md-end">
+                <form id="FiltroBusca" method="post" action="" class="d-flex flex-column flex-md-row my-1">
                     <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Data início">
                         <div class="input-group mb-2 mr-sm-2">
-                            <div class="input-group-prepend">
+                            <div class="input-group-prepend displayNone">
                                 <div class="input-group-text">
                                     <i class="fas fa-calendar-day"></i>
                                 </div>
                             </div>
-                            <input name="dataInicial" type="date" pattern="[0-9]{2}\/[0-9]{2}\/[0-9]{4}$" class="form-control" id="inlineFormInputGroupUsername2">
+                            <input name="dataInicial" type="date" value="<?php echo isset($dataInicial) ? $dataInicial : ""; ?>" class="form-control" id="inlineFormInputGroupUsername2">
                         </div>
                     </span>
 
-                        <span class="mr-2">até</span>
+                    <span class="mx-2">até</span>
 
-                        <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Data fim">
+                    <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Data fim">
                         <div class="input-group mb-2 mr-sm-2">
-                            <div class="input-group-prepend">
+                            <div class="input-group-prepend displayNone">
                                 <div class="input-group-text">
                                     <i class="fas fa-calendar-day"></i>
                                 </div>
                             </div>
-                            <input name="dataFinal" type="date" pattern="[0-9]{2}\/[0-9]{2}\/[0-9]{4}$" class="form-control" id="inlineFormInputGroupUsername2" required>
+                            <input name="dataFinal" type="date" value="<?php echo isset($dataFinal) ? $dataFinal : ""; ?>" class="form-control" id="inlineFormInputGroupUsername2" required>
                         </div>
                     </span>
-
-                        <button class="btn btn-outline-warning mb-2 mr-2"><i class="fas fa-search"></i></button>
+                    <span class="ml-0 ml-md-2">
+                        <button class="btn btn-outline-powercar mb-2 mr-2"><i class="fas fa-search"></i></button>
+                    </span>
                 </form>
             </div>
+
+            <div class="col-md-6 text-center text-md-left">
+                <span class="badge bg-light my-3">
+                Filtro Aplicado:
+                <?php
+                echo isset($dataFinal) ? date("d/m/Y", strtotime($dataInicial)) : "";
+                echo " - ";
+                echo isset($dataFinal) ? date("d/m/Y", strtotime($dataFinal)) : "";
+                ?>
+                </span>
+            </div>
         </div>
 
+        <?php
+            if(empty($this->Dados['gerentes'])){
+                echo "Nenhum gerente encontrado. Cadastre gerentes e funcionários.";
+            } else {
+        ?>
         <div class="row mt-3">
-            <div class="col-md-4">
-                <div onclick="window.location.href='<?php echo URLADM . 'alocacao/gerente/3'; ?>'" style="cursor: pointer;" class="card cardBorder text-center border-secondary">
+            <?php
+                //var_dump($this->Dados['gerentes']);
+                foreach ($this->Dados['gerentes'] as $key => $value){
+                    if (empty($value['percentual_alocacao']) and $value['percentual_alocacao'] <= 0){
+                        $value['percentual_alocacao'] = 0;
+                    }
+            ?>
+            <div class="col-md-4 mb-3">
+                <div onclick="window.location.href='<?php echo URLADM . 'alocacao/gerente/' . $key .'?data_inicio='.$dataInicial.'&data_fim='.$dataFinal; ?>'" style="cursor: pointer;" class="card cardBorder text-center">
                     <div class="row no-gutters">
                         <div class="col-md-8">
-                            <div class="card-header"><strong>Leila</strong></div>
+                            <div class="card-header"><strong><?php echo $value['nome'] ?></strong></div>
                             <div class="card-body">
-                                <p class="card-text">Percentual da Alocação</p>
-                                <p class="card-text"><small class="text-muted">Clique no link abaixo</small></p>
-                                <button class="btn btn-outline-secondary">
+                                <p class="card-text">Percentual de Alocação</p>
+                                <p class="card-text d-none d-md-block"><small class="text-muted">Clique no link abaixo</small></p>
+                                <button class="btn btn-outline-secondary  d-none d-md-inline-block">
                                     <i class="fas fa-external-link-square-alt"></i>
                                 </button>
                             </div>
                         </div>
-                        <div class="col-md-4 bg-secondary text-light cardGerente">
-                            85%
+                        <div class="col-md-4 text-light cardGerente">
+                            <?php echo number_format($value['percentual_alocacao'], 0, ',', ' ') . "%" ?>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div onclick="window.location.href='<?php echo URLADM . 'alocacao/gerente/2'; ?>'" style="cursor: pointer;" class="card cardBorder text-center border-secondary">
-                    <div class="row no-gutters">
-                        <div class="col-md-8">
-                            <div class="card-header"><strong>Nome do Gerente</strong></div>
-                            <div class="card-body">
-                                <p class="card-text">Percentual da Alocação</p>
-                                <p class="card-text"><small class="text-muted">Clique no link abaixo</small></p>
-                                <button class="btn btn-outline-secondary">
-                                    <i class="fas fa-external-link-square-alt"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="col-md-4 bg-secondary text-light cardGerente">
-                            58%
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div onclick="window.location.href='<?php echo URLADM . 'alocacao/gerente/2'; ?>'" style="cursor: pointer;" class="card cardBorder text-center border-secondary">
-                    <div class="row no-gutters">
-                        <div class="col-md-8">
-                            <div class="card-header"><strong>Nome do Gerente</strong></div>
-                            <div class="card-body">
-                                <p class="card-text">Percentual da Alocação</p>
-                                <p class="card-text"><small class="text-muted">Clique no link abaixo</small></p>
-                                <button class="btn btn-outline-secondary">
-                                    <i class="fas fa-external-link-square-alt"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="col-md-4 bg-secondary text-light cardGerente">
-                            94%
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <?php
+
+                }
+            ?>
         </div>
+        <?php
+            }
+        ?>
 
     </div>
 </div>

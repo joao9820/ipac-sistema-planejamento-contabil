@@ -38,12 +38,12 @@ class SomarDuracaoAtividadesEntreDatas
     private function buscar()
     {
         $query = new AdmsRead();
-        $query->fullRead("SELECT SUM(TIME_TO_SEC(duracao_atividade))  AS duracao_atividade_sc
+        $query->fullRead("SELECT SUM(TIME_TO_SEC(alocacao_atividade))  AS duracao_atividade_sc
                                 FROM adms_atendimento_funcionarios
                                 WHERE adms_funcionario_id =:id
                                 AND data_inicio_planejado >=:data_inicio
                                 AND data_inicio_planejado <=:data_fim
-                                AND adms_sits_atendimentos_funcionario_id NOT IN (4, 5)", "id={$this->FuncionarioId}&data_inicio={$this->DataInicio}&data_fim={$this->DataFim}");
+                                AND adms_sits_atendimentos_funcionario_id =:sit_atividade", "id={$this->FuncionarioId}&data_inicio={$this->DataInicio}&data_fim={$this->DataFim}&sit_atividade=4");
         if ($query->getResultado()) {
 
             $this->Atividade = $query->getResultado()[0];

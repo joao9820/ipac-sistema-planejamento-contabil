@@ -30,6 +30,7 @@ class AdmsFuncConcluirAtendimento
     /**
      * @param null $DadosId
      * @param null $Status
+     * @param null $AtendimentoId
      * @throws \Exception
      */
     public function alterar($DadosId = null, $Status = null, $AtendimentoId = null)
@@ -42,7 +43,7 @@ class AdmsFuncConcluirAtendimento
 
             $this->Dados['adms_sits_atendimentos_funcionario_id'] = 3;
             $this->Dados['at_pausado'] = date("Y-m-d H:i:s");
-//$this->Dados['adms_sits_atendimento_id'] = 2;
+            //$this->Dados['adms_sits_atendimento_id'] = 2;
 
             $this->buscarTempoRestante();
             if (empty($this->ResultadoTempo[0]['at_tempo_excedido'])) {
@@ -114,8 +115,7 @@ class AdmsFuncConcluirAtendimento
         $this->Dados['fim_atendimento'] = date("Y-m-d H:i:s");
         $this->Dados['modified'] = date("Y-m-d H:i:s");
 
-        //$this->verificarAtividadesConcluidas();
-        //die;
+
 
         $upAtendimento = new AdmsUpdate();
         $upAtendimento->exeUpdate("adms_atendimento_funcionarios", $this->Dados, "WHERE id =:id", "id={$this->DadosId}");
@@ -123,8 +123,16 @@ class AdmsFuncConcluirAtendimento
 
             $this->verificarAtividadesConcluidas();
 
-            $alert = new AdmsAlertMensagem();
-            $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atividade finalizada!","success");
+            $calcularAlocacao = new AdmsCalcularAlocacaoAtividade($this->DadosId, $_SESSION['usuario_id']);
+            $resultAlocacao = $calcularAlocacao->getResultadoAlocacao();
+            if ($resultAlocacao){
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atividade finalizada!","success");
+            } else {
+                $alert = new AdmsAlertMensagem();
+                $_SESSION['msg'] = $alert->alertMensagemJavaScript("Atividade finalizada! Mas não foi possível calcular a alocação da atividade.","success");
+            }
+
             $this->Resultado = true;
 
         }

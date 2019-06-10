@@ -6,11 +6,17 @@ if (!defined('URL')) {
 }
 
 ?>
+<style>
+    .nav-tabs a {
+        color: #FFF;
+        transition: all .2s;
+    }
+</style>
 <div class="content p-1">
-    <div class="list-group-item">
+    <div class="list-group-item pt-0 pl-0 pr-0">
 
-        <div class="card border-0">
-            <div class="card-header">
+        <div class="card border-0 shadow-none">
+            <div class="card-header bg-powercar">
                 <ul class="nav nav-tabs card-header-tabs">
                     <li class="nav-item">
                         <a class="nav-link active" href="#">Perfil</a>
@@ -40,14 +46,16 @@ if (!defined('URL')) {
                         extract($this->Dados['dados_perfil'][0]);
                         ?>
                         <div class="col-md-2">
-                            <?php
-                            if (!empty($_SESSION['usuario_imagem']))
-                            {
-                                echo "<img src='".URLADM."assets/imagens/usuario/".$_SESSION['usuario_id']."/".$_SESSION['usuario_imagem']."' class='img-fluid'    alt='".$_SESSION['usuario_imagem']."'> ";
-                            } else {
-                                echo "<img src='".URLADM."assets/imagens/usuario/icone_usuario.jpg' class='img-fluid'  width='150' height='150'  alt='".$_SESSION['usuario_imagem']."'> ";
-                            }
-                            ?>
+                            <div class="card bg-light mb-3 shadow">
+                                <?php
+                                if (!empty($_SESSION['usuario_imagem']))
+                                {
+                                    echo "<img src='".URLADM."assets/imagens/usuario/".$_SESSION['usuario_id']."/".$_SESSION['usuario_imagem']."' class='img-fluid rounded'    alt='".$_SESSION['usuario_imagem']."'> ";
+                                } else {
+                                    echo "<img src='".URLADM."assets/imagens/usuario/icone_usuario.jpg' class='img-fluid rounded'  alt='".$_SESSION['usuario_imagem']."'> ";
+                                }
+                                ?>
+                            </div>
                         </div>
                         <div class="col-md-10">
                             <div class="form-group row">

@@ -24,6 +24,7 @@ class AtendimentoStatus
     private $PageId;
     private $PageVer;
     private $AtendimentoId;
+    private $FuncionarioId;
 
     public function alterar($DadosId = null)
     {
@@ -33,11 +34,14 @@ class AtendimentoStatus
         $this->PageVer = filter_input(INPUT_GET, "ver", FILTER_SANITIZE_NUMBER_INT);
         $this->AtendimentoId = filter_input(INPUT_GET, 'aten', FILTER_DEFAULT);
 
+        $this->FuncionarioId = filter_input(INPUT_GET, 'func', FILTER_DEFAULT);
+
 
         if (!empty($this->DadosId) AND !empty($this->Status) AND !empty($this->PageId) AND !empty($this->AtendimentoId)) {
 
             $alterarStatus = new AdmsAtendimentoStatus();
-            $alterarStatus->alterarStatus($this->DadosId, $this->Status, $this->AtendimentoId);
+            $alterarStatus->alterarStatus($this->DadosId, $this->Status, $this->AtendimentoId, $this->FuncionarioId);
+
 
             if (isset($this->PageVer) AND !empty($this->PageVer)) {
 
@@ -46,13 +50,13 @@ class AtendimentoStatus
 
             } else {
 
-                $UrlDestino = URLADM . "atendimentos/listar/{$this->PageId}";
+                $UrlDestino = URLADM . "atendimentos/listar/{$this->PageId}?func={$this->FuncionarioId}";
                 header("Location: $UrlDestino");
 
             }
         }
         else {
-            $UrlDestino = URLADM . 'atendimentos/listar';
+            $UrlDestino = URLADM . 'atendimentos/listar/1?func='.$this->FuncionarioId;
             header("Location: $UrlDestino");
         }
     }

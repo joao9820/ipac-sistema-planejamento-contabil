@@ -5,16 +5,19 @@
  * Date: 25/03/2019
  * Time: 12:19
  */
-
+if (!defined('URL')) {
+    header("Location: /");
+    exit();
+}
 ?>
 
 <div class="content p-1">
     <div class="list-group-item">
-        <div class="d-flex">
+        <div class="d-flex flex-column flex-md-row">
             <div class="mr-auto p-2">
                 <h2 class="display-4 titulo">Departamentos</h2>
             </div>
-            <div class="d-flex p-2">
+            <div class="d-flex justify-content-end p-2">
                 <span class="d-block">
                     <a href="<?php echo URLADM . 'jornada-de-trabalho/listar'; ?>" class="btn btn-outline-info btn-sm"><i class="fas fa-list"></i> Listar Funcionários</a>
                 </span>
@@ -37,20 +40,18 @@
                 unset($_SESSION['msg']);
             }
             ?>
+        <span>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success btn-sm my-2" data-toggle="modal" data-target="#cadastrarDepartamento">
+              Cadastrar Departamento
+            </button>
+        </span>
         <div class="table-responsive">
             <table class="table table-striped table-hover border">
                 <thead class="bg-info text-light">
                     <tr>
-                        <th scope="col" class="icon">#</th>
                         <th scope="col" class="">Departamento</th>
-                        <th scope="col" class="d-none d-lg-table-cell">Descrição</th>
-                        <?php
-                        if ($this->Dados['botao']['editar_dept']) {
-                            ?>
-                            <th scope="col" class="text-center">Ações</th>
-                            <?php
-                        }
-                        ?>
+                        <th scope="col" class="text-center">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,11 +61,9 @@
                     extract($funcionario);
                     ?>
                     <tr>
-                        <td scope="row"><i class="<?php echo $icon; ?>"></i></td>
                         <td scope="row"><?php echo $nome; ?></td>
-                        <td class="d-none d-sm-table-cell"><?php echo $descricao; ?></td>
                         <?php
-                        if ($this->Dados['botao']['editar_dept']) {
+                        if (!$this->Dados['botao']['editar_dept']) {
                             ?>
                             <td class="text-center">
                             <span class="d-none d-md-block">
@@ -112,6 +111,42 @@
             <?php
             } // Fim do else para verificar se tem dados para exibir
             ?>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="cadastrarDepartamento" tabindex="-1" role="dialog" aria-labelledby="cadastrarDepartamentoLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="<?php echo URLADM . 'departamentos/store' ?>" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cadastrarDepartamentoLabel">Novo departamento</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="nomeDepart">Departamento</label>
+                        <input type="text" name="nome" class="form-control" id="nomeDepart" placeholder="Nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gerente_id">Gerente</label>
+                        <select name="gerente_id" class="form-control" id="gerente_id" required>
+                            <option>Selecione um gerente</option>
+                            <?php
+                                foreach ($this->Dados['listaDeGerentes'] as $gerente){
+                                    echo "<option value='{$gerente['id']}'>{$gerente['nome']}</option>";
+                                }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

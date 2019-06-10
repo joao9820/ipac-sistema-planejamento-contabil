@@ -6,82 +6,55 @@ if (!defined('URL')) {
 ?>
 <head>
 
-    <link rel="icon" href="<?php echo URLADM . 'assets/imagens/favicon.png'; ?>">
+    <link rel="shortcut icon" href="<?php echo URLADM . 'assets/imagens/favicon.ico'; ?>" />
 
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+    
+
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?php echo URLADM ?>assets/css/bootstrap.css">
 
+    <link rel="stylesheet" href="<?php echo URLADM ?>assets/css/home.css">
+    <link rel="stylesheet" href="<?php echo URLADM ?>assets/css/personalizado.css">
+    <link rel="stylesheet" href="<?php echo URLADM ?>assets/css/all.css">
 
-    <!-- Fonticons -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
 
     <title>Admin IPAC</title>
 
-    <style>
-        body {
-            max-height: 100vh;
-            background: #eff1f4;
-            position: relative;
+    <body id="page-top" class="body-conteudo">
+    <?php
+        if(isset($_SESSION['msg'])){
+            echo $_SESSION['msg'];
+            unset($_SESSION['msg']);
+            $_SESSION['alert'] = "ok";
         }
-        #login.row {
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-        }
-        #header {
-            min-height: 40vh;
-            background-image: linear-gradient(to right, #2B2C7C, #4647C8);
-        }
-        #header .row {
-            min-height: 40vh;
-            max-height: 40vh;
-            text-align: center;
-        }
-        #conteudo {
-            min-height: 60vh;
-            max-height: 60vh;
-        }
-        .btn-login {
-            background-image: linear-gradient(to right, #2B2C7C, #4647C8);
-            color: #e9e3e3;
-            transition: all .2s ease-in-out;
-        }
-        .btn-login:hover {
-            background-image: linear-gradient(to right, rgb(37, 38, 110), rgb(57, 57, 168));
-            color: #FFF !important;
-        }
-        .form-group label {
-            color: #333333;
-        }
+    ?>
+        <header class="login-cabecalho">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <a href="#">
+                            <img class="img-fluid  logo-login-cadastro" src="<?php echo URLADM . 'assets/imagens/logo-ipac.png' ?>" alt="IPAC">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <section class="login-conteudo">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 mt-5 mx-auto">
 
-        /*ALERT COM JAVASCRIPT*/
-        #mensagemCard {
-            position: absolute;
-            z-index: 3333;
-            right: 0px;
-            top: 40px;
-            opacity: 0;
-            transition: all .3s ease-in-out;
-            box-shadow: 0 0 10px rgba(0,0,0,.5);
-        }
-        #mensagemCard h5.card-title {
-            font-size: 1.3em;
-            margin-bottom: .75rem;
-        }
+                        <!-- Incluindo o conteudo -->
+
+                    
 
 
-    </style>
-
-</head>
-<body>
-<?php
-    if(isset($_SESSION['msg'])){
-        echo $_SESSION['msg'];
-        unset($_SESSION['msg']);
-        $_SESSION['alert'] = "ok";
-    }
-?>

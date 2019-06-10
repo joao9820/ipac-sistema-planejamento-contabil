@@ -9,6 +9,7 @@
 namespace App\adms\Models;
 
 use App\adms\Models\funcoes\BuscarDuracaoAtividades;
+use App\adms\Models\funcoes\BuscarDuracaoAtividadesAlocacao;
 use App\adms\Models\funcoes\BuscarDuracaoJornadaT;
 use App\adms\Models\funcoes\Funcoes;
 use App\adms\Models\helper\AdmsRead;
@@ -77,7 +78,7 @@ class AdmsAlocacaoFuncionario
         if ($DiaUtil->isDiaUtil($Data)) {
 
             // Buscando duração total das atividades
-            $duracaoAtividades = new BuscarDuracaoAtividades($FuncionarioId, $Data);
+            $duracaoAtividades = new BuscarDuracaoAtividadesAlocacao($FuncionarioId, $Data, NULL, "4");
             $resultado = $duracaoAtividades->getDuracaoAtividade();
             $this->DadosAlocacao[$Data]['DuracaoAtividades'] = $resultado['duracao_atividade_sc'] ? $resultado['duracao_atividade_sc'] : 0;
 

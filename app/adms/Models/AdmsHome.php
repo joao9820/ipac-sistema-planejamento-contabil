@@ -53,4 +53,28 @@ class AdmsHome
 
     }
 
+    /*
+     * Ver total alocação gerentes
+     */
+    public function getAlocacao()
+    {
+        $alocacaoGerentes = new AdmsAlocacaoGerentes();
+        $dadosGerentes = $alocacaoGerentes->getGerentes();
+
+        if($dadosGerentes){
+            $atividades = 0;
+            $jornada = 0;
+
+            foreach ($dadosGerentes as $gerente){
+                $atividades += (int) $gerente['duracao_atividades'];
+                $jornada += (int) $gerente['duracao_jornada'];
+            }
+            $resultado = $atividades > 0 ? ($atividades * 100) / $jornada : 0;
+            return $resultado;
+        } else {
+            $resultado = 0;
+            return $resultado;
+        }
+    }
+
 }

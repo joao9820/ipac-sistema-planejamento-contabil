@@ -17,56 +17,65 @@ if (isset($this->Dados['gerente'])){
 // pega a data de inicio e fim
 $DataInicio = isset($this->Dados['DataInicio']) ? $this->Dados['DataInicio'] : date('Y-m-d');
 $DataFim = isset($this->Dados['DataFim']) ? $this->Dados['DataFim'] : date('Y-m-d');
+
+if (!empty($this->Dados['dadosForm'])){
+    extract($this->Dados['dadosForm']);
+}
 ?>
 
 
 <div class="content p-1">
     <div class="list-group-item">
         <div class="row">
-            <div class="col-md-12 p-2 d-flex px-3">
+            <div class="col-md-12 p-2 d-flex flex-column flex-md-row px-3">
                 <h2 class="display-4 titulo">Alocação funcionários</h2>
 
                 <span class="d-block ml-auto">
-                    <button onclick="window.location.href='<?php echo URLADM . 'alocacao/listar'; ?>'" class="btn btn-outline-info btn-sm"><i class="fas fa-arrow-circle-left"></i> Voltar</button>
+                    <button onclick="window.location.href='<?php echo URLADM . 'alocacao/listar?data_inicio='.$DataInicio.'&data_fim='.$DataFim; ?>'" class="btn btn-outline-info btn-sm"><i class="fas fa-arrow-circle-left"></i> Voltar</button>
                 </span>
             </div>
 
-            <div class="col-md-6">
-                <h3>Gerente: <?php echo $NomeGerente; ?></h3>
-            </div>
-            <div class="col-md-6 d-flex justify-content-end">
-                <form method="post" action="" class="form-inline my-1">
+            
+            <div class="col-md-12 d-flex justify-content-center justify-content-md-end">
+                <form id="FiltroBusca" method="post" action="" class="d-flex flex-column flex-md-row my-1">
                     <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Data início">
                         <div class="input-group mb-2 mr-sm-2">
-                            <div class="input-group-prepend">
+                            <div class="input-group-prepend displayNone">
                                 <div class="input-group-text">
                                     <i class="fas fa-calendar-day"></i>
                                 </div>
                             </div>
-                            <input name="dataInicial" type="date" pattern="[0-9]{2}\/[0-9]{2}\/[0-9]{4}$" class="form-control" id="inlineFormInputGroupUsername2">
+                            <input name="dataInicial" type="date" value="<?php echo isset($dataInicial) ? $dataInicial : ""; ?>" class="form-control" id="inlineFormInputGroupUsername2">
                         </div>
                     </span>
 
-                    <span class="mr-2">até</span>
+                    <span class="mx-2">até</span>
 
                     <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Data fim">
                         <div class="input-group mb-2 mr-sm-2">
-                            <div class="input-group-prepend">
+                            <div class="input-group-prepend displayNone">
                                 <div class="input-group-text">
                                     <i class="fas fa-calendar-day"></i>
                                 </div>
                             </div>
-                            <input name="dataFinal" type="date" pattern="[0-9]{2}\/[0-9]{2}\/[0-9]{4}$" class="form-control" id="inlineFormInputGroupUsername2" required>
+                            <input name="dataFinal" type="date" value="<?php echo isset($dataFinal) ? $dataFinal : ""; ?>"  class="form-control" id="inlineFormInputGroupUsername2" required>
                         </div>
                     </span>
 
-                    <button class="btn btn-outline-warning mb-2 mr-2"><i class="fas fa-search"></i></button>
+                    <span class="ml-0 ml-md-2">
+                        <button class="btn btn-outline-powercar mb-2 mr-2"><i class="fas fa-search"></i></button>
+                    </span>
                 </form>
             </div>
+
+            <div class="col-md-6 text-left my-2 my-md-0">
+                <h3><small>Gerente:</small> <strong class="d-block"><?php echo $NomeGerente; ?></strong></h3>
+            </div>
+
         </div>
 
         <div class="row mt-3">
-            <div class="col-md-6">
+            <div class="col-md-6 text-center text-md-left">
                 <span class="badge bg-light my-3">
                 Filtro Aplicado:
                 <?php
@@ -98,13 +107,13 @@ $DataFim = isset($this->Dados['DataFim']) ? $this->Dados['DataFim'] : date('Y-m-
                                     $DurAti = (int)  $value['duracao_atividade_sc'];
                                     $JorTra = (int) $value['duracao_total_jornada'];
                                     // Calcular porcentagem de alocação
-                                    $AlocacaoT = $DurAti > 0 ? ($DurAti * 100) / $JorTra : 0;
+                                    $AlocacaoT = $DurAti > 0 ? ($DurAti / $JorTra) * 100 : 0;
                                     $textoCor = $AlocacaoT > 100 ? "text-danger" : "text-secondary";
 
                                     echo '<tr>';
                                         echo "<td>{$value['nome']}</td>";
                                         echo "<td>{$value['cargo']}</td>";
-                                        echo "<td class='".$textoCor."'><strong>". number_format($AlocacaoT, 1, ',', ' ') ."%</strong></td>";
+                                        echo "<td class='".$textoCor."'><strong>". number_format($AlocacaoT, 0, ',', ' ') ."%</strong></td>";
 
                                     /*
                                     foreach ($dado as $coluna => $item){

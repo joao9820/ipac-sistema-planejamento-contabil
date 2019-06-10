@@ -9,7 +9,9 @@
 namespace App\adms\Controllers;
 
 use App\adms\Models\AdmsAlocacaoFuncionario;
+use App\adms\Models\AdmsAlocacaoFuncionarioData;
 use App\adms\Models\AdmsAlocacaoFuncionariosGerente;
+use App\adms\Models\AdmsAlocacaoGerentes;
 use App\adms\Models\AdmsMenu;
 use App\adms\Models\funcoes\Funcoes;
 use App\adms\Models\funcoes\ValidarTipoDeUsuario;
@@ -31,6 +33,44 @@ class Alocacao
     // Index da alocação, mostrar todos os gerentes
     public function listar()
     {
+
+        $dadosForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+        if(isset($dadosForm['dataFinal']) and !empty($dadosForm['dataFinal'])){
+            if(empty($dadosForm['dataInicial'])){
+                $dadosForm['dataInicial'] = $dadosForm['dataFinal'];
+            }
+            if ($dadosForm['dataInicial'] > $dadosForm['dataFinal']) {
+                $dadosForm['dataInicial'] = $dadosForm['dataFinal'];
+            }
+            $alocacaoGerentes = new AdmsAlocacaoGerentes($dadosForm['dataInicial'], $dadosForm['dataFinal']);
+            $dadosGerentes = $alocacaoGerentes->getGerentes();
+
+            $this->Dados['dadosForm'] = $dadosForm;
+        } else {
+            $DataInicio = filter_input(INPUT_GET, "data_inicio", FILTER_DEFAULT);
+            $DataFim = filter_input(INPUT_GET, "data_fim", FILTER_DEFAULT);
+            if(!empty($DataFim) and !empty($DataInicio)){
+                $this->DataFim = $DataFim;
+                $this->DataInicio = $DataInicio;
+            } else {
+                $novaData = new Funcoes();
+                $this->DataFim = date('Y-m-d');
+                $this->DataInicio = $novaData->dia_in_data(date('Y-m-d'), 15, '-');
+            }
+            $alocacaoGerentes = new AdmsAlocacaoGerentes($this->DataInicio, $this->DataFim);
+            $dadosGerentes = $alocacaoGerentes->getGerentes();
+
+            $this->Dados['dadosForm']['dataInicial'] = $this->DataInicio;
+            $this->Dados['dadosForm']['dataFinal'] = $this->DataFim;
+        }
+
+
+        if($dadosGerentes){
+            $this->Dados['gerentes'] = $dadosGerentes;
+        } else {
+            $this->Dados['gerentes'] = "";
+        }
+
         $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
 
@@ -53,15 +93,35 @@ class Alocacao
             header("Location: $UrlDestino");
         } else {
 
-            $DataInicio = filter_input(INPUT_GET, "data_inicio", FILTER_DEFAULT);
-            $DataFim = filter_input(INPUT_GET, "data_fim", FILTER_DEFAULT);
-            if (empty($DataInicio)) {
-                $novaData = new Funcoes();
-                $this->DataInicio = date('Y-m-d');
-                $this->DataFim = $novaData->dia_in_data(date('Y-m-d'),7);
+            $dadosForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+            if(isset($dadosForm['dataFinal']) and !empty($dadosForm['dataFinal'])){
+                if(empty($dadosForm['dataInicial'])){
+                    $dadosForm['dataInicial'] = $dadosForm['dataFinal'];
+                }
+                if ($dadosForm['dataInicial'] > $dadosForm['dataFinal']) {
+                    $dadosForm['dataInicial'] = $dadosForm['dataFinal'];
+                }
+                $this->DataInicio = $dadosForm['dataInicial'];
+                $this->DataFim = $dadosForm['dataFinal'];
+
+                $this->Dados['dadosForm'] = $dadosForm;
             } else {
-                $this->DataInicio = date('Y-m-d', strtotime($DataInicio));
-                $this->DataFim = date('Y-m-d', strtotime($DataFim));
+
+                $DataInicio = filter_input(INPUT_GET, "data_inicio", FILTER_DEFAULT);
+                $DataFim = filter_input(INPUT_GET, "data_fim", FILTER_DEFAULT);
+                if (empty($DataInicio)) {
+
+                    $novaData = new Funcoes();
+                    $this->DataFim = date('Y-m-d');
+                    $this->DataInicio = $novaData->dia_in_data(date('Y-m-d'), 15,'-');
+
+                    $this->Dados['dadosForm']['dataInicial'] = $this->DataInicio;
+                    $this->Dados['dadosForm']['dataFinal'] = $this->DataFim;
+
+                } else {
+                    $this->DataInicio = date('Y-m-d', strtotime($DataInicio));
+                    $this->DataFim = date('Y-m-d', strtotime($DataFim));
+                }
             }
 
             $alocacao = new AdmsAlocacaoFuncionariosGerente($GerenteId, $this->DataInicio, $this->DataFim);
@@ -89,12 +149,31 @@ class Alocacao
         $DataInicio = filter_input(INPUT_GET, "data_inicio", FILTER_DEFAULT);
         $DataFim = filter_input(INPUT_GET, "data_fim", FILTER_DEFAULT);
         if (empty($DataInicio)) {
-            $novaData = new Funcoes();
-            $this->DataInicio = date('Y-m-d');
-            $this->DataFim = $novaData->dia_in_data(date('Y-m-d'),7);
+            $dadosForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+            if(isset($dadosForm['dataFinal']) and !empty($dadosForm['dataFinal'])){
+                if(empty($dadosForm['dataInicial'])){
+                    $dadosForm['dataInicial'] = $dadosForm['dataFinal'];
+                }
+                if ($dadosForm['dataInicial'] > $dadosForm['dataFinal']) {
+                    $dadosForm['dataInicial'] = $dadosForm['dataFinal'];
+                }
+                $this->DataInicio = $dadosForm['dataInicial'];
+                $this->DataFim = $dadosForm['dataFinal'];
+                $this->Dados['dadosForm'] = $dadosForm;
+            } else {
+                $novaData = new Funcoes();
+                $this->DataInicio = date('Y-m-d');
+                $this->DataFim = $novaData->dia_in_data(date('Y-m-d'),7);
+                $this->Dados['dadosForm']['dataInicial'] = $this->DataInicio;
+                $this->Dados['dadosForm']['dataFinal'] = $this->DataFim;
+            }
+
         } else {
             $this->DataInicio = date('Y-m-d', strtotime($DataInicio));
             $this->DataFim = date('Y-m-d', strtotime($DataFim));
+
+            $this->Dados['dadosForm']['dataInicial'] = $this->DataInicio;
+            $this->Dados['dadosForm']['dataFinal'] = $this->DataFim;
         }
 
         // Verificar se o id informado pertence a um funcionário
@@ -118,6 +197,41 @@ class Alocacao
             $carregarView = new ConfigView("adms/Views/alocacao/gerente/funcionario/index", $this->Dados);
             $carregarView->renderizar();
         }
+    }
+
+    public function funcionarioData($FuncionarioId = null)
+    {
+
+        $Funcionario = $FuncionarioId;
+        $GerenteId = filter_input(INPUT_GET, 'gerente', FILTER_DEFAULT);
+        $DataInicio = filter_input(INPUT_GET, "data_inicio", FILTER_DEFAULT);
+        $Data = filter_input(INPUT_GET, "data", FILTER_DEFAULT);
+        $DataFim = filter_input(INPUT_GET, "data_fim", FILTER_DEFAULT);
+
+        $this->Dados['url']['gerente'] = $GerenteId;
+        $this->Dados['url']['data_inicio'] = $DataInicio;
+        $this->Dados['url']['data_fim'] = $DataFim;
+        $this->Dados['url']['funcionario'] = $FuncionarioId;
+
+        $DataAlocacao = isset($DataAlocacao) ? $DataAlocacao : date('Y-m-d');
+
+        $alocacaoFuncionarioData = new AdmsAlocacaoFuncionarioData($FuncionarioId, $Data);
+        $this->Dados['alocacao'] = $alocacaoFuncionarioData->getDadosAlocacao();
+        $this->Dados['funcionarioNome'] = $alocacaoFuncionarioData->getNomeFuncionario();
+        $this->Dados['percentual_alocacao'] = $alocacaoFuncionarioData->getAlocacaoAtividades();
+
+        //$alocacaoFuncionario = new AdmsAlocacaoFuncionario($FuncionarioId, $this->DataInicio, $this->DataFim);
+        //$this->Dados['alocacao'] = $alocacaoFuncionario->getDadosAlocacao();
+
+        $this->Dados['dataFiltro'] = $Data;
+
+        $listarMenu = new AdmsMenu();
+        $this->Dados['menu'] = $listarMenu->itemMenu();
+
+
+        $carregarView = new ConfigView("adms/Views/alocacao/gerente/funcionario/listarAtividadesData", $this->Dados);
+        $carregarView->renderizar();
+
     }
 
 }

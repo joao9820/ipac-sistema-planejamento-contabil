@@ -4,7 +4,7 @@ if (!defined('URL')) {
     exit();
 }
 //echo $_SESSION['adms_empresa_id'];
-//var_dump($this->Dados);
+//var_dump($this->Dados['listarAtendimentos']);
 if(!empty($this->Dados['jornadaDeTrabalho'])) {
     extract($this->Dados['jornadaDeTrabalho']);
 }
@@ -38,8 +38,6 @@ function getFeriados($ano){
     );
     return $feriados;
 }
-
-//var_dump($this->Dados['listarAtendimentos']);
 ?>
 <style>
 
@@ -70,11 +68,14 @@ function getFeriados($ano){
         border: transparent;
     }
 </style>
+
+
+
 <div class="content p-1">
 
 
 
-    <div class="list-group-item">
+    <div class="">
         <div class="d-flex">
             <div class="mr-auto p-2">
                 <h2 class="display-4 titulo">Atividades</h2>
@@ -105,15 +106,32 @@ function getFeriados($ano){
         echo $hora_termino2."<br>";
         */
     ?>
-    <span class="d-block my-3 ml-4">
+    <?php
+    if ($this->Dados['botao']['jornada']) {
+        ?>
+        <span class="d-block my-3">
+           <a href="<?php echo URLADM . 'jornada-de-trabalho/listar'; ?>">
+               <div class="">
+                   <button class="btn btn-outline-primary btn-sm">
+                       <i class="fas fa-arrow-left"></i> Voltar
+                   </button>
+               </div>
+           </a>
+        </span>
+        <?php
+    }
+    ?>
+    <span class="d-block my-3">
         <?php if(!empty($this->Dados['planejamento'])) {?>
             <button onclick="Parametros('<?php echo $hora_inicio; ?>', '<?php echo $hora_termino; ?>', '<?php echo $hora_inicio2; ?>', '<?php echo $hora_termino2; ?>', '<?php echo $adms_funcionario_id; ?>')"
                     class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#editarFuncionarioModal">
-                <i class="fa fa-eye"></i> Ver Planejamento
+                <i class="fa fa-eye"></i> Ver Jornada de Trabalho
             </button>
         <?php } ?>
     </span>
-    <div class="list-group-item border mx-4 mb-4 p-0 rounded">
+
+
+    <div class="list-group-item border mb-4 p-0 rounded">
         <div id="headerDescricaoPg" class="bg-primary">
             <h3 class="">Lista de Atividades Pendentes</h3>
         </div>
@@ -126,6 +144,8 @@ function getFeriados($ano){
             }
 
             ?>
+
+
 
             <div class="container-fluid">
                 <div class="row">
@@ -219,7 +239,7 @@ function getFeriados($ano){
             ?>
 
 
-            <h4 class="text-secondary mr-2">Últimos: </h4>
+            <h4 class="text-secondary mr-2">Últimas: </h4>
             <?php
                 //var_dump($this->Dados['listarAtendimentos']);
                 if (empty($this->Dados['listarAtendimentos'])) {
@@ -239,7 +259,7 @@ function getFeriados($ano){
                 ?>
 
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover table-border">
+                    <table class="table  table-hover table-border">
                         <thead class="bg-info text-light">
                         <tr class="text-center">
                             <th class="">Opções</th>
@@ -278,76 +298,78 @@ function getFeriados($ano){
                         ?>
                         <tr class="text-center">
                             <td>
-                                <?php
-                                $contLuz++;
-                                    if ( !empty($data_fatal) and (date('Y-m-d', strtotime($data_fatal)) == date('Y-m-d'))){
-                                ?>
-                                <span class="text-warning" tabindex='0' data-placement='top' data-toggle='tooltip' title='Aviso! A data limite para concluir a atividade é hoje.'>
-                                    <i class="fas fa-lightbulb faIpac mr-2"></i>
+                                <span class="d-flex flex-row">
+                                    <?php
+                                    $contLuz++;
+                                        if ( !empty($data_fatal) and (date('Y-m-d', strtotime($data_fatal)) == date('Y-m-d'))){
+                                    ?>
+                                    <span class="text-warning" tabindex='0' data-placement='top' data-toggle='tooltip' title='Aviso! A data limite para concluir a atividade é hoje.'>
+                                        <i class="fas fa-lightbulb faIpac mr-2"></i>
+                                    </span>
+                                    <?php
+                                        } elseif ( !empty($data_fatal) and (date('Y-m-d', strtotime($data_fatal)) < date('Y-m-d'))){
+                                    ?>
+                                    <span class="text-danger" tabindex='0' data-placement='top' data-toggle='tooltip' title='Atenção! A atividade ultrapassou a data limite de entrega.'>
+                                        <i class="fas fa-lightbulb faIpac mr-2"></i>
+                                    </span>
+                                    <?php
+                                    } else {
+                                    ?>
+                                    <span class="text-transparente">
+                                        <i class="fas fa-lightbulb"></i>
+                                    </span>
+                                    <?php
+                                    }
+                                    if ($id_sits_aten_func == 1) {
+                                        // Não iniciado
+                                        ?>
+                                        <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Clique para iniciar a atividade.'>
+                                            <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id_aten_func . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']. '&aten='.$id_atendimento.'&func='.$funcionario_id; ?>" class="btn btn-outline-success btn-sm mb-2 btnOpcoes"  data-sitAtenIniciar='Tem certeza que deseja iniciar está atividade?'>
+                                                Iniciar
+                                            </a>
+                                        </span>
+                                        <?php
+                                    } elseif ($id_sits_aten_func == 2){
+                                        // Iniciado
+                                        ?>
+
+
+                                        <a href="#" class="btn btn-secondary btn-sm mb-2 btnOpcoesDisabled disabled">
+                                            Em andamento
+                                        </a>
+                                        <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Clique para pausar a atividade.'>
+                                            <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id_aten_func . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']. '&aten='.$id_atendimento.'&func='.$funcionario_id; ?>" class="btn btn-outline-warning ml-2 btn-sm mb-2" data-sitAtenPausar='Tem certeza que deseja pausar está atividade?'>
+                                                Pausar
+                                            </a>
+                                        </span>
+
+
+                                        <?php
+                                    } elseif ($id_sits_aten_func == 3) {
+                                        // Pausado
+                                            ?>
+                                            <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Clique para continuar a atividade.'>
+                                                <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id_aten_func . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']. '&aten='.$id_atendimento.'&func='.$funcionario_id; ?>" class="btn btn-outline-info btn-sm mb-2 btnOpcoes"
+                                                   data-sitAtenContinuar='Tem certeza que deseja da continuidade está atividade agora?'>
+                                                    Continuar
+                                                </a>
+                                            </span>
+                                            <a href="#" class="btn btn-secondary btn-sm ml-2 mb-2 btnOpcoesDisabled disabled">
+                                                Pausar
+                                            </a>
+                                            <?php
+                                    } else {
+                                        // Finalizado
+                                        ?>
+                                        <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Atividade finalizada.'>
+                                            <a href="#" class="btn btn-dark btn-sm mb-2 btnOpcoes btnOpcoesDisabled disabled">
+                                                Finalizado
+                                            </a>
+                                        </span>
+                                        <?php
+                                    }
+                                    ?>
                                 </span>
-                                <?php
-                                    } elseif ( !empty($data_fatal) and (date('Y-m-d', strtotime($data_fatal)) < date('Y-m-d'))){
-                                ?>
-                                <span class="text-danger" tabindex='0' data-placement='top' data-toggle='tooltip' title='Atenção! A atividade ultrapassou a data limite de entrega.'>
-                                    <i class="fas fa-lightbulb faIpac mr-2"></i>
-                                </span>
-                                <?php
-                                } else {
-                                ?>
-                                <span class="text-transparente">
-                                    <i class="fas fa-lightbulb"></i>
-                                </span>
-                                <?php
-                                }
-                                if ($id_sits_aten_func == 1) {
-                                    // Não iniciado
-                                    ?>
-                                    <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Clique para iniciar a atividade.'>
-                                        <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id_aten_func . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']. '&aten='.$id_atendimento; ?>" class="btn btn-outline-success btn-sm mb-2 btnOpcoes"  data-sitAtenIniciar='Tem certeza que deseja iniciar está atividade?'>
-                                            Iniciar
-                                        </a>
-                                    </span>
-                                    <?php
-                                } elseif ($id_sits_aten_func == 2){
-                                    // Iniciado
-                                    ?>
-
-
-                                    <a href="#" class="btn btn-secondary btn-sm mb-2 btnOpcoesDisabled disabled">
-                                        Em andamento
-                                    </a>
-                                    <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Clique para pausar a atividade.'>
-                                        <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id_aten_func . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']. '&aten='.$id_atendimento; ?>" class="btn btn-outline-warning btn-sm mb-2" data-sitAtenPausar='Tem certeza que deseja pausar está atividade?'>
-                                            Pausar
-                                        </a>
-                                    </span>
-
-
-                                    <?php
-                                } elseif ($id_sits_aten_func == 3) {
-                                    // Pausado
-                                    ?>
-                                    <span tabindex='0' data-placement='top' data-toggle='tooltip' title='Clique para continuar a atividade.'>
-                                        <a href="<?php echo URLADM . 'atendimento-status/alterar/'.$id_aten_func . '?status='.$id_sits_aten_func.'&pg='.$this->Dados['pg']. '&aten='.$id_atendimento; ?>" class="btn btn-outline-info btn-sm mb-2 btnOpcoes"
-                                           data-sitAtenContinuar='Tem certeza que deseja da continuidade está atividade agora?'>
-                                            Continuar
-                                        </a>
-                                    </span>
-                                    <a href="#" class="btn btn-secondary btn-sm mb-2 btnOpcoesDisabled disabled">
-                                        Pausar
-                                    </a>
-                                    <?php
-                                } else {
-                                    // Finalizado
-                                    ?>
-                                    <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Atividade finalizada.'>
-                                        <a href="#" class="btn btn-dark btn-sm mb-2 btnOpcoes btnOpcoesDisabled disabled">
-                                            Finalizado
-                                        </a>
-                                    </span>
-                                    <?php
-                                }
-                                ?>
                             </td>
                             <td>
                                 <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Descrição: <?php echo $descricao_demanda; ?>'>
@@ -370,13 +392,13 @@ function getFeriados($ano){
                                     <?php echo $nome_atividade; ?>
                                 </span>
                                 <br/>
-                                    <?php  if($prioridade == 1) { ?>
-                                    
-                                        <span class="text-danger" tabindex='0' data-placement='bottom' data-toggle='tooltip' title='Atividade foi definida com prioridade sobre as próximas'>
+                                <?php  if($prioridade == 1) { ?>
+
+                                    <span class="text-danger" tabindex='0' data-placement='bottom' data-toggle='tooltip' title='Atividade foi definida com prioridade sobre as próximas'>
                                             <i class="fas fa-exclamation-triangle"></i>
                                         </span>
-                                    
-                                    <?php } ?>
+
+                                <?php } ?>
                             </td>
                             <td>
                                 <?php
@@ -756,7 +778,7 @@ function getFeriados($ano){
                                 }
                                 if (($this->Dados['botao']['conclu']) AND ($id_sits_aten_func == 2 OR $id_sits_aten_func == 3)) { ?>
                                     <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Finalizar">
-                                        <a href="<?php echo URLADM . 'func-concluir-atendimento/concluir/' . $id_aten_func. '?status='. $id_sits_aten_func .'&pg='.$this->Dados['pg'] . '&aten='.$id_atendimento; ?>" class="btn btn-outline-success btn-sm mb-2" data-confirmFinalizar='Finalizar atendimento'>
+                                        <a href="<?php echo URLADM . 'func-concluir-atendimento/concluir/' . $id_aten_func. '?status='. $id_sits_aten_func .'&pg='.$this->Dados['pg'] . '&aten='.$id_atendimento.'&func='.$funcionario_id; ?>" class="btn btn-outline-success btn-sm mb-2" data-confirmFinalizar='Finalizar atendimento'>
                                             <i class="fas fa-clipboard-check"></i>
                                         </a>
                                     </span>
@@ -903,6 +925,7 @@ function getFeriados($ano){
 </div>
 
 
+
 <!-- Calculo tempo restante -->
 <script src="<?php echo URLADM.'assets/js/temporizador/jquery-1.9.1.min.js'; ?>"></script>
 <?php
@@ -1015,6 +1038,96 @@ if (!empty($tempo_restanteUrgente)) {
 
         // Chama a função ao carregar a tela
         startCountdownU();
+
+        // chamar função que será executada a cada 10 minutos
+
+        myFunction();
+
+
+        function myFunction() {
+            setInterval(function(){
+                console.log("teste");
+                exibirAviso();
+            }, 600000); // 1 minuto
+        }
+    </script>
+
+    <script>
+        var mensagemCardAviso = document.getElementById('mensagemCardAviso');
+
+        // chando a função ao carregar pagina
+        function exibirAviso() {
+            setTimeout(function () {
+                fadeIn(mensagemCardAviso, 0.5);
+                //fecharMensagem();
+            }, 0);
+        }
+
+        function fecharMensagem() {
+            window.setTimeout(function () {
+                fadeOut(mensagemCardAviso, 1);
+            }, 540000)
+        }
+
+
+        function fecharAgoraAviso() {
+            mensagemCardAviso.classList.add('d-none');
+            mensagemCardAviso.style.opacity = 0;
+            mensagemCardAviso.style.right = 0 + "px";
+            //fadeOut(mensagemCardAviso,0.5)
+        }
+
+
+        // fadeIn
+        function fadeIn(element,time){
+            processa(element,time,0,100);
+        }
+
+        // fadeOut
+        function fadeOut(element,time){
+            processa(element,time,100,0);
+        }
+
+        // realizar efeito
+        function processa(element,time,initial,end){
+            var increment;
+            var intervalo;
+            var opc;
+
+            if(initial == 0){
+                increment = 2;
+                element.classList.remove('d-none');
+            }else {
+                increment = -3;
+            }
+
+            opc = initial;
+
+            intervalo = setInterval(function(){
+                if((opc == end)){
+                    if(end == 0){
+                        element.classList.add('d-none');
+                    }
+                    clearInterval(intervalo);
+                }else {
+                    if (end == 0) {
+                        opc += increment;
+                        if (element.style.opacity >= 0) {
+                            element.style.opacity = opc / 100;
+                        } else {
+                            element.classList.add('d-none');
+                        }
+                        element.style.filter = "alpha(opacity=" + opc + ")";
+                        element.style.right =  -0.1 + "px";
+                    } else {
+                        opc += increment;
+                        element.style.opacity = opc / 100;
+                        element.style.filter = "alpha(opacity=" + opc + ")";
+                        element.style.right = (opc) + "px";
+                    }
+                }
+            },time * 10);
+        }
 
     </script>
 

@@ -1,0 +1,338 @@
+
+/*===================================*/
+/*ALERT COM JAVASCRIPT*/
+#mensagemCard {
+    position: absolute;
+    z-index: 3333;
+    right: 0%;
+    top: 5%;
+    opacity: 0;
+    transition: all .3s ease-in-out;
+    box-shadow: 0 0 10px rgba(0,0,0,.5);
+}
+#mensagemCard h5.card-title {
+    font-size: 1.3em;
+    margin-bottom: .75rem;
+}
+
+
+#mensagemCardAviso {
+    position: absolute;
+    z-index: 3333;
+    right: 0px;
+    top: 5%;
+    opacity: 0;
+    transition: all .3s ease-in-out;
+    box-shadow: 0 0 10px rgba(0,0,0,.5);
+}
+#mensagemCardAviso h5.card-title {
+    font-size: 1.3em;
+    margin-bottom: .75rem;
+}
+
+/*===================================*/
+
+a.link {
+    text-decoration: none;
+}
+/* Input file*/
+.custom-file-label:lang(pt-br)::after {
+    content: "Selecionar";
+}
+.custom-file-label:lang(en)::after {
+    content: "Select" !important;
+}
+/* Input disabled */
+#perfilDados .form-control:disabled,
+#perfilDados .form-control[readonly] {
+    background-color: #FFF;
+}
+/*GERAL*/
+
+body {
+    background: #FFF;
+    position: relative;
+}
+
+.linha {
+    color: rgba(0, 0, 0, 0.125);
+    border-color: rgba(0, 0, 0, 0.125);
+}
+
+/*Body login Pagina Site*/
+
+#loginSite .form-group {
+    position: relative;
+    margin: 0;
+}
+
+#loginSite .form-group label {
+    position: absolute;
+    top: 8px;
+    left: 18px;
+    margin: 0;
+    color: #cccccc;
+}
+
+#loginSite input.form-control {
+    padding-left: 40px;
+    border-color: #cccccc;
+}
+
+/*Header login*/
+.login-cabecalho {
+    background-image: linear-gradient(to right, #2b2c7c, #0053ff);
+    background-position: top left;
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 250px;
+    height: 40vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-login-cadastro {
+    max-height: 200px;
+}
+
+#loginAuth .form-group {
+    position: relative;
+}
+
+#loginAuth .form-group label {
+    position: absolute;
+    top: 13px;
+    left: 18px;
+    margin: 0;
+    color: #cccccc;
+    z-index: 11;
+}
+
+#loginAuth input.form-control {
+    padding-left: 40px;
+    border-color: #cccccc;
+}
+
+/*Todos os label*/
+label {
+    cursor: pointer;
+}
+
+/*Card Sobre*/
+.card-sobre img {
+    object-fit: cover;
+    object-position: center;
+    height: 200px;
+    min-width: 100%;
+}
+
+/*PAGINA ADMINISTRATIVA*/
+
+
+
+/*-- Imagem de perfil no menu --*/
+.perfil-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none !important;
+    font-style: normal;
+    color: #FFF !important;
+    font-weight: 300;
+}
+
+.img-menu {
+    object-fit: cover;
+    object-position: center;
+    max-height: 54px;
+    max-width: 54px;
+    min-height: 54px;
+    min-width: 54px;
+    border-radius: 50%;
+    border: 4px solid #FFF;
+}
+
+
+.titulo-conteudo {
+    font-size: 22px;
+    color: #858c96 !important;
+    font-weight: 300;
+}
+
+.breadcrumb {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0;
+    background-color: transparent;
+}
+
+/*Font fina*/
+.font-slim {
+    font-weight: 300;
+}
+
+.card-body {
+    min-height: 120px;
+}
+
+.card-body .card-left {
+    width: 30%;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+    position: relative;
+}
+
+.gradiente-azul {
+    background-image: linear-gradient(to left, #23df96, #22a5d5);
+}
+
+.gradiente-vermelho {
+    background-image: linear-gradient(to left, #dfd223, #d52222);
+}
+
+.gradiente-verde {
+    background-image: linear-gradient(to left, #6092d4, #b122d5);
+}
+
+.card-left .card-fundo-title {
+    position: absolute;
+    background: #FFF;
+    height: 25px;
+    width: 150px;
+    text-align: center;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+    left: 10px;
+    top: 10px;
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-body .card-right {
+    padding-top: 20px;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.card-right h1 {
+    font-size: 4rem;
+    margin: 0;
+}
+
+.card-right span {
+    font-size: .7rem;
+    margin-bottom: 5px;
+}
+
+/*CONTEUDO O.S. LISTAR*/
+#pesquisar input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-color: transparent;
+}
+
+#pesquisar button {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/*-- Tabela --*/
+.italico {
+    font-style: oblique;
+}
+
+#ultimosServicosThead tr th {
+    font-weight: 500;
+    border: none;
+}
+
+#ultimosServicosTbody tr td {
+    text-transform: uppercase;
+    font-size: .9em;
+}
+
+/*EDITANDO DADOS DO CLIENTE*/
+.editar-cliente-titulo {
+    font-size: 1.5em;
+    font-weight: 300;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+.nav-titulo {
+    margin-left: 10px;
+}
+
+
+
+
+
+.card-body {
+    min-height: 0px !important;
+}
+.fa-power-off:hover {
+    color: red;
+    border: none;
+}
+
+
+.notificacao-menu {
+    position: relative;
+}
+
+.notificacao-menu .icone-nav {
+    font-size: 1.2rem;
+}
+
+.numero-notificacao {
+    padding: 1px 2px;
+    color: #FFF;
+    background: #FF6B40;
+    position: absolute;
+    min-width: 22px;
+    min-height: 22px;
+    text-align: center;
+    top: -9px;
+    left: 10px;
+    font-size: .7em;
+    border: 2px solid #6fffff;
+    border-radius: 50px;
+}
+
+.dropdown-header {
+    display: block;
+    width: 100%;
+    padding: 1rem 1.5rem;
+    clear: both;
+    font-weight: 400;
+    color: #212529;
+    text-align: inherit;
+    border: 0;
+    margin: 0 0 10px 0;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+}
+
+#ntNotificacao .dropdown-item {
+    padding-bottom: .9rem;
+    border-radius: .25rem;
+    white-space: normal;
+}
+
+.nt-mensagem {
+    font-size: .9em;
+    display: block;
+    min-width: 300px;
+}
+
+.nt-data {
+    font-size: .7em;
+    color: #8d8e8e;
+    display: block;
+}

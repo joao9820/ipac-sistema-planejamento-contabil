@@ -25,6 +25,9 @@ class Home
         $atendimentos = new AdmsHome();
         $this->Dados['atendimentos_total'] = $atendimentos->verAtendimentos();
 
+        $alocacao = new AdmsHome();
+        $this->Dados['alocacao'] = $alocacao->getAlocacao();
+
         $listarMenu = new AdmsMenu();
         $this->Dados['menu'] = $listarMenu->itemMenu();
         

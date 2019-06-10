@@ -22,12 +22,16 @@ class BuscarDuracaoAtividades
     private $Data;
     private $AtividadeId;
     private $Atividade;
+    private $Status;
 
-    public function __construct($FuncionarioId, $Data = null, $AtividadeId = null)
+    public function __construct($FuncionarioId, $Data = null, $AtividadeId = null, $Status = null)
     {
         $this->FuncionarioId = (int) $FuncionarioId;
         $this->Data = date('Y-m-d', strtotime($Data));
         $this->AtividadeId = (int) $AtividadeId;
+        if (!empty($Status)){
+            $this->Status = (int) $Status;
+        }
 
         $this->buscar();
     }
@@ -38,11 +42,19 @@ class BuscarDuracaoAtividades
     private function buscar()
     {
         $query = new AdmsRead();
-        $query->fullRead("SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(duracao_atividade)))  AS duracao_atividade, SUM(TIME_TO_SEC(duracao_atividade))  AS duracao_atividade_sc
+        if (isset($this->Status)){
+            $query->fullRead("SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(duracao_atividade)))  AS duracao_atividade, SUM(TIME_TO_SEC(duracao_atividade))  AS duracao_atividade_sc
+                                FROM adms_atendimento_funcionarios
+                                WHERE adms_funcionario_id =:id
+                                AND data_inicio_planejado =:data_plan
+                                AND adms_sits_atendimentos_funcionario_id =:sit_atividade", "id={$this->FuncionarioId}&data_plan={$this->Data}&sit_atividade={$this->Status}");
+        } else {
+            $query->fullRead("SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(duracao_atividade)))  AS duracao_atividade, SUM(TIME_TO_SEC(duracao_atividade))  AS duracao_atividade_sc
                                 FROM adms_atendimento_funcionarios
                                 WHERE adms_funcionario_id =:id
                                 AND data_inicio_planejado =:data_plan
                                 AND adms_sits_atendimentos_funcionario_id NOT IN (4, 5)", "id={$this->FuncionarioId}&data_plan={$this->Data}");
+        }
         if ($query->getResultado()) {
 
             $this->Atividade = $query->getResultado()[0];

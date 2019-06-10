@@ -82,9 +82,9 @@ class AdmsAlertMensagem
                     <div onclick='fecharAgora()' class='text-right' style='position: absolute; top: 5px; right: 10px'>
                         <i class='fas fa-times' style='cursor: pointer;'></i>
                     </div>
-                    <i class='{$icone} fa-2x'></i>
+                    <i class='{$icone} fa-2x mt-3'></i>
                     <h5 class='card-title' >{$textoNegrito}</h5>
-                    <p class='card-text'>{$texto}</p>
+                    <p class='card-text mb-3'>{$texto}</p>
                 </div>
             </div>
             ";

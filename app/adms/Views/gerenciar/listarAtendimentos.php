@@ -42,23 +42,25 @@
     <div class="list-group-item">
         <div class="d-flex">
             <div class="mr-auto w-100 p-2">
-                <h2 class="display-4 titulo">Atendimentos</h2>
-                <div class="d-flex">
-                <div class="mr-auto ">
-                    <a href="#" class="btn btn-outline-success btn-sm"><i class="far fa-play-circle"></i> Em execução</a>
-                    <a href="#" class="btn btn-outline-warning btn-sm"><i class="far fa-pause-circle"></i> Pausado</a>
-                    <a href="#" class="btn btn-outline-danger btn-sm"><i class="far fa-clock"></i> Atrasado</a>
-                </div>
-                <div class="">
-                    <a href="#" class="btn btn-outline-info btn-sm"><i class="fas fa-circle"></i> Em andamento</a>
-                    <a href="#" class="btn btn-outline-primary btn-sm"><i class="fas fa-check"></i> Concluído</a>
-                    <a href="#" class="btn btn-outline-danger btn-sm"><i class="fas fa-ban"></i> Cancelado</a>
-                    <!--
-                    <?php if ($this->Dados['botao']['arqui_atendimento']) { ?>
-                        <a href="<?php echo URLADM . 'gerenciar-atendimento/arquivado'; ?>" class="btn btn-outline-dark btn-sm"><i class="fas fa-archive"></i> Arquivados</a>
-                    <?php } ?>
-                    -->
-                </div>
+                <h2 class="display-4 titulo offset-2 offset-md-1 ml-0">Atendimentos</h2>
+                <div class="d-flex offset-1 offset-md-2">
+                    <div class="mr-auto ">
+                        <!--
+                        <a href="#" class="btn btn-outline-success btn-sm"><i class="far fa-play-circle"></i> Em execução</a>
+                        <a href="#" class="btn btn-outline-warning btn-sm"><i class="far fa-pause-circle"></i> Pausado</a>
+                        <a href="#" class="btn btn-outline-danger btn-sm"><i class="far fa-clock"></i> Atrasado</a>
+                        -->
+                    </div>
+                    <div class="">
+                        <!--
+                        <a href="#" class="btn btn-outline-info btn-sm"><i class="fas fa-circle"></i> Em andamento</a>
+                        <a href="#" class="btn btn-outline-primary btn-sm"><i class="fas fa-check"></i> Concluído</a>
+                        <a href="#" class="btn btn-outline-danger btn-sm"><i class="fas fa-ban"></i> Cancelado</a>
+                        -->
+                        <?php if ($this->Dados['botao']['arqui_atendimento']) { ?>
+                            <a href="<?php echo URLADM . 'gerenciar-atendimento/arquivado'; ?>" class="btn btn-outline-dark btn-sm"><i class="fas fa-archive"></i> Arquivados</a>
+                        <?php } ?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -82,49 +84,51 @@
         }
         ?>
 
+        <div class="col-md-12 d-flex justify-content-center justify-content-md-end">
+            <form id="FiltroBusca" method="post" action="" class="d-flex flex-column flex-md-row my-4">
 
-        <form method="post" action="" class="form-inline my-4">
 
 
-
-            <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Caso não escolha uma data inicial será considerado a data atual">
-                <div class="input-group mb-2 mr-sm-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <i class="fas fa-calendar-day"></i>
+                <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Caso não escolha uma data inicial será considerado a data atual">
+                    <div class="input-group mb-2 mr-sm-2">
+                        <div class="input-group-prepend displayNone">
+                            <div class="input-group-text">
+                                <i class="fas fa-calendar-day"></i>
+                            </div>
                         </div>
+                        <input name="dataInicial" type="date" class="form-control" id="inlineFormInputGroupUsername2">
                     </div>
-                    <input name="dataInicial" type="date" pattern="[0-9]{2}\/[0-9]{2}\/[0-9]{4}$" class="form-control" id="inlineFormInputGroupUsername2">
-                </div>
-            </span>
+                </span>
 
+                <span class="mx-2">até</span>
 
-            <span class="mr-2">até</span>
-
-            <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Data final">
-                <div class="input-group mb-2 mr-sm-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <i class="fas fa-calendar-day"></i>
+                <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Data final">
+                    <div class="input-group mb-2 mr-sm-2">
+                        <div class="input-group-prepend displayNone">
+                            <div class="input-group-text">
+                                <i class="fas fa-calendar-day"></i>
+                            </div>
                         </div>
+                        <input name="dataFinal" type="date" class="form-control" id="inlineFormInputGroupUsername2" required>
                     </div>
-                    <input name="dataFinal" type="date" pattern="[0-9]{2}\/[0-9]{2}\/[0-9]{4}$" class="form-control" id="inlineFormInputGroupUsername2" required>
-                </div>
-            </span>
+                </span>
 
-            <button class="btn btn-outline-warning mb-2 mr-2"><i class="fas fa-search"></i></button>
-            <a href="#" class="btn btn-outline-secondary mb-2"><i class="fas fa-eraser"></i></a>
-        </form>
+                <span class="pl-0 pl-md-2">
+                    <button class="btn btn-outline-powercar mb-2 mr-2"><i class="fas fa-search"></i></button>
+                    <a href="#" class="btn btn-outline-secondary mb-2"><i class="fas fa-eraser"></i></a>
+                </span>
+            </form>
+        </div>
 
         <?php
         //var_dump($this->Dados['listAtendimentos']);
         ?>
 
         <div class="table-responsive">
-            <table class="table table-striped table-hover ">
+            <table class="table table-hover ">
                 <thead class="bg-info text-light my-4">
                 <tr>
-                    <th class="d-none d-lg-table-cell">Cod.</th>
+                    <th class="">Cod.</th>
                     <th class="">Planejamento</th>
                     <th><span class='luzAlert' tabindex='0' data-placement='right' data-toggle='tooltip' title='Total de atividades definidas para um ou mais funcionários'>Qtd/Atividades</span></th>
                     <th>Progresso</th>
@@ -150,7 +154,7 @@
                     <tr class="">
                         <?php
                         if(($nome_situacao == "Concluído") AND ($id_situacao == 3)){
-                            echo '<td class="d-none d-lg-table-cell">';
+                            echo '<td class="">';
                             echo '<i class="fas fa-lightbulb text-light faIpac"></i>';
                             if ($id < 10){
                                 echo "000".$id;
@@ -163,11 +167,11 @@
                             }
                         } else {
                             ?>
-                            <td class="d-none d-lg-table-cell <?php if (($data_fatal_atividade < date('Y-m-d'))and (!empty($data_fatal_atividade))) {
-                                echo "text-danger";
-                            } else {
-                                echo "text-dark";
-                            } ?>">
+                        <td class=" <?php if (($data_fatal_atividade < date('Y-m-d'))and (!empty($data_fatal_atividade))) {
+                                    echo "text-danger";
+                                } else {
+                                    echo "text-dark";
+                                } ?>">
                                 <?php
                                     if (($data_fatal_atividade < date('Y-m-d'))and (!empty($data_fatal_atividade))){
                                         echo "<span class='luzAlert' tabindex='0' data-placement='right' data-toggle='tooltip' title='Este atendimento está com uma (ou mais) atividade(s) com entrega atrasada(s).'>";
@@ -199,12 +203,10 @@
                             } else {
                                 ?>
                                 <span class="d-flex justify-content-start">
-                                <span tabindex='0' data-placement='right' data-toggle='tooltip' title='Clique para acessar a página de visualização dos funfionários responsável por este atendimento'>
                                     <a href="<?php echo URLADM . 'atendimento-funcionarios/listar/' . $adms_demanda_id .'?aten='.$id.'&pg='.$this->Dados['pg']; ?>" class="btn btn-outline-secondary border-0 btn-sm mb-2 btnOpcoes"  >
                                         <i class="fas fa-pen-square"></i> Planejamento
                                     </a>
                                 </span>
-                            </span>
                                 <?php
                             }
                             ?>
@@ -294,13 +296,13 @@
                                 <?php echo $nome_situacao; ?>
                             </span>
                         </td>
-                        <td class="d-none d-sm-table-cell">
+                        <td class="">
                             <span tabindex="0" data-placement="right" data-toggle="tooltip" title="<?php echo $emp_nome; ?>">
                                 <?php echo $fantasia; ?>
                             </span>
                         </td>
                         <td>
-                            <div class="dataAtendimento">
+                            <div class="dataAtendimento d-flex flex-row">
                                 <span class="data bg-light text-secondary shadow"><i class="far fa-calendar-alt"></i> <?php echo date('d/m/Y \a\s H\hi', strtotime($created)); ?></span>
                             </div>
                         </td>
@@ -326,9 +328,9 @@
                                     <?php
                                 }
                                 ?>
-                                <!--
+
                                 <?php
-                                if ($this->Dados['botao']['arquivar_atendimento']) { ?>
+                                if (($this->Dados['botao']['arquivar_atendimento']) AND (($nome_situacao == "Concluído")  AND ($id_situacao == 3))) { ?>
                                     <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Arquivar">
                                         <a href="<?php echo URLADM . 'atendimento-gerente/arquivar/'.$id . '?pg='.$this->Dados['pg']; ?>" class="btn btn-outline-secondary btn-sm my-md-1"
                                         data-arquivo='Tem certeza que deseja arquivar o atendimento selecionado?'>
@@ -338,7 +340,7 @@
                                     <?php
                                 }
                                 ?>
-                                -->
+
                             </span>
                             <div class="dropdown d-block d-md-none">
                                 <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="acoesListar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -372,10 +374,10 @@
                 ?>
                 </tbody>
             </table>
-            <?php
-                echo $this->Dados['paginacao'];
-            ?>
+            
         </div>
-
+        <?php
+            echo $this->Dados['paginacao'];
+        ?>
     </div>
 </div>

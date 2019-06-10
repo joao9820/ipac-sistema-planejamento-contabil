@@ -21,7 +21,7 @@ if (!defined('URL')) {
 //die();
 ?>
 <div class="content p-1">
-    <div class="list-group-item">
+    <div class="mb-3">
         <div class="d-flex">
             <div class="mr-auto p-2">
 
@@ -33,9 +33,9 @@ if (!defined('URL')) {
             </div>
         </div>
     </div>
-    <div class="list-group-item border mx-4 mb-4 p-0 rounded">
+    <div class="list-group-item border mb-4 p-0 rounded">
         <div id="headerDescricaoPg" class="bg-primary">
-            <h3 class="">Listando Atividades</h3>
+            <h3 class="">Gerenciar Atividades</h3>
         </div>
 
         <div class="list-group-item">
