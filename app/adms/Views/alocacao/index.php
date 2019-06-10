@@ -22,19 +22,6 @@ if (!empty($this->Dados['dadosForm'])){
         justify-content: center;
         align-items: center;
         font-size: 3em;
-        border-top-left-radius: 0;
-        border-top-right-radius: .25rem;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: .25rem;
-        background-image: linear-gradient(to right, #2b2c7c, #0053ff);
-    }
-    @media (max-width: 480px) {
-        .cardGerente {
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
-            border-bottom-left-radius: .25rem;
-            border-bottom-right-radius: .25rem;
-        }
     }
     .cardBorder, .cardGerente {
         transition: all .3s ease-in-out;
@@ -43,7 +30,7 @@ if (!empty($this->Dados['dadosForm'])){
         border-color: #2b2c7c !important;
     }
     .cardBorder:hover .cardGerente {
-       opacity: .8;
+        background: #2b2c7c !important;
     }
 
 </style>
@@ -56,11 +43,11 @@ if (!empty($this->Dados['dadosForm'])){
 
             </div>
 
-            <div class="col-md-12 d-flex justify-content-center justify-content-md-end">
-                <form id="FiltroBusca" method="post" action="" class="d-flex flex-column flex-md-row my-1">
+            <div class="col-md-12 d-flex justify-content-end">
+                <form method="post" action="" class="form-inline my-1">
                     <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Data início">
                         <div class="input-group mb-2 mr-sm-2">
-                            <div class="input-group-prepend displayNone">
+                            <div class="input-group-prepend">
                                 <div class="input-group-text">
                                     <i class="fas fa-calendar-day"></i>
                                 </div>
@@ -69,11 +56,11 @@ if (!empty($this->Dados['dadosForm'])){
                         </div>
                     </span>
 
-                    <span class="mx-2">até</span>
+                        <span class="mr-2">até</span>
 
-                    <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Data fim">
+                        <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Data fim">
                         <div class="input-group mb-2 mr-sm-2">
-                            <div class="input-group-prepend displayNone">
+                            <div class="input-group-prepend">
                                 <div class="input-group-text">
                                     <i class="fas fa-calendar-day"></i>
                                 </div>
@@ -81,13 +68,12 @@ if (!empty($this->Dados['dadosForm'])){
                             <input name="dataFinal" type="date" value="<?php echo isset($dataFinal) ? $dataFinal : ""; ?>" class="form-control" id="inlineFormInputGroupUsername2" required>
                         </div>
                     </span>
-                    <span class="ml-0 ml-md-2">
-                        <button class="btn btn-outline-powercar mb-2 mr-2"><i class="fas fa-search"></i></button>
-                    </span>
+
+                        <button class="btn btn-outline-warning mb-2 mr-2"><i class="fas fa-search"></i></button>
                 </form>
             </div>
 
-            <div class="col-md-6 text-center text-md-left">
+            <div class="col-md-6">
                 <span class="badge bg-light my-3">
                 Filtro Aplicado:
                 <?php
@@ -113,7 +99,7 @@ if (!empty($this->Dados['dadosForm'])){
                     }
             ?>
             <div class="col-md-4 mb-3">
-                <div onclick="window.location.href='<?php echo URLADM . 'alocacao/gerente/' . $key .'?data_inicio='.$dataInicial.'&data_fim='.$dataFinal; ?>'" style="cursor: pointer;" class="card cardBorder text-center">
+                <div onclick="window.location.href='<?php echo URLADM . 'alocacao/gerente/' . $key .'?data_inicio='.$dataInicial.'&data_fim='.$dataFinal; ?>'" style="cursor: pointer;" class="card cardBorder text-center border-secondary">
                     <div class="row no-gutters">
                         <div class="col-md-8">
                             <div class="card-header"><strong><?php echo $value['nome'] ?></strong></div>
@@ -125,7 +111,7 @@ if (!empty($this->Dados['dadosForm'])){
                                 </button>
                             </div>
                         </div>
-                        <div class="col-md-4 text-light cardGerente">
+                        <div class="col-md-4 bg-secondary text-light cardGerente">
                             <?php echo number_format($value['percentual_alocacao'], 0, ',', ' ') . "%" ?>
                         </div>
                     </div>

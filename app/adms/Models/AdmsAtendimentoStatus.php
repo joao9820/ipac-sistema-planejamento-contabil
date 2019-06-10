@@ -33,15 +33,12 @@ class AdmsAtendimentoStatus
     private $ResultadoStsIniciado;
     private $ResultadoTempo;
     private $AtendimentoId;
-    private $FuncionarioId;
 
-
-    public function alterarStatus($DadosId = null, $Status = null, $AtendimentoId = null, $FuncionarioId = null)
+    public function alterarStatus($DadosId = null, $Status = null, $AtendimentoId = null)
     {
         $this->DadosId = (int) $DadosId;
         $this->Status = (int) $Status;
         $this->AtendimentoId = (int) $AtendimentoId;
-        $this->FuncionarioId = !empty($FuncionarioId) ? (int) $FuncionarioId : $_SESSION['usuario_id'];
 
         $this->verificarAtenIniciado();
         if (isset($this->ResultadoStsIniciado) AND !empty($this->ResultadoStsIniciado))
@@ -118,13 +115,10 @@ class AdmsAtendimentoStatus
     {
         $tempoRestante = new AdmsRead();
         $tempoRestante->fullRead("SELECT at_tempo_restante, at_iniciado, at_tempo_excedido FROM adms_atendimento_funcionarios 
-                WHERE id=:id AND adms_funcionario_id =:adms_funcionario_id", "id={$this->DadosId}&adms_funcionario_id={$this->FuncionarioId}");
+                WHERE id=:id AND adms_funcionario_id =:adms_funcionario_id", "id={$this->DadosId}&adms_funcionario_id={$_SESSION['usuario_id']}");
         $this->ResultadoTempo = $tempoRestante->getResultado();
     }
 
-    /**
-     * @throws \Exception
-     */
     private function alterar()
     {
         if ($this->Status == 1) {
@@ -174,7 +168,6 @@ class AdmsAtendimentoStatus
                     $novoTempoRestante = gmdate("H:i:s", $segundosDiff);
 
                 }
-
                 $this->Dados['at_tempo_restante'] = $novoTempoRestante;
             }
             else {
@@ -216,8 +209,6 @@ class AdmsAtendimentoStatus
 
         $this->Dados['modified'] = date("Y-m-d H:i:s");
 
-
-
         $upAtendimento = new AdmsUpdate();
         $upAtendimento->exeUpdate("adms_atendimento_funcionarios", $this->Dados, "WHERE id =:id", "id={$this->DadosId}");
 
@@ -225,15 +216,6 @@ class AdmsAtendimentoStatus
 
             if ($this->Status == 1) {
                 $this->iniciarAtendimento();
-            }
-
-            if ($_SESSION['adms_niveis_acesso_id'] < 4) {
-                $registrarLogGerente = new AdmsLogGerenteAtendimento($this->Dados['adms_sits_atendimentos_funcionario_id'], $_SESSION['adms_niveis_acesso_id'], $this->DadosId, $this->FuncionarioId);
-                if (!$registrarLogGerente->getRegistrarLog()) {
-                    echo "Não foi possível registrar o log";
-                } else {
-                    echo "Log registrado";
-                }
             }
 
             $this->Resultado = true;
@@ -273,7 +255,7 @@ class AdmsAtendimentoStatus
     {
         $verificarAtenIni = new AdmsRead();
         $verificarAtenIni->fullRead("SELECT id, adms_demanda_id FROM adms_atendimento_funcionarios 
-                WHERE id<>:id AND adms_funcionario_id =:adms_funcionario_id AND adms_sits_atendimentos_funcionario_id =:adms_sits_aten_funcionario_id", "id={$this->DadosId}&adms_funcionario_id={$this->FuncionarioId}&adms_sits_aten_funcionario_id=2");
+                WHERE id<>:id AND adms_funcionario_id =:adms_funcionario_id AND adms_sits_atendimentos_funcionario_id =:adms_sits_aten_funcionario_id", "id={$this->DadosId}&adms_funcionario_id={$_SESSION['usuario_id']}&adms_sits_aten_funcionario_id=2");
         $this->ResultadoStsIniciado = $verificarAtenIni->getResultado();
     }
 

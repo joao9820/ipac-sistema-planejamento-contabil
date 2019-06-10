@@ -1,5 +1,5 @@
 /*MEDIA TOP NAVBAR*/
-@media (max-width: 780px){
+@media (max-width: 480px){
     .nav-menu {
         background-image: linear-gradient(to right, #2b2c7c, #0053ff);
         color: #FFF;
@@ -25,11 +25,5 @@
     }
     #main {
         padding-right: 0;
-    }
-    .nav-tabs li {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        font-size: .85em;
     }
 }

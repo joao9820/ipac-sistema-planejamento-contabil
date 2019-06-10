@@ -202,10 +202,10 @@ class AtendimentoFuncionarios {
          * prioridade <- 1 [Sim] , 2 [Não]
          */
         $this->Dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-
+        
         var_dump($this->Dados);
         //die();
-
+        
         $adms_demanda_id = $this->Dados['adms_demanda_id'];
         $adms_atendimento_id = $this->Dados['adms_atendimento_id'];
 
@@ -230,11 +230,11 @@ class AtendimentoFuncionarios {
                 $this->Condicao['adms_atendimento_id'] = $this->Dados['adms_atendimento_id'];
                 unset($this->Dados['adms_atendimento_id']);
                 $this->Condicao['adms_funcionario_id'] = $this->Dados['adms_funcionario_id'];
-
+       
                 $this->Condicao['adms_funcionario_id_ant'] = $this->Dados['verificar_mesmo_funcionario']; //Verificar o funcionário antigo para deletar o registro e mover para o outro
-
+                
                 unset($this->Dados['verificar_mesmo_funcionario']); // Retirando do array o funcionário antigo
-
+                
                 $upAtividade = new AdmsAtendimentoFuncionarioEditar();
                 $upAtividade->setAtividade($this->Dados, $this->Condicao); //A prioridade está inclusa
                 // Receber um array de dados contendo o status

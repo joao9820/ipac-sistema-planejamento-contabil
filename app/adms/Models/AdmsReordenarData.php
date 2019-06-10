@@ -43,9 +43,9 @@ class AdmsReordenarData {
 
     public function defineData($Funcionario = null, $Data = null, $horaFimAtvAnt = null) {
         $this->FuncionarioId = $Funcionario;
-
-        $novaData = $this->verificarData($Data);
-
+        
+        $novaData = $this->verificarData($Data);  
+        
         $this->horaFimAtvAnt = $horaFimAtvAnt;
         echo 'Horafim atv ant: ' . $this->horaFimAtvAnt;
         //die();
@@ -58,20 +58,20 @@ class AdmsReordenarData {
 
         $reordemDia->buscarJornada($this->FuncionarioId, $novaData);
         $this->JornadaFunc = $reordemDia->getBuscarJornada();
-
+        
         $reordemDia->buscarUltimaAtividadeDefineData($novaData);
         $this->UltimaAtividadeLoop = $reordemDia->getBuscarUltimaAtividadeDefineData();
-
+        
         //VERIFICAR SE É POSSIVEL RETIRAR A PRIMEIRA CONDIÇÃO, POIS A SEGUNDA CONDIÇÃO SO VAI SER VERDADE SE A PRIMEIRA TAMBÉM FOR, E VISE E VERSA
         if (($this->horaFimAtvAnt > $this->JornadaFunc['hora_inicio']) && ($this->JornadaFunc['hora_termino2'] > $this->horaFimAtvAnt)) {
             //die();
             $this->Dados['data_inicio_planejado'] = $novaData;
-            echo 'Data ja na classe reordenar: ' . $this->Dados['data_inicio_planejado'];
+            echo 'Data ja na classe reordenar: '. $this->Dados['data_inicio_planejado'];
             //die();
             //break;
         } else {
 
-            if ($this->JornadaFunc['hora_termino2'] < $this->horaFimAtvAnt || $this->JornadaFunc['hora_termino2'] > $this->horaFimAtvAnt) { //MODIFICADO
+            if ($this->JornadaFunc['hora_termino2'] < $this->horaFimAtvAnt || $this->JornadaFunc['hora_termino2'] > $this->horaFimAtvAnt ) { //MODIFICADO
 
                 /*
                  * calcular o tempo excedido quando a soma total das atividades não ultrapassa a jornada de trabalho
@@ -99,18 +99,18 @@ class AdmsReordenarData {
             $data->modify('+1 day');
             $novaData = $data->format('Y-m-d');
             //echo $novaData;
-
+            
             $novaDataDisp = $this->verificarData($novaData);
-
-            if ($Data == '2019-06-03') {
-
-                echo "(({$this->JornadaFunc['jornadaFunc']} > {$this->DuracaoTotalAtivi[0]['duracao_atividade_sc']}) and ({$this->JornadaFunc['hora_termino2']} > {$this->horaFimAtvAnt})) <br>";
-
-                echo 'Nova data na classe de reordenar data' . $novaDataDisp . "<br>";
-                //die();
-            }
-
-
+                     
+        if($Data == '2019-06-03'){
+            
+            echo "(({$this->JornadaFunc['jornadaFunc']} > {$this->DuracaoTotalAtivi[0]['duracao_atividade_sc']}) and ({$this->JornadaFunc['hora_termino2']} > {$this->horaFimAtvAnt})) <br>";
+            
+            echo 'Nova data na classe de reordenar data' . $novaDataDisp . "<br>";
+            //die();
+        }
+            
+            
             $this->Dados['data_inicio_planejado'] = $novaDataDisp;
             //$this->horaFimAtvAnt = $this->UltimaAtividadeLoop[0]['hora_fim_planejado']; //Se somar um dia buscará a hora da ultima atividade para esse dia
         }
@@ -142,14 +142,14 @@ class AdmsReordenarData {
         return $this->jaExiste;
     }
 
-    public function buscarUltimaAtiviFuncAlmoco($horaFimAtv, $data, $duracao, $inicio_atv_almoco = NULL, $tempo_excedido = NULL, $func_id = NULL) { //Recebe a hora que está terminando sem intervalo de almoço
+    public function buscarUltimaAtiviFuncAlmoco($horaFimAtv, $data, $duracao, $inicio_atv_almoco = NULL,  $tempo_excedido = NULL, $func_id = NULL) { //Recebe a hora que está terminando sem intervalo de almoço
         $this->Dados['data_inicio_planejado'] = $data;
         $this->Dados['duracao_atividade'] = $duracao;
-
-        if (!is_null($func_id)) {
+        
+        if(!is_null($func_id)){
             $this->FuncionarioId = $func_id;
         }
-
+        
         $jornadaFunc = new BuscarDuracaoJornadaT($this->FuncionarioId, $this->Dados['data_inicio_planejado']);
         $pausa_almoco = $jornadaFunc->getDuracaoJornada()['hora_termino'];
         $retorna_trabalho = $jornadaFunc->getDuracaoJornada()['hora_inicio2'];
@@ -158,54 +158,48 @@ class AdmsReordenarData {
         if (empty($pausa_almoco)) {
             return $this->Resultado = false;
         }
-
-        if (empty($inicio_atv_almoco)) {
+        
+        if(empty($inicio_atv_almoco)){
             $this->comparaHoraInicio = $this->horaFimAtvAnt; //Já está no atributo a hora fim da ultima atv e seria a hora de inicio da atv em questão
-        } else {
+        }else{
             $this->comparaHoraInicio = $inicio_atv_almoco;
         }
-
-        echo 'Hora inicio atv sem intervalo: ' . $this->comparaHoraInicio;
-
-        if (($this->comparaHoraInicio < $pausa_almoco) and ( $pausa_almoco < $horaFimAtv)) {
+        
+        
+        //echo  'Hora inicio atv sem intervalo: ' . $this->comparaHoraInicio;
+        
+        if (($this->comparaHoraInicio < $pausa_almoco) and ($pausa_almoco < $horaFimAtv)) {
             $calculaAlmoco = new Funcoes();
             $totalTimeAlmoco = $calculaAlmoco->sbtrair_horas_in_hours($retorna_trabalho, $pausa_almoco);
             $this->Dados['hora_inicio_planejado'] = $this->comparaHoraInicio;
             $this->Dados['hora_fim_planejado'] = $calculaAlmoco->somar_time_in_hours($totalTimeAlmoco, $horaFimAtv);
         }
         /*
-          var_dump($this->Dados);
-          echo 'Tempo Excedido: ' . $tempo_excedido;
-         */
-        //A partir daqui estava utilizando o parâmetro $inicio_atv_almoco
-        if (($this->comparaHoraInicio >= $pausa_almoco) and ($this->comparaHoraInicio < $retorna_trabalho)) { //Antes utilizava o compara_hora_inicio
+        var_dump($this->Dados);
+        echo 'Tempo Excedido: ' . $tempo_excedido;
+        */
+        if (($inicio_atv_almoco >= $pausa_almoco) and ($inicio_atv_almoco < $retorna_trabalho)) { //Antes utilizava o compara_hora_inicio
             echo 'Entrou aqui! ';
-            //die();
             /*
              * calcular se o tempo excedido da atividade anterior termina durante o horario de almoço, se sim, somar horario de almoço
              * na hora_inicio_planejado da atividade sendo registrada e somar a duração da atividade definindo a hora_fim_planejado
              */
 
-            if (!empty($tempo_excedido)) {
-                
-                $verificarTimeExcedido = new Funcoes();
+            $verificarTimeExcedido = new Funcoes();
 
-                $timeExcedido = $verificarTimeExcedido->segundos_to_hora($tempo_excedido);
-
-                echo '<br>Time excedido: ' . $timeExcedido;
-
-                //die();
-                $horaInicioSemAlmoco = $verificarTimeExcedido->somar_time_in_hours($timeExcedido, $start_job);
-            }else{ //Ex: atv anterior - 9:30 até 13:00 (CRISTOVÃO)
-                $horaInicioSemAlmoco = $this->comparaHoraInicio;
-            }
-
+            $timeExcedido = $verificarTimeExcedido->segundos_to_hora($tempo_excedido);
+            
+            echo '<br>Time excedido: ' . $timeExcedido;
+            
+            //die();
+            
+            $horaInicioSemAlmoco = $verificarTimeExcedido->somar_time_in_hours($timeExcedido, $start_job);
 
             if ($horaInicioSemAlmoco > $pausa_almoco) {
 
                 $calcularInicioAfterAlmoco = new Funcoes();
                 $totalTimeAlmoco = $calcularInicioAfterAlmoco->sbtrair_horas_in_hours($retorna_trabalho, $pausa_almoco);
-                $this->Dados['hora_inicio_planejado'] = $calcularInicioAfterAlmoco->somar_time_in_hours($totalTimeAlmoco, $this->comparaHoraInicio);
+                $this->Dados['hora_inicio_planejado'] = $calcularInicioAfterAlmoco->somar_time_in_hours($totalTimeAlmoco, $inicio_atv_almoco);
                 $this->Dados['hora_fim_planejado'] = $calcularInicioAfterAlmoco->somar_time_in_hours($this->Dados['duracao_atividade'], $this->Dados['hora_inicio_planejado']);
             } else {
                 // Caso a nova atividade a ser registrada inicie durante o almoço, será definida pra ela o novo inicio após o almoço
@@ -219,19 +213,19 @@ class AdmsReordenarData {
     public function getBuscarUltimaAtiviFuncAlmoco() {
 
         if (!empty($this->Dados['hora_inicio_planejado']) && !empty($this->Dados['hora_fim_planejado'])) {
-            $this->Resultado = ["hora_inicio" => $this->Dados['hora_inicio_planejado'], "hora_fim" => $this->Dados['hora_fim_planejado']];
-            //echo 'hora fim depois do almoço' .  $this->Resultado['hora_fim'];
+             $this->Resultado = ["hora_inicio" => $this->Dados['hora_inicio_planejado'], "hora_fim" => $this->Dados['hora_fim_planejado']];
+             //echo 'hora fim depois do almoço' .  $this->Resultado['hora_fim'];
             return $this->Resultado;
         } else {
             return FALSE;
         }
     }
-
-    public function verificarData($novaData) {
-
+    
+    public function verificarData($novaData){
+       
         $data = getdate(strtotime($novaData));
-        if (($data['wday'] == 6) or ( $data['wday'] == 0)) {
-            if ($data['wday'] == 6) {
+        if (($data['wday'] == 6) or ($data['wday'] == 0)) {
+            if ($data['wday'] == 6){
                 // se for sabado
                 $dias = 2;
             } else {
@@ -239,7 +233,7 @@ class AdmsReordenarData {
                 $dias = 1;
             }
             $novodia = new Funcoes();
-            $novaData = $novodia->dia_in_data($novaData, $dias, "+");
+            $novaData = $novodia->dia_in_data($novaData,$dias,"+");
         } else {
 
             // Verificando se é feriado
@@ -249,12 +243,14 @@ class AdmsReordenarData {
                 $novaData = $feriado->dia_in_data($novaData, 1, "+");
                 //echo "teve feriado";
             }
+
         }
-
-        return $novaData;
+        
+       return $novaData; 
+        
     }
-
-    public function getHoraInicio() {
+    
+    public function getHoraInicio(){
         $this->Resultado = ["hora_inicio" => $this->JornadaFunc['hora_inicio'], "hora_termino2" => $this->JornadaFunc['hora_termino2']];
         return $this->Resultado;
     }

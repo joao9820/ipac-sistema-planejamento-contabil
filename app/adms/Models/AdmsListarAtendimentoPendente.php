@@ -23,37 +23,24 @@ class AdmsListarAtendimentoPendente
     private $PageId;
     private $LimiteResultado = 15; // Define a quantidade de usuarios por páginas
     private $ResultadoPg;
-    private $FuncionarioId;
 
-    public function __construct($FuncionarioId = null)
-    {
-        if (($FuncionarioId == null) or (empty($FuncionarioId))){
-            $this->FuncionarioId = (int) $_SESSION['usuario_id'];
-        } else {
-            $this->FuncionarioId = (int) $FuncionarioId;
-        }
-    }
 
     public function getResultadoPg()
     {
         return $this->ResultadoPg;
     }
 
-    public function verCargaHoraria($FuncionarioId = null)
+    public function verCargaHoraria()
     {
-        if (!empty($FuncionarioId)){
-            $this->FuncionarioId = (int) $FuncionarioId;
-        }
-
         $hoje = date('Y-m-d');
         $verJornada = new AdmsRead();
         $verJornada->fullRead("SELECT usuario.nome, usuario.jornada_de_trabalho, time_format(SEC_TO_TIME(SUM(TIME_TO_SEC( extra.total ))),'%H:%i:%s') 
                                     AS hora_extra
                                     FROM adms_usuarios usuario, adms_hora_extra extra
                                     WHERE usuario.id =:id  AND usuario.id=extra.adms_usuario_id AND extra.data =:hoje
-                                    LIMIT :limit", "id=".$this->FuncionarioId."&hoje=".$hoje."&limit=1");
+                                    LIMIT :limit", "id=".$_SESSION['usuario_id']."&hoje=".$hoje."&limit=1");
         $this->Resultado = $verJornada->getResultado();
-
+        
         if($this->Resultado){
             return $this->Resultado[0]; 
         }else{
@@ -64,7 +51,7 @@ class AdmsListarAtendimentoPendente
     public function listarAtendimento($PageId = null)
     {
         $this->PageId = (int) $PageId;
-        $paginacao = new AdmsPaginacao(URLADM . 'atendimentos/listar',"?func={$this->FuncionarioId}");
+        $paginacao = new AdmsPaginacao(URLADM . 'atendimentos/listar');
         $paginacao->condicao($this->PageId, $this->LimiteResultado);
         $paginacao->paginacao("SELECT COUNT(aten.id) AS num_result
                      FROM adms_atendimento_funcionarios aten
@@ -73,13 +60,13 @@ class AdmsListarAtendimentoPendente
                        AND (at.adms_sits_atendimento_id <>:adms_sits_atendimento_id AND at.adms_sits_atendimento_id <>:adms_sits_atendimento_conclu)
                        AND aten.adms_sits_atendimentos_funcionario_id <>:adms_s_atend_func_id 
                        AND aten.adms_sits_atendimentos_funcionario_id <>:interrompido
-                       AND at.prioridade <>:prioridade", "usuario=".$this->FuncionarioId."&adms_sits_atendimento_id=4&adms_sits_atendimento_conclu=3&prioridade=1&adms_s_atend_func_id=4&interrompido=5");
+                       AND at.prioridade <>:prioridade", "usuario=".$_SESSION['usuario_id']."&adms_sits_atendimento_id=4&adms_sits_atendimento_conclu=3&prioridade=1&adms_s_atend_func_id=4&interrompido=5");
         $this->ResultadoPg = $paginacao->getResultado();
         $offset = $paginacao->getOffset();
 
 
         $listarAtendimento = new AdmsRead();
-        $listarAtendimento->fullRead("SELECT aten.id id_aten_func, aten.duracao_atividade, aten.adms_funcionario_id as funcionario_id, aten.created, aten.inicio_atendimento, aten.at_tempo_restante, aten.at_iniciado, aten.at_tempo_excedido, aten.data_fatal, aten.hora_inicio_planejado, aten.hora_fim_planejado, aten.data_inicio_planejado, aten.prioridade,
+        $listarAtendimento->fullRead("SELECT aten.id id_aten_func, aten.duracao_atividade, aten.created, aten.inicio_atendimento, aten.at_tempo_restante, aten.at_iniciado, aten.at_tempo_excedido, aten.data_fatal, aten.hora_inicio_planejado, aten.hora_fim_planejado, aten.data_inicio_planejado, aten.prioridade,
             ativi.nome nome_atividade, ativi.descricao descricao_atividade,
             demanda.nome nome_demanda, demanda.descricao descricao_demanda,
             at.id id_atendimento, at.created data_solicitacao, at.descricao descricao_atendimento,
@@ -102,7 +89,7 @@ class AdmsListarAtendimentoPendente
             AND at.prioridade <>:prioridade 
             AND aten.adms_sits_atendimentos_funcionario_id <>:adms_s_atend_func_id 
             AND aten.adms_sits_atendimentos_funcionario_id <>:interrompido
-            ORDER BY aten.data_inicio_planejado ASC, aten.hora_inicio_planejado ASC LIMIT :limit OFFSET :offset", "usuario=".$this->FuncionarioId."&adms_sits_atendimento_id=4&adms_sits_atendimento_conclu=3&prioridade=1&adms_s_atend_func_id=4&interrompido=5&limit={$this->LimiteResultado}&offset={$offset}");
+            ORDER BY aten.data_inicio_planejado ASC, aten.hora_inicio_planejado ASC LIMIT :limit OFFSET :offset", "usuario=".$_SESSION['usuario_id']."&adms_sits_atendimento_id=4&adms_sits_atendimento_conclu=3&prioridade=1&adms_s_atend_func_id=4&interrompido=5&limit={$this->LimiteResultado}&offset={$offset}");
         $this->Resultado = $listarAtendimento->getResultado();
         //var_dump($this->Resultado);
         return $this->Resultado;
@@ -136,7 +123,7 @@ class AdmsListarAtendimentoPendente
                 AND (at.adms_sits_atendimento_id <>:adms_sits_atendimento_id AND at.adms_sits_atendimento_id <>:adms_sits_atendimento_conclu) 
                 AND at.prioridade <>:prioridade
                 AND aten.adms_sits_atendimentos_funcionario_id =:adms_s_atend_func_id
-                ORDER BY created ASC", "usuario=".$this->FuncionarioId."&adms_sits_atendimento_id=4&adms_sits_atendimento_conclu=3&prioridade=1&adms_s_atend_func_id=5");
+                ORDER BY created ASC", "usuario=".$_SESSION['usuario_id']."&adms_sits_atendimento_id=4&adms_sits_atendimento_conclu=3&prioridade=1&adms_s_atend_func_id=5");
         $this->Resultado = $listarInterrompido->getResultado();
         //var_dump($this->Resultado);
         return $this->Resultado;

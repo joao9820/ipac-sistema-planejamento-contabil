@@ -88,7 +88,6 @@ extract($this->Dados['funcionarioPlan'][0])
                                     <th>Descrição Atendimento</th>
                                     <th class="">Demanda</th>
                                     <th class="">Atividade</th>
-                                    <th>Empresa</th>
                                     <th class="">Duração atividade</th>
                                     <th class="">Data inicio planejado</th>
                                     <th class="">Hora inicio planejado</th>
@@ -123,11 +122,6 @@ extract($this->Dados['funcionarioPlan'][0])
                                     <td>
                                         <?php
                                             echo $nome_atividade;
-                                        ?>
-                                    </td>
-                                    <td>
-                                        <?php
-                                            echo $nome_empresa;
                                         ?>
                                     </td>
                                     <td>
@@ -230,6 +224,3 @@ extract($this->Dados['funcionarioPlan'][0])
 
 </div>
 
-<script>
-    // document.title = "Novo titulo";
-</script>

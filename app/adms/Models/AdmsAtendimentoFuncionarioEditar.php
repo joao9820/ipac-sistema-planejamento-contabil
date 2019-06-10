@@ -421,13 +421,12 @@ class AdmsAtendimentoFuncionarioEditar {
         //die();
 
         if ($infoAtividades->getBuscarPrimeiraAtv() != NULL) {
-            //die();
             $this->Dados['data_inicio_planejado'] = $infoAtividades->getBuscarPrimeiraAtv()[0]['data_inicio_planejado'];
             $this->Condicao['ordem'] = (int) $infoAtividades->getBuscarPrimeiraAtv()[0]['ordem'];
             $this->Condicao['hora_inicio_planejado'] = (int) $infoAtividades->getBuscarPrimeiraAtv()[0]['hora_inicio_planejado']; //Hora de inicio da primeira atividade
             //$this->defineHoraDataPrioridade($infoAtividades->getBuscarPrimeiraAtv());
-        } else if ($this->FuncionarioId != $this->Condicao['adms_funcionario_id_ant']){
-            //ex: O funcionário que receberá a atividade com prioridade não ter nenhuma a ele atribuída ainda
+        } else {
+
             if ($this->updateAtividade() == 1) {
                 return 1;
             } else {
@@ -435,14 +434,6 @@ class AdmsAtendimentoFuncionarioEditar {
             }
 
             $this->Condicao['ordem'] = NULL;
-        }else{ //talvez esta condição não esta ativa ainda pois a prioridade não está sendo levada em conta no método buscarPrimeiraAtv, apenas a situação da atividade e a data, (filtro para outro método)
-            //die();
-                $priori['prioridade'] = $this->Dados['prioridade'];
-
-                $update1 = new AdmsUpdate();
-                $update1->exeUpdate("adms_atendimento_funcionarios", $priori, "WHERE id=:id_aten_fun AND adms_atendimento_id=:atendimento AND adms_atividade_id=:atividade", "id_aten_fun={$this->Condicao['id_aten_fun']}&atendimento={$this->Condicao['adms_atendimento_id']}&atividade={$this->Condicao['adms_atividade_id']}");
-
-            return 2;  
         }
 
         $reordenarPriori = new AdmsAtendimentoFuncionariosReordenarPriori();
@@ -464,10 +455,9 @@ class AdmsAtendimentoFuncionarioEditar {
         //die();
         if (!is_null($this->Condicao['ordem'])) {
             $this->Dados['ordem'] = $this->Condicao['ordem']; //Ordens para listar na função corretamente
-            //echo 'Parou aqui!';
             //die();
             $this->booleanReordenar = $reordenarPriori->reordenarAtvPriori($this->Condicao['ordem'], $this->FuncionarioId, $this->Dados['duracao_atividade'], $this->Dados['data_inicio_planejado'], $this->Condicao['hora_inicio_planejado'], $this->Condicao['adms_funcionario_id_ant'], $this->Condicao['id_aten_fun']);
-            //var_dump($this->booleanReordenar);
+            var_dump($this->booleanReordenar);
             //$this->booleanReordenar = null;
             //die();
             // if(!empty($this->boleadnReordenar))

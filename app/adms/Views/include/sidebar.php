@@ -7,7 +7,7 @@ if (!defined('URL')) {
 
 <!-- Conteudo Principal -->
 <div id="main" class="row container-fluid pr-0">
-    <section id="menuLateral" class="d-mobile-none">
+    <section id="menuLateral" class="d-none d-md-block">
         <div class="container-fluid px-0">
             <!-- Perfil -->
             <a  href="<?php echo URLADM . 'ver-perfil/perfil' ?>" class="perfil-menu my-4">

@@ -9,7 +9,6 @@
 namespace App\adms\Models;
 
 use App\adms\Models\funcoes\BuscarDuracaoAtividades;
-use App\adms\Models\funcoes\BuscarDuracaoAtividadesAlocacao;
 use App\adms\Models\funcoes\BuscarDuracaoJornadaT;
 use App\adms\Models\funcoes\Funcoes;
 use App\adms\Models\helper\AdmsRead;
@@ -48,7 +47,7 @@ class AdmsAlocacaoFuncionarioData
     private function buscarAlocacao()
     {
         $select = new AdmsRead();
-        $select->fullRead("SELECT aten.id id_aten_func, aten.duracao_atividade, aten.alocacao_atividade, aten.created, aten.inicio_atendimento, aten.fim_atendimento, aten.at_tempo_restante, aten.at_iniciado, aten.at_tempo_excedido, aten.data_fatal, aten.hora_inicio_planejado, aten.hora_fim_planejado, aten.data_inicio_planejado,
+        $select->fullRead("SELECT aten.id id_aten_func, aten.duracao_atividade, aten.created, aten.inicio_atendimento, aten.at_tempo_restante, aten.at_iniciado, aten.at_tempo_excedido, aten.data_fatal, aten.hora_inicio_planejado, aten.hora_fim_planejado, aten.data_inicio_planejado,
             ativi.nome nome_atividade, ativi.descricao descricao_atividade,
             demanda.nome nome_demanda, demanda.descricao descricao_demanda,
             at.id id_atendimento, at.created data_solicitacao, at.descricao descricao_atendimento,
@@ -86,7 +85,7 @@ class AdmsAlocacaoFuncionarioData
     public function getAlocacaoAtividades()
     {
         // Buscando duração total das atividades
-        $duracaoAtividades = new BuscarDuracaoAtividadesAlocacao($this->FuncionarioId, $this->Data, NULL, "4");
+        $duracaoAtividades = new BuscarDuracaoAtividades($this->FuncionarioId, $this->Data, NULL, "4");
         $resultado = $duracaoAtividades->getDuracaoAtividade();
         $DuracaoAtividades = $resultado['duracao_atividade_sc'] ? $resultado['duracao_atividade_sc'] : 0;
         $DuracaoAtividades = $DuracaoAtividades / 60;

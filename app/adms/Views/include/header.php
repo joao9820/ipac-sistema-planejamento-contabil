@@ -28,13 +28,13 @@ if (!defined('URL')) {
 <!-- Navigation -->
 <header class="nav-cabecalho container-fluid px-0">
         <div class="row mx-0 px-0">
-            <div id="navLogo" class="logo-admin d-mobile-none">
+            <div id="navLogo" class="logo-admin d-none d-md-block">
                 <a href="<?php echo URLADM . 'home/index' ?>">
                     <img class="img-fluid" src="<?php echo URLADM . 'assets/imagens/logo_login/logo-ipac.png'; ?>" alt="IPAC">
                 </a>
             </div>
             <div class="col px-0 mx-0 nav-menu border-bottom">
-                <div class="ml-4 d-mobile-none" onclick="MostrarEsconderDiv()" style="cursor:pointer;">
+                <div class="ml-4 d-none d-md-block" onclick="MostrarEsconderDiv()" style="cursor:pointer;">
                     <i class="fas fa-bars"></i>
                 </div>
 
@@ -98,87 +98,81 @@ if (!defined('URL')) {
                                         
                                     </div>
                                 </div>
-                                <div class="d-flex flex-column">
-                                    <p>
-                                        <button class="btn btn-powercar btn-sm" type="button" data-toggle="collapse" data-target="#menuCollapse" aria-expanded="false" aria-controls="menuCollapse">Menu</button>
-                                    </p>
-                                    <div class="collapse" id="menuCollapse">
-                                        <div class="card  card-mobile-conteudo  col-12" >
-                                            <div class="card-body p-0">
-                                                <div class="conainer-mobile-link">
+                                <div class="card  card-mobile-conteudo  col-12" style="width: 100px;">
+                                    <div class="card-body p-0">
+                                        <div class="conainer-mobile-link">
+                                            
+                                            <?php
+                                            $cont_drop = 0;
+                                            $cont_drop_fech = 0;
+                                            foreach ($this->Dados['menu'] as $menu) {
+                                                extract($menu);
+                                                if ($dropdown == 1)
+                                                {
 
-                                                    <?php
-                                                    $cont_drop = 0;
-                                                    $cont_drop_fech = 0;
-                                                    foreach ($this->Dados['menu'] as $menu) {
-                                                        extract($menu);
-                                                        if ($dropdown == 1)
+                                                    // MENU DROPDOWN
+                                                    if($cont_drop != $id_men)
+                                                    {
+                                                        if(($cont_drop_fech == 1) AND ($cont_drop != 0))
                                                         {
+                                                            // Fechamento do dropdown
+                                                            echo "</ul>";
+                                                            //echo "</div>";
 
-                                                            // MENU DROPDOWN
-                                                            if($cont_drop != $id_men)
-                                                            {
-                                                                if(($cont_drop_fech == 1) AND ($cont_drop != 0))
-                                                                {
-                                                                    // Fechamento do dropdown
-                                                                    echo "</ul>";
-                                                                    //echo "</div>";
-
-                                                                    $cont_drop_fech = 0;
-                                                                }
-                                                                ?>
-                                                                <div class="tiulo-mobile-link">
-                                                                    <a  onclick="event.preventDefault();" href="#">
-                                                                        <i class="<?php echo $icone_men; ?>"></i> <?php echo $nome_men; ?>
-                                                                    </a>
-                                                                </div>
-                                                                <ul>
-                                                                <?php
-                                                                $cont_drop = $id_men;
-                                                            }
-                                                            ?>
-                                                                <li>
-                                                                    <a  class="link-mobile" href="<?php echo URLADM .$menu_controller.'/'.$menu_metodo; ?>">
-                                                                    <i class="<?php echo $icone_pg; ?>"></i> <?php echo $nome_pagina; ?></a>
-                                                                </li>
-
-                                                            <?php
-
-                                                            $cont_drop_fech = 1;
-
-                                                        } else {
-
-                                                            if(($cont_drop_fech == 1))
-                                                            {
-                                                                // Fechamento do dropdown
-                                                                echo "</ul>";
-                                                                //echo "</div>";
-                                                                $cont_drop_fech = 0;
-                                                            }
-                                                            // link normal, sem modal
-                                                            ?>
-                                                            <div class="tiulo-mobile-link">
-                                                                <a href="<?php echo URLADM .$menu_controller.'/'.$menu_metodo; ?>">
-                                                                    <i class="<?php echo $icone_men; ?>"></i> <?php echo $nome_men; ?>
-                                                                </a>
-                                                            </div>
-                                                            <?php
+                                                            $cont_drop_fech = 0;
                                                         }
+                                                        ?>
+                                                        <div class="tiulo-mobile-link">
+                                                            <a  onclick="event.preventDefault();" href="#">
+                                                                <i class="<?php echo $icone_men; ?>"></i> <?php echo $nome_men; ?>
+                                                            </a>
+                                                        </div>
+                                                        <ul>
+                                                        <?php
+                                                        $cont_drop = $id_men;
                                                     }
+                                                    ?>
+                                                        <li>
+                                                            <a  class="link-mobile" href="<?php echo URLADM .$menu_controller.'/'.$menu_metodo; ?>">
+                                                            <i class="<?php echo $icone_pg; ?>"></i> <?php echo $nome_pagina; ?></a>
+                                                        </li>
+                                                        
+                                                    <?php
+
+                                                    $cont_drop_fech = 1;
+
+                                                } else {
+
                                                     if(($cont_drop_fech == 1))
                                                     {
                                                         // Fechamento do dropdown
                                                         echo "</ul>";
+                                                        //echo "</div>";
                                                         $cont_drop_fech = 0;
                                                     }
+                                                    // link normal, sem modal
                                                     ?>
+                                                    <div class="tiulo-mobile-link">
+                                                        <a href="<?php echo URLADM .$menu_controller.'/'.$menu_metodo; ?>">
+                                                            <i class="<?php echo $icone_men; ?>"></i> <?php echo $nome_men; ?>
+                                                        </a>
+                                                    </div>
+                                                    <?php
+                                                }
+                                            }
+                                            if(($cont_drop_fech == 1))
+                                            {
+                                                // Fechamento do dropdown
+                                                echo "</ul>";
+                                                $cont_drop_fech = 0;
+                                            }
+                                            ?>
 
-                                                </div>
-
-                                            </div>
                                         </div>
+                                    
                                     </div>
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -195,7 +189,7 @@ if (!defined('URL')) {
                         <a id="iconeNav" href="#" class="linkMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Configuração <i class="fas fa-cogs"></i>
                         </a>
-                        <div id="cardConfig" class="dropdown-menu" aria-labelledby="iconeNav">
+                        <div class="dropdown-menu" aria-labelledby="iconeNav">
                             <?php
                             $cont_drop = 0;
                             $cont_drop_fech = 0;

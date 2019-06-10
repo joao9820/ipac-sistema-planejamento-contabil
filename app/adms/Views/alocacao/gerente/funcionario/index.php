@@ -24,7 +24,7 @@ if (!empty($this->Dados['dadosForm'])){
 <div class="content p-1">
     <div class="list-group-item">
         <div class="row">
-            <div class="col-md-12 p-2 d-flex flex-column flex-md-row px-3">
+            <div class="col-md-12 p-2 d-flex px-3">
                 <h2 class="display-4 titulo">Alocação atividades</h2>
 
                 <span class="d-block ml-auto">

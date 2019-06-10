@@ -65,16 +65,6 @@ $(document).ready(function () {
         return false;
     });
 
-    $('a[data-deletar]').click(function (ev) {
-        var href = $(this).attr('href');
-        if (!$('#deletarRegistro').length) {
-            $('body').append('<div class="modal fade" id="deletarRegistro" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-danger text-white">EXCLUIR REGISTRO<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><h3 class="text-secondary text-center">Tem certeza de que deseja excluir o planejamento da atividade selecionada?</h3></div><div class="modal-footer"><button type="button" class="btn btn-outline-success" data-dismiss="modal"><i class="fas fa-ban"></i> Cancelar</button><a class="btn btn-outline-danger" id="dataComfirmDelete"><i class="fas fa-trash-alt"></i> Apagar</a></div></div></div></div>');
-        }
-        $('#dataComfirmDelete').attr('href', href);
-        $('#deletarRegistro').modal({show: true});
-        return false;
-    });
-
     $('a[data-confirmDema]').click(function (ev) {
         var href = $(this).attr('href');
         if (!$('#confirm-delete').length) {
