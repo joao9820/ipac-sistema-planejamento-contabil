@@ -24,7 +24,7 @@ extract($this->Dados['funcionarioPlan'][0])
 
 </style>
 <div class="content p-1">
-    <div class="list-group-item">
+    <div class="mb-4">
         <div class="d-flex">
             <div class="mr-auto p-2">
                 <h2 class="display-4 titulo"><i class="far fa-calendar-alt"></i> Planejamento do Funcionario "<strong><?php echo ucfirst($nome_funcionario); ?></strong>"</h2>
@@ -38,7 +38,7 @@ extract($this->Dados['funcionarioPlan'][0])
             </div>
         </div>
     </div>
-    <div class="list-group-item border mx-4 mb-4 p-0 rounded">
+    <div class="list-group-item border mb-4 p-0 rounded">
         <div id="headerDescricaoPg" class="bg-primary">
             <h3 class="">Funcionário: <?php echo ucfirst($nome_funcionario); ?></h3>
         </div>

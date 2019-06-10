@@ -17,6 +17,10 @@ if (isset($this->Dados['gerente'])){
 // pega a data de inicio e fim
 $DataInicio = isset($this->Dados['DataInicio']) ? $this->Dados['DataInicio'] : date('Y-m-d');
 $DataFim = isset($this->Dados['DataFim']) ? $this->Dados['DataFim'] : date('Y-m-d');
+
+if (!empty($this->Dados['dadosForm'])){
+    extract($this->Dados['dadosForm']);
+}
 ?>
 
 
@@ -27,7 +31,7 @@ $DataFim = isset($this->Dados['DataFim']) ? $this->Dados['DataFim'] : date('Y-m-
                 <h2 class="display-4 titulo">Alocação funcionários</h2>
 
                 <span class="d-block ml-auto">
-                    <button onclick="window.location.href='<?php echo URLADM . 'alocacao/listar'; ?>'" class="btn btn-outline-info btn-sm"><i class="fas fa-arrow-circle-left"></i> Voltar</button>
+                    <button onclick="window.location.href='<?php echo URLADM . 'alocacao/listar?data_inicio='.$DataInicio.'&data_fim='.$DataFim; ?>'" class="btn btn-outline-info btn-sm"><i class="fas fa-arrow-circle-left"></i> Voltar</button>
                 </span>
             </div>
 
@@ -43,7 +47,7 @@ $DataFim = isset($this->Dados['DataFim']) ? $this->Dados['DataFim'] : date('Y-m-
                                     <i class="fas fa-calendar-day"></i>
                                 </div>
                             </div>
-                            <input name="dataInicial" type="date" pattern="[0-9]{2}\/[0-9]{2}\/[0-9]{4}$" class="form-control" id="inlineFormInputGroupUsername2">
+                            <input name="dataInicial" type="date" value="<?php echo isset($dataInicial) ? $dataInicial : ""; ?>" class="form-control" id="inlineFormInputGroupUsername2">
                         </div>
                     </span>
 
@@ -56,7 +60,7 @@ $DataFim = isset($this->Dados['DataFim']) ? $this->Dados['DataFim'] : date('Y-m-
                                     <i class="fas fa-calendar-day"></i>
                                 </div>
                             </div>
-                            <input name="dataFinal" type="date" pattern="[0-9]{2}\/[0-9]{2}\/[0-9]{4}$" class="form-control" id="inlineFormInputGroupUsername2" required>
+                            <input name="dataFinal" type="date" value="<?php echo isset($dataFinal) ? $dataFinal : ""; ?>"  class="form-control" id="inlineFormInputGroupUsername2" required>
                         </div>
                     </span>
 
@@ -98,13 +102,13 @@ $DataFim = isset($this->Dados['DataFim']) ? $this->Dados['DataFim'] : date('Y-m-
                                     $DurAti = (int)  $value['duracao_atividade_sc'];
                                     $JorTra = (int) $value['duracao_total_jornada'];
                                     // Calcular porcentagem de alocação
-                                    $AlocacaoT = $DurAti > 0 ? ($DurAti * 100) / $JorTra : 0;
+                                    $AlocacaoT = $DurAti > 0 ? ($DurAti / $JorTra) * 100 : 0;
                                     $textoCor = $AlocacaoT > 100 ? "text-danger" : "text-secondary";
 
                                     echo '<tr>';
                                         echo "<td>{$value['nome']}</td>";
                                         echo "<td>{$value['cargo']}</td>";
-                                        echo "<td class='".$textoCor."'><strong>". number_format($AlocacaoT, 1, ',', ' ') ."%</strong></td>";
+                                        echo "<td class='".$textoCor."'><strong>". number_format($AlocacaoT, 0, ',', ' ') ."%</strong></td>";
 
                                     /*
                                     foreach ($dado as $coluna => $item){

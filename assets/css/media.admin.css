@@ -1,0 +1,29 @@
+/*MEDIA TOP NAVBAR*/
+@media (max-width: 480px){
+    .nav-menu {
+        background-image: linear-gradient(to right, #2b2c7c, #0053ff);
+        color: #FFF;
+    }
+    .nav-menu a {
+        color: #FFF !important;
+        font-size: 1em !important;
+    }
+    #iconeNav {
+        font-size: 1.2em !important;
+    }
+    .mobile-logo-admin {
+        display: block;
+    }
+    .mobile-logo-admin img {
+        max-height: 40px;
+        object-fit: contain;
+        object-position: center;
+        width: 100%;
+    }
+    .d-mobile-none {
+        display: none;
+    }
+    #main {
+        padding-right: 0;
+    }
+}

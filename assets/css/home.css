@@ -1,0 +1,166 @@
+.titulo-topico {
+    font-weight: 400;
+    color: #55595c;
+}
+/*HEADER DA PAGINA DE APRESENTAÇÃO*/
+#headerHome {
+    background-image: linear-gradient(to right, #2b2c7c, #0053ff);
+}
+#logoHome img {
+    height: 80px;
+}
+#linksHomeHeader a {
+    color: #FFF;
+}
+/*Navbar*/
+#navbarHome {
+    background: #FFF;
+    border-radius: 5px;
+}
+#navbarHome li a {
+    color: #145ae7;
+    transition: all .3s ease-in-out;
+}
+#navbarHome li a:hover {
+    color: #272d36;
+}
+/*APRESENTAÇÃO HOME*/
+#apresentacaoHome {
+    color: #FFF;
+}
+ .green {
+    background: #0ac600;
+    border: 3px solid rgba(255,255,255,.2);
+    transition: all .3s ease-in-out;
+}
+.green:hover {
+    background: #0ac600;
+    border: 3px solid rgba(255, 255, 255, .8);
+    box-shadow: 0 0 5px rgba(255,255,255,1);
+}
+#imagemHome {
+    position: relative;
+}
+#imagemHome img {
+    position: absolute;
+    max-width: 450px;
+    right: 0;
+}
+
+/*SERVIÇOS*/
+#servicos {
+    margin-top: 100px;
+}
+.card-servicos .card {
+    max-height: 200px;
+    min-height: 200px;
+    border: none;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.418);
+    transition: all .3s ease-in-out;
+    overflow: hidden;
+}
+.card-servicos .card:hover {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.267);
+}
+.card-servicos .card .zoom {
+    overflow: hidden;
+}
+.card-servicos .card .zoom img {
+    object-fit: cover;
+    object-position: center;
+    max-height: 120px;
+    min-height: 120px;
+    max-width: 100%;
+    transition: all .3s;
+}
+.card-servicos .card:hover .zoom img {
+    transform: scale(1.1);
+}
+.card-servicos .card .card-body {
+    padding: 5px 10px;
+    text-align: center;
+    font-weight: 400;
+    color: #333333;
+}
+.card-servicos .card .card-body h5 {
+    font-weight: 500;
+    font-size: 1em;
+    margin-bottom: 5px;
+}
+.card-servicos .card .card-body p {
+    font-size: .7em;
+}
+
+/*AVALIAÇÕES DE CLIENTES*/
+#fundoSlideAvaliacoes {
+    background: url(../../../images/mecanico.jpg);
+    background-attachment: fixed;
+    background-size: cover;
+}
+#slideAvaliacoes {
+    background-image: radial-gradient(circle, rgba(0, 0, 0, 0.89), rgba(0, 0, 0, 0.959));
+}
+#carroselAvaliacoes {
+    min-height: 250px;
+    max-height: 250px;
+}
+.avaliacao {
+    max-width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    color: #FFF;
+    font-weight: 300;
+}
+.avaliacao p {
+    text-align: center;
+    font-size: 1.2em;
+    font-style: oblique;
+}
+.avaliacao span {
+    display: block;
+    text-align: center;
+}
+
+#marcas .marcasLogos .card {
+    max-height: 100px;
+}
+#marcas .marcasLogos .card img {
+    object-fit: contain;
+    width: auto;
+    height: 80px;
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+    filter: gray;
+    transition: all .3s;
+}
+#marcas .marcasLogos .card:hover img {
+    -webkit-filter: none;
+    filter: none;
+    cursor: pointer;
+}
+
+/*SOBRE*/
+#sobre {
+    background-image: linear-gradient(to right, #2b2c7c, #0053ff);
+    position: relative;
+}
+#sobre img {
+    position: absolute;
+    top: 40px;
+}
+
+/*FOOTER*/
+#rodape {
+    background: #000000;
+    text-align: center;
+    color: #FFF;
+}
+#rodape img {
+    max-width: 250px;
+    margin: 40px;
+}
+#rodape p {
+    font-weight: 300;
+    margin: 10px;
+    font-size: .9em;
+}

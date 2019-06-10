@@ -67,7 +67,8 @@ class AdmsAlocacaoFuncionarioData
             INNER JOIN adms_cors cor_sitAtenFun ON cor_sitAtenFun.id=sitAtenFun.adms_cor_id 
             WHERE aten.adms_funcionario_id =:usuario 
             AND aten.data_inicio_planejado =:data_inicio
-            ORDER BY created ASC ","usuario=".$this->FuncionarioId."&data_inicio=".$this->Data);
+            AND aten.adms_sits_atendimentos_funcionario_id =:sit_atividade
+            ORDER BY created ASC ","usuario=".$this->FuncionarioId."&data_inicio=".$this->Data."&sit_atividade=4");
         $resultado = $select->getResultado();
         //var_dump($resultado);
         //die;
@@ -84,7 +85,7 @@ class AdmsAlocacaoFuncionarioData
     public function getAlocacaoAtividades()
     {
         // Buscando duração total das atividades
-        $duracaoAtividades = new BuscarDuracaoAtividades($this->FuncionarioId, $this->Data);
+        $duracaoAtividades = new BuscarDuracaoAtividades($this->FuncionarioId, $this->Data, NULL, "4");
         $resultado = $duracaoAtividades->getDuracaoAtividade();
         $DuracaoAtividades = $resultado['duracao_atividade_sc'] ? $resultado['duracao_atividade_sc'] : 0;
         $DuracaoAtividades = $DuracaoAtividades / 60;
@@ -95,7 +96,7 @@ class AdmsAlocacaoFuncionarioData
         $JornadaTrabalho = $resultado['total'] ? $resultado['total'] : null;
         $JornadaTrabalho = $JornadaTrabalho / 60;
 
-        $percentual_alocacao = ($DuracaoAtividades * 100) / $JornadaTrabalho;
+        $percentual_alocacao = ($DuracaoAtividades / $JornadaTrabalho) * 100;
 
         return $percentual_alocacao;
 

@@ -77,7 +77,7 @@ class AdmsAlocacaoFuncionario
         if ($DiaUtil->isDiaUtil($Data)) {
 
             // Buscando duração total das atividades
-            $duracaoAtividades = new BuscarDuracaoAtividades($FuncionarioId, $Data);
+            $duracaoAtividades = new BuscarDuracaoAtividades($FuncionarioId, $Data, NULL, "4");
             $resultado = $duracaoAtividades->getDuracaoAtividade();
             $this->DadosAlocacao[$Data]['DuracaoAtividades'] = $resultado['duracao_atividade_sc'] ? $resultado['duracao_atividade_sc'] : 0;
 

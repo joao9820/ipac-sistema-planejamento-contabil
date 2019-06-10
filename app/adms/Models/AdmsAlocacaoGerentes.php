@@ -28,8 +28,8 @@ class AdmsAlocacaoGerentes
     {
         if (empty($DataInicio)) {
             $novaData = new Funcoes();
-            $this->DataInicio = date('Y-m-d');
-            $this->DataFim = $novaData->dia_in_data(date('Y-m-d'),7);
+            $this->DataFim = date('Y-m-d');
+            $this->DataInicio = $novaData->dia_in_data(date('Y-m-d'),15, '-');
         } else {
             $this->DataInicio = date('Y-m-d', strtotime($DataInicio));
             $this->DataFim = date('Y-m-d', strtotime($DataFim));
@@ -74,7 +74,7 @@ class AdmsAlocacaoGerentes
                         $alocacao_jornada += $value2['duracao_total_jornada'] / 60;
                     }
                 }
-                $this->Gerentes[$key]['percentual_alocacao'] = $alocacao_atividade > 0 ? ($alocacao_atividade * 100) / $alocacao_jornada : 0;
+                $this->Gerentes[$key]['percentual_alocacao'] = $alocacao_atividade > 0 ? ($alocacao_atividade / $alocacao_jornada) * 100 : 0;
                 $this->Gerentes[$key]['duracao_atividades'] = $alocacao_atividade;
                 $alocacao_atividade = 0;
                 $this->Gerentes[$key]['duracao_jornada'] = $alocacao_jornada;

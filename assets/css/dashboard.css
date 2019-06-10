@@ -38,6 +38,9 @@ span[data-toggle="tooltip"]{
 }
 
 /*===================================*/
+.list-group-item {
+    margin-bottom: 40px !important;
+}
 .faIpac {
     font-size: 1.5em;
 }
@@ -123,7 +126,6 @@ body {
 }
 .content{
     width: 100%;
-    background: #FFF;
 }
 .list-group-item {
     border: none;

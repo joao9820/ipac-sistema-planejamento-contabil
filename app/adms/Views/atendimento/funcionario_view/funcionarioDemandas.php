@@ -75,7 +75,7 @@ function getFeriados($ano){
 
 
 
-    <div class="list-group-item">
+    <div class="">
         <div class="d-flex">
             <div class="mr-auto p-2">
                 <h2 class="display-4 titulo">Atividades</h2>
@@ -106,7 +106,7 @@ function getFeriados($ano){
         echo $hora_termino2."<br>";
         */
     ?>
-    <span class="d-block my-3 ml-4">
+    <span class="d-block my-3">
         <?php if(!empty($this->Dados['planejamento'])) {?>
             <button onclick="Parametros('<?php echo $hora_inicio; ?>', '<?php echo $hora_termino; ?>', '<?php echo $hora_inicio2; ?>', '<?php echo $hora_termino2; ?>', '<?php echo $adms_funcionario_id; ?>')"
                     class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#editarFuncionarioModal">
@@ -114,7 +114,7 @@ function getFeriados($ano){
             </button>
         <?php } ?>
     </span>
-    <div class="list-group-item border mx-4 mb-4 p-0 rounded">
+    <div class="list-group-item border mb-4 p-0 rounded">
         <div id="headerDescricaoPg" class="bg-primary">
             <h3 class="">Lista de Atividades Pendentes</h3>
         </div>
@@ -222,7 +222,7 @@ function getFeriados($ano){
             ?>
 
 
-            <h4 class="text-secondary mr-2">Últimos: </h4>
+            <h4 class="text-secondary mr-2">Últimas: </h4>
             <?php
                 //var_dump($this->Dados['listarAtendimentos']);
                 if (empty($this->Dados['listarAtendimentos'])) {
@@ -242,7 +242,7 @@ function getFeriados($ano){
                 ?>
 
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover table-border">
+                    <table class="table  table-hover table-border">
                         <thead class="bg-info text-light">
                         <tr class="text-center">
                             <th class="">Opções</th>

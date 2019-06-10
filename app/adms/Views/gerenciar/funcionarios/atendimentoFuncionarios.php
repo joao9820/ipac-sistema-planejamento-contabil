@@ -30,7 +30,7 @@ if (!empty($this->Dados['dadosAtendimento'])) {
 
 </style>
 <div class="content p-1">
-    <div class="list-group-item">
+    <div class="mb-4">
         <div class="d-flex">
             <div class="mr-auto p-2">
                 <span class="d-block">
@@ -48,7 +48,7 @@ if (!empty($this->Dados['dadosAtendimento'])) {
             </div>
         </div>
     </div>
-    <div class="list-group-item border mx-4 mb-4 p-0 rounded">
+    <div class="list-group-item border mb-4 p-0 rounded">
         <div id="headerDescricaoPg" class="bg-primary">
             <h3 class="">Atendimento: <?php
                 $id = $_GET['aten'];
@@ -158,11 +158,13 @@ if (!empty($this->Dados['dadosAtendimento'])) {
                                          $contFor++;
 
                                          if (($data_fatal < $data_inicio_planejado) AND ($status != 'Finalizado')) {
-                                             $cor = "danger";
+                                             $corD = "danger";
+                                         } else {
+                                             $corD = "dark";
                                          }
                                         ?>
 
-                                        <tr class="text-<?php echo $cor ?>">
+                                        <tr class="text-<?php echo $corD ?>">
                                             <td>
                                                 <div class="d-flex flex-row ">
                                                     <span tabindex="0" data-toggle="tooltip" data-placement="left" data-html="true" title="Editar atividade">

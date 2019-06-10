@@ -121,7 +121,7 @@
         ?>
 
         <div class="table-responsive">
-            <table class="table table-striped table-hover ">
+            <table class="table table-hover ">
                 <thead class="bg-info text-light my-4">
                 <tr>
                     <th class="d-none d-lg-table-cell">Cod.</th>
@@ -300,7 +300,7 @@
                             </span>
                         </td>
                         <td>
-                            <div class="dataAtendimento">
+                            <div class="dataAtendimento d-flex flex-row">
                                 <span class="data bg-light text-secondary shadow"><i class="far fa-calendar-alt"></i> <?php echo date('d/m/Y \a\s H\hi', strtotime($created)); ?></span>
                             </div>
                         </td>

@@ -35,28 +35,13 @@ echo $funcionario;
 
             <div class="col-md-6">
                 <h3>Funcionário: <?php echo $this->Dados['funcionarioNome'][0]['nome']; ?></h3>
-                <h3>Percentual de Alocação: <?php echo number_format($this->Dados['percentual_alocacao'], 1, ',', ' ') ?>%</h3>
+                <h3>Percentual de Alocação: <?php echo number_format($this->Dados['percentual_alocacao'], 0, ',', ' ') ?>%</h3>
                 <span class="badge bg-light my-3">
                 Filtro Aplicado:
                 <?php
                 echo date("d/m/Y", strtotime($this->Dados['dataFiltro']));
                 ?>
                 </span>
-            </div>
-            <div class="col-md-6 d-flex justify-content-end">
-                <form method="post" action="" class="form-inline my-1">
-                    <span tabindex="0" data-toggle="tooltip" data-placement="top" data-html="true" title="Data">
-                        <div class="input-group mb-2 mr-sm-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                    <i class="fas fa-calendar-day"></i>
-                                </div>
-                            </div>
-                            <input name="dataInicial" type="date" value="<?php echo $this->Dados['dataFiltro'] ?>" class="form-control" id="inlineFormInputGroupUsername2">
-                        </div>
-                    </span>
-                    <button class="btn btn-outline-warning mb-2 mr-2"><i class="fas fa-search"></i></button>
-                </form>
             </div>
         </div>
 
